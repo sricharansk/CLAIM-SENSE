@@ -39,12 +39,26 @@ app = FastAPI(title="Claim Sense API", lifespan=lifespan,
 app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origins, allow_methods=["*"], allow_headers=["*"])
 
 
+SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "no-referrer",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    "Content-Security-Policy": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; "
+                               "script-src 'self'; connect-src 'self'; frame-ancestors 'none'",
+}
+
+
 @app.middleware("http")
 async def correlation_id(request: Request, call_next):
     cid = request.headers.get("x-correlation-id") or f"req-{uuid.uuid4().hex[:12]}"
     request.state.correlation_id = cid
     response = await call_next(request)
     response.headers["x-correlation-id"] = cid
+    response.headers.update(SECURITY_HEADERS)
+    if request.url.path in ("/docs", "/redoc"):
+        # Swagger UI loads its assets from a CDN; keep the other headers but skip the strict CSP there.
+        del response.headers["Content-Security-Policy"]
     return response
 
 

@@ -101,3 +101,25 @@ def test_health_ready_and_analytics(client):
     a = client.get("/api/v1/analytics").json()
     assert a["totals"]["claims"] >= 8
     assert a["portfolio"]["claims"] == 1000 and 0 < a["portfolio"]["recall"] <= 1
+
+
+def test_security_headers_and_error_shape(client):
+    r = client.get("/api/v1/claims/DOES-NOT-EXIST")
+    assert r.status_code == 404
+    assert r.json()["error"]["code"] == "HTTP_404" and r.json()["error"]["correlation_id"]
+    assert r.headers["x-content-type-options"] == "nosniff"
+    assert r.headers["x-frame-options"] == "DENY"
+    assert "frame-ancestors 'none'" in r.headers["content-security-policy"]
+
+
+def test_upload_filename_cannot_escape_storage(client):
+    n = client.post("/api/v1/claims", json={"policy_number": "CS-HLT-24-000117", "claim_type": "health",
+                                             "claimant_name": "Ravi Kumar"}).json()["claim_number"]
+    files = [("files", ("../../../etc/evil.txt", b"Policy Number: CS-HLT-24-000117\n", "text/plain"))]
+    r = client.post(f"/api/v1/claims/{n}/documents", files=files)
+    assert r.status_code == 201 and r.json()[0]["filename"] == "evil.txt"
+
+
+def test_api_docs_page_loads(client):
+    r = client.get("/docs")
+    assert r.status_code == 200 and "content-security-policy" not in r.headers

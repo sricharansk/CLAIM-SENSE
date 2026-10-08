@@ -125,11 +125,11 @@ Configuration lives in environment variables; see [.env.example](.env.example). 
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 32 tests
+cd backend && ruff check app tests && python -m pytest -q    # 35 tests
 cd frontend && npm run build                                 # type check + production build
 ```
 
-Tests cover the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus a Docker + PostgreSQL smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)).
+Tests cover security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus `pip-audit`, `npm audit` and a Docker + PostgreSQL smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Data and datasets
 

@@ -25,15 +25,31 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | 13 | Interactive frontend | 9 screens, all calling real endpoints | Playwright golden path: 0 console errors |
 | – | Supervisor/orchestrator | `agents/supervisor.py`, `analysis_runs`, `agent_runs` with tool calls | Safe-failure and re-run tests |
 | – | Docker | `Dockerfile` (UI + API in one image), `docker-compose.yml` with PostgreSQL | Built and run locally on PostgreSQL; smoke test passed |
-| – | CI | `.github/workflows/ci.yml`: ruff, pytest, frontend build, Docker smoke test | Not yet run on GitHub (runs on the PR) |
+| – | CI | `.github/workflows/ci.yml`: ruff, pytest, pip-audit, npm audit, frontend build, Docker + PostgreSQL smoke test | First run on PR #1: all jobs passed |
+| – | Security | Upload allow-list, size limit and filename sanitising; security headers and CSP; non-root container; dependency audits; see `docs/SECURITY.md` | Header and path tests; pip-audit and npm audit clean |
 
 ## Validation results (this session)
 
 - `ruff check app tests`: clean.
-- `pytest`: 32 passed.
+- `pytest`: 35 passed.
 - `npm run build` (tsc + vite): passed.
+- `pip-audit -r backend/requirements.txt`: no known vulnerabilities. `npm audit`: 0 vulnerabilities.
+- GitHub Actions CI run 1 on PR #1: backend, frontend and docker-smoke jobs passed.
 - Browser (Playwright, Chromium) against Vite dev server and against the Docker image on PostgreSQL: create claim, upload 3 documents, analyse (₹78,000 billed, ₹64,080 payable, partial approval), approve, assistant answer and refusal, all pages load. No console errors on the Docker run.
 - `scripts/smoke_test.py http://localhost:8080` against Docker + PostgreSQL: all checks passed.
+
+## Definition of done (blueprint PART 20)
+
+| Item | State |
+|---|---|
+| Repository audited; source-of-truth docs created | Done |
+| Backend runs; frontend runs; database migrates; demo data loads | Done (SQLite and PostgreSQL) |
+| Policy ingests; claim ingests; document extraction | Done |
+| Policy/version matching; hybrid RAG; citations resolve | Done |
+| Coverage; deterministic adjudication; risk/fraud; supervisor | Done |
+| Human review; audit; dashboard | Done |
+| Golden tests pass; security checks pass; Docker works; repository clean | Done |
+| Deployment succeeds; deployed health check; deployed smoke test | **Blocked**: needs a cloud account (see below) |
 
 ## In progress
 
