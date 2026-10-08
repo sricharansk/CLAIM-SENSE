@@ -1,0 +1,123 @@
+[
+  {
+    "claim_number": "CLM-H-1001",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-24-000117",
+    "claimant_name": "Ravi Kumar",
+    "incident_date": "2025-08-12",
+    "description": "Sudden severe abdominal pain; admitted through emergency and operated for acute appendicitis.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.pdf"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Covered surgery with room-rent cap, consumables exclusion, deductible and co-pay"
+  },
+  {
+    "claim_number": "CLM-H-1002",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-25-000342",
+    "claimant_name": "Meena Iyer",
+    "incident_date": "2025-09-05",
+    "description": "Planned surgery for progressive blurring of vision in the left eye.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Cataract inside the 24-month specified-disease waiting period"
+  },
+  {
+    "claim_number": "CLM-H-1003",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-25-000518",
+    "claimant_name": "Arjun Mehta",
+    "incident_date": "2025-06-20",
+    "description": "High fever and breathlessness; admitted to ICU with pneumonia.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "INVESTIGATE",
+    "scenario": "Early claim, 94% of sum insured, claim form amount differs from the bill total"
+  },
+  {
+    "claim_number": "CLM-H-1004",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-23-000089",
+    "claimant_name": "Fatima Shaikh",
+    "incident_date": "2025-10-02",
+    "description": "Admitted for dengue fever with low platelet count.",
+    "documents": [
+      "claim_form.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "REQUEST_INFO",
+    "scenario": "Discharge summary missing"
+  },
+  {
+    "claim_number": "CLM-H-1005",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-24-000233",
+    "claimant_name": "Suresh Nair",
+    "incident_date": "2025-02-14",
+    "description": "Fracture of right forearm after a fall at home.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Incident before 2025-04-01, so the 2024.1 wording applies"
+  },
+  {
+    "claim_number": "CLM-H-1006",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-24-000117",
+    "claimant_name": "Ravi Kumar",
+    "incident_date": "2025-08-12",
+    "description": "Claim for hospitalisation for appendicitis.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "INVESTIGATE",
+    "scenario": "Duplicate of CLM-H-1001"
+  },
+  {
+    "claim_number": "CLM-M-2001",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001204",
+    "claimant_name": "Priya Sharma",
+    "incident_date": "2025-09-18",
+    "description": "Rear-ended at a traffic signal on Outer Ring Road; rear bumper, boot lid and tail lamp damaged.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "police_report.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Depreciation by part type and vehicle age, plus compulsory deductible"
+  },
+  {
+    "claim_number": "CLM-M-2002",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001377",
+    "claimant_name": "Karthik Rao",
+    "incident_date": "2025-07-27",
+    "description": "Vehicle hit the road divider late at night; front bumper and bonnet damaged.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "police_report.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Driving under the influence exclusion (clause 3.1)"
+  }
+]

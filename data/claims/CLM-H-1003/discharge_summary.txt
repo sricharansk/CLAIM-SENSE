@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Patient Name: Arjun Mehta
+Admission Date: 2025-06-20
+Discharge Date: 2025-07-01
+Diagnosis: Community acquired pneumonia
+Procedure: Medical management, non-invasive ventilation
+
+Clinical Notes:
+Recovered. Discharged on oral antibiotics.

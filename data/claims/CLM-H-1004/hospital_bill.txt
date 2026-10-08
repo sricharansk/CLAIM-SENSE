@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1004
+Admission Date: 2025-10-02
+Discharge Date: 2025-10-06
+Patient/Insured Name: Fatima Shaikh
+
+Itemised Charges:
+Room Rent - General Ward (4 days @ 3,500)                       14,000.00
+Consultant Fees                                                 12,000.00
+Pharmacy - Medicines and Drugs                                   9,800.00
+Laboratory Tests - Platelet Count Series                         7,600.00
+
+Total Amount                                                    43,400.00

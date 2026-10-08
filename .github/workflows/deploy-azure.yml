@@ -1,0 +1,35 @@
+# Manual deployment to Azure Container Apps. Requires repository secrets:
+#   AZURE_CREDENTIALS  service principal JSON for azure/login
+# and repository variables:
+#   AZURE_RESOURCE_GROUP, AZURE_CONTAINERAPP_NAME, AZURE_ACR_NAME, AZURE_LOCATION
+# The app runs as a single container with SQLite seeded on start; set DATABASE_URL to an
+# Azure Database for PostgreSQL connection string for persistent data.
+name: Deploy to Azure Container Apps
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Build, push and deploy
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ github.workspace }}
+          dockerfilePath: Dockerfile
+          acrName: ${{ vars.AZURE_ACR_NAME }}
+          containerAppName: ${{ vars.AZURE_CONTAINERAPP_NAME }}
+          resourceGroup: ${{ vars.AZURE_RESOURCE_GROUP }}
+          location: ${{ vars.AZURE_LOCATION }}
+          targetPort: 8000
+          ingress: external
+      - name: Smoke test the deployed app
+        run: |
+          FQDN=$(az containerapp show -n "${{ vars.AZURE_CONTAINERAPP_NAME }}" -g "${{ vars.AZURE_RESOURCE_GROUP }}" --query properties.configuration.ingress.fqdn -o tsv)
+          for i in $(seq 1 60); do curl -sf "https://$FQDN/api/v1/ready" && break; sleep 5; done
+          python3 scripts/smoke_test.py "https://$FQDN"

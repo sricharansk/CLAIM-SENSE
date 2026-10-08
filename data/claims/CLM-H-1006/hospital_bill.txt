@@ -1,0 +1,18 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Bill Number: HB-1006
+Admission Date: 2025-08-12
+Discharge Date: 2025-08-15
+Patient/Insured Name: Ravi Kumar
+
+Itemised Charges:
+Room Rent - Twin Sharing (3 days @ 6,500)                       19,500.00
+Surgeon and Anaesthetist Fees                                   45,000.00
+Operation Theatre Charges                                       18,000.00
+Pharmacy - Medicines and Drugs                                  12,500.00
+Laboratory and Diagnostic Tests (CT Abdomen, Blood)              8,200.00
+Consumables - Gloves, Masks, Admission Kit                       3,400.00
+
+Total Amount                                                   106,600.00

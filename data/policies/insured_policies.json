@@ -1,0 +1,58 @@
+[
+  {
+    "policy_number": "CS-HLT-24-000117",
+    "product_code": "HLT-SHIELD",
+    "holder_name": "Ravi Kumar",
+    "start_date": "2024-06-01",
+    "end_date": "2026-05-31",
+    "sum_insured": 500000
+  },
+  {
+    "policy_number": "CS-HLT-25-000342",
+    "product_code": "HLT-SHIELD",
+    "holder_name": "Meena Iyer",
+    "start_date": "2025-02-10",
+    "end_date": "2026-02-09",
+    "sum_insured": 300000
+  },
+  {
+    "policy_number": "CS-HLT-25-000518",
+    "product_code": "HLT-SHIELD",
+    "holder_name": "Arjun Mehta",
+    "start_date": "2025-05-01",
+    "end_date": "2026-04-30",
+    "sum_insured": 500000
+  },
+  {
+    "policy_number": "CS-HLT-23-000089",
+    "product_code": "HLT-SHIELD",
+    "holder_name": "Fatima Shaikh",
+    "start_date": "2023-09-15",
+    "end_date": "2026-09-14",
+    "sum_insured": 400000
+  },
+  {
+    "policy_number": "CS-HLT-24-000233",
+    "product_code": "HLT-SHIELD",
+    "holder_name": "Suresh Nair",
+    "start_date": "2024-01-20",
+    "end_date": "2026-01-19",
+    "sum_insured": 300000
+  },
+  {
+    "policy_number": "CS-MTR-25-001204",
+    "product_code": "MTR-SECURE",
+    "holder_name": "Priya Sharma",
+    "start_date": "2025-04-15",
+    "end_date": "2026-04-14",
+    "sum_insured": 650000
+  },
+  {
+    "policy_number": "CS-MTR-25-001377",
+    "product_code": "MTR-SECURE",
+    "holder_name": "Karthik Rao",
+    "start_date": "2025-06-01",
+    "end_date": "2026-05-31",
+    "sum_insured": 480000
+  }
+]

@@ -1,0 +1,54 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+5 0 obj
+<< /Length 927 >>
+stream
+BT
+/F1 9 Tf
+11 TL
+40 800 Td
+(FINAL HOSPITAL BILL) Tj T*
+(SYNTHETIC DEMO DOCUMENT) Tj T*
+() Tj T*
+(Hospital: Lakeview Multispeciality Hospital \(fictional\)) Tj T*
+(Bill Number: HB-1001) Tj T*
+(Admission Date: 2025-08-12) Tj T*
+(Discharge Date: 2025-08-15) Tj T*
+(Patient/Insured Name: Ravi Kumar) Tj T*
+() Tj T*
+(Itemised Charges:) Tj T*
+(Room Rent - Twin Sharing \(3 days @ 6,500\)                       19,500.00) Tj T*
+(Surgeon and Anaesthetist Fees                                   45,000.00) Tj T*
+(Operation Theatre Charges                                       18,000.00) Tj T*
+(Pharmacy - Medicines and Drugs                                  12,500.00) Tj T*
+(Laboratory and Diagnostic Tests \(CT Abdomen, Blood\)              8,200.00) Tj T*
+(Consumables - Gloves, Masks, Admission Kit                       3,400.00) Tj T*
+() Tj T*
+(Total Amount                                                   106,600.00) Tj T*
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000309 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1287
+%%EOF

@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Patient Name: Suresh Nair
+Admission Date: 2025-02-14
+Discharge Date: 2025-02-16
+Diagnosis: Distal radius fracture following accidental fall
+Procedure: Open reduction and internal fixation
+
+Clinical Notes:
+Accidental injury.

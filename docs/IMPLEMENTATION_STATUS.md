@@ -1,0 +1,56 @@
+# Implementation Status
+
+Last updated: 2026-10-08. Source of truth: `docs/Claim_Sense_Project_1_..._FINAL_V2_..._Deployment_Ready.md` and `PROJECT_1_FINAL_CONTENTS.md`.
+
+## Starting point
+
+The repository held one file, `PROJECT 1.MD` (the original project prompt). There was no code, build, test, Docker or deployment configuration. Everything below was built in this pass.
+
+## Completed (validated)
+
+| # | Golden-path step | Implementation | Validation |
+|---|---|---|---|
+| 1 | Dashboard | `frontend/src/pages/Dashboard.tsx`, `GET /api/v1/analytics` | Browser run, screenshot `docs/screenshots/01-dashboard.png` |
+| 2 | Claim creation and document upload | `POST /claims`, `POST /claims/{n}/documents`, `NewClaim.tsx` | Browser upload of `data/claims/demo_upload`, API test |
+| 3 | Extraction and structured facts | `agents/document.py` (PDF via pypdf, text), facts with file/line/confidence | `test_extraction.py` incl. PDF |
+| 4 | Policy and version matching | `agents/policy.py`, effective-dated `policy_versions` | `test_version_matching_uses_wording_in_force` |
+| 5 | Hybrid RAG | `rag/retriever.py` BM25 + char n-gram TF-IDF, RRF, synonym expansion | `test_rag.py` |
+| 6 | Evidence with source metadata | clause ref, section, page, version, file on every citation | `test_rejection_cites_clause`, smoke test |
+| 7 | Coverage and exclusions | `agents/coverage.py` | 8 golden scenarios |
+| 8 | Deterministic adjudication | `adjudication/rules.py` (Decimal, waterfall) | `test_adjudication.py` hand calculations |
+| 9 | Fraud/risk signals | `agents/risk.py` | `test_risk_levels`, duplicate test, portfolio evaluation |
+| 10 | Evidence-backed recommendation | `agents/evidence.py` | 8 golden scenarios |
+| 11 | Human review and workflow | `agents/review.py`, `/review`, `/reviews` | API test incl. validation and override audit; browser approve |
+| 12 | Audit trail | `audit_events`, `/audit` | API test, browser |
+| 13 | Interactive frontend | 9 screens, all calling real endpoints | Playwright golden path: 0 console errors |
+| – | Supervisor/orchestrator | `agents/supervisor.py`, `analysis_runs`, `agent_runs` with tool calls | Safe-failure and re-run tests |
+| – | Docker | `Dockerfile` (UI + API in one image), `docker-compose.yml` with PostgreSQL | Built and run locally on PostgreSQL; smoke test passed |
+| – | CI | `.github/workflows/ci.yml`: ruff, pytest, frontend build, Docker smoke test | Not yet run on GitHub (runs on the PR) |
+
+## Validation results (this session)
+
+- `ruff check app tests`: clean.
+- `pytest`: 32 passed.
+- `npm run build` (tsc + vite): passed.
+- Browser (Playwright, Chromium) against Vite dev server and against the Docker image on PostgreSQL: create claim, upload 3 documents, analyse (₹78,000 billed, ₹64,080 payable, partial approval), approve, assistant answer and refusal, all pages load. No console errors on the Docker run.
+- `scripts/smoke_test.py http://localhost:8080` against Docker + PostgreSQL: all checks passed.
+
+## In progress
+
+Nothing in progress.
+
+## Blocked
+
+| Item | Blocker | What unblocks it |
+|---|---|---|
+| Cloud deployment (Azure Container Apps or Render) | No cloud credentials or account access in the build environment | Add `AZURE_CREDENTIALS` secret and variables, then run the *Deploy to Azure Container Apps* workflow; or connect the repo on Render using `render.yaml` |
+| LLM-written answers | No `ANTHROPIC_API_KEY` provided | Set the key; extractive mode works without it |
+| Public 2024–2026 datasets | Registered only; not downloaded or ingested | Download, record provenance, ingest IRDAI circulars into the RAG corpus |
+
+## Not in this version (roadmap)
+
+Authentication and roles, OCR for scanned images, embedding retriever, ML fraud model, property and travel lines, background job queue, Azure AI Search, Key Vault, Application Insights, reopening decided claims.
+
+## Next action
+
+Merge the PR after CI passes, then deploy with one of the two prepared paths and run `python3 scripts/smoke_test.py <deployed-url>`. Deployment is not claimed until that passes.

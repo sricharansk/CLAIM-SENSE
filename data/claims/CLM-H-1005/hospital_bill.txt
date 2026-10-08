@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Bill Number: HB-1005
+Admission Date: 2025-02-14
+Discharge Date: 2025-02-16
+Patient/Insured Name: Suresh Nair
+
+Itemised Charges:
+Room Rent - Twin Sharing (2 days @ 5,500)                       11,000.00
+Orthopaedic Surgeon Fees                                        28,000.00
+Operation Theatre Charges                                       12,000.00
+Implants and Medicines                                          22,000.00
+X-Ray and Diagnostics                                            3,500.00
+
+Total Amount                                                    76,500.00

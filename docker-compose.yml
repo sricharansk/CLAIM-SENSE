@@ -1,0 +1,34 @@
+# Local stack: Claim Sense app + PostgreSQL. Open http://localhost:8080
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: claimsense
+      POSTGRES_USER: claimsense
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-claimsense-local}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U claimsense -d claimsense"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    image: claimsense:local
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://claimsense:${POSTGRES_PASSWORD:-claimsense-local}@db:5432/claimsense
+      CLAIMSENSE_SEED: "true"
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    ports:
+      - "8080:8000"
+    volumes:
+      - uploads:/app/var/storage
+
+volumes:
+  pgdata:
+  uploads:

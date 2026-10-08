@@ -1,0 +1,18 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Urology Centre (fictional)
+Bill Number: HB-7781
+Admission Date: 2025-11-03
+Discharge Date: 2025-11-05
+Patient/Insured Name: Fatima Shaikh
+
+Itemised Charges:
+Room Rent - Twin Sharing (2 days @ 4,800)                        9,600.00
+Urologist and Anaesthetist Fees                                 38,000.00
+Operation Theatre Charges                                       15,000.00
+Pharmacy - Medicines and Drugs                                   7,400.00
+Diagnostic Tests - CT KUB and Urine Culture                      6,200.00
+Admission Kit and Consumables                                    1,800.00
+
+Total Amount                                                    78,000.00

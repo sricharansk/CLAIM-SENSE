@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Urology Centre (fictional)
+Patient Name: Fatima Shaikh
+Admission Date: 2025-11-03
+Discharge Date: 2025-11-05
+Diagnosis: Left renal calculus (kidney stone), 9 mm
+Procedure: Ureteroscopic lithotripsy (URSL)
+
+Clinical Notes:
+Stone cleared. Discharged with stent.
