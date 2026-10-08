@@ -11,6 +11,7 @@ Outputs (deterministic, seed=2025):
   data/policies/insured_policies.json           customer policy contracts
   data/claims/<CLAIM>/*.txt|pdf                 claim document packets for the golden scenarios
   data/claims/scenarios.json                    claim headers + expected outcome
+  data/evaluation/packets/<CASE>/*.txt          extra packets used only by scripts/evaluate.py (never seeded)
   data/synthetic/claims_portfolio.csv           1,000 claims with injected fraud patterns
 
 Run: python data/synthetic/generate.py
@@ -27,6 +28,7 @@ ROOT = Path(__file__).resolve().parents[2]
 POL = ROOT / "data" / "policies"
 CLM = ROOT / "data" / "claims"
 SYN = ROOT / "data" / "synthetic"
+EVAL = ROOT / "data" / "evaluation" / "packets"
 INSURER = "Synthetic Assurance Co. Ltd. (fictional)"
 NOTICE = ("This is SYNTHETIC policy wording created for the Claim Sense demo. It is not issued by any "
           "real insurer and is not regulatory text.")
@@ -415,6 +417,50 @@ def write_demo_upload() -> None:
                                                        "Ureteroscopic lithotripsy (URSL)", "Stone cleared. Discharged with stent."), encoding="utf-8")
 
 
+def evaluation_claims() -> list[dict]:
+    """Packets for evaluation cases the seeded scenarios do not cover. Created fresh by scripts/evaluate.py."""
+    viral = [("Room Rent - Twin Sharing (3 days @ 4,500)", 13500), ("Consultant Physician Fees", 9000),
+             ("Pharmacy - Medicines and Drugs", 8200), ("Laboratory Tests - Platelet Count and Serology", 5300)]
+    E = []
+    E.append(dict(claim_number="EVAL-H-01", claim_type="health", policy_number="CS-HLT-24-000233", claimant="Suresh Nair",
+                  incident_date="2025-11-10", hospital="Lakeview Multispeciality Hospital (fictional)",
+                  narrative="Admitted with acute gastroenteritis and dehydration after two days of vomiting.",
+                  items=[("Room Rent - General Ward (2 days @ 4,000)", 8000), ("Consultant Physician Fees", 6000),
+                         ("Pharmacy - Medicines and IV Fluids", 7400), ("Laboratory Tests - Stool and Blood", 3600)],
+                  admit="2025-11-10", disch="2025-11-12", diagnosis="Acute gastroenteritis with moderate dehydration",
+                  procedure="Medical management with IV fluids", notes="Recovered. Discharged on oral rehydration."))
+    E.append(dict(claim_number="EVAL-H-02", claim_type="health", policy_number="CS-HLT-25-000342", claimant="Meena Iyer",
+                  incident_date="2025-12-05", hospital="Sunrise Care Hospital (fictional)",
+                  narrative="Injured in a road traffic accident as a pillion rider; fractures of the left femur and pelvis.",
+                  items=[("Room Rent - Twin Sharing (8 days @ 5,000)", 40000), ("ICU Charges (3 days @ 10,000)", 30000),
+                         ("Orthopaedic Surgeon and Anaesthetist Fees", 120000), ("Operation Theatre Charges", 45000),
+                         ("Implants - Femur Nail and Pelvic Plates", 110000), ("Pharmacy - Medicines and Drugs", 38000),
+                         ("Physiotherapy and Diagnostic Imaging", 27000)],
+                  admit="2025-12-05", disch="2025-12-16",
+                  diagnosis="Fracture shaft of left femur and pelvic fracture following road traffic accident",
+                  procedure="Intramedullary nailing of femur and pelvic fixation", notes="Mobilised with walker. Discharged."))
+    for number, day, disch in (("EVAL-H-03", "2025-04-01", "2025-04-04"), ("EVAL-H-04", "2025-03-31", "2025-04-03")):
+        E.append(dict(claim_number=number, claim_type="health", policy_number="CS-HLT-24-000117", claimant="Ravi Kumar",
+                      incident_date=day, hospital="Greenfield General Hospital (fictional)",
+                      narrative="High-grade fever with body ache; admitted for viral fever with low platelets.",
+                      items=viral, admit=day, disch=disch, diagnosis="Viral fever with thrombocytopenia",
+                      procedure="Medical management", notes="Platelets recovered. Discharged."))
+    return E
+
+
+def write_evaluation_packets() -> None:
+    for c in evaluation_claims():
+        d = EVAL / c["claim_number"]
+        d.mkdir(parents=True, exist_ok=True)
+        c["form_amount"] = sum(a for _, a in c["items"])
+        (d / "claim_form.txt").write_text(claim_form(c), encoding="utf-8")
+        (d / "hospital_bill.txt").write_text(bill("FINAL HOSPITAL BILL", c, c["items"],
+                                                  {"Hospital": c["hospital"], "Bill Number": f"HB-{c['claim_number'][-4:]}",
+                                                   "Admission Date": c["admit"], "Discharge Date": c["disch"]}), encoding="utf-8")
+        (d / "discharge_summary.txt").write_text(discharge(c, c["admit"], c["disch"], c["diagnosis"], c["procedure"], c["notes"]),
+                                                 encoding="utf-8")
+
+
 def write_pdf(path: Path, lines: list[str]) -> None:
     """Minimal single-page text PDF (Courier), enough for pypdf text extraction."""
     def esc(s: str) -> str:
@@ -495,6 +541,7 @@ def main() -> None:
         for a, b, c, d, e, f in INSURED], indent=2), encoding="utf-8")
     scen = write_claim_packets()
     write_demo_upload()
+    write_evaluation_packets()
     (CLM / "scenarios.json").write_text(json.dumps(scen, indent=2), encoding="utf-8")
     portfolio()
     print(f"policies: {len(list(POL.glob('*.md')))}, claims: {len(scen)}, portfolio rows: 1000")

@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-H-04
+Admission Date: 2025-03-31
+Discharge Date: 2025-04-03
+Patient/Insured Name: Ravi Kumar
+
+Itemised Charges:
+Room Rent - Twin Sharing (3 days @ 4,500)                       13,500.00
+Consultant Physician Fees                                        9,000.00
+Pharmacy - Medicines and Drugs                                   8,200.00
+Laboratory Tests - Platelet Count and Serology                   5,300.00
+
+Total Amount                                                    36,000.00

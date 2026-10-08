@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Patient Name: Meena Iyer
+Admission Date: 2025-12-05
+Discharge Date: 2025-12-16
+Diagnosis: Fracture shaft of left femur and pelvic fracture following road traffic accident
+Procedure: Intramedullary nailing of femur and pelvic fixation
+
+Clinical Notes:
+Mobilised with walker. Discharged.

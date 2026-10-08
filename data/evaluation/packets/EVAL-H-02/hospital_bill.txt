@@ -1,0 +1,19 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Bill Number: HB-H-02
+Admission Date: 2025-12-05
+Discharge Date: 2025-12-16
+Patient/Insured Name: Meena Iyer
+
+Itemised Charges:
+Room Rent - Twin Sharing (8 days @ 5,000)                       40,000.00
+ICU Charges (3 days @ 10,000)                                   30,000.00
+Orthopaedic Surgeon and Anaesthetist Fees                      120,000.00
+Operation Theatre Charges                                       45,000.00
+Implants - Femur Nail and Pelvic Plates                        110,000.00
+Pharmacy - Medicines and Drugs                                  38,000.00
+Physiotherapy and Diagnostic Imaging                            27,000.00
+
+Total Amount                                                   410,000.00

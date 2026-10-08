@@ -1,0 +1,145 @@
+{
+  "about": "Golden evaluation cases for Claim Sense. Expected values are worked out by hand from the synthetic policy wording and terms (data/policies), not copied from system output. Run: python scripts/evaluate.py",
+  "claims": [
+    {
+      "id": "C01", "categories": ["clearly_covered", "deductible"],
+      "title": "Gastroenteritis admission, every check passes; only the deductible and co-pay apply",
+      "packet": "EVAL-H-01", "policy_number": "CS-HLT-24-000233", "claim_type": "health", "claimant": "Suresh Nair",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "18000.00",
+        "waterfall": {"R10_NON_PAYABLE": null, "R20_PER_DAY_LIMIT": null, "R30_DEDUCTIBLE": "-5000.00", "R40_COPAY": "-2000.00", "R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "25,000 billed; room rent 4,000/day is within the 5,000 limit (2.2); deductible 5,000 (5.1) -> 20,000; co-pay 10% (5.2) = 2,000 -> 18,000."
+    },
+    {
+      "id": "C02", "categories": ["excluded"],
+      "title": "Motor claim with a positive breath analyser test",
+      "claim_number": "CLM-M-2002",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_DUI", "clause_ref": "3.1"},
+        "payable_amount": "0.00", "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW",
+        "retrieved_clause": "3.1"
+      },
+      "working": "Police report says the driver was under the influence of alcohol; exclusion 3.1 applies, nothing is payable."
+    },
+    {
+      "id": "C03", "categories": ["excluded"],
+      "title": "Cataract surgery inside the 24-month specified-disease waiting period",
+      "claim_number": "CLM-H-1002",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED",
+        "failing_check": {"code": "SPECIFIED_DISEASE_WAITING", "clause_ref": "3.3"},
+        "payable_amount": "0.00", "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW",
+        "retrieved_clause": "3.3"
+      },
+      "working": "Policy started 2025-02-10, surgery 2025-09-05, about 6 months of cover; cataract needs 24 months (3.3)."
+    },
+    {
+      "id": "C04", "categories": ["partial_coverage", "sub_limit"],
+      "title": "Appendicectomy with a room above the per-day limit and non-payable consumables",
+      "claim_number": "CLM-H-1001",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "84330.00",
+        "waterfall": {"R10_NON_PAYABLE": "-3400.00", "R20_PER_DAY_LIMIT": "-4500.00", "R30_DEDUCTIBLE": "-5000.00", "R40_COPAY": "-9370.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "106,600 billed; consumables 3,400 not payable (4.3); room 3 days x (6,500 - 5,000) = 4,500 over the limit (2.2); deductible 5,000; co-pay 10% of 93,700 = 9,370 -> 84,330."
+    },
+    {
+      "id": "C05", "categories": ["partial_coverage"],
+      "title": "Motor rear-end collision with depreciation by part type and vehicle age",
+      "claim_number": "CLM-M-2001",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "55350.00",
+        "waterfall": {"R15_DEPRECIATION": "-16150.00", "R30_DEDUCTIBLE": "-2000.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "73,500 billed; vehicle 34 months old so metal 15%: bumper 50% of 12,000 = 6,000, boot lid 15% of 26,000 = 3,900, tail lamp 50% of 6,500 = 3,250, paint 50% of 6,000 = 3,000 (2.2); glass and labour 0%; 1197cc deductible 2,000 (2.3) -> 55,350."
+    },
+    {
+      "id": "C06", "categories": ["insufficient_evidence"],
+      "title": "Dengue admission without a discharge summary",
+      "claim_number": "CLM-H-1004",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "missing_documents": ["discharge_summary"],
+        "payable_amount": "34560.00", "risk_level": "LOW", "recommendation": "REQUEST_INFO", "queue": "PENDING_INFORMATION"
+      },
+      "working": "Required documents (6.2) include the discharge summary, which is missing. Provisional amount: 43,400 - 5,000 = 38,400, co-pay 3,840 -> 34,560."
+    },
+    {
+      "id": "C07", "categories": ["high_risk"],
+      "title": "ICU pneumonia claim: early, 94% of the sum insured, and the form amount differs from the bill",
+      "claim_number": "CLM-H-1003",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "332100.00",
+        "waterfall": {"R20_PER_DAY_LIMIT": "-68000.00"},
+        "risk_level": "HIGH", "risk_signals": ["HIGH_AMOUNT_RATIO", "EARLY_CLAIM", "AMOUNT_MISMATCH"],
+        "recommendation": "INVESTIGATE", "queue": "SIU_INVESTIGATION"
+      },
+      "working": "Form says 468,000, bill totals 442,000 (gap 5.9%); 50 days after start; 468,000 / 500,000 = 94%. ICU 6 x (18,000 - 10,000) = 48,000 and room 5 x (9,000 - 5,000) = 20,000 over limits -> 374,000; deductible 5,000; co-pay 36,900 -> 332,100."
+    },
+    {
+      "id": "C08", "categories": ["sub_limit", "ambiguous_policy_version"],
+      "title": "Fracture before 2025-04-01, so the older wording's lower room limit and higher deductible apply",
+      "claim_number": "CLM-H-1005",
+      "expect": {
+        "policy_version": "2024.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "50800.00",
+        "waterfall": {"R20_PER_DAY_LIMIT": "-3000.00", "R30_DEDUCTIBLE": "-10000.00", "R40_COPAY": "-12700.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "2024.1 wording: room limit 4,000/day so 2 x 1,500 = 3,000 over; 76,500 - 3,000 = 73,500; deductible 10,000; co-pay 20% of 63,500 = 12,700 -> 50,800."
+    },
+    {
+      "id": "C09", "categories": ["max_coverage"],
+      "title": "Road accident with bills above the sum insured; payment capped at the available sum insured",
+      "packet": "EVAL-H-02", "policy_number": "CS-HLT-25-000342", "claim_type": "health", "claimant": "Meena Iyer",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "300000.00",
+        "waterfall": {"R20_PER_DAY_LIMIT": null, "R30_DEDUCTIBLE": "-5000.00", "R40_COPAY": "-40500.00", "R50_MAX_LIABILITY": "-64500.00"},
+        "risk_level": "MEDIUM", "risk_signals": ["HIGH_AMOUNT_RATIO"],
+        "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "410,000 billed; room and ICU at exactly their limits; deductible 5,000 -> 405,000; co-pay 40,500 -> 364,500; capped at the 300,000 sum insured (5.3). 410,000 / 300,000 is above 80%, the only risk signal (score 30, MEDIUM)."
+    },
+    {
+      "id": "C10", "categories": ["duplicate"],
+      "title": "Second claim for the same appendicitis admission",
+      "claim_number": "CLM-H-1006",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED",
+        "payable_amount": "84330.00", "risk_level": "HIGH", "risk_signals": ["POSSIBLE_DUPLICATE"],
+        "recommendation": "INVESTIGATE", "queue": "SIU_INVESTIGATION"
+      },
+      "working": "Same policy, incident date and amount as CLM-H-1001, which was filed first."
+    },
+    {
+      "id": "C11", "categories": ["ambiguous_policy_version"],
+      "title": "Admission on 2025-04-01, the first day of the 2025.1 wording",
+      "packet": "EVAL-H-03", "policy_number": "CS-HLT-24-000117", "claim_type": "health", "claimant": "Ravi Kumar",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "payable_amount": "27900.00",
+        "waterfall": {"R20_PER_DAY_LIMIT": null, "R30_DEDUCTIBLE": "-5000.00", "R40_COPAY": "-3100.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "2025.1: room 4,500/day is within 5,000; 36,000 - 5,000 = 31,000; co-pay 10% = 3,100 -> 27,900."
+    },
+    {
+      "id": "C12", "categories": ["ambiguous_policy_version"],
+      "title": "Same bill admitted on 2025-03-31, the last day of the 2024.1 wording",
+      "packet": "EVAL-H-04", "policy_number": "CS-HLT-24-000117", "claim_type": "health", "claimant": "Ravi Kumar",
+      "expect": {
+        "policy_version": "2024.1", "coverage_status": "COVERED", "payable_amount": "19600.00",
+        "waterfall": {"R20_PER_DAY_LIMIT": "-1500.00", "R30_DEDUCTIBLE": "-10000.00", "R40_COPAY": "-4900.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "2024.1: room limit 4,000 so 3 x 500 = 1,500 over; 34,500 - 10,000 = 24,500; co-pay 20% = 4,900 -> 19,600."
+    }
+  ]
+}

@@ -19,8 +19,15 @@ jobs:
           cache: pip
           cache-dependency-path: backend/requirements*.txt
       - run: pip install -r requirements-dev.txt
-      - run: ruff check app tests
+      - run: ruff check app tests ../scripts
       - run: python -m pytest -q
+      - name: Golden evaluation (fails on any check)
+        run: python ../scripts/evaluate.py --out ../evaluation-ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evaluation-report
+          path: evaluation-ci/
       - run: pip-audit -r requirements.txt
 
   frontend:

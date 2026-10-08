@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Bill Number: HB-H-01
+Admission Date: 2025-11-10
+Discharge Date: 2025-11-12
+Patient/Insured Name: Suresh Nair
+
+Itemised Charges:
+Room Rent - General Ward (2 days @ 4,000)                        8,000.00
+Consultant Physician Fees                                        6,000.00
+Pharmacy - Medicines and IV Fluids                               7,400.00
+Laboratory Tests - Stool and Blood                               3,600.00
+
+Total Amount                                                    25,000.00
