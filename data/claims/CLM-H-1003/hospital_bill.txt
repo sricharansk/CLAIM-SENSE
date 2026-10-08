@@ -1,0 +1,18 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Bill Number: HB-1003
+Admission Date: 2025-06-20
+Discharge Date: 2025-07-01
+Patient/Insured Name: Arjun Mehta
+
+Itemised Charges:
+ICU Charges (6 days @ 18,000)                                  108,000.00
+Room Rent - Private (5 days @ 9,000)                            45,000.00
+Consultant and Intensivist Fees                                 96,000.00
+Pharmacy - Medicines and Drugs                                 118,000.00
+Laboratory and Diagnostic Tests                                 54,000.00
+Ventilator and Equipment Charges                                21,000.00
+
+Total Amount                                                   442,000.00

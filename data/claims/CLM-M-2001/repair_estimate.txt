@@ -1,0 +1,17 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2001
+Vehicle Registration: KA-05-SY-4821
+Patient/Insured Name: Priya Sharma
+
+Itemised Charges:
+Rear Bumper (plastic) - replace                                 12,000.00
+Boot Lid Panel (metal) - replace                                26,000.00
+Tail Lamp Assembly (plastic)                                     6,500.00
+Rear Windshield Glass                                            9,000.00
+Denting and Fitting Labour                                      14,000.00
+Painting Material                                                6,000.00
+
+Total Amount                                                    73,500.00

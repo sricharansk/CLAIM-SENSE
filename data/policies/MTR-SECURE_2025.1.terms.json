@@ -1,0 +1,105 @@
+{
+  "product_code": "MTR-SECURE",
+  "product_name": "ClaimSense Motor Secure",
+  "line_of_business": "motor",
+  "insurer": "Synthetic Assurance Co. Ltd. (fictional)",
+  "version": "2025.1",
+  "effective_from": "2025-04-01",
+  "effective_to": "2026-03-31",
+  "deductible": {
+    "amount": 2000,
+    "amount_above_1500cc": 3500,
+    "clause": "2.3"
+  },
+  "depreciation": {
+    "clause": "2.2",
+    "flat_percent": {
+      "parts_plastic": 50,
+      "parts_fibre": 30,
+      "glass": 0,
+      "paint": 50,
+      "labour": 0
+    },
+    "metal_by_age_months": [
+      [
+        6,
+        0
+      ],
+      [
+        12,
+        5
+      ],
+      [
+        24,
+        10
+      ],
+      [
+        36,
+        15
+      ],
+      [
+        48,
+        25
+      ],
+      [
+        60,
+        35
+      ],
+      [
+        100000,
+        40
+      ]
+    ]
+  },
+  "max_liability_clause": "1.2",
+  "exclusions": [
+    {
+      "code": "EXCL_DUI",
+      "clause": "3.1",
+      "keywords": [
+        "under the influence",
+        "breath analyser test positive",
+        "drunk",
+        "intoxicated",
+        "alcohol"
+      ]
+    },
+    {
+      "code": "EXCL_NO_LICENCE",
+      "clause": "3.2",
+      "keywords": [
+        "no valid licence",
+        "licence expired",
+        "unlicensed"
+      ]
+    },
+    {
+      "code": "EXCL_WEAR_TEAR",
+      "clause": "3.3",
+      "keywords": [
+        "wear and tear",
+        "mechanical breakdown",
+        "electrical breakdown"
+      ]
+    },
+    {
+      "code": "EXCL_OUTSIDE_INDIA",
+      "clause": "3.4",
+      "keywords": [
+        "outside india",
+        "nepal",
+        "bhutan"
+      ]
+    }
+  ],
+  "non_payable_categories": {},
+  "required_documents": {
+    "documents": [
+      "claim_form",
+      "repair_estimate",
+      "driving_licence"
+    ],
+    "clause": "4.2"
+  },
+  "coverage_clause": "2.1"
+}

@@ -1,0 +1,15 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2002
+Vehicle Registration: KA-03-SY-1190
+Patient/Insured Name: Karthik Rao
+
+Itemised Charges:
+Front Bumper (plastic) - replace                                14,500.00
+Bonnet (metal) - replace                                        31,000.00
+Headlamp Assembly (plastic)                                     11,000.00
+Denting and Fitting Labour                                       9,000.00
+
+Total Amount                                                    65,500.00

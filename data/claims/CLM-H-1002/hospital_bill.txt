@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Clearsight Eye Institute (fictional)
+Bill Number: HB-1002
+Admission Date: 2025-09-05
+Discharge Date: 2025-09-05
+Patient/Insured Name: Meena Iyer
+
+Itemised Charges:
+Room Rent - Day Care (1 day @ 3,000)                             3,000.00
+Surgeon Fees - Phacoemulsification                              32,000.00
+Intraocular Lens and Medicines                                  24,000.00
+Diagnostic Tests - Biometry                                      2,500.00
+
+Total Amount                                                    61,500.00

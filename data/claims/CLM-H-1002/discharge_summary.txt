@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Clearsight Eye Institute (fictional)
+Patient Name: Meena Iyer
+Admission Date: 2025-09-05
+Discharge Date: 2025-09-05
+Diagnosis: Senile cataract, left eye
+Procedure: Cataract surgery with IOL implant
+
+Clinical Notes:
+Planned day care procedure.

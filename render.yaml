@@ -1,0 +1,17 @@
+# One-click alternative: Render Blueprint (https://render.com/docs/blueprint-spec).
+# Builds the root Dockerfile; SQLite is re-seeded on each start (fine for a demo).
+services:
+  - type: web
+    name: claim-sense
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: CLAIMSENSE_SEED
+        value: "true"
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: DEMO_PASSWORD
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false

@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Patient Name: Ravi Kumar
+Admission Date: 2025-08-12
+Discharge Date: 2025-08-15
+Diagnosis: Acute appendicitis
+Procedure: Laparoscopic appendicectomy
+
+Clinical Notes:
+Uneventful recovery. Discharged in stable condition.
