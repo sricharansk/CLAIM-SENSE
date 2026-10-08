@@ -129,3 +129,10 @@ td.details { max-width: 420px; word-break: break-word; }
 .brand.dark small { color: var(--muted); }
 .demo-accounts { display: flex; flex-direction: column; gap: 6px; }
 .demo-accounts .chip { text-align: left; border-radius: 8px; }
+.letter { border: 1px solid var(--line); border-radius: 10px; padding: 18px 22px; background: var(--panel); max-width: 820px; line-height: 1.55; }
+.letter h3 { margin: 12px 0 8px; }
+@media print {
+  body * { visibility: hidden; }
+  .letter, .letter * { visibility: visible; }
+  .letter { position: absolute; left: 0; top: 0; border: 0; max-width: none; color: #000; background: #fff; }
+}

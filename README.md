@@ -15,7 +15,7 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Area | What you can do | Where |
 |---|---|---|
 | Sign-in and roles | Adjuster (approves up to ₹2,00,000), Supervisor (no limit, decides escalations, ingests policies), Auditor (read-only); signed tokens; every action audited under the signed-in user | `/` |
-| Dashboard | Live claim counts, recommendations, risk mix, review progress, portfolio evaluation | `/` |
+| Dashboard | Live claim counts, recommendations, risk mix, review progress, settlement clock, portfolio evaluation | `/` |
 | Claim intake | Create a claim, upload PDF or text documents, run the agent pipeline | `/claims/new` |
 | Document intelligence | Document classification, extracted facts with source file, line and confidence, itemised charges | claim page |
 | Policy versioning | Picks the wording version in force on the incident date (HLT-SHIELD 2024.1 vs 2025.1) | claim page |
@@ -26,6 +26,9 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Recommendation | Approve, partial approval, reject, request info or investigate, with reasons and an evidence package | claim page |
 | Human review | Approve (with amount override), reject, request info, investigate, escalate; notes required for adverse actions; approval limits enforced; escalated claims need a supervisor | claim page, `/reviews` |
 | Workflow | Routing to adjuster, investigation (SIU), pending-information and supervisor queues | `/reviews` |
+| Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
+| Decision letters | Settlement, repudiation (quotes the clause relied on), document-request and under-review letters built from data, no LLM; printable; marked draft until a human decides | claim page |
+| Export | Download the claim register as CSV with decision, payable amount, risk and settlement status | `/claims` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
 | Policy library | Browse clauses by version, view structured terms, ingest new wordings | `/policies` |
 | Provenance | Which datasets are used and which public 2024–2026 sources are registered | `/datasets` |
@@ -63,6 +66,7 @@ CLM-H-1001 waterfall, as the app shows it:
 | ![Claim analysis](docs/screenshots/02-claim-analysis.png) | ![Rejected for waiting period](docs/screenshots/04-claim-rejected-waiting-period.png) |
 | ![High-risk claim](docs/screenshots/05-claim-high-risk.png) | ![Motor depreciation](docs/screenshots/06-motor-depreciation.png) |
 | ![Policy assistant](docs/screenshots/07-policy-assistant.png) | ![Review queue](docs/screenshots/08-review-queue.png) |
+| ![Repudiation letter](docs/screenshots/12-rejection-letter.png) | ![Audit trail](docs/screenshots/10-audit-trail.png) |
 
 ## Architecture
 
@@ -132,15 +136,16 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 2. Upload the three files in [`data/claims/demo_upload/`](data/claims/demo_upload) and press **Create, upload and analyse**.
 3. Review the recommendation, coverage checks, waterfall (₹78,000 billed, ₹64,080 payable), risk and evidence.
 4. Approve it. The claim, review queue, dashboard and audit trail all update.
+5. Press **Generate letter** for the settlement letter (₹64,080.00), or open `CLM-H-1002` for a repudiation letter citing clause 3.3.
 
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 42 tests
+cd backend && ruff check app tests && python -m pytest -q    # 49 tests
 cd frontend && npm run build                                 # type check + production build
 ```
 
-Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus `pip-audit`, `npm audit` and a Docker + PostgreSQL smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
+Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus `pip-audit`, `npm audit` and a Docker + PostgreSQL smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Data and datasets
 

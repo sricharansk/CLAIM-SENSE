@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ApiError, AnalysisResult, ClaimDetail as Detail, api, inr, when, words } from "../api";
+import { ApiError, AnalysisResult, ClaimDetail as Detail, Letter, api, inr, when, words } from "../api";
 import { useSession } from "../components/session";
-import { Badge, Card, ErrorBox, Loading, useLoad } from "../components/ui";
+import { Badge, Card, Due, ErrorBox, Loading, useLoad } from "../components/ui";
 
 export default function ClaimDetail() {
   const { claimNumber = "" } = useParams();
@@ -30,6 +30,7 @@ export default function ClaimDetail() {
           <Link to="/claims" className="muted">← Claims</Link>
           <h1>{c.claim_number} <Badge value={c.status} /></h1>
           <p className="muted">{words(c.claim_type)} claim · {c.claimant_name} · policy <span className="mono">{c.policy_number}</span> · incident {c.incident_date ?? "unknown"} · claimed {inr(c.claimed_amount)}</p>
+          <p className="small">Settlement: <Due s={c.settlement} /> <span className="muted">due {c.settlement.due_date} ({c.settlement.days} days from last document{c.settlement.clause ? `, clause ${c.settlement.clause}` : ""})</span></p>
         </div>
         <div className="row">
           {!closed && <label className="btn">Upload documents
@@ -133,6 +134,8 @@ export default function ClaimDetail() {
         </Card>
       </>}
 
+      {r && <LetterCard claimNumber={c.claim_number} version={c.decisions.length} />}
+
       <div className="grid2">
         <Card title="Decisions">
           {c.decisions.length ? <ul className="timeline">{c.decisions.map((d) => (
@@ -201,6 +204,33 @@ function ReviewPanel({ claim, r, disabled, onDone }: { claim: Detail; r: Analysi
           disabled={busy || escalated || (a === "APPROVE" && overLimit)} onClick={() => act(a)}>{label}</button>)}</div>
         <ErrorBox error={error} />
       </div>
+    </Card>
+  );
+}
+
+function LetterCard({ claimNumber, version }: { claimNumber: string; version: number }) {
+  const [letter, setLetter] = useState<Letter | null>(null);
+  const [error, setError] = useState<ApiError | null>(null);
+  const load = async () => { setError(null); try { setLetter(await api.letter(claimNumber)); } catch (e) { setError(e as ApiError); } };
+  return (
+    <Card title="Decision letter" actions={<div className="row">
+      <button className="btn" onClick={load}>{letter ? "Refresh" : "Generate letter"}</button>
+      {letter && <button className="btn" onClick={() => window.print()}>Print</button>}
+    </div>}>
+      <ErrorBox error={error} />
+      {!letter && <p className="muted small">Builds the letter to the claimant from the recorded decision: amounts from the rules engine, reasons and clause text from the policy wording. No AI-written text.</p>}
+      {letter && (
+        <article className="letter" key={version}>
+          <div className="row between"><Badge value={letter.status} /><span className="muted small">Based on the {letter.based_on}</span></div>
+          <p className="small">{letter.from}<br />Date: {letter.date}</p>
+          <p className="small">To: {letter.to.name}<br />Policy: {letter.to.policy_number} · Claim: {letter.claim_number}</p>
+          <h3>{letter.subject}</h3>
+          {letter.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          {letter.references.length > 0 && <div className="small muted">Policy references: {letter.references.map((r) => `${r.policy} §${r.clause_ref} "${r.title}", p.${r.page}`).join("; ")}</div>}
+          <p>Yours sincerely,<br />{letter.signed_by ?? "Claims Department"}</p>
+          <p className="muted small">Synthetic demo letter. Not issued by any real insurer.</p>
+        </article>
+      )}
     </Card>
   );
 }

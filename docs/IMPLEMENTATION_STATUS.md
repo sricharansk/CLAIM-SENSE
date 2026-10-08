@@ -27,16 +27,19 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | – | Docker | `Dockerfile` (UI + API in one image), `docker-compose.yml` with PostgreSQL | Built and run locally on PostgreSQL; smoke test passed |
 | – | CI | `.github/workflows/ci.yml`: ruff, pytest, pip-audit, npm audit, frontend build, Docker + PostgreSQL smoke test | First run on PR #1: all jobs passed |
 | – | Sign-in and roles | `auth.py`, `/auth/login`, `/auth/me`; adjuster / supervisor / auditor; approval limit and escalation rules; sign-in screen and role-aware UI | `test_auth.py` (7 tests); browser run signs in and sees approval blocked over the limit |
+| – | Settlement clock | `sla.py`: due date from the `settlement_days` term (clause 6.3 health, 4.3 motor), counted from the last document; shown on claim page, claims list, review queue and dashboard | `test_letters_sla.py`; browser run |
+| – | Decision letters | `letters.py`, `GET /claims/{n}/letter`: settlement, repudiation (quotes the clause), document request, under review; deterministic, marked draft until a human decides | `test_letters_sla.py`; browser run generates the ₹64,080.00 settlement letter; screenshot `12-rejection-letter.png` |
+| – | CSV export | `GET /claims-export.csv`, Export CSV button on `/claims` | `test_letters_sla.py`; browser download |
 | – | Security | Upload allow-list, size limit and filename sanitising; security headers and CSP; non-root container; dependency audits; see `docs/SECURITY.md` | Header and path tests; pip-audit and npm audit clean |
 
 ## Validation results (this session)
 
 - `ruff check app tests`: clean.
-- `pytest`: 42 passed.
+- `pytest`: 49 passed.
 - `npm run build` (tsc + vite): passed.
 - `pip-audit -r backend/requirements.txt`: no known vulnerabilities. `npm audit`: 0 vulnerabilities.
 - GitHub Actions CI run 1 on PR #1: backend, frontend and docker-smoke jobs passed.
-- Browser (Playwright, Chromium) against Vite dev server and against the Docker image on PostgreSQL: create claim, upload 3 documents, analyse (₹78,000 billed, ₹64,080 payable, partial approval), approve, assistant answer and refusal, all pages load. No console errors on the Docker run.
+- Browser (Playwright, Chromium) against Vite dev server and against the Docker image on PostgreSQL: create claim, upload 3 documents, analyse (₹78,000 billed, ₹64,080 payable, partial approval), approve, generate the settlement letter (INR 64,080.00) and a repudiation letter, export CSV, assistant answer and refusal, all pages load. No console errors on the Docker run.
 - `scripts/smoke_test.py http://localhost:8080` against Docker + PostgreSQL: all checks passed.
 
 ## Definition of done (blueprint PART 20)

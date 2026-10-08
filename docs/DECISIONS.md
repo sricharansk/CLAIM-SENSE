@@ -13,3 +13,5 @@
 | D9 | Claim numbers are the public identifier in URLs and APIs | Readable for reviewers and audit |
 | D10 | Built-in sign-in with three seeded roles and signed tokens instead of an identity provider | Works in any deployment with no external setup; SSO (Azure AD / OIDC) is the next step |
 | D11 | Adjuster approval limit of ₹2,00,000; escalated claims only a supervisor can decide | Mirrors common delegated-authority limits in claims operations and keeps high-value payouts under senior review |
+| D12 | Decision letters are filled from templates and stored data, never written by an LLM | A customer-facing repudiation must quote the exact clause and amounts; templates make that verifiable. Letters stay marked draft until a human decides |
+| D13 | Settlement clock counts from the last document upload, using the policy's `settlement_days` term | The synthetic wordings define settlement within 30 days of the last required document, so the clock follows the wording rather than a hard-coded SLA |

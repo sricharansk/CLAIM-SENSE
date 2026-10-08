@@ -28,11 +28,12 @@ export default function Dashboard() {
         <Kpi label="AI-recommended payable" value={inr(totals.recommended_payable)} />
         <Kpi label="Avg. analysis time" value={totals.avg_analysis_ms !== null ? `${totals.avg_analysis_ms} ms` : "—"} />
         <Kpi label="Human agreed with AI" value={`${a.data.human_vs_ai.agreed}/${a.data.human_vs_ai.decided}`} />
+        <Kpi label="Settlement overdue / breached" value={totals.overdue} tone={totals.overdue ? "red" : undefined} />
       </div>
       <div className="grid3">
         <Card title="AI recommendations"><Bars data={a.data.by_recommendation} /></Card>
         <Card title="Risk levels"><Bars data={a.data.by_risk} /></Card>
-        <Card title="Claim status"><Bars data={a.data.by_status} /></Card>
+        <Card title="Claim status"><Bars data={a.data.by_status} /><h4>Settlement clock</h4><Bars data={a.data.settlement} /></Card>
       </div>
       <div className="grid2">
         <Card title="Recent claims" actions={<Link to="/claims">All claims</Link>}>

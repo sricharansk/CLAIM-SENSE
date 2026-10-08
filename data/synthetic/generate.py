@@ -156,6 +156,7 @@ def health_terms(v: str, p: dict) -> dict:
         "non_payable_categories": {"consumables": "4.3", "non_medical": "4.3"},
         "category_limits": {"room_rent": "room_rent_per_day", "icu": "icu_per_day"},
         "required_documents": {"documents": ["claim_form", "discharge_summary", "hospital_bill"], "clause": "6.2"},
+        "settlement_days": {"value": 30, "clause": "6.3"},
         "coverage_clause": "2.1",
     }
 
@@ -233,6 +234,7 @@ def motor_terms() -> dict:
         ],
         "non_payable_categories": {},
         "required_documents": {"documents": ["claim_form", "repair_estimate", "driving_licence"], "clause": "4.2"},
+        "settlement_days": {"value": 30, "clause": "4.3"},
         "coverage_clause": "2.1",
     }
 

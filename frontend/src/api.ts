@@ -1,5 +1,12 @@
 // Typed client for the Claim Sense API. Every screen calls these real endpoints.
+export type Settlement = { start: string; due_date: string; days: number; clause: string | null; days_left: number | null;
+  state: "ON_TRACK" | "DUE_SOON" | "OVERDUE" | "MET" | "BREACHED"; decided_on: string | null };
+export type Letter = { claim_number: string; kind: string; status: "FINAL" | "DRAFT"; date: string;
+  to: { name: string; policy_number: string; holder: string }; from: string; subject: string; paragraphs: string[];
+  references: { clause_ref: string; title: string; page: number; text: string; policy: string }[];
+  signed_by: string | null; based_on: string };
 export type ClaimSummary = {
+  settlement: Settlement;
   claim_number: string; policy_number: string; claim_type: "health" | "motor"; claimant_name: string;
   incident_date: string | null; claimed_amount: string | null; status: string; created_at: string; updated_at: string;
   recommendation: string | null; recommended_payable: string | null; risk_level: string | null; documents: number;
@@ -48,10 +55,11 @@ export type PolicyVersionFull = { id: number; version: string; effective_from: s
   clauses: { id: number; clause_ref: string; title: string; section: string; page: number; text: string }[] };
 export type InsuredPolicy = { policy_number: string; product_code: string; holder_name: string; start_date: string; end_date: string; sum_insured: string };
 export type RagAnswer = { question: string; grounded: boolean; mode: string; answer: string; citations: Citation[] };
-export type ReviewTask = { task_id: number; queue: string; priority: string; claim_number: string; claimant_name: string; claim_type: string;
+export type ReviewTask = { settlement: Settlement; task_id: number; queue: string; priority: string; claim_number: string; claimant_name: string; claim_type: string;
   claimed_amount: string | null; status: string; recommendation: string | null; recommended_payable: string | null; created_at: string };
 export type Analytics = {
-  totals: { claims: number; pending_review: number; high_risk: number; decided: number; claimed_amount: string; recommended_payable: string; avg_analysis_ms: number | null };
+  settlement: Record<string, number>;
+  totals: { overdue: number; claims: number; pending_review: number; high_risk: number; decided: number; claimed_amount: string; recommended_payable: string; avg_analysis_ms: number | null };
   by_status: Record<string, number>; by_recommendation: Record<string, number>; by_risk: Record<string, number>;
   by_line: Record<string, number>; queues: Record<string, number>;
   human_vs_ai: { decided: number; agreed: number; overridden: number };
@@ -113,6 +121,15 @@ export const api = {
     const fd = new FormData();
     files.forEach((f) => fd.append("files", f));
     return request<{ id: number; filename: string; doc_type: string; facts_extracted: number }[]>(`/claims/${n}/documents`, { method: "POST", body: fd });
+  },
+  letter: (n: string) => request<Letter>(`/claims/${n}/letter`),
+  exportCsv: async () => {
+    const res = await fetch("/api/v1/claims-export.csv", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    if (!res.ok) throw new ApiError(`Export failed (${res.status})`, res.status);
+    const url = URL.createObjectURL(await res.blob());
+    const a = document.createElement("a");
+    a.href = url; a.download = "claim-sense-claims.csv"; a.click();
+    URL.revokeObjectURL(url);
   },
   document: (n: string, id: number) => request<{ filename: string; doc_type: string; text: string }>(`/claims/${n}/documents/${id}`),
   analyze: (n: string) => request<Analysis>(`/claims/${n}/analyze`, { method: "POST" }),

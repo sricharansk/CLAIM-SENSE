@@ -8,9 +8,10 @@ from functools import lru_cache
 
 from sqlalchemy.orm import Session
 
+from . import sla
 from .agents.risk import level, score_features
 from .config import settings
-from .models import AnalysisRun, Claim, ClaimDecision, WorkflowTask
+from .models import AnalysisRun, Claim, ClaimDecision, PolicyVersion, WorkflowTask
 
 
 def _latest_ai(db: Session) -> dict[int, ClaimDecision]:
@@ -37,16 +38,23 @@ def dashboard(db: Session) -> dict:
         last_human[d.claim_id] = d
     agree = sum(1 for cid, h in last_human.items() if cid in ai and _agrees(ai[cid].decision, h.decision))
     open_tasks = db.query(WorkflowTask).filter_by(status="OPEN").all()
+    clocks = Counter()
+    for c in claims:
+        run = latest_run.get(c.id)
+        terms = db.get(PolicyVersion, run.policy_version_id).terms if run and run.policy_version_id else None
+        clocks[sla.settlement_clock(c, terms, last_human.get(c.id))["state"]] += 1
     return {
         "totals": {"claims": len(claims), "pending_review": sum(1 for c in claims if c.status == "PENDING_REVIEW"),
                    "high_risk": risk.get("HIGH", 0), "decided": len(last_human),
                    "claimed_amount": str(claimed), "recommended_payable": str(recommended),
-                   "avg_analysis_ms": round(sum(durations) / len(durations)) if durations else None},
+                   "avg_analysis_ms": round(sum(durations) / len(durations)) if durations else None,
+                   "overdue": clocks.get("OVERDUE", 0) + clocks.get("BREACHED", 0)},
         "by_status": dict(Counter(c.status for c in claims)),
         "by_recommendation": dict(Counter(d.decision for d in ai.values())),
         "by_risk": dict(risk),
         "by_line": dict(Counter(c.claim_type for c in claims)),
         "queues": dict(Counter(t.queue for t in open_tasks)),
+        "settlement": dict(clocks),
         "human_vs_ai": {"decided": len(last_human), "agreed": agree, "overridden": len(last_human) - agree},
         "portfolio": portfolio_evaluation(),
     }

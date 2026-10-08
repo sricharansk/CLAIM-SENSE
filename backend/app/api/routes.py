@@ -1,16 +1,19 @@
 """REST API v1 (blueprint PART 12)."""
 from __future__ import annotations
 
+import csv
+import io
 import json
 from datetime import date
 from decimal import Decimal
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import func, text
 from sqlalchemy.orm import Session
 
-from .. import analytics, llm
+from .. import analytics, letters, llm, sla
 from ..agents import audit
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
@@ -27,6 +30,7 @@ from ..models import (
     DatasetSource,
     InsuredPolicy,
     Policy,
+    PolicyVersion,
     User,
     WorkflowTask,
 )
@@ -96,8 +100,15 @@ class ClaimIn(BaseModel):
     description: str = Field(default="", max_length=4000)
 
 
-def _claim_summary(c: Claim, ai: ClaimDecision | None, risk: str | None) -> dict:
-    return {"claim_number": c.claim_number, "policy_number": c.policy_number, "claim_type": c.claim_type,
+def _clock(db: Session, c: Claim) -> dict:
+    run = db.query(AnalysisRun).filter_by(claim_id=c.id, status="SUCCEEDED").order_by(AnalysisRun.id.desc()).first()
+    terms = db.get(PolicyVersion, run.policy_version_id).terms if run and run.policy_version_id else None
+    final = db.query(ClaimDecision).filter_by(claim_id=c.id, source="HUMAN").order_by(ClaimDecision.id.desc()).first()
+    return sla.settlement_clock(c, terms, final)
+
+
+def _claim_summary(c: Claim, ai: ClaimDecision | None, risk: str | None, clock: dict | None = None) -> dict:
+    return {"settlement": clock,"claim_number": c.claim_number, "policy_number": c.policy_number, "claim_type": c.claim_type,
             "claimant_name": c.claimant_name, "incident_date": c.incident_date, "claimed_amount": _money(c.claimed_amount),
             "status": c.status, "created_at": c.created_at, "updated_at": c.updated_at,
             "recommendation": ai.decision if ai else None, "recommended_payable": _money(ai.payable_amount) if ai else None,
@@ -135,7 +146,23 @@ def list_claims(status: str | None = None, q: str | None = None, db: Session = D
     risk = {}
     for r in db.query(AnalysisRun).filter_by(status="SUCCEEDED").order_by(AnalysisRun.id).all():
         risk[r.claim_id] = r.result["risk"]["level"] if r.result else None
-    return [_claim_summary(c, ai.get(c.id), risk.get(c.id)) for c in claims]
+    return [_claim_summary(c, ai.get(c.id), risk.get(c.id), _clock(db, c)) for c in claims]
+
+
+EXPORT_FIELDS = ["claim_number", "claim_type", "policy_number", "claimant_name", "incident_date", "claimed_amount",
+                 "recommendation", "recommended_payable", "risk_level", "status", "settlement_due", "settlement_state", "created_at"]
+
+
+@router.get("/claims-export.csv")
+def export_claims(db: Session = Depends(get_db)):
+    rows = list_claims(None, None, db)
+    buf = io.StringIO()
+    w = csv.DictWriter(buf, fieldnames=EXPORT_FIELDS, extrasaction="ignore")
+    w.writeheader()
+    for r in rows:
+        w.writerow({**r, "settlement_due": r["settlement"]["due_date"], "settlement_state": r["settlement"]["state"]})
+    return StreamingResponse(iter([buf.getvalue()]), media_type="text/csv",
+                             headers={"Content-Disposition": "attachment; filename=claim-sense-claims.csv"})
 
 
 def _analysis(db: Session, c: Claim) -> dict | None:
@@ -161,7 +188,7 @@ def get_claim(claim_number: str, db: Session = Depends(get_db)):
     ai = next((d for d in reversed(decisions) if d.source == "AI"), None)
     risk = analysis["result"]["risk"]["level"] if analysis and analysis["result"] else None
     return {
-        **_claim_summary(c, ai, risk), "description": c.description,
+        **_claim_summary(c, ai, risk, _clock(db, c)), "description": c.description,
         "documents": [{"id": d.id, "filename": d.filename, "doc_type": d.doc_type, "pages": d.pages, "status": d.status,
                        "sha256": d.sha256, "uploaded_at": d.uploaded_at} for d in c.documents],
         "facts": [{"id": f.id, "document_id": f.document_id, "name": f.name, "value": f.value, "confidence": f.confidence,
@@ -174,6 +201,14 @@ def get_claim(claim_number: str, db: Session = Depends(get_db)):
         "audit": [{"id": e.id, "event_type": e.event_type, "actor": e.actor, "details": e.details,
                    "correlation_id": e.correlation_id, "created_at": e.created_at} for e in events],
     }
+
+
+@router.get("/claims/{claim_number}/letter")
+def claim_letter(claim_number: str, db: Session = Depends(get_db)):
+    letter = letters.build_letter(db, _claim(db, claim_number))
+    if letter is None:
+        raise HTTPException(409, "Run the analysis before generating a letter")
+    return letter
 
 
 @router.post("/claims/{claim_number}/documents", status_code=201)
@@ -266,7 +301,8 @@ def review_queue(db: Session = Depends(get_db)):
                     "created_at": t.created_at, "claim_number": c.claim_number, "claimant_name": c.claimant_name,
                     "claim_type": c.claim_type, "claimed_amount": _money(c.claimed_amount), "status": c.status,
                     "recommendation": ai.decision if ai else None,
-                    "recommended_payable": _money(ai.payable_amount) if ai else None})
+                    "recommended_payable": _money(ai.payable_amount) if ai else None,
+                    "settlement": _clock(db, c)})
     return out
 
 
