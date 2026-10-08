@@ -1,18 +1,23 @@
 """Golden-path smoke test against a running Claim Sense deployment (local, Docker or cloud).
 
-Usage: python scripts/smoke_test.py http://localhost:8080
-Uses only the standard library. Exits non-zero on the first failed check.
+Usage: python scripts/smoke_test.py http://localhost:8080 [password]
+Signs in as the synthetic supervisor account (password from the argument, $DEMO_PASSWORD or the
+default demo password). Uses only the standard library. Exits non-zero on the first failed check.
 """
 from __future__ import annotations
 
 import json
+import os
 import sys
+import urllib.error
 import urllib.request
 import uuid
 from pathlib import Path
 
 BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8080").rstrip("/") + "/api/v1"
 DEMO = Path(__file__).resolve().parents[1] / "data" / "claims" / "demo_upload"
+PASSWORD = sys.argv[2] if len(sys.argv) > 2 else os.getenv("DEMO_PASSWORD", "claimsense-demo")
+TOKEN: str | None = None
 
 
 def call(method: str, path: str, body: dict | None = None, files: list[Path] | None = None):
@@ -27,6 +32,8 @@ def call(method: str, path: str, body: dict | None = None, files: list[Path] | N
         headers["Content-Type"] = f"multipart/form-data; boundary={boundary}"
     elif body is not None:
         data, headers["Content-Type"] = json.dumps(body).encode(), "application/json"
+    if TOKEN:
+        headers["Authorization"] = f"Bearer {TOKEN}"
     req = urllib.request.Request(BASE + path, data=data, method=method, headers=headers)
     with urllib.request.urlopen(req, timeout=60) as r:
         return json.loads(r.read())
@@ -42,6 +49,13 @@ health = call("GET", "/health")
 check("health", health["status"] == "ok", json.dumps(health))
 ready = call("GET", "/ready")
 check("ready", ready["status"] == "ready" and ready["policy_index"] == "ok", json.dumps(ready))
+try:
+    call("GET", "/claims")
+    check("API requires sign-in", False, "unauthenticated request was accepted")
+except urllib.error.HTTPError as e:
+    check("API requires sign-in", e.code == 401, f"HTTP {e.code}")
+TOKEN = call("POST", "/auth/login", {"username": "supervisor", "password": PASSWORD})["token"]
+check("sign in", bool(TOKEN))
 claims = call("GET", "/claims")
 check("seeded claims", len(claims) >= 8, f"{len(claims)} claims")
 c = call("POST", "/claims", {"policy_number": "CS-HLT-23-000089", "claim_type": "health",
@@ -63,7 +77,7 @@ check("recommendation", res["recommendation"]["decision"] == expected,
       res["recommendation"]["decision"] + (" (duplicate of an earlier smoke-test claim)" if dup else ""))
 check("citations", all(e.get("clause_ref") for e in res["evidence"] if e["kind"] == "policy_clause"),
       f"{len(res['evidence'])} evidence items")
-r = call("POST", f"/claims/{n}/review", {"action": "APPROVE", "reviewer": "smoke-test", "notes": "smoke"})
+r = call("POST", f"/claims/{n}/review", {"action": "APPROVE", "notes": "smoke test"})
 check("human review", r["status"] == "APPROVED", json.dumps(r))
 audit = call("GET", f"/audit?claim_number={n}")
 check("audit trail", {"CLAIM_CREATED", "AI_RECOMMENDATION", "HUMAN_DECISION"} <= {e["event_type"] for e in audit}, f"{len(audit)} events")

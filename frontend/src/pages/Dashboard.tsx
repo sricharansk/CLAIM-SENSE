@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { api, inr } from "../api";
+import { useSession } from "../components/session";
 import { Badge, Bars, Card, ErrorBox, Loading, useLoad } from "../components/ui";
 
 export default function Dashboard() {
+  const { user } = useSession();
   const a = useLoad(api.analytics);
   const claims = useLoad(() => api.claims());
   if (a.loading && !a.data) return <Loading />;
@@ -15,7 +17,7 @@ export default function Dashboard() {
           <h1>Claims intelligence dashboard</h1>
           <p className="muted">Claim Sense: RAG-Based Insurance Claims Adjudication &amp; Policy Knowledge Assistant</p>
         </div>
-        <Link className="btn primary" to="/claims/new">New claim</Link>
+        {user.can_write && <Link className="btn primary" to="/claims/new">New claim</Link>}
       </header>
       <div className="kpis">
         <Kpi label="Claims" value={totals.claims} />

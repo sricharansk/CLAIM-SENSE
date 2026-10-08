@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { api, inr } from "../api";
+import { useSession } from "../components/session";
 import { Badge, Card, ErrorBox, Loading, useLoad } from "../components/ui";
 
 const STATUSES = ["", "PENDING_REVIEW", "DOCUMENTS_RECEIVED", "SUBMITTED", "APPROVED", "REJECTED", "INFO_REQUESTED", "UNDER_INVESTIGATION", "ESCALATED", "NEEDS_ATTENTION"];
 
 export default function Claims() {
+  const { user } = useSession();
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("");
   const list = useLoad(() => api.claims(q, status), [q, status]);
@@ -13,7 +15,7 @@ export default function Claims() {
     <>
       <header className="page-head">
         <h1>Claims</h1>
-        <Link className="btn primary" to="/claims/new">New claim</Link>
+        {user.can_write && <Link className="btn primary" to="/claims/new">New claim</Link>}
       </header>
       <Card>
         <div className="filters">

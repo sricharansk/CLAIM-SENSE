@@ -14,6 +14,17 @@ def utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
 
+class User(Base):
+    __tablename__ = "users"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(String(60), unique=True)
+    display_name: Mapped[str] = mapped_column(String(120))
+    role: Mapped[str] = mapped_column(String(20))  # ADJUSTER | SUPERVISOR | AUDITOR
+    approval_limit: Mapped[Decimal | None] = mapped_column(Money, nullable=True)  # None = unlimited
+    password_hash: Mapped[str] = mapped_column(String(200))
+    active: Mapped[bool] = mapped_column(default=True)
+
+
 class Policy(Base):
     """An insurance product (e.g. a health plan) with dated wording versions."""
 

@@ -4,6 +4,8 @@
 
 | Area | Control | Where |
 |---|---|---|
+| Authentication | Sign-in required for every API route except health, readiness and login; PBKDF2-SHA256 password hashes; HMAC-SHA256 signed tokens with expiry (`AUTH_SECRET`, `TOKEN_TTL_HOURS`); failed and successful logins audited | `auth.py` |
+| Authorisation | Roles: Adjuster (approval limit ₹2,00,000), Supervisor (no limit, escalations, policy ingestion), Auditor (read-only); enforced on the server; decisions recorded under the signed-in user | `auth.py`, `api/routes.py` |
 | Uploads | Allow-list of `.pdf`, `.txt`, `.md`; 10 MB limit (`MAX_UPLOAD_BYTES`); empty files rejected; filename reduced to its base name; stored under a hash-prefixed name | `services.add_document` |
 | Untrusted content | Document and policy text is parsed as data, never executed or used as instructions; the optional LLM prompt marks clause text as data | `agents/document.py`, `llm.py` |
 | Money | Deterministic `Decimal` rules; the LLM never computes amounts | `adjudication/rules.py` |
@@ -24,6 +26,7 @@
 
 ## Known gaps
 
-- No authentication or role-based access yet; the reviewer name is free text. Do not expose this demo with real data.
+- Demo accounts share one password (`DEMO_PASSWORD`); there is no user management, SSO or password reset yet. Change `DEMO_PASSWORD` and set `AUTH_SECRET` before sharing a deployment, and never use it with real data.
+- Tokens are kept in the browser's local storage; there is no server-side revocation.
 - No rate limiting or malware scanning on uploads.
 - SQLite in single-container deployments is not suitable for concurrent production use; use PostgreSQL.

@@ -1,6 +1,9 @@
+import { useCallback, useEffect, useState } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
-import { api } from "./api";
-import { useLoad } from "./components/ui";
+import { User, api, auth, words } from "./api";
+import { SessionContext } from "./components/session";
+import { Loading, useLoad } from "./components/ui";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Claims from "./pages/Claims";
 import NewClaim from "./pages/NewClaim";
@@ -17,6 +20,25 @@ const NAV = [
 ];
 
 export default function App() {
+  const [user, setUser] = useState<User | null>(null);
+  const [checking, setChecking] = useState(!!auth.get());
+  const signOut = useCallback(() => { auth.set(null); setUser(null); }, []);
+  useEffect(() => {
+    if (auth.get()) api.me().then(setUser).catch(() => auth.set(null)).finally(() => setChecking(false));
+    const onOut = () => setUser(null);
+    window.addEventListener("claimsense:signed-out", onOut);
+    return () => window.removeEventListener("claimsense:signed-out", onOut);
+  }, []);
+  if (checking) return <Loading />;
+  if (!user) return <Login onSignedIn={setUser} />;
+  return (
+    <SessionContext.Provider value={{ user, signOut }}>
+      <Shell user={user} signOut={signOut} />
+    </SessionContext.Provider>
+  );
+}
+
+function Shell({ user, signOut }: { user: User; signOut: () => void }) {
   const ready = useLoad(api.ready);
   return (
     <div className="shell">
@@ -26,10 +48,15 @@ export default function App() {
           <div><strong>Claim Sense</strong><small>Claims decision support</small></div>
         </div>
         <nav>
-          {NAV.map(([to, label]) => (
+          {NAV.filter(([to]) => to !== "/claims/new" || user.can_write).map(([to, label]) => (
             <NavLink key={to} to={to} end={to === "/" || to === "/claims"}>{label}</NavLink>
           ))}
         </nav>
+        <div className="who">
+          <strong>{user.display_name}</strong>
+          <span>{words(user.role)}{user.approval_limit ? ` · limit ₹${Number(user.approval_limit).toLocaleString("en-IN")}` : user.role === "SUPERVISOR" ? " · no limit" : ""}</span>
+          <button className="link light" onClick={signOut}>Sign out</button>
+        </div>
         <div className="health">
           <span className={`dot ${ready.data ? "ok" : ready.error ? "bad" : ""}`} />
           {ready.data ? `API ready · ${ready.data.database_backend} · LLM ${ready.data.llm.startsWith("disabled") ? "off" : "on"}` : ready.error ? "API unreachable" : "Checking API…"}

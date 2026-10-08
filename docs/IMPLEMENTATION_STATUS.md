@@ -26,12 +26,13 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | – | Supervisor/orchestrator | `agents/supervisor.py`, `analysis_runs`, `agent_runs` with tool calls | Safe-failure and re-run tests |
 | – | Docker | `Dockerfile` (UI + API in one image), `docker-compose.yml` with PostgreSQL | Built and run locally on PostgreSQL; smoke test passed |
 | – | CI | `.github/workflows/ci.yml`: ruff, pytest, pip-audit, npm audit, frontend build, Docker + PostgreSQL smoke test | First run on PR #1: all jobs passed |
+| – | Sign-in and roles | `auth.py`, `/auth/login`, `/auth/me`; adjuster / supervisor / auditor; approval limit and escalation rules; sign-in screen and role-aware UI | `test_auth.py` (7 tests); browser run signs in and sees approval blocked over the limit |
 | – | Security | Upload allow-list, size limit and filename sanitising; security headers and CSP; non-root container; dependency audits; see `docs/SECURITY.md` | Header and path tests; pip-audit and npm audit clean |
 
 ## Validation results (this session)
 
 - `ruff check app tests`: clean.
-- `pytest`: 35 passed.
+- `pytest`: 42 passed.
 - `npm run build` (tsc + vite): passed.
 - `pip-audit -r backend/requirements.txt`: no known vulnerabilities. `npm audit`: 0 vulnerabilities.
 - GitHub Actions CI run 1 on PR #1: backend, frontend and docker-smoke jobs passed.
@@ -65,8 +66,8 @@ Nothing in progress.
 
 ## Not in this version (roadmap)
 
-Authentication and roles, OCR for scanned images, embedding retriever, ML fraud model, property and travel lines, background job queue, Azure AI Search, Key Vault, Application Insights, reopening decided claims.
+Single sign-on and user management, OCR for scanned images, embedding retriever, ML fraud model, property and travel lines, background job queue, Azure AI Search, Key Vault, Application Insights, reopening decided claims.
 
 ## Next action
 
-Merge the PR after CI passes, then deploy with one of the two prepared paths and run `python3 scripts/smoke_test.py <deployed-url>`. Deployment is not claimed until that passes.
+Merge PR #1 (Render deploys from the default branch), then deploy with one of the two prepared paths and run `python3 scripts/smoke_test.py <deployed-url>`. Deployment is not claimed until that passes.

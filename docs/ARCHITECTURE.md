@@ -4,6 +4,10 @@
 
 A FastAPI modular monolith with a React single-page app. In production the UI is built into the same image and served by FastAPI, so one container serves everything. PostgreSQL in Docker Compose; SQLite for local development and tests.
 
+## Access control
+
+Every `/api/v1` route except `health`, `ready` and `auth/login` requires a bearer token from `POST /api/v1/auth/login`. Roles are enforced on the server (`backend/app/auth.py`): adjusters and supervisors can write, auditors can only read, adjusters cannot approve above their limit, only supervisors decide escalated claims and ingest policy wordings.
+
 ## Analysis pipeline
 
 `POST /api/v1/claims/{n}/analyze` runs the supervisor (`backend/app/agents/supervisor.py`):

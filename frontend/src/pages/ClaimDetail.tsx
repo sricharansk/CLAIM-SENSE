@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ApiError, AnalysisResult, ClaimDetail as Detail, api, inr, when, words } from "../api";
+import { useSession } from "../components/session";
 import { Badge, Card, ErrorBox, Loading, useLoad } from "../components/ui";
 
 export default function ClaimDetail() {
   const { claimNumber = "" } = useParams();
+  const { user } = useSession();
   const claim = useLoad(() => api.claim(claimNumber), [claimNumber]);
   const [busy, setBusy] = useState("");
   const [error, setError] = useState<ApiError | null>(null);
@@ -14,7 +16,7 @@ export default function ClaimDetail() {
   if (!claim.data) return <ErrorBox error={claim.error} onRetry={claim.reload} />;
   const c = claim.data;
   const r = c.analysis?.result ?? null;
-  const closed = c.status === "APPROVED" || c.status === "REJECTED";
+  const closed = c.status === "APPROVED" || c.status === "REJECTED" || !user.can_write;
 
   const run = async (label: string, fn: () => Promise<unknown>) => {
     setBusy(label); setError(null);
@@ -172,26 +174,31 @@ function Recommendation({ r }: { r: AnalysisResult }) {
 const ACTIONS = [["APPROVE", "Approve"], ["REJECT", "Reject"], ["REQUEST_INFO", "Request info"], ["INVESTIGATE", "Investigate"], ["ESCALATE", "Escalate"]];
 
 function ReviewPanel({ claim, r, disabled, onDone }: { claim: Detail; r: AnalysisResult; disabled: boolean; onDone: () => void }) {
-  const [reviewer, setReviewer] = useState("Adjuster A. Rao");
+  const { user } = useSession();
   const [notes, setNotes] = useState("");
   const [amount, setAmount] = useState(r.adjudication.payable_amount);
   const [error, setError] = useState<ApiError | null>(null);
   const [busy, setBusy] = useState(false);
   if (disabled) return null;
+  const overLimit = user.approval_limit !== null && Number(amount) > Number(user.approval_limit);
+  const escalated = claim.status === "ESCALATED" && !user.is_supervisor;
   const act = async (action: string) => {
     setBusy(true); setError(null);
     try {
-      await api.review(claim.claim_number, { action, reviewer, notes, ...(action === "APPROVE" ? { payable_amount: amount } : {}) });
+      await api.review(claim.claim_number, { action, notes, ...(action === "APPROVE" ? { payable_amount: amount } : {}) });
       setNotes(""); onDone();
     } catch (e) { setError(e as ApiError); } finally { setBusy(false); }
   };
   return (
     <Card title="Human review">
       <div className="form">
-        <label>Reviewer<input value={reviewer} onChange={(e) => setReviewer(e.target.value)} /></label>
+        <label>Reviewer<input value={`${user.display_name} (${user.role.toLowerCase()})`} disabled /></label>
         <label>Approved amount (₹)<input type="number" min={0} step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} /></label>
         <label className="wide">Notes (required to reject, investigate or escalate)<textarea rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} /></label>
-        <div className="wide row">{ACTIONS.map(([a, label]) => <button key={a} className={`btn ${a === "APPROVE" ? "primary" : a === "REJECT" ? "danger" : ""}`} disabled={busy} onClick={() => act(a)}>{label}</button>)}</div>
+        {escalated && <div className="wide notice">This claim is escalated. A supervisor must decide it.</div>}
+        {!escalated && overLimit && <div className="wide notice">₹{Number(amount).toLocaleString("en-IN")} is above your approval limit of ₹{Number(user.approval_limit).toLocaleString("en-IN")}. Escalate it to a supervisor, with a note.</div>}
+        <div className="wide row">{ACTIONS.map(([a, label]) => <button key={a} className={`btn ${a === "APPROVE" ? "primary" : a === "REJECT" ? "danger" : ""}`}
+          disabled={busy || escalated || (a === "APPROVE" && overLimit)} onClick={() => act(a)}>{label}</button>)}</div>
         <ErrorBox error={error} />
       </div>
     </Card>

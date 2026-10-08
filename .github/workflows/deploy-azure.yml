@@ -2,6 +2,7 @@
 #   AZURE_CREDENTIALS  service principal JSON for azure/login
 # and repository variables:
 #   AZURE_RESOURCE_GROUP, AZURE_CONTAINERAPP_NAME, AZURE_ACR_NAME, AZURE_LOCATION
+# Set AUTH_SECRET (and optionally DEMO_PASSWORD) as container app secrets/env vars after the first deploy.
 # The app runs as a single container with SQLite seeded on start; set DATABASE_URL to an
 # Azure Database for PostgreSQL connection string for persistent data.
 name: Deploy to Azure Container Apps
@@ -32,4 +33,4 @@ jobs:
         run: |
           FQDN=$(az containerapp show -n "${{ vars.AZURE_CONTAINERAPP_NAME }}" -g "${{ vars.AZURE_RESOURCE_GROUP }}" --query properties.configuration.ingress.fqdn -o tsv)
           for i in $(seq 1 60); do curl -sf "https://$FQDN/api/v1/ready" && break; sleep 5; done
-          python3 scripts/smoke_test.py "https://$FQDN"
+          python3 scripts/smoke_test.py "https://$FQDN" "${{ secrets.DEMO_PASSWORD || 'claimsense-demo' }}"

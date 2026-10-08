@@ -23,6 +23,8 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg://claimsense:${POSTGRES_PASSWORD:-claimsense-local}@db:5432/claimsense
       CLAIMSENSE_SEED: "true"
+      AUTH_SECRET: ${AUTH_SECRET:-local-dev-only-change-me}
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-claimsense-demo}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
     ports:
       - "8080:8000"

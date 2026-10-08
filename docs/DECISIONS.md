@@ -11,4 +11,5 @@
 | D7 | Rule-based extraction from labelled fields and itemised lines | Deterministic provenance (file + line); OCR and LLM extraction are roadmap items |
 | D8 | Duplicate detection and other risk signals are weighted rules, not ML | Transparent and explainable for reviewers; ML is roadmap |
 | D9 | Claim numbers are the public identifier in URLs and APIs | Readable for reviewers and audit |
-| D10 | No authentication in v1; reviewer name is free text | Not in the prioritised golden path; listed as the first roadmap item |
+| D10 | Built-in sign-in with three seeded roles and signed tokens instead of an identity provider | Works in any deployment with no external setup; SSO (Azure AD / OIDC) is the next step |
+| D11 | Adjuster approval limit of ₹2,00,000; escalated claims only a supervisor can decide | Mirrors common delegated-authority limits in claims operations and keeps high-value payouts under senior review |

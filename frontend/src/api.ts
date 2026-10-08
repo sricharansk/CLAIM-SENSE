@@ -61,18 +61,37 @@ export type Analytics = {
 export type Dataset = { name: string; publisher: string; year: string; url: string; purpose: string; status: string };
 export type Ready = { status: string; database: string; policy_index: string; llm: string; database_backend: string };
 
+export type User = { username: string; display_name: string; role: "ADJUSTER" | "SUPERVISOR" | "AUDITOR";
+  approval_limit: string | null; can_write: boolean; is_supervisor: boolean };
+
+const TOKEN_KEY = "claimsense.token";
+let token: string | null = (() => { try { return localStorage.getItem(TOKEN_KEY); } catch { return null; } })();
+export const auth = {
+  get: () => token,
+  set: (t: string | null) => {
+    token = t;
+    try { if (t) localStorage.setItem(TOKEN_KEY, t); else localStorage.removeItem(TOKEN_KEY); } catch { /* storage unavailable */ }
+  },
+};
+
 export class ApiError extends Error {
   constructor(message: string, public status: number, public correlationId?: string) { super(message); }
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
+  const headers = new Headers(init?.headers);
+  if (token) headers.set("Authorization", `Bearer ${token}`);
   try {
-    res = await fetch(`/api/v1${path}`, init);
+    res = await fetch(`/api/v1${path}`, { ...init, headers });
   } catch {
     throw new ApiError("Cannot reach the Claim Sense API. Check that the backend is running.", 0);
   }
   const body = await res.json().catch(() => null);
+  if (res.status === 401 && path !== "/auth/login") {
+    auth.set(null);
+    window.dispatchEvent(new Event("claimsense:signed-out"));
+  }
   if (!res.ok) {
     const err = body?.error;
     throw new ApiError(err?.message ?? `Request failed (${res.status})`, res.status, err?.correlation_id ?? res.headers.get("x-correlation-id") ?? undefined);
@@ -82,6 +101,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 const json = (method: string, data: unknown): RequestInit => ({ method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
 
 export const api = {
+  login: (username: string, password: string) => request<{ token: string; user: User }>("/auth/login", json("POST", { username, password })),
+  me: () => request<User>("/auth/me"),
   ready: () => request<Ready>("/ready"),
   analytics: () => request<Analytics>("/analytics"),
   claims: (q = "", status = "") => request<ClaimSummary[]>(`/claims?${new URLSearchParams({ ...(q && { q }), ...(status && { status }) })}`),
@@ -95,7 +116,7 @@ export const api = {
   },
   document: (n: string, id: number) => request<{ filename: string; doc_type: string; text: string }>(`/claims/${n}/documents/${id}`),
   analyze: (n: string) => request<Analysis>(`/claims/${n}/analyze`, { method: "POST" }),
-  review: (n: string, data: { action: string; reviewer: string; notes: string; payable_amount?: string }) =>
+  review: (n: string, data: { action: string; notes: string; payable_amount?: string }) =>
     request<{ status: string }>(`/claims/${n}/review`, json("POST", data)),
   reviews: () => request<ReviewTask[]>("/reviews"),
   policies: () => request<Policy[]>("/policies"),

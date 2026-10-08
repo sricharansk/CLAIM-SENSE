@@ -14,6 +14,7 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 
 | Area | What you can do | Where |
 |---|---|---|
+| Sign-in and roles | Adjuster (approves up to ₹2,00,000), Supervisor (no limit, decides escalations, ingests policies), Auditor (read-only); signed tokens; every action audited under the signed-in user | `/` |
 | Dashboard | Live claim counts, recommendations, risk mix, review progress, portfolio evaluation | `/` |
 | Claim intake | Create a claim, upload PDF or text documents, run the agent pipeline | `/claims/new` |
 | Document intelligence | Document classification, extracted facts with source file, line and confidence, itemised charges | claim page |
@@ -23,7 +24,7 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Adjudication | Decimal rules engine: non-payable items, per-day limits, depreciation, deductible, co-pay, sum-insured cap, shown as a waterfall | claim page |
 | Risk / fraud | Transparent weighted signals: amount ratio, early claim, frequency, duplicates, amount and name mismatches, missing documents | claim page |
 | Recommendation | Approve, partial approval, reject, request info or investigate, with reasons and an evidence package | claim page |
-| Human review | Approve (with amount override), reject, request info, investigate, escalate; notes required for adverse actions | claim page, `/reviews` |
+| Human review | Approve (with amount override), reject, request info, investigate, escalate; notes required for adverse actions; approval limits enforced; escalated claims need a supervisor | claim page, `/reviews` |
 | Workflow | Routing to adjuster, investigation (SIU), pending-information and supervisor queues | `/reviews` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
 | Policy library | Browse clauses by version, view structured terms, ingest new wordings | `/policies` |
@@ -95,7 +96,7 @@ More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/DECISIONS.md](d
 ```bash
 docker compose up --build
 # open http://localhost:8080
-python3 scripts/smoke_test.py http://localhost:8080   # golden-path smoke test
+python3 scripts/smoke_test.py http://localhost:8080   # golden-path smoke test (signs in as supervisor)
 ```
 
 ### Local development
@@ -115,9 +116,19 @@ npm run dev                                      # http://localhost:5173, proxie
 
 Configuration lives in environment variables; see [.env.example](.env.example). API docs are served at `/docs`.
 
+### Demo accounts
+
+All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense-demo`); set `AUTH_SECRET` to a long random value in any shared deployment.
+
+| Username | Role | Can do |
+|---|---|---|
+| `adjuster` | Adjuster | Create and analyse claims, decide up to ₹2,00,000, escalate above that |
+| `supervisor` | Supervisor | Everything, no limit, decide escalated claims, ingest policy wordings |
+| `auditor` | Auditor | Read-only |
+
 ### Try the golden path
 
-1. Open **New claim**, pick policy `CS-HLT-23-000089` (Fatima Shaikh).
+1. Sign in as `adjuster`, open **New claim**, pick policy `CS-HLT-23-000089` (Fatima Shaikh).
 2. Upload the three files in [`data/claims/demo_upload/`](data/claims/demo_upload) and press **Create, upload and analyse**.
 3. Review the recommendation, coverage checks, waterfall (₹78,000 billed, ₹64,080 payable), risk and evidence.
 4. Approve it. The claim, review queue, dashboard and audit trail all update.
@@ -125,11 +136,11 @@ Configuration lives in environment variables; see [.env.example](.env.example). 
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 35 tests
+cd backend && ruff check app tests && python -m pytest -q    # 42 tests
 cd frontend && npm run build                                 # type check + production build
 ```
 
-Tests cover security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus `pip-audit`, `npm audit` and a Docker + PostgreSQL smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
+Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus `pip-audit`, `npm audit` and a Docker + PostgreSQL smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Data and datasets
 
@@ -168,7 +179,7 @@ scripts/         smoke_test.py
 
 ## Roadmap
 
-Authentication and role-based access, OCR for scanned images, embedding retriever as a third ranker, ingestion of the registered IRDAI circulars into the RAG corpus, ML fraud model on the Figshare dataset, property and travel lines, background job queue, Azure AI Search, Key Vault and Application Insights. Status and next actions: [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
+Single sign-on (Azure AD / OIDC) and user management, OCR for scanned images, embedding retriever as a third ranker, ingestion of the registered IRDAI circulars into the RAG corpus, ML fraud model on the Figshare dataset, property and travel lines, background job queue, Azure AI Search, Key Vault and Application Insights. Status and next actions: [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
 
 ## Disclaimer
 

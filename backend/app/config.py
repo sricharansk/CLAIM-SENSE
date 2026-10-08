@@ -18,6 +18,12 @@ class Settings:
     anthropic_model = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-5")
     max_upload_bytes = int(os.getenv("MAX_UPLOAD_BYTES", str(10 * 1024 * 1024)))
     rag_min_score = float(os.getenv("RAG_MIN_SCORE", "0.15"))
+    # Signing key for login tokens. Set AUTH_SECRET in any shared deployment; without it a random
+    # key is generated per process and sign-ins do not survive a restart.
+    auth_secret = os.getenv("AUTH_SECRET", "")
+    token_ttl_hours = int(os.getenv("TOKEN_TTL_HOURS", "12"))
+    # Password for the seeded synthetic demo accounts (adjuster, supervisor, auditor).
+    demo_password = os.getenv("DEMO_PASSWORD", "claimsense-demo")
     rules_version = "adjudication-rules/1.0.0"
     risk_version = "risk-rules/1.0.0"
 

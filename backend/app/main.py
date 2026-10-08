@@ -12,7 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from .api.routes import router
+from .api.routes import public, router
+from .auth import seed_users
 from .config import settings
 from .db import Base, SessionLocal, engine
 from .seed import seed
@@ -26,6 +27,7 @@ async def lifespan(_: FastAPI):
     Base.metadata.create_all(engine)
     settings.storage_dir.mkdir(parents=True, exist_ok=True)
     with SessionLocal() as db:
+        seed_users(db)
         if settings.seed_on_startup:
             seed(db)
         else:
@@ -84,6 +86,7 @@ async def unhandled(request: Request, exc: Exception):
     return _error(request, 500, "Unexpected server error. Quote the correlation ID when reporting it.", "INTERNAL_ERROR")
 
 
+app.include_router(public)
 app.include_router(router)
 
 # Serve the built frontend when present (single-container deployment).

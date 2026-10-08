@@ -1,8 +1,10 @@
 import { FormEvent, useState } from "react";
 import { ApiError, api } from "../api";
+import { useSession } from "../components/session";
 import { Card, ErrorBox, Loading, useLoad } from "../components/ui";
 
 export default function Policies() {
+  const { user } = useSession();
   const list = useLoad(api.policies);
   const [code, setCode] = useState("");
   const selected = code || list.data?.[0]?.product_code || "";
@@ -55,14 +57,14 @@ export default function Policies() {
           <details><summary className="muted">Structured terms used by the rules engine</summary><pre>{JSON.stringify(version.terms, null, 2)}</pre></details>
         </Card>
       )}
-      <Card title="Ingest a policy wording">
+      {user.is_supervisor ? <Card title="Ingest a policy wording">
         <form className="form" onSubmit={upload}>
           <label>Wording (.md with “## N. Section” and “### N.M Clause” headings)<input type="file" accept=".md,.txt" onChange={(e) => setFiles({ ...files, wording: e.target.files?.[0] })} /></label>
           <label>Structured terms (.json)<input type="file" accept=".json" onChange={(e) => setFiles({ ...files, terms: e.target.files?.[0] })} /></label>
           <div className="wide row"><button className="btn primary" disabled={!files.wording || !files.terms}>Ingest and index</button>{msg && <span className="ok-text">{msg}</span>}</div>
           <ErrorBox error={error} />
         </form>
-      </Card>
+      </Card> : <p className="muted small">Supervisors can ingest new policy wordings.</p>}
     </>
   );
 }

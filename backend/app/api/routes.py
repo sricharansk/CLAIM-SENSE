@@ -14,6 +14,7 @@ from .. import analytics, llm
 from ..agents import audit
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
+from ..auth import current_user, issue_token, supervisor, user_view, verify_password, writer
 from ..config import settings
 from ..db import get_db
 from ..models import (
@@ -26,12 +27,14 @@ from ..models import (
     DatasetSource,
     InsuredPolicy,
     Policy,
+    User,
     WorkflowTask,
 )
 from ..rag import service as rag
 from ..services import ValidationProblem, add_document, ingest_policy
 
-router = APIRouter(prefix="/api/v1")
+public = APIRouter(prefix="/api/v1")
+router = APIRouter(prefix="/api/v1", dependencies=[Depends(current_user)])
 
 
 def _claim(db: Session, claim_number: str) -> Claim:
@@ -46,18 +49,41 @@ def _money(x) -> str | None:
 
 
 # ------------------------------------------------------------------ health
-@router.get("/health")
+@public.get("/health")
 def health():
     return {"status": "ok", "service": settings.app_name, "version": settings.version}
 
 
-@router.get("/ready")
+@public.get("/ready")
 def ready(db: Session = Depends(get_db)):
     db.execute(text("SELECT 1"))
     clauses = rag.retrieve(db, "deductible", k=1)
     return {"status": "ready", "database": "ok", "policy_index": "ok" if clauses else "empty",
             "llm": "anthropic" if llm.enabled() else "disabled (extractive answers)",
             "database_backend": db.bind.dialect.name}
+
+
+# -------------------------------------------------------------------- auth
+class LoginIn(BaseModel):
+    username: str = Field(min_length=1, max_length=60)
+    password: str = Field(min_length=1, max_length=200)
+
+
+@public.post("/auth/login")
+def login(body: LoginIn, db: Session = Depends(get_db)):
+    user = db.query(User).filter_by(username=body.username.strip().lower(), active=True).first()
+    if user is None or not verify_password(body.password, user.password_hash):
+        audit.log(db, None, "LOGIN_FAILED", body.username[:60], {})
+        db.commit()
+        raise HTTPException(401, "Wrong username or password")
+    audit.log(db, None, "LOGIN", user.username, {"role": user.role})
+    db.commit()
+    return {"token": issue_token(user), "user": user_view(user)}
+
+
+@router.get("/auth/me")
+def me(user: User = Depends(current_user)):
+    return user_view(user)
 
 
 # ------------------------------------------------------------------ claims
@@ -79,7 +105,7 @@ def _claim_summary(c: Claim, ai: ClaimDecision | None, risk: str | None) -> dict
 
 
 @router.post("/claims", status_code=201)
-def create_claim(body: ClaimIn, db: Session = Depends(get_db)):
+def create_claim(body: ClaimIn, db: Session = Depends(get_db), user: User = Depends(writer)):
     if db.query(InsuredPolicy).filter_by(policy_number=body.policy_number).first() is None:
         raise HTTPException(422, f"Policy number {body.policy_number} is not in the policy register")
     n = (db.query(func.count(Claim.id)).scalar() or 0) + 1
@@ -91,7 +117,7 @@ def create_claim(body: ClaimIn, db: Session = Depends(get_db)):
     c = Claim(claim_number=number, **body.model_dump())
     db.add(c)
     db.flush()
-    audit.log(db, c.id, "CLAIM_CREATED", "adjuster", {"policy_number": c.policy_number, "claim_type": c.claim_type})
+    audit.log(db, c.id, "CLAIM_CREATED", user.username, {"policy_number": c.policy_number, "claim_type": c.claim_type})
     db.commit()
     return _claim_summary(c, None, None)
 
@@ -151,7 +177,8 @@ def get_claim(claim_number: str, db: Session = Depends(get_db)):
 
 
 @router.post("/claims/{claim_number}/documents", status_code=201)
-async def upload_documents(claim_number: str, files: list[UploadFile] = File(...), db: Session = Depends(get_db)):
+async def upload_documents(claim_number: str, files: list[UploadFile] = File(...), db: Session = Depends(get_db),
+                           user: User = Depends(writer)):
     c = _claim(db, claim_number)
     if c.status in ("APPROVED", "REJECTED"):
         raise HTTPException(409, "Claim is closed; documents can no longer be added")
@@ -159,7 +186,7 @@ async def upload_documents(claim_number: str, files: list[UploadFile] = File(...
     for f in files:
         data = await f.read()
         try:
-            d = add_document(db, c, f.filename or "upload.txt", data, actor="adjuster")
+            d = add_document(db, c, f.filename or "upload.txt", data, actor=user.username)
         except ValidationProblem as exc:
             db.rollback()
             raise HTTPException(422, str(exc)) from exc
@@ -179,11 +206,11 @@ def get_document(claim_number: str, doc_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/claims/{claim_number}/analyze")
-def analyze(claim_number: str, db: Session = Depends(get_db)):
+def analyze(claim_number: str, db: Session = Depends(get_db), user: User = Depends(writer)):
     c = _claim(db, claim_number)
     if c.status in ("APPROVED", "REJECTED"):
         raise HTTPException(409, "Claim already decided; reopen is not supported in this version")
-    analyze_claim(db, c, actor="adjuster")
+    analyze_claim(db, c, actor=user.username)
     return _analysis(db, c)
 
 
@@ -198,13 +225,12 @@ def get_analysis(claim_number: str, db: Session = Depends(get_db)):
 
 class ReviewIn(BaseModel):
     action: str
-    reviewer: str = Field(min_length=2, max_length=100)
     notes: str = Field(default="", max_length=4000)
     payable_amount: Decimal | None = Field(default=None, ge=0)
 
 
 @router.post("/claims/{claim_number}/review")
-def review_claim(claim_number: str, body: ReviewIn, db: Session = Depends(get_db)):
+def review_claim(claim_number: str, body: ReviewIn, db: Session = Depends(get_db), user: User = Depends(writer)):
     c = _claim(db, claim_number)
     if body.action not in ACTIONS:
         raise HTTPException(422, f"action must be one of {', '.join(ACTIONS)}")
@@ -215,7 +241,14 @@ def review_claim(claim_number: str, body: ReviewIn, db: Session = Depends(get_db
         raise HTTPException(409, "Run the AI analysis before recording a decision")
     if body.action in ("REJECT", "ESCALATE", "INVESTIGATE") and not body.notes.strip():
         raise HTTPException(422, "Notes are required to reject, escalate or refer for investigation")
-    d = apply_review(db, c, body.action, body.reviewer, body.notes, body.payable_amount, ai.payable_amount)
+    if c.status == "ESCALATED" and user.role != "SUPERVISOR":
+        raise HTTPException(403, "This claim is escalated; a supervisor must decide it")
+    if body.action == "APPROVE" and user.approval_limit is not None:
+        amount = body.payable_amount if body.payable_amount is not None else ai.payable_amount
+        if amount is not None and Decimal(amount) > user.approval_limit:
+            raise HTTPException(403, f"₹{Decimal(amount):,.2f} is above your approval limit of ₹{user.approval_limit:,.2f}. "
+                                     "Escalate it to a supervisor.")
+    d = apply_review(db, c, body.action, user.display_name, body.notes, body.payable_amount, ai.payable_amount)
     db.commit()
     return {"claim_number": c.claim_number, "status": c.status, "decision": d.decision,
             "payable_amount": _money(d.payable_amount)}
@@ -248,11 +281,12 @@ def list_policies(db: Session = Depends(get_db)):
 
 
 @router.post("/policies", status_code=201)
-async def upload_policy(wording: UploadFile = File(...), terms: UploadFile = File(...), db: Session = Depends(get_db)):
+async def upload_policy(wording: UploadFile = File(...), terms: UploadFile = File(...), db: Session = Depends(get_db),
+                        user: User = Depends(supervisor)):
     try:
         md = (await wording.read()).decode("utf-8")
         t = json.loads((await terms.read()).decode("utf-8"))
-        v = ingest_policy(db, md, t, wording.filename or "policy.md", actor="adjuster")
+        v = ingest_policy(db, md, t, wording.filename or "policy.md", actor=user.username)
     except (ValidationProblem, json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
         db.rollback()
         raise HTTPException(422, str(exc)) from exc
@@ -297,7 +331,7 @@ class RagQuery(BaseModel):
 
 
 @router.post("/rag/query")
-def rag_query(body: RagQuery, db: Session = Depends(get_db)):
+def rag_query(body: RagQuery, db: Session = Depends(get_db), user: User = Depends(current_user)):
     vids = None
     if body.product_code:
         p = _policy(db, body.product_code)
@@ -306,7 +340,7 @@ def rag_query(body: RagQuery, db: Session = Depends(get_db)):
             raise HTTPException(404, f"Version {body.version} not found for {body.product_code}")
         vids = {v.id for v in vs}
     result = rag.answer(db, body.question, vids)
-    audit.log(db, None, "RAG_QUERY", "adjuster", {"question": body.question, "grounded": result["grounded"],
+    audit.log(db, None, "RAG_QUERY", user.username, {"question": body.question, "grounded": result["grounded"],
                                                   "citations": [c["clause_id"] for c in result["citations"]]})
     db.commit()
     return result
