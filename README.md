@@ -69,7 +69,9 @@ CLM-H-1001 waterfall, as the app shows it:
 | ![Policy assistant](docs/screenshots/07-policy-assistant.png) | ![Review queue](docs/screenshots/08-review-queue.png) |
 | ![Repudiation letter](docs/screenshots/12-rejection-letter.png) | ![Golden evaluation](docs/screenshots/13-evaluation.png) |
 | ![Policy PDF ingestion](docs/screenshots/15-policy-pdf-ingestion.png) | ![Claim evidence tab](docs/screenshots/16-claim-evidence.png) |
-| ![Data provenance](docs/screenshots/17-data-provenance.png) | |
+| ![Data provenance](docs/screenshots/17-data-provenance.png) | ![Fact correction](docs/screenshots/18-fact-correction.png) |
+
+On a phone the navigation collapses into a menu: [screenshot](docs/screenshots/19-mobile-dashboard.png).
 
 ## Architecture
 

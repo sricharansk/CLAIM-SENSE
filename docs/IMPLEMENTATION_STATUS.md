@@ -48,7 +48,8 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 - `pip-audit -r backend/requirements.txt`: no known vulnerabilities. `npm audit`: 0 vulnerabilities.
 - GitHub Actions CI run 1 on PR #1: backend, frontend and docker-smoke jobs passed.
 - Browser (Playwright, Chromium) against Vite dev server and against the Docker image on PostgreSQL: create claim, upload 3 documents, analyse (₹78,000 billed, ₹64,080 payable, partial approval), approve, generate the settlement letter (INR 64,080.00) and a repudiation letter, export CSV, assistant answer and refusal, evaluation scorecard (256 / 256), adjuster escalates the over-limit claim and the dashboard shows escalation rate 50% (1/2) and override rate 0% (0/1), all pages load (2026-10-09, image built from this branch, screenshot `14-dashboard-after-review.png`). No console errors on the Docker run.
-- `scripts/smoke_test.py http://localhost:8080` against Docker + PostgreSQL: all checks passed.
+- Browser regression on the Docker image with a fresh PostgreSQL volume (2026-10-09, after the review-assignment, provenance, audit, fact-correction and phone-layout stages): golden claim ₹64,080 partial approval, approval-limit block, approve, letters, CSV, assistant answer and refusal, evaluation 256 / 256, escalation and dashboard rates (override 0% (0/1), escalation 50% (1/2)), take / release / reassign a review task, provenance screen (14 sources, 5 / 5 checksums verified, 54 chunks, 0 rejected), fact correction and re-run, phone menu at 390 px. 0 console errors. Screenshots `00`–`14`, `16`–`19` refreshed.
+- `scripts/smoke_test.py http://localhost:8080` against Docker + PostgreSQL: all checks passed, including the registry and manifest checks.
 
 ## Definition of done (blueprint PART 20)
 
