@@ -41,16 +41,18 @@ export default function App() {
 
 function Shell({ user, signOut }: { user: User; signOut: () => void }) {
   const ready = useLoad(api.ready);
+  const [menu, setMenu] = useState(false);
   return (
     <div className="shell">
-      <aside className="sidebar">
+      <aside className={`sidebar ${menu ? "open" : ""}`}>
         <div className="brand">
           <div className="logo">CS</div>
           <div><strong>Claim Sense</strong><small>Claims decision support</small></div>
+          <button className="menu-btn" aria-expanded={menu} aria-controls="main-nav" onClick={() => setMenu(!menu)}>{menu ? "Close" : "Menu"}</button>
         </div>
-        <nav>
+        <nav id="main-nav">
           {NAV.filter(([to]) => to !== "/claims/new" || user.can_write).map(([to, label]) => (
-            <NavLink key={to} to={to} end={to === "/" || to === "/claims"}>{label}</NavLink>
+            <NavLink key={to} to={to} end={to === "/" || to === "/claims"} onClick={() => setMenu(false)}>{label}</NavLink>
           ))}
         </nav>
         <div className="who">
