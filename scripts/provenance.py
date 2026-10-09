@@ -23,10 +23,6 @@ MANIFEST = ROOT / "reports" / "rag_manifest.json"
 
 
 def build_manifest() -> dict:
-    tmp = Path(tempfile.mkdtemp(prefix="claimsense-manifest-"))
-    os.environ.update(DATABASE_URL=f"sqlite:///{tmp / 'manifest.db'}", CLAIMSENSE_STORAGE_DIR=str(tmp / "storage"))
-    os.environ.pop("ANTHROPIC_API_KEY", None)
-    sys.path.insert(0, str(ROOT / "backend"))
     from app import provenance
     from app.db import Base, SessionLocal, engine
     from app.seed import seed
@@ -43,6 +39,10 @@ def main() -> int:
     mode.add_argument("--check", action="store_true")
     mode.add_argument("--write", action="store_true")
     args = ap.parse_args()
+    # settings are read at import time, so point the app at a fresh, isolated database before importing it
+    tmp = Path(tempfile.mkdtemp(prefix="claimsense-manifest-"))
+    os.environ.update(DATABASE_URL=f"sqlite:///{tmp / 'manifest.db'}", CLAIMSENSE_STORAGE_DIR=str(tmp / "storage"))
+    os.environ.pop("ANTHROPIC_API_KEY", None)
     sys.path.insert(0, str(ROOT / "backend"))
     from app import provenance
 
