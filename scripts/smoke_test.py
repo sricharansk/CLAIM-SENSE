@@ -67,6 +67,11 @@ check("policy wordings ingested", sum(i["status"] == "READY" for i in ingestions
       ", ".join(f"{i['filename']}={i['status']}" for i in ingestions[:4]))
 evaluation = call("GET", "/evaluation")["summary"]
 check("golden evaluation report", evaluation["all_passed"], f"{evaluation['checks_passed']}/{evaluation['checks']} checks")
+registry = call("GET", "/datasets")
+check("source registry provenance", registry["valid"], f"{len(registry['sources'])} sources, {len(registry['problems'])} problems")
+manifest = call("GET", "/knowledge-base/manifest")
+check("RAG manifest", manifest["indexed_chunks"] > 0 and not manifest["rejected"],
+      f"{manifest['indexed_chunks']} chunks, {manifest['rejected_chunks']} rejected")
 c = call("POST", "/claims", {"policy_number": "CS-HLT-23-000089", "claim_type": "health",
                              "claimant_name": "Fatima Shaikh", "description": "smoke test"})
 n = c["claim_number"]

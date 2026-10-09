@@ -3,8 +3,9 @@
 ## Commands
 
 ```bash
-cd backend && ruff check app tests ../scripts && python -m pytest -q     # 63 tests
+cd backend && ruff check app tests ../scripts && python -m pytest -q     # 69 tests
 python3 scripts/evaluate.py                                             # golden evaluation, 256 checks
+python3 scripts/provenance.py --check                                   # registry, checksums, reproducible RAG manifest
 cd frontend && npm run build                                            # type check + build
 docker compose up --build -d && python3 scripts/smoke_test.py http://localhost:8080
 ```
@@ -24,6 +25,7 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | `test_evaluation.py` | 3 | Evaluation report served and complete; sign-in required; refusals |
 | `test_security_guards.py` | 4 | Sign-in throttle; injection scan; injected document flagged with amount unchanged; override and escalation rates |
 | `test_policy_ingestion.py` | 4 | PDF ingestion with pages and states; duplicate, scanned, unreadable and wrong-type failures; supervisor only; seeded records |
+| `test_provenance.py` | 6 | Committed registry valid; validator rejects missing or wrong provenance and checksum drift; `/datasets`; every indexed chunk resolves; a chunk without an extraction run is kept out of the index; backfill |
 | `test_review_assignment.py` | 3 | Queue shows risk, age and assignee; take, release and supervisor reassignment; others cannot take or decide an assigned task; supervisor-queue and auditor limits; audit events |
 
 Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is always off.
@@ -37,7 +39,7 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
 
 ## End-to-end
 
-- **`scripts/smoke_test.py <url> [password]`:** checks the frontend, health and readiness, sign-in enforcement, seeded data, policy ingestion records and the evaluation report. It then runs the golden claim: create, upload, analyse, coverage, adjudication (₹64,080), citations, human review, audit, assistant answer and refusal.
+- **`scripts/smoke_test.py <url> [password]`:** checks the frontend, health and readiness, sign-in enforcement, seeded data, policy ingestion records, the evaluation report, the source registry and the RAG manifest. It then runs the golden claim: create, upload, analyse, coverage, adjudication (₹64,080), citations, human review, audit, assistant answer and refusal.
 - **Browser runs (Playwright, Chromium) against the Docker image:**
   - sign in;
   - create a claim, upload, analyse;

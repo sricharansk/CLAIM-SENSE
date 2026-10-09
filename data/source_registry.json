@@ -1,0 +1,308 @@
+{
+  "schema_version": "1.0",
+  "note": "Provenance register for every data source Claim Sense uses or plans to use. Validated by backend/app/provenance.py; CI runs scripts/provenance.py --check. IN_USE sources carry a SHA-256 over their files; REGISTERED sources are not downloaded in this build.",
+  "sources": [
+    {
+      "id": "synthetic-policy-corpus",
+      "name": "Synthetic policy wordings and structured terms (HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1)",
+      "publisher": "Claim Sense (generated)",
+      "source_type": "synthetic",
+      "data_type": "synthetic_policies",
+      "claim_level": false,
+      "url": "data/synthetic/generate.py",
+      "publication_date": "2026-10-08",
+      "retrieval_date": "2026-10-08",
+      "data_period": "Policy years 2024-2026",
+      "license": "Synthetic; generated in this repository; no third-party terms",
+      "intended_use": [
+        "rag",
+        "adjudication"
+      ],
+      "status": "IN_USE",
+      "paths": [
+        "data/policies/HLT-SHIELD_2024.1.md",
+        "data/policies/HLT-SHIELD_2024.1.terms.json",
+        "data/policies/HLT-SHIELD_2025.1.md",
+        "data/policies/HLT-SHIELD_2025.1.terms.json",
+        "data/policies/MTR-SECURE_2025.1.md",
+        "data/policies/MTR-SECURE_2025.1.terms.json",
+        "data/policies/insured_policies.json"
+      ],
+      "transformation_script": "data/synthetic/generate.py",
+      "checksum_sha256": "7e829eade7f773598085ef0485cd834a7c838b5af0c7592174c0b5dadc7866ab"
+    },
+    {
+      "id": "synthetic-policy-pdf-demo",
+      "name": "Synthetic HLT-SHIELD 2026.1 wording as a 6-page PDF (ingestion demo)",
+      "publisher": "Claim Sense (generated)",
+      "source_type": "synthetic",
+      "data_type": "synthetic_policies",
+      "claim_level": false,
+      "url": "data/synthetic/generate.py",
+      "publication_date": "2026-10-09",
+      "retrieval_date": "2026-10-09",
+      "data_period": "Policy year 2026",
+      "license": "Synthetic; generated in this repository; no third-party terms",
+      "intended_use": [
+        "rag",
+        "demo"
+      ],
+      "status": "IN_USE",
+      "paths": [
+        "data/policies/ingest_demo"
+      ],
+      "transformation_script": "data/synthetic/generate.py",
+      "checksum_sha256": "e953a16db78c9e93bf8b9e5e3a614977aa07c48097ae0ba00c31cfc4c43c8fdc"
+    },
+    {
+      "id": "synthetic-golden-claims",
+      "name": "Synthetic golden claim packets (8 scenarios and the demo upload)",
+      "publisher": "Claim Sense (generated)",
+      "source_type": "synthetic",
+      "data_type": "synthetic_claims",
+      "claim_level": true,
+      "url": "data/claims/scenarios.json",
+      "publication_date": "2026-10-08",
+      "retrieval_date": "2026-10-08",
+      "data_period": "Synthetic incidents 2023-2026",
+      "license": "Synthetic; generated in this repository; no third-party terms",
+      "intended_use": [
+        "demo",
+        "evaluation"
+      ],
+      "status": "IN_USE",
+      "paths": [
+        "data/claims"
+      ],
+      "transformation_script": "data/synthetic/generate.py",
+      "checksum_sha256": "cdc377be178a613bbf214da6ff169d19e51746146e252b2f1de3646c1adbefb2"
+    },
+    {
+      "id": "synthetic-claims-portfolio",
+      "name": "Synthetic claims portfolio (1,000 claims with injected anomaly labels)",
+      "publisher": "Claim Sense (generated)",
+      "source_type": "synthetic",
+      "data_type": "synthetic_claims",
+      "claim_level": true,
+      "url": "data/synthetic/claims_portfolio.csv",
+      "publication_date": "2026-10-08",
+      "retrieval_date": "2026-10-08",
+      "data_period": "Synthetic",
+      "license": "Synthetic; generated in this repository; no third-party terms",
+      "intended_use": [
+        "analytics",
+        "evaluation"
+      ],
+      "status": "IN_USE",
+      "paths": [
+        "data/synthetic/claims_portfolio.csv"
+      ],
+      "transformation_script": "data/synthetic/generate.py",
+      "checksum_sha256": "32bc6b3f568e2042a2a2f0ba4654f279f11e9088a669891db82c4c1d7a1b440b"
+    },
+    {
+      "id": "golden-evaluation-set",
+      "name": "Golden evaluation set (12 claim cases, 21 policy questions, 4 fresh packets)",
+      "publisher": "Claim Sense (hand-worked expectations; generated packets)",
+      "source_type": "synthetic",
+      "data_type": "evaluation",
+      "claim_level": true,
+      "url": "data/evaluation/golden_cases.json",
+      "publication_date": "2026-10-08",
+      "retrieval_date": "2026-10-08",
+      "data_period": "Synthetic",
+      "license": "Synthetic; written in this repository; no third-party terms",
+      "intended_use": [
+        "evaluation"
+      ],
+      "status": "IN_USE",
+      "paths": [
+        "data/evaluation"
+      ],
+      "transformation_script": "data/synthetic/generate.py (packets); golden_cases.json and rag_questions.json written by hand",
+      "checksum_sha256": "2dde897ba923867ff0558c8e53e4e62117c1b93a399bd1233e4ddf1fff4fb632"
+    },
+    {
+      "id": "irdai-mc-health-2024",
+      "name": "IRDAI Master Circular on Health Insurance Business",
+      "publisher": "IRDAI",
+      "source_type": "regulatory",
+      "data_type": "regulatory",
+      "claim_level": false,
+      "url": "https://irdai.gov.in/circulars",
+      "publication_date": "2024-05-29",
+      "retrieval_date": null,
+      "data_period": "In force from 2024",
+      "license": "CHECK_SOURCE",
+      "intended_use": [
+        "rag"
+      ],
+      "status": "REGISTERED",
+      "paths": [],
+      "transformation_script": null,
+      "checksum_sha256": null
+    },
+    {
+      "id": "irdai-mc-general-2024",
+      "name": "IRDAI Master Circular on General Insurance Business",
+      "publisher": "IRDAI",
+      "source_type": "regulatory",
+      "data_type": "regulatory",
+      "claim_level": false,
+      "url": "https://irdai.gov.in/circulars",
+      "publication_date": "2024-06-11",
+      "retrieval_date": null,
+      "data_period": "In force from 2024",
+      "license": "CHECK_SOURCE",
+      "intended_use": [
+        "rag"
+      ],
+      "status": "REGISTERED",
+      "paths": [],
+      "transformation_script": null,
+      "checksum_sha256": null
+    },
+    {
+      "id": "irdai-mc-policyholders-2024",
+      "name": "IRDAI Master Circular on Protection of Policyholders' Interests",
+      "publisher": "IRDAI",
+      "source_type": "regulatory",
+      "data_type": "regulatory",
+      "claim_level": false,
+      "url": "https://irdai.gov.in/circulars",
+      "publication_date": "2024-08-12",
+      "retrieval_date": null,
+      "data_period": "In force from 2024",
+      "license": "CHECK_SOURCE",
+      "intended_use": [
+        "rag"
+      ],
+      "status": "REGISTERED",
+      "paths": [],
+      "transformation_script": null,
+      "checksum_sha256": null
+    },
+    {
+      "id": "irdai-handbook-2024-25",
+      "name": "IRDAI Handbook on Indian Insurance Statistics 2024-25",
+      "publisher": "IRDAI",
+      "source_type": "statistical",
+      "data_type": "aggregate",
+      "claim_level": false,
+      "url": "https://irdai.gov.in/handbook-of-indian-insurance",
+      "publication_date": "2026-02-03",
+      "retrieval_date": null,
+      "data_period": "2024-25",
+      "license": "CHECK_SOURCE",
+      "intended_use": [
+        "calibration",
+        "analytics"
+      ],
+      "status": "REGISTERED",
+      "paths": [],
+      "transformation_script": null,
+      "checksum_sha256": null
+    },
+    {
+      "id": "apra-ncpd-2026",
+      "name": "APRA National Claims and Policies Database statistics",
+      "publisher": "APRA",
+      "source_type": "statistical",
+      "data_type": "masked_claims",
+      "claim_level": null,
+      "url": "https://www.apra.gov.au/news-and-publications/national-claims-and-policies-database-statistics",
+      "publication_date": "2026-07-03",
+      "retrieval_date": null,
+      "data_period": "Through December 2024",
+      "license": "CHECK_SOURCE",
+      "intended_use": [
+        "calibration",
+        "benchmark"
+      ],
+      "status": "REGISTERED",
+      "paths": [],
+      "transformation_script": null,
+      "checksum_sha256": null
+    },
+    {
+      "id": "cms-tic-puf-py2026",
+      "name": "CMS Transparency in Coverage PUF PY2026",
+      "publisher": "CMS",
+      "source_type": "statistical",
+      "data_type": "aggregate",
+      "claim_level": false,
+      "url": "https://data.healthcare.gov/dataset/dfc1a61d-6e77-4c62-bee1-44422a42cf06",
+      "publication_date": "2025-10-28",
+      "retrieval_date": null,
+      "data_period": "PY2024 data",
+      "license": "CHECK_SOURCE",
+      "intended_use": [
+        "analytics"
+      ],
+      "status": "REGISTERED",
+      "paths": [],
+      "transformation_script": null,
+      "checksum_sha256": null
+    },
+    {
+      "id": "figshare-auto-fraud-v2",
+      "name": "Auto Insurance Fraud Detection (Figshare, version 2)",
+      "publisher": "Figshare",
+      "source_type": "benchmark",
+      "data_type": "research_benchmark",
+      "claim_level": null,
+      "url": "https://figshare.com/articles/dataset/Auto_Insurance_Fraud_Detection/28207571",
+      "publication_date": "2025-05-01",
+      "retrieval_date": null,
+      "data_period": "Historical",
+      "license": "CC BY 4.0",
+      "intended_use": [
+        "benchmark"
+      ],
+      "status": "REGISTERED",
+      "paths": [],
+      "transformation_script": null,
+      "checksum_sha256": null
+    },
+    {
+      "id": "zenodo-health-claims-2024",
+      "name": "Health Insurance Claims (Zenodo)",
+      "publisher": "Zenodo",
+      "source_type": "benchmark",
+      "data_type": "research_benchmark",
+      "claim_level": null,
+      "url": "https://zenodo.org/records/13289814",
+      "publication_date": "2024",
+      "retrieval_date": null,
+      "data_period": "Collected 2024",
+      "license": "CHECK_SOURCE",
+      "intended_use": [
+        "benchmark"
+      ],
+      "status": "REGISTERED",
+      "paths": [],
+      "transformation_script": null,
+      "checksum_sha256": null
+    },
+    {
+      "id": "zenodo-auto-claims-2024",
+      "name": "Auto Insurance Claims (Zenodo)",
+      "publisher": "Zenodo",
+      "source_type": "benchmark",
+      "data_type": "research_benchmark",
+      "claim_level": null,
+      "url": "https://zenodo.org/records/13381118",
+      "publication_date": "2024-08-27",
+      "retrieval_date": null,
+      "data_period": "Historical",
+      "license": "CHECK_SOURCE",
+      "intended_use": [
+        "benchmark"
+      ],
+      "status": "REGISTERED",
+      "paths": [],
+      "transformation_script": null,
+      "checksum_sha256": null
+    }
+  ]
+}

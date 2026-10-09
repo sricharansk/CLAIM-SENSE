@@ -30,6 +30,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | – | Sign-in and roles | `auth.py`, `/auth/login`, `/auth/me`; adjuster / supervisor / auditor; approval limit and escalation rules; sign-in screen and role-aware UI | `test_auth.py` (7 tests); browser run signs in and sees approval blocked over the limit |
 | – | Policy PDF ingestion (blueprint Prompt 05) | `services.ingest_policy_file`: upload → validation → SHA-256 checksum (duplicate refused) → page-preserving PDF extraction (pypdf) or Markdown → section/clause parsing (`rag/parser.parse_policy_pages`) → version metadata → persistence → indexing; states UPLOADED, VALIDATING, EXTRACTING, INDEXING, READY, FAILED recorded per attempt in `policy_ingestions`; instruction-like lines reported as warnings; `/policy-ingestions`; Policy library shows the stages and history | `test_policy_ingestion.py` (PDF of 6 pages → 21 clauses with page numbers, citations name the PDF, duplicate, scanned PDF, unreadable PDF, wrong type, supervisor-only); browser run on Docker ingests `data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf`, screenshot `15-policy-pdf-ingestion.png` |
 | – | Claim workspace tabs (blueprint Prompt 15) | `ClaimDetail.tsx`: Overview, Documents, Policy & evidence, Coverage, Adjudication, Risk, Review, Audit, with counts and deep links (`/claims/CLM-H-1002#coverage`); empty states when no analysis yet; "Open review" prompt while a decision is pending | `npm run build`; browser run uses every tab; screenshots `02`–`06`, `16-claim-evidence.png` |
+| – | Data provenance (blueprint Data Prompts A and G) | `data/source_registry.json` (14 sources: 5 synthetic in use with SHA-256 over their files, 9 public sources registered, not downloaded); `provenance.py` validator rejects missing provenance, unconfirmed licences on in-use data and checksum drift; RAG manifest (`/knowledge-base/manifest`, `reports/rag_manifest.json`) resolves every indexed chunk to source file, version, page, section/clause and extraction run; the index keeps out chunks that do not resolve; Data sources screen shows both; `docs/DATA_PROVENANCE.md` | `test_provenance.py` (6); `scripts/provenance.py --check` in CI (54 chunks, 0 rejected, manifest reproducible); smoke test against Docker + PostgreSQL (14 sources, 0 problems; 54 chunks, 0 rejected); browser run, 0 console errors, screenshot `17-data-provenance.png` |
 | – | Settlement clock | `sla.py`: due date from the `settlement_days` term (clause 6.3 health, 4.3 motor), counted from the last document; shown on claim page, claims list, review queue and dashboard | `test_letters_sla.py`; browser run |
 | – | Decision letters | `letters.py`, `GET /claims/{n}/letter`: settlement, repudiation (quotes the clause), document request, under review; deterministic, marked draft until a human decides | `test_letters_sla.py`; browser run generates the ₹64,080.00 settlement letter; screenshot `12-rejection-letter.png` |
 | – | CSV export | `GET /claims-export.csv`, Export CSV button on `/claims` | `test_letters_sla.py`; browser download |
@@ -40,7 +41,8 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 ## Validation results (this session)
 
 - `ruff check app tests`: clean.
-- `pytest`: 63 passed.
+- `pytest`: 69 passed.
+- `python scripts/provenance.py --check`: registry 14 sources, 0 problems; RAG manifest 54 chunks from 3 documents, 0 rejected, identical to the committed copy.
 - `python scripts/evaluate.py`: 256 / 256 checks passed (retrieval hit@1 100%, MRR 1.00, all refusals correct). The first run found three assistant misses (ICU question cited the room-rent clause, a cataract question cited the 30-day waiting period, two off-topic prompts were answered); fixed in `rag/retriever.py` and `rag/service.py`.
 - `npm run build` (tsc + vite): passed.
 - `pip-audit -r backend/requirements.txt`: no known vulnerabilities. `npm audit`: 0 vulnerabilities.
@@ -71,7 +73,7 @@ Nothing in progress.
 |---|---|---|
 | Cloud deployment (Azure Container Apps or Render) | No cloud account in the build environment. Checked 2026-10-09: the only cloud variables present are proxy placeholders (`gcloud` reports no credentialed accounts) | Add `AZURE_CREDENTIALS` secret and variables, then run the *Deploy to Azure Container Apps* workflow; or connect the repo on Render using `render.yaml` |
 | LLM-written answers | No `ANTHROPIC_API_KEY` provided | Set the key; extractive mode works without it |
-| Public 2024–2026 datasets | Registered only; not downloaded or ingested | Download, record provenance, ingest IRDAI circulars into the RAG corpus |
+| Public 2024–2026 datasets | Registered in `data/source_registry.json` with dates, URLs and licence status; not downloaded or ingested (no licence review done; most are `CHECK_SOURCE`) | Confirm terms, download, stamp checksums with `scripts/provenance.py --write`, ingest the IRDAI circulars through the policy ingestion pipeline |
 
 ## Not in this version (roadmap)
 

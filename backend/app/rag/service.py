@@ -1,6 +1,7 @@
 """Policy knowledge service: index lifecycle, clause retrieval with citations, grounded answers."""
 from __future__ import annotations
 
+import logging
 import re
 import threading
 
@@ -11,14 +12,20 @@ from ..config import settings
 from ..models import PolicyClause
 from .retriever import HybridIndex, expand_query, word_tokens
 
+log = logging.getLogger("claimsense.rag")
 _index = HybridIndex()
 _lock = threading.Lock()
 _built = False
 
 
 def rebuild_index(db: Session) -> int:
+    """Index only clauses whose provenance resolves (source file, version, page, section/clause, extraction run)."""
     global _built
-    rows = db.query(PolicyClause).all()
+    from ..provenance import indexable
+
+    rows, rejected = indexable(db)
+    if rejected:
+        log.warning("%d clause chunks kept out of the index for missing provenance: %s", len(rejected), rejected[:5])
     with _lock:
         _index.build([(c.id, c.version_id, f"{c.title}. {c.section}. {c.text}") for c in rows])
         _built = True

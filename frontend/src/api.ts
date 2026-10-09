@@ -87,7 +87,16 @@ export type Evaluation = {
 export type Ingestion = { id: number; filename: string; file_type: string; sha256: string; size_bytes: number; status: string;
   stages: { status: string; at: string; detail: string }[]; product_code: string | null; version: string | null; pages: number;
   clauses: number; warnings: string[]; error: string | null; actor: string; created_at: string; finished_at: string | null };
-export type Dataset = { name: string; publisher: string; year: string; url: string; purpose: string; status: string };
+export type Source = { id: string; name: string; publisher: string; source_type: string; data_type: string; claim_level: boolean | null;
+  url: string; publication_date: string; retrieval_date: string | null; data_period: string; license: string; intended_use: string[];
+  status: string; paths: string[]; transformation_script: string | null; checksum_sha256: string | null; valid: boolean; problems: string[] };
+export type Registry = { schema_version: string; sources: Source[]; problems: string[]; valid: boolean };
+export type Manifest = { manifest_version: string; indexed_chunks: number; rejected_chunks: number;
+  documents: { document: string; source_file: string; source_sha256: string; file_type: string; extraction_run: number; pages: number;
+    effective_from: string; effective_to: string; chunks: number }[];
+  chunks: { chunk_id: string; document: string; source_file: string; page: number; section: string; clause_ref: string; title: string;
+    extraction_run: number; text_sha256: string }[];
+  rejected: { clause_id: number; product_code: string; version: string; clause_ref: string; missing: string[] }[] };
 export type Ready = { status: string; database: string; policy_index: string; llm: string; database_backend: string };
 
 export type User = { username: string; display_name: string; role: "ADJUSTER" | "SUPERVISOR" | "AUDITOR";
@@ -173,7 +182,8 @@ export const api = {
   ask: (question: string, product_code?: string, version?: string) =>
     request<RagAnswer>("/rag/query", json("POST", { question, product_code: product_code || null, version: version || null })),
   audit: (claim_number?: string) => request<AuditEvent[]>(`/audit${claim_number ? `?claim_number=${claim_number}` : ""}`),
-  datasets: () => request<Dataset[]>("/datasets"),
+  datasets: () => request<Registry>("/datasets"),
+  manifest: () => request<Manifest>("/knowledge-base/manifest"),
   evaluation: () => request<Evaluation>("/evaluation"),
 };
 

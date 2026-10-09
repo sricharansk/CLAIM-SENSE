@@ -25,14 +25,14 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Risk / fraud | Transparent weighted signals: amount ratio, early claim, frequency, duplicates, amount and name mismatches, missing documents, text in documents addressed to an AI | claim page |
 | Recommendation | Approve, partial approval, reject, request info or investigate, with reasons and an evidence package | claim page |
 | Human review | Approve (with amount override), reject, request info, investigate, escalate; notes required for adverse actions; approval limits enforced; escalated claims need a supervisor | claim page, `/reviews` |
-| Workflow | Routing to adjuster, investigation (SIU), pending-information and supervisor queues | `/reviews` |
+| Workflow | Routing to adjuster, investigation (SIU), pending-information and supervisor queues; queue shows status, risk, age and assignee; adjusters take and release tasks, supervisors reassign | `/reviews` |
 | Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
 | Decision letters | Settlement, repudiation (quotes the clause relied on), document-request and under-review letters built from data, no LLM; printable; marked draft until a human decides | claim page |
 | Export | Download the claim register as CSV with decision, payable amount, risk and settlement status | `/claims` |
 | Golden evaluation | 12 hand-worked claim cases (all 10 required types) and 21 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
 | Policy library | Browse clauses by version, view structured terms, ingest new wordings as PDF or Markdown with checksum, page-preserving extraction and visible processing states (Uploaded → Validating → Extracting → Indexing → Ready / Failed) | `/policies` |
-| Provenance | Which datasets are used and which public 2024–2026 sources are registered | `/datasets` |
+| Provenance | Source registry with publisher, dates, licence, intended use and SHA-256 checked on every request; RAG manifest tracing every indexed chunk to file, version, page, clause and extraction run; chunks without provenance are kept out of the index | `/datasets`, [docs/DATA_PROVENANCE.md](docs/DATA_PROVENANCE.md) |
 
 ## Real results from the golden scenarios
 
@@ -69,6 +69,7 @@ CLM-H-1001 waterfall, as the app shows it:
 | ![Policy assistant](docs/screenshots/07-policy-assistant.png) | ![Review queue](docs/screenshots/08-review-queue.png) |
 | ![Repudiation letter](docs/screenshots/12-rejection-letter.png) | ![Golden evaluation](docs/screenshots/13-evaluation.png) |
 | ![Policy PDF ingestion](docs/screenshots/15-policy-pdf-ingestion.png) | ![Claim evidence tab](docs/screenshots/16-claim-evidence.png) |
+| ![Data provenance](docs/screenshots/17-data-provenance.png) | |
 
 ## Architecture
 
@@ -144,7 +145,7 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 63 tests
+cd backend && ruff check app tests && python -m pytest -q    # 69 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
 cd frontend && npm run build                                 # type check + production build
 ```
@@ -158,9 +159,9 @@ Tests cover sign-in, roles, approval limits and escalation, security headers and
 | Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, each with structured terms that cite clauses | In use |
 | Eight synthetic golden claim packets (claim forms, bills, estimates, discharge summaries, police reports; one as PDF) | In use |
 | 1,000-claim synthetic portfolio with labelled injected anomaly patterns | In use for analytics and rule evaluation |
-| IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with purpose and URL; not downloaded in this build |
+| IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with publication date, URL, licence status and intended use; not downloaded in this build |
 
-Everything is regenerated deterministically with `python data/synthetic/generate.py`. The wording borrows common Indian retail-insurance concepts but is not any insurer's product and not regulatory text. Never commit real customer data or confidential policy documents.
+Everything is regenerated deterministically with `python data/synthetic/generate.py`; then `python scripts/provenance.py --write` re-stamps the checksums in [data/source_registry.json](data/source_registry.json). The wording borrows common Indian retail-insurance concepts but is not any insurer's product and not regulatory text. Never commit real customer data or confidential policy documents.
 
 ## Deployment
 
@@ -180,7 +181,7 @@ backend/app/
   api/routes.py  REST API v1
 backend/tests/   pytest suite
 frontend/src/    React + TypeScript UI (pages/, components/, api.ts)
-data/            synthetic policies, claim packets, portfolio, dataset register, generator
+data/            synthetic policies, claim packets, portfolio, source registry, generator
 docs/            blueprint, status, architecture, decisions, deployment, screenshots
 references/      supporting planning documents
 scripts/         smoke_test.py

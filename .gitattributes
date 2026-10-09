@@ -1,0 +1,2 @@
+# Data files are checksummed in data/source_registry.json, so git must never convert their line endings.
+data/** -text

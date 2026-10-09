@@ -45,6 +45,7 @@ const TONE: Record<string, string> = {
   ON_TRACK: "green", DUE_SOON: "amber", OVERDUE: "red", MET: "green", BREACHED: "red", FINAL: "green", DRAFT: "amber",
   READY: "green", UPLOADED: "gray", VALIDATING: "blue", EXTRACTING: "blue", INDEXING: "blue",
   SUCCEEDED: "green", FAILED: "red", NEEDS_ATTENTION: "red", DOCUMENTS_RECEIVED: "gray", SUBMITTED: "gray",
+  IN_USE: "green", REGISTERED: "gray", VERIFIED: "green", COMPLETE: "blue", CHECK_SOURCE: "amber",
 };
 export function Badge({ value }: { value: string | null | undefined }) {
   if (!value) return <span className="muted">—</span>;

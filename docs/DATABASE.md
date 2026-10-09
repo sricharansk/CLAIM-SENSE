@@ -18,7 +18,7 @@ SQLAlchemy 2 models in `backend/app/models.py`. SQLite by default (tests and loc
 | `claim_decisions` | AI recommendations and human decisions | `source` (AI or HUMAN), `decision`, `payable_amount`, `actor`, `notes` |
 | `workflow_tasks` | Review queues | `queue` (ADJUSTER_REVIEW, SIU_INVESTIGATION, PENDING_INFORMATION, SUPERVISOR_REVIEW), `priority`, `status`, `assignee` |
 | `audit_events` | Append-only activity log | `claim_id` (nullable), `event_type`, `actor`, `details` (JSON), `correlation_id` |
-| `dataset_sources` | Data provenance register | `name`, `publisher`, `year`, `url`, `purpose`, `status` |
+| `dataset_sources` | Mirror of the validated `data/source_registry.json`; entries without provenance are not loaded | `name`, `publisher`, `year` (publication date), `url`, `purpose` (intended use), `status` |
 
 ## Relationships
 

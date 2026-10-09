@@ -18,3 +18,5 @@
 | D14 | Evaluation expectations are worked out by hand from the wording and terms, and the report is committed and served read-only | A scorecard that copies system output proves nothing; the hand working is in `data/evaluation/golden_cases.json` so a reviewer can check it |
 | D15 | The assistant refuses when retrieved clauses share only generic insurance words with the question | Score thresholds alone answered off-topic and instruction-like prompts from loosely related clauses |
 | D16 | Policy ingestion runs synchronously but records each processing state with a timestamp per attempt | The staged history is visible and auditable without a job queue; a background worker can drive the same states later |
+| D17 | The source registry is JSON (`data/source_registry.json`), not the YAML file the blueprint names | The backend already reads JSON and has no YAML parser; the fields and the validator are what the blueprint asks for |
+| D18 | The retrieval index excludes any chunk whose provenance does not resolve, instead of failing start-up | One bad version should not take the assistant down; the rejected chunks are listed in the manifest and fail the CI check |

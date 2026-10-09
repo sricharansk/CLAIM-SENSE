@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func, text
 from sqlalchemy.orm import Session
 
-from .. import analytics, letters, llm, sla
+from .. import analytics, letters, llm, provenance, sla
 from ..agents import audit
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
@@ -27,7 +27,6 @@ from ..models import (
     Claim,
     ClaimDecision,
     ClaimFact,
-    DatasetSource,
     InsuredPolicy,
     Policy,
     PolicyIngestion,
@@ -482,6 +481,12 @@ def evaluation_report():
 
 
 @router.get("/datasets")
-def datasets(db: Session = Depends(get_db)):
-    return [{"name": d.name, "publisher": d.publisher, "year": d.year, "url": d.url, "purpose": d.purpose,
-             "status": d.status} for d in db.query(DatasetSource).order_by(DatasetSource.id).all()]
+def datasets():
+    """The source registry, validated now: required provenance fields and, for in-use sources, file checksums."""
+    return provenance.load_registry()
+
+
+@router.get("/knowledge-base/manifest")
+def knowledge_base_manifest(db: Session = Depends(get_db)):
+    """Every indexed policy chunk with its source file, version, page, section/clause and extraction run."""
+    return provenance.rag_manifest(db)
