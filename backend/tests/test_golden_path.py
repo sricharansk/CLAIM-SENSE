@@ -61,9 +61,13 @@ def test_end_to_end_create_upload_analyse_review(client):
     ok = client.post(f"/api/v1/claims/{n}/review", json={"action": "APPROVE", "reviewer": "qa", "payable_amount": "60000"})
     assert ok.json() == {"claim_number": n, "status": "APPROVED", "decision": "APPROVE", "payable_amount": "60000.00"}
     events = [e["event_type"] for e in client.get(f"/api/v1/audit?claim_number={n}").json()]
-    assert {"CLAIM_CREATED", "DOCUMENT_UPLOADED", "ANALYSIS_STARTED", "AI_RECOMMENDATION", "HUMAN_DECISION"} <= set(events)
-    human = next(e for e in client.get(f"/api/v1/audit?claim_number={n}").json() if e["event_type"] == "HUMAN_DECISION")
-    assert human["details"]["override"] is True
+    assert {"CLAIM_CREATED", "DOCUMENT_UPLOADED", "ANALYSIS_STARTED", "FACTS_EXTRACTED", "POLICY_SELECTED",
+            "EVIDENCE_RETRIEVED", "COVERAGE_ANALYZED", "ADJUDICATION_CALCULATED", "RISK_SCORED", "EVIDENCE_PACKAGED",
+            "AI_RECOMMENDATION", "HUMAN_DECISION"} <= set(events)
+    trail = {e["event_type"]: e for e in client.get(f"/api/v1/audit?claim_number={n}").json()}
+    assert trail["ADJUDICATION_CALCULATED"]["details"]["payable_amount"] == "64080.00"
+    assert trail["POLICY_SELECTED"]["details"]["version"] == trail["AI_RECOMMENDATION"]["details"]["policy_version"]
+    assert trail["HUMAN_DECISION"]["details"]["override"] is True and trail["HUMAN_DECISION"]["details"]["final"] is True
     assert client.post(f"/api/v1/claims/{n}/analyze").status_code == 409
 
 

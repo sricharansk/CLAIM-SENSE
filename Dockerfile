@@ -19,6 +19,7 @@ RUN --mount=type=secret,id=ca,required=false \
     if [ -f /run/secrets/ca ]; then export PIP_CERT=/run/secrets/ca; fi; pip install --no-cache-dir -r backend/requirements.txt
 COPY backend/app backend/app
 COPY data data
+COPY reports reports
 COPY --from=web /web/dist backend/static
 RUN useradd --create-home claimsense && mkdir -p /app/var/storage && chown -R claimsense /app/var
 USER claimsense

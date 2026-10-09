@@ -9,7 +9,8 @@ from ..models import Claim
 from .base import ClaimContext, ToolLog
 
 WEIGHTS = {"HIGH_AMOUNT_RATIO": 30, "ELEVATED_AMOUNT_RATIO": 15, "EARLY_CLAIM": 20, "FREQUENT_CLAIMS": 20,
-           "POSSIBLE_DUPLICATE": 50, "AMOUNT_MISMATCH": 25, "NAME_MISMATCH": 20, "MISSING_DOCUMENTS": 10}
+           "POSSIBLE_DUPLICATE": 50, "AMOUNT_MISMATCH": 25, "NAME_MISMATCH": 20, "MISSING_DOCUMENTS": 10,
+           "EMBEDDED_INSTRUCTIONS": 50}
 
 
 def score_features(f: dict) -> tuple[int, list[dict]]:
@@ -36,6 +37,9 @@ def score_features(f: dict) -> tuple[int, list[dict]]:
         sig("NAME_MISMATCH", "Names differ across claim documents.")
     if f.get("missing_documents"):
         sig("MISSING_DOCUMENTS", f"Missing documents: {', '.join(f['missing_documents'])}.")
+    if f.get("embedded_instructions"):
+        sig("EMBEDDED_INSTRUCTIONS", "Document text addressed to an AI system, ignored and flagged for the reviewer: "
+            + "; ".join(f"{h['document']} line {h['line']}: \"{h['text'][:90]}\"" for h in f["embedded_instructions"][:3]))
     return min(100, sum(s["weight"] for s in signals)), signals
 
 
@@ -61,6 +65,7 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
         "amount_gap": float(abs(claimed - gross) / gross) if gross else 0,
         "name_mismatch": len(ctx.facts.get("distinct_names", [])) > 1,
         "missing_documents": ctx.coverage["missing_documents"],
+        "embedded_instructions": ctx.embedded_instructions,
     }
     score, signals = score_features(features)
     ctx.risk = {"score": score, "level": level(score), "signals": signals, "features": features,

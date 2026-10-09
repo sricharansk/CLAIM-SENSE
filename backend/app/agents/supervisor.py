@@ -33,6 +33,34 @@ def _jsonable(o):
     return json.loads(json.dumps(o, default=str))
 
 
+def _stage_events(name: str, ctx: ClaimContext) -> list[tuple[str, dict]]:
+    """Audit events for each completed stage (blueprint Prompt 14), with the figures a reviewer would check."""
+    if name == "Intake Agent":
+        return [("FACTS_EXTRACTED", {"facts": len(ctx.facts), "line_items": len(ctx.line_items), "documents": ctx.doc_types,
+                                     "embedded_instructions": len(ctx.embedded_instructions)})]
+    if name == "Policy Retrieval Agent":
+        v = ctx.version
+        return [("POLICY_SELECTED", {"policy_number": ctx.insured.policy_number, "product_code": v.policy.product_code,
+                                     "version": v.version, "effective_from": v.effective_from, "effective_to": v.effective_to}),
+                ("EVIDENCE_RETRIEVED", {"clauses": [h["clause_ref"] for h in ctx.retrieved]})]
+    if name == "Coverage Agent":
+        failing = [f for f in ctx.coverage["findings"] if f["outcome"] == "FAIL"]
+        return [("COVERAGE_ANALYZED", {"status": ctx.coverage["status"], "failing_checks": [
+            {"code": f["code"], "clause_ref": (f["citation"] or {}).get("clause_ref")} for f in failing]})]
+    if name == "Adjudication Tool":
+        a = ctx.adjudication
+        return [("ADJUDICATION_CALCULATED", {"gross_billed": a["gross_billed"], "payable_amount": a["payable_amount"],
+                                             "rules_version": a["rules_version"],
+                                             "steps": [w["rule_id"] for w in a["waterfall"]]})]
+    if name == "Risk/Fraud Agent":
+        return [("RISK_SCORED", {"level": ctx.risk["level"], "score": ctx.risk["score"],
+                                 "signals": [x["code"] for x in ctx.risk["signals"]]})]
+    if name == "Evidence Agent":
+        return [("EVIDENCE_PACKAGED", {"items": len(ctx.evidence),
+                                       "policy_clauses": sum(e["kind"] == "policy_clause" for e in ctx.evidence)})]
+    return []
+
+
 def analyze_claim(db: Session, claim: Claim, actor: str = "system") -> AnalysisRun:
     cid = f"cs-{uuid.uuid4().hex[:12]}"
     run = AnalysisRun(claim_id=claim.id, correlation_id=cid, rules_version=settings.rules_version)
@@ -47,6 +75,8 @@ def analyze_claim(db: Session, claim: Claim, actor: str = "system") -> AnalysisR
             summary = fn(ctx, log)
             db.add(AgentRun(analysis_run_id=run.id, agent=name, status="SUCCEEDED", summary=summary,
                             tool_calls=_jsonable(log.calls), duration_ms=int((time.perf_counter() - t) * 1000)))
+            for event, details in _stage_events(name, ctx):
+                audit.log(db, claim.id, event, name, _jsonable(details), cid)
         except AgentError as exc:
             db.add(AgentRun(analysis_run_id=run.id, agent=name, status="FAILED", summary=str(exc),
                             tool_calls=_jsonable(log.calls), duration_ms=int((time.perf_counter() - t) * 1000)))

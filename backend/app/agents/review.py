@@ -52,5 +52,5 @@ def apply_review(db: Session, claim: Claim, action: str, reviewer: str, notes: s
     audit.log(db, claim.id, "HUMAN_DECISION", reviewer,
               {"action": action, "payable_amount": str(payable) if payable is not None else None,
                "ai_payable_amount": str(ai_payable) if ai_payable is not None else None,
-               "override": overridden, "notes": notes})
+               "override": overridden, "final": action in ("APPROVE", "REJECT"), "notes": notes})
     return decision

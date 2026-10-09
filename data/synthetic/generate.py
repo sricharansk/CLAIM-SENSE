@@ -11,6 +11,8 @@ Outputs (deterministic, seed=2025):
   data/policies/insured_policies.json           customer policy contracts
   data/claims/<CLAIM>/*.txt|pdf                 claim document packets for the golden scenarios
   data/claims/scenarios.json                    claim headers + expected outcome
+  data/evaluation/packets/<CASE>/*.txt          extra packets used only by scripts/evaluate.py (never seeded)
+  data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf  a new wording version as a multi-page PDF, for live ingestion
   data/synthetic/claims_portfolio.csv           1,000 claims with injected fraud patterns
 
 Run: python data/synthetic/generate.py
@@ -27,6 +29,7 @@ ROOT = Path(__file__).resolve().parents[2]
 POL = ROOT / "data" / "policies"
 CLM = ROOT / "data" / "claims"
 SYN = ROOT / "data" / "synthetic"
+EVAL = ROOT / "data" / "evaluation" / "packets"
 INSURER = "Synthetic Assurance Co. Ltd. (fictional)"
 NOTICE = ("This is SYNTHETIC policy wording created for the Claim Sense demo. It is not issued by any "
           "real insurer and is not regulatory text.")
@@ -38,6 +41,9 @@ HEALTH_VERSIONS = {
     "2025.1": dict(effective_from="2025-04-01", effective_to="2026-03-31", room=5000, icu=10000,
                    deductible=5000, copay=10, ped_months=36, notify_hours=48),
 }
+# Not seeded: ingested live through the Policy library to demonstrate PDF ingestion.
+DEMO_INGEST_VERSION = ("2026.1", dict(effective_from="2026-04-01", effective_to="2027-03-31", room=6000, icu=12000,
+                                      deductible=5000, copay=10, ped_months=36, notify_hours=48))
 SPECIFIED = ["cataract", "hernia", "joint replacement", "kidney stone", "sinusitis", "tonsillectomy", "varicose veins"]
 
 
@@ -156,6 +162,7 @@ def health_terms(v: str, p: dict) -> dict:
         "non_payable_categories": {"consumables": "4.3", "non_medical": "4.3"},
         "category_limits": {"room_rent": "room_rent_per_day", "icu": "icu_per_day"},
         "required_documents": {"documents": ["claim_form", "discharge_summary", "hospital_bill"], "clause": "6.2"},
+        "settlement_days": {"value": 30, "clause": "6.3"},
         "coverage_clause": "2.1",
     }
 
@@ -233,6 +240,7 @@ def motor_terms() -> dict:
         ],
         "non_payable_categories": {},
         "required_documents": {"documents": ["claim_form", "repair_estimate", "driving_licence"], "clause": "4.2"},
+        "settlement_days": {"value": 30, "clause": "4.3"},
         "coverage_clause": "2.1",
     }
 
@@ -413,6 +421,50 @@ def write_demo_upload() -> None:
                                                        "Ureteroscopic lithotripsy (URSL)", "Stone cleared. Discharged with stent."), encoding="utf-8")
 
 
+def evaluation_claims() -> list[dict]:
+    """Packets for evaluation cases the seeded scenarios do not cover. Created fresh by scripts/evaluate.py."""
+    viral = [("Room Rent - Twin Sharing (3 days @ 4,500)", 13500), ("Consultant Physician Fees", 9000),
+             ("Pharmacy - Medicines and Drugs", 8200), ("Laboratory Tests - Platelet Count and Serology", 5300)]
+    E = []
+    E.append(dict(claim_number="EVAL-H-01", claim_type="health", policy_number="CS-HLT-24-000233", claimant="Suresh Nair",
+                  incident_date="2025-11-10", hospital="Lakeview Multispeciality Hospital (fictional)",
+                  narrative="Admitted with acute gastroenteritis and dehydration after two days of vomiting.",
+                  items=[("Room Rent - General Ward (2 days @ 4,000)", 8000), ("Consultant Physician Fees", 6000),
+                         ("Pharmacy - Medicines and IV Fluids", 7400), ("Laboratory Tests - Stool and Blood", 3600)],
+                  admit="2025-11-10", disch="2025-11-12", diagnosis="Acute gastroenteritis with moderate dehydration",
+                  procedure="Medical management with IV fluids", notes="Recovered. Discharged on oral rehydration."))
+    E.append(dict(claim_number="EVAL-H-02", claim_type="health", policy_number="CS-HLT-25-000342", claimant="Meena Iyer",
+                  incident_date="2025-12-05", hospital="Sunrise Care Hospital (fictional)",
+                  narrative="Injured in a road traffic accident as a pillion rider; fractures of the left femur and pelvis.",
+                  items=[("Room Rent - Twin Sharing (8 days @ 5,000)", 40000), ("ICU Charges (3 days @ 10,000)", 30000),
+                         ("Orthopaedic Surgeon and Anaesthetist Fees", 120000), ("Operation Theatre Charges", 45000),
+                         ("Implants - Femur Nail and Pelvic Plates", 110000), ("Pharmacy - Medicines and Drugs", 38000),
+                         ("Physiotherapy and Diagnostic Imaging", 27000)],
+                  admit="2025-12-05", disch="2025-12-16",
+                  diagnosis="Fracture shaft of left femur and pelvic fracture following road traffic accident",
+                  procedure="Intramedullary nailing of femur and pelvic fixation", notes="Mobilised with walker. Discharged."))
+    for number, day, disch in (("EVAL-H-03", "2025-04-01", "2025-04-04"), ("EVAL-H-04", "2025-03-31", "2025-04-03")):
+        E.append(dict(claim_number=number, claim_type="health", policy_number="CS-HLT-24-000117", claimant="Ravi Kumar",
+                      incident_date=day, hospital="Greenfield General Hospital (fictional)",
+                      narrative="High-grade fever with body ache; admitted for viral fever with low platelets.",
+                      items=viral, admit=day, disch=disch, diagnosis="Viral fever with thrombocytopenia",
+                      procedure="Medical management", notes="Platelets recovered. Discharged."))
+    return E
+
+
+def write_evaluation_packets() -> None:
+    for c in evaluation_claims():
+        d = EVAL / c["claim_number"]
+        d.mkdir(parents=True, exist_ok=True)
+        c["form_amount"] = sum(a for _, a in c["items"])
+        (d / "claim_form.txt").write_text(claim_form(c), encoding="utf-8")
+        (d / "hospital_bill.txt").write_text(bill("FINAL HOSPITAL BILL", c, c["items"],
+                                                  {"Hospital": c["hospital"], "Bill Number": f"HB-{c['claim_number'][-4:]}",
+                                                   "Admission Date": c["admit"], "Discharge Date": c["disch"]}), encoding="utf-8")
+        (d / "discharge_summary.txt").write_text(discharge(c, c["admit"], c["disch"], c["diagnosis"], c["procedure"], c["notes"]),
+                                                 encoding="utf-8")
+
+
 def write_pdf(path: Path, lines: list[str]) -> None:
     """Minimal single-page text PDF (Courier), enough for pypdf text extraction."""
     def esc(s: str) -> str:
@@ -432,6 +484,57 @@ def write_pdf(path: Path, lines: list[str]) -> None:
     out += b"".join(f"{o:010d} 00000 n \n".encode() for o in offsets)
     out += f"trailer\n<< /Size {len(objs) + 1} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n".encode()
     path.write_bytes(bytes(out))
+
+
+def policy_pdf_pages(markdown: str, width: int = 92) -> list[list[str]]:
+    """Lay out policy wording as plain PDF pages: headings become numbered lines, body text is wrapped."""
+    import textwrap
+    pages: list[list[str]] = [[]]
+    for line in markdown.splitlines():
+        if line.startswith("<!-- page:"):
+            if int(line.split(":")[1].split("-")[0]) > 1:
+                pages.append([])
+            continue
+        text = line.lstrip("#").strip().replace("\u2014", "-")
+        if line.startswith("#") or not text:
+            pages[-1].append(text)
+        else:
+            pages[-1].extend(textwrap.wrap(text, width, break_on_hyphens=False))
+    return [p for p in pages if any(x.strip() for x in p)]
+
+
+def write_pdf_pages(path: Path, pages: list[list[str]]) -> None:
+    """Multi-page text PDF (Courier 9pt), one content stream per page, readable by pypdf."""
+    def esc(s: str) -> str:
+        return s.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)").encode("latin-1", "replace").decode("latin-1")
+    n = len(pages)
+    kids = " ".join(f"{3 + 2 * i} 0 R" for i in range(n))
+    objs = [b"<< /Type /Catalog /Pages 2 0 R >>", f"<< /Type /Pages /Kids [{kids}] /Count {n} >>".encode()]
+    font = 3 + 2 * n
+    for i, lines in enumerate(pages):
+        content = ["BT", "/F1 9 Tf", "11 TL", "40 800 Td"] + [f"({esc(line)}) Tj T*" for line in lines] + ["ET"]
+        stream = "\n".join(content).encode("latin-1")
+        objs.append(f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 {font} 0 R >> >> "
+                    f"/Contents {4 + 2 * i} 0 R >>".encode())
+        objs.append(b"<< /Length " + str(len(stream)).encode() + b" >>\nstream\n" + stream + b"\nendstream")
+    objs.append(b"<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>")
+    out, offsets = bytearray(b"%PDF-1.4\n"), []
+    for i, o in enumerate(objs, 1):
+        offsets.append(len(out))
+        out += f"{i} 0 obj\n".encode() + o + b"\nendobj\n"
+    xref = len(out)
+    out += f"xref\n0 {len(objs) + 1}\n0000000000 65535 f \n".encode()
+    out += b"".join(f"{o:010d} 00000 n \n".encode() for o in offsets)
+    out += f"trailer\n<< /Size {len(objs) + 1} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n".encode()
+    path.write_bytes(bytes(out))
+
+
+def write_ingest_demo() -> None:
+    v, p = DEMO_INGEST_VERSION
+    d = POL / "ingest_demo"
+    d.mkdir(parents=True, exist_ok=True)
+    write_pdf_pages(d / f"HLT-SHIELD_{v}.pdf", policy_pdf_pages(health_wording(v, p)))
+    (d / f"HLT-SHIELD_{v}.terms.json").write_text(json.dumps(health_terms(v, p), indent=2), encoding="utf-8")
 
 
 # ------------------------------------------------------------ portfolio ---
@@ -493,6 +596,8 @@ def main() -> None:
         for a, b, c, d, e, f in INSURED], indent=2), encoding="utf-8")
     scen = write_claim_packets()
     write_demo_upload()
+    write_evaluation_packets()
+    write_ingest_demo()
     (CLM / "scenarios.json").write_text(json.dumps(scen, indent=2), encoding="utf-8")
     portfolio()
     print(f"policies: {len(list(POL.glob('*.md')))}, claims: {len(scen)}, portfolio rows: 1000")

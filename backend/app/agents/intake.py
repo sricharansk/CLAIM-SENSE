@@ -5,12 +5,48 @@ import json
 from datetime import date
 
 from ..models import ClaimFact, InsuredPolicy
+from ..safety import embedded_instructions
 from .base import AgentError, ClaimContext, ToolLog
 
 SINGLE_VALUE = ["policy_number", "claimant_name", "incident_date", "admission_date", "discharge_date", "diagnosis",
                 "procedure", "claimed_amount", "hospital", "vehicle_registration", "vehicle_first_registration",
                 "engine_cc", "fir_number", "narrative", "clinical_notes", "police_findings", "document_total",
                 "patient_name", "licence_holder", "licence_valid_till"]
+
+
+# Reviewers may correct these before (re-)running the analysis; bill totals and line items stay as extracted.
+CORRECTABLE = [n for n in SINGLE_VALUE if n != "document_total"]
+CORRECTION = "reviewer_correction"
+
+
+def consolidate(facts: list[ClaimFact], doc_type: dict[int, str]) -> tuple[dict, dict, list[dict], dict[str, set]]:
+    """One value per fact: the latest reviewer correction (a fact with no document) wins, then the first document
+    value. Returns values, their sources, bill/estimate line items and the distinct names seen in documents."""
+    values: dict = {}
+    sources: dict[str, dict] = {}
+    items: list[dict] = []
+    names: dict[str, set] = {}
+    for f in sorted((f for f in facts if f.document_id is None), key=lambda f: -f.id):
+        if f.name in CORRECTABLE and f.name not in values:
+            values[f.name] = f.value
+            sources[f.name] = {"fact_id": f.id, "document_id": None, "document_type": CORRECTION, "line": None,
+                               "text": f.source_text, "confidence": f.confidence}
+    for f in sorted((f for f in facts if f.document_id is not None), key=lambda f: f.id):
+        src = {"fact_id": f.id, "document_id": f.document_id, "document_type": doc_type.get(f.document_id),
+               "line": f.source_line, "text": f.source_text, "confidence": f.confidence}
+        if f.name == "line_item":
+            # bills/estimates are the source of truth for line items
+            if doc_type.get(f.document_id) in ("hospital_bill", "repair_estimate"):
+                items.append({**json.loads(f.value), "source": src})
+            continue
+        if f.name in ("claimant_name", "patient_name", "licence_holder"):
+            names.setdefault(f.value.strip().lower(), set()).add(doc_type.get(f.document_id))
+        if f.name == "document_total" and doc_type.get(f.document_id) not in ("hospital_bill", "repair_estimate"):
+            continue
+        if f.name in SINGLE_VALUE and f.name not in values:
+            values[f.name] = f.value
+            sources[f.name] = src
+    return values, sources, items, names
 
 
 def run(ctx: ClaimContext, log: ToolLog) -> str:
@@ -22,22 +58,10 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     facts = ctx.db.query(ClaimFact).filter_by(claim_id=claim.id).all()
     doc_type = {d.id: d.doc_type for d in claim.documents}
     ctx.doc_types = sorted({d.doc_type for d in claim.documents})
-    names: dict[str, set] = {}
-    for f in facts:
-        src = {"fact_id": f.id, "document_id": f.document_id, "document_type": doc_type.get(f.document_id),
-               "line": f.source_line, "text": f.source_text, "confidence": f.confidence}
-        if f.name == "line_item":
-            # bills/estimates are the source of truth for line items
-            if doc_type.get(f.document_id) in ("hospital_bill", "repair_estimate"):
-                ctx.line_items.append({**json.loads(f.value), "source": src})
-            continue
-        if f.name in ("claimant_name", "patient_name", "licence_holder"):
-            names.setdefault(f.value.strip().lower(), set()).add(doc_type.get(f.document_id))
-        if f.name == "document_total" and doc_type.get(f.document_id) not in ("hospital_bill", "repair_estimate"):
-            continue
-        if f.name in SINGLE_VALUE and f.name not in ctx.facts:
-            ctx.facts[f.name] = f.value
-            ctx.fact_sources[f.name] = src
+    values, sources, items, names = consolidate(facts, doc_type)
+    ctx.facts.update(values)
+    ctx.fact_sources.update(sources)
+    ctx.line_items.extend(items)
     ctx.facts["distinct_names"] = sorted(names)
     # header values fill gaps; extracted document values win when present
     ctx.facts.setdefault("policy_number", claim.policy_number)
@@ -46,6 +70,12 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     if claim.claimed_amount is not None and "claimed_amount" not in ctx.facts:
         ctx.facts["claimed_amount"] = str(claim.claimed_amount)
     log.record("consolidate_facts", {"documents": len(claim.documents)}, f"{len(ctx.facts)} facts, {len(ctx.line_items)} line items", t)
+
+    t = time.perf_counter()
+    ctx.embedded_instructions = [{"document": d.filename, "document_type": d.doc_type, **hit}
+                                 for d in claim.documents for hit in embedded_instructions(d.text or "")]
+    log.record("scan_embedded_instructions", {"documents": len(claim.documents)},
+               f"{len(ctx.embedded_instructions)} suspicious lines (treated as data, never followed)", t)
 
     t = time.perf_counter()
     insured = ctx.db.query(InsuredPolicy).filter_by(policy_number=ctx.facts["policy_number"]).first()

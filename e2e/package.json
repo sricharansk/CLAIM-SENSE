@@ -1,0 +1,12 @@
+{
+  "name": "claim-sense-e2e",
+  "private": true,
+  "description": "Browser tests for Claim Sense, run against a running stack (default http://localhost:8080)",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
+}

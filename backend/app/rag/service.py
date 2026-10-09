@@ -1,6 +1,7 @@
 """Policy knowledge service: index lifecycle, clause retrieval with citations, grounded answers."""
 from __future__ import annotations
 
+import logging
 import re
 import threading
 
@@ -11,14 +12,20 @@ from ..config import settings
 from ..models import PolicyClause
 from .retriever import HybridIndex, expand_query, word_tokens
 
+log = logging.getLogger("claimsense.rag")
 _index = HybridIndex()
 _lock = threading.Lock()
 _built = False
 
 
 def rebuild_index(db: Session) -> int:
+    """Index only clauses whose provenance resolves (source file, version, page, section/clause, extraction run)."""
     global _built
-    rows = db.query(PolicyClause).all()
+    from ..provenance import indexable
+
+    rows, rejected = indexable(db)
+    if rejected:
+        log.warning("%d clause chunks kept out of the index for missing provenance: %s", len(rejected), rejected[:5])
     with _lock:
         _index.build([(c.id, c.version_id, f"{c.title}. {c.section}. {c.text}") for c in rows])
         _built = True
@@ -64,10 +71,18 @@ def _best_sentences(question: str, text: str, limit: int = 2) -> list[str]:
     return [s for s in ranked[:limit] if q & set(word_tokens(s))]
 
 
+# Words nearly every clause shares; matching only these is not evidence that a clause answers the question.
+GENERIC = set(word_tokens("policy policies insurer insurers insured insurance claim claims cover covers covered coverage "
+                          "payable pay paid pays amount amounts charge charges expense expenses benefit benefits much many"))
+
+
 def answer(db: Session, question: str, version_ids: set[int] | None = None, k: int = 4) -> dict:
-    """Evidence-first answer. Refuses when retrieval finds no sufficiently relevant clause."""
+    """Evidence-first answer. Refuses when retrieval finds no sufficiently relevant clause, or when the only
+    overlap with the question is generic insurance vocabulary."""
     hits = retrieve(db, question, version_ids, k)
-    strong = [h for h in hits if h["score"] >= settings.rag_min_score]
+    focus = set(word_tokens(expand_query(question))) - GENERIC
+    strong = [h for h in hits if h["score"] >= settings.rag_min_score
+              and focus & set(word_tokens(f"{h['title']} {h['text']}"))]
     if not strong:
         return {"question": question, "grounded": False, "mode": "refusal",
                 "answer": "I could not find policy wording that answers this question, so I will not guess. "

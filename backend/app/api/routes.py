@@ -1,21 +1,25 @@
 """REST API v1 (blueprint PART 12)."""
 from __future__ import annotations
 
+import csv
+import io
 import json
-from datetime import date
+from datetime import date, datetime, timezone
 from decimal import Decimal
 
-from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import func, text
 from sqlalchemy.orm import Session
 
-from .. import analytics, llm
+from .. import analytics, letters, llm, provenance, sla
 from ..agents import audit
+from ..agents.intake import CORRECTABLE, CORRECTION, SINGLE_VALUE, consolidate
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
-from ..auth import current_user, issue_token, supervisor, user_view, verify_password, writer
-from ..config import settings
+from ..auth import WRITE_ROLES, current_user, issue_token, supervisor, throttle, user_view, verify_password, writer
+from ..config import REPO_ROOT, settings
 from ..db import get_db
 from ..models import (
     AgentRun,
@@ -24,14 +28,15 @@ from ..models import (
     Claim,
     ClaimDecision,
     ClaimFact,
-    DatasetSource,
     InsuredPolicy,
     Policy,
+    PolicyIngestion,
+    PolicyVersion,
     User,
     WorkflowTask,
 )
 from ..rag import service as rag
-from ..services import ValidationProblem, add_document, ingest_policy
+from ..services import IngestionFailed, ValidationProblem, add_document, ingest_policy_file
 
 public = APIRouter(prefix="/api/v1")
 router = APIRouter(prefix="/api/v1", dependencies=[Depends(current_user)])
@@ -70,12 +75,21 @@ class LoginIn(BaseModel):
 
 
 @public.post("/auth/login")
-def login(body: LoginIn, db: Session = Depends(get_db)):
-    user = db.query(User).filter_by(username=body.username.strip().lower(), active=True).first()
+def login(body: LoginIn, request: Request, db: Session = Depends(get_db)):
+    username = body.username.strip().lower()
+    key = f"{request.client.host if request.client else '-'}|{username}"
+    wait = throttle.retry_after(key)
+    if wait:
+        audit.log(db, None, "LOGIN_THROTTLED", username[:60], {"retry_after_s": wait})
+        db.commit()
+        raise HTTPException(429, f"Too many failed sign-ins. Try again in {wait} seconds.", headers={"Retry-After": str(wait)})
+    user = db.query(User).filter_by(username=username, active=True).first()
     if user is None or not verify_password(body.password, user.password_hash):
-        audit.log(db, None, "LOGIN_FAILED", body.username[:60], {})
+        throttle.fail(key)
+        audit.log(db, None, "LOGIN_FAILED", username[:60], {})
         db.commit()
         raise HTTPException(401, "Wrong username or password")
+    throttle.reset(key)
     audit.log(db, None, "LOGIN", user.username, {"role": user.role})
     db.commit()
     return {"token": issue_token(user), "user": user_view(user)}
@@ -96,8 +110,15 @@ class ClaimIn(BaseModel):
     description: str = Field(default="", max_length=4000)
 
 
-def _claim_summary(c: Claim, ai: ClaimDecision | None, risk: str | None) -> dict:
-    return {"claim_number": c.claim_number, "policy_number": c.policy_number, "claim_type": c.claim_type,
+def _clock(db: Session, c: Claim) -> dict:
+    run = db.query(AnalysisRun).filter_by(claim_id=c.id, status="SUCCEEDED").order_by(AnalysisRun.id.desc()).first()
+    terms = db.get(PolicyVersion, run.policy_version_id).terms if run and run.policy_version_id else None
+    final = db.query(ClaimDecision).filter_by(claim_id=c.id, source="HUMAN").order_by(ClaimDecision.id.desc()).first()
+    return sla.settlement_clock(c, terms, final)
+
+
+def _claim_summary(c: Claim, ai: ClaimDecision | None, risk: str | None, clock: dict | None = None) -> dict:
+    return {"settlement": clock,"claim_number": c.claim_number, "policy_number": c.policy_number, "claim_type": c.claim_type,
             "claimant_name": c.claimant_name, "incident_date": c.incident_date, "claimed_amount": _money(c.claimed_amount),
             "status": c.status, "created_at": c.created_at, "updated_at": c.updated_at,
             "recommendation": ai.decision if ai else None, "recommended_payable": _money(ai.payable_amount) if ai else None,
@@ -135,7 +156,23 @@ def list_claims(status: str | None = None, q: str | None = None, db: Session = D
     risk = {}
     for r in db.query(AnalysisRun).filter_by(status="SUCCEEDED").order_by(AnalysisRun.id).all():
         risk[r.claim_id] = r.result["risk"]["level"] if r.result else None
-    return [_claim_summary(c, ai.get(c.id), risk.get(c.id)) for c in claims]
+    return [_claim_summary(c, ai.get(c.id), risk.get(c.id), _clock(db, c)) for c in claims]
+
+
+EXPORT_FIELDS = ["claim_number", "claim_type", "policy_number", "claimant_name", "incident_date", "claimed_amount",
+                 "recommendation", "recommended_payable", "risk_level", "status", "settlement_due", "settlement_state", "created_at"]
+
+
+@router.get("/claims-export.csv")
+def export_claims(db: Session = Depends(get_db)):
+    rows = list_claims(None, None, db)
+    buf = io.StringIO()
+    w = csv.DictWriter(buf, fieldnames=EXPORT_FIELDS, extrasaction="ignore")
+    w.writeheader()
+    for r in rows:
+        w.writerow({**r, "settlement_due": r["settlement"]["due_date"], "settlement_state": r["settlement"]["state"]})
+    return StreamingResponse(iter([buf.getvalue()]), media_type="text/csv",
+                             headers={"Content-Disposition": "attachment; filename=claim-sense-claims.csv"})
 
 
 def _analysis(db: Session, c: Claim) -> dict | None:
@@ -150,6 +187,67 @@ def _analysis(db: Session, c: Claim) -> dict | None:
             "result": run.result}
 
 
+def _fact_view(c: Claim, facts: list[ClaimFact]) -> list[dict]:
+    """The consolidated facts the next analysis will use, each with its source and the extracted value it replaced."""
+    doc = {d.id: d for d in c.documents}
+    values, sources, _, _ = consolidate(facts, {i: d.doc_type for i, d in doc.items()})
+    extracted, _, _, _ = consolidate([f for f in facts if f.document_id is not None], {i: d.doc_type for i, d in doc.items()})
+    out = []
+    for name in SINGLE_VALUE:
+        if name not in values:
+            continue
+        src = sources[name]
+        d = doc.get(src["document_id"])
+        out.append({"name": name, "value": values[name], "corrected": src["document_type"] == CORRECTION,
+                    "extracted_value": extracted.get(name), "correctable": name in CORRECTABLE,
+                    "source": {"document": d.filename if d else None, "document_type": src["document_type"],
+                               "line": src["line"], "confidence": src["confidence"], "text": src["text"]}})
+    return out
+
+
+class FactCorrectionIn(BaseModel):
+    name: str
+    value: str = Field(min_length=1, max_length=500)
+    reason: str = Field(default="", max_length=1000)
+
+
+@router.post("/claims/{claim_number}/facts", status_code=201)
+def correct_fact(claim_number: str, body: FactCorrectionIn, db: Session = Depends(get_db), user: User = Depends(writer)):
+    """Record a reviewer's correction of an extracted fact. The next analysis uses it; the extracted value is kept."""
+    c = _claim(db, claim_number)
+    if c.status in ("APPROVED", "REJECTED"):
+        raise HTTPException(409, f"Claim already {c.status.lower()}")
+    if body.name not in CORRECTABLE:
+        raise HTTPException(422, f"{body.name} cannot be corrected; correctable facts: {', '.join(CORRECTABLE)}")
+    if not body.reason.strip():
+        raise HTTPException(422, "Give a reason for the correction")
+    value = body.value.strip()
+    try:
+        if body.name.endswith("_date") or body.name == "licence_valid_till":
+            value = date.fromisoformat(value).isoformat()
+        elif body.name == "claimed_amount":
+            amount = Decimal(value.replace(",", ""))
+            if amount < 0 or not amount.is_finite():
+                raise ValueError
+            value = str(amount.quantize(Decimal("0.01")))
+    except (ValueError, ArithmeticError) as exc:
+        kind = "a date as YYYY-MM-DD" if body.name != "claimed_amount" else "a non-negative amount"
+        raise HTTPException(422, f"{words_label(body.name)} must be {kind}") from exc
+    facts = db.query(ClaimFact).filter_by(claim_id=c.id).all()
+    before = consolidate(facts, {d.id: d.doc_type for d in c.documents})[0].get(body.name)
+    f = ClaimFact(claim_id=c.id, document_id=None, name=body.name, value=value, confidence=1.0, source_line=None,
+                  source_text=f"Corrected by {user.display_name}: {body.reason.strip()}")
+    db.add(f)
+    audit.log(db, c.id, "FACT_CORRECTED", user.username,
+              {"fact": body.name, "from": before, "to": value, "reason": body.reason.strip()})
+    db.commit()
+    return {"id": f.id, "name": f.name, "value": f.value, "previous": before}
+
+
+def words_label(name: str) -> str:
+    return name.replace("_", " ").capitalize()
+
+
 @router.get("/claims/{claim_number}")
 def get_claim(claim_number: str, db: Session = Depends(get_db)):
     c = _claim(db, claim_number)
@@ -161,9 +259,10 @@ def get_claim(claim_number: str, db: Session = Depends(get_db)):
     ai = next((d for d in reversed(decisions) if d.source == "AI"), None)
     risk = analysis["result"]["risk"]["level"] if analysis and analysis["result"] else None
     return {
-        **_claim_summary(c, ai, risk), "description": c.description,
+        **_claim_summary(c, ai, risk, _clock(db, c)), "description": c.description,
         "documents": [{"id": d.id, "filename": d.filename, "doc_type": d.doc_type, "pages": d.pages, "status": d.status,
                        "sha256": d.sha256, "uploaded_at": d.uploaded_at} for d in c.documents],
+        "fact_view": _fact_view(c, facts),
         "facts": [{"id": f.id, "document_id": f.document_id, "name": f.name, "value": f.value, "confidence": f.confidence,
                    "line": f.source_line, "source_text": f.source_text} for f in facts],
         "analysis": analysis,
@@ -174,6 +273,14 @@ def get_claim(claim_number: str, db: Session = Depends(get_db)):
         "audit": [{"id": e.id, "event_type": e.event_type, "actor": e.actor, "details": e.details,
                    "correlation_id": e.correlation_id, "created_at": e.created_at} for e in events],
     }
+
+
+@router.get("/claims/{claim_number}/letter")
+def claim_letter(claim_number: str, db: Session = Depends(get_db)):
+    letter = letters.build_letter(db, _claim(db, claim_number))
+    if letter is None:
+        raise HTTPException(409, "Run the analysis before generating a letter")
+    return letter
 
 
 @router.post("/claims/{claim_number}/documents", status_code=201)
@@ -243,6 +350,9 @@ def review_claim(claim_number: str, body: ReviewIn, db: Session = Depends(get_db
         raise HTTPException(422, "Notes are required to reject, escalate or refer for investigation")
     if c.status == "ESCALATED" and user.role != "SUPERVISOR":
         raise HTTPException(403, "This claim is escalated; a supervisor must decide it")
+    task = db.query(WorkflowTask).filter_by(claim_id=c.id, status="OPEN").first()
+    if task and task.assignee not in (None, user.display_name) and user.role != "SUPERVISOR":
+        raise HTTPException(409, f"This review is assigned to {task.assignee}; a supervisor can reassign it")
     if body.action == "APPROVE" and user.approval_limit is not None:
         amount = body.payable_amount if body.payable_amount is not None else ai.payable_amount
         if amount is not None and Decimal(amount) > user.approval_limit:
@@ -258,16 +368,60 @@ def review_claim(claim_number: str, body: ReviewIn, db: Session = Depends(get_db
 def review_queue(db: Session = Depends(get_db)):
     tasks = db.query(WorkflowTask).filter_by(status="OPEN").order_by(WorkflowTask.id).all()
     order = {"HIGH": 0, "MEDIUM": 1, "NORMAL": 2}
+    now = datetime.now(timezone.utc)
     out = []
     for t in sorted(tasks, key=lambda t: (order.get(t.priority, 9), t.id)):
         c = db.get(Claim, t.claim_id)
         ai = db.query(ClaimDecision).filter_by(claim_id=c.id, source="AI").order_by(ClaimDecision.id.desc()).first()
+        run = db.query(AnalysisRun).filter_by(claim_id=c.id, status="SUCCEEDED").order_by(AnalysisRun.id.desc()).first()
+        opened = t.created_at if t.created_at.tzinfo else t.created_at.replace(tzinfo=timezone.utc)
         out.append({"task_id": t.id, "queue": t.queue, "priority": t.priority, "assignee": t.assignee,
-                    "created_at": t.created_at, "claim_number": c.claim_number, "claimant_name": c.claimant_name,
+                    "created_at": t.created_at, "age_hours": round((now - opened).total_seconds() / 3600, 1),
+                    "claim_number": c.claim_number, "claimant_name": c.claimant_name,
                     "claim_type": c.claim_type, "claimed_amount": _money(c.claimed_amount), "status": c.status,
+                    "risk_level": run.result["risk"]["level"] if run and run.result else None,
                     "recommendation": ai.decision if ai else None,
-                    "recommended_payable": _money(ai.payable_amount) if ai else None})
+                    "recommended_payable": _money(ai.payable_amount) if ai else None,
+                    "settlement": _clock(db, c)})
     return out
+
+
+@router.get("/reviewers")
+def reviewers(db: Session = Depends(get_db)):
+    return [{"username": u.username, "display_name": u.display_name, "role": u.role}
+            for u in db.query(User).filter(User.active.is_(True), User.role.in_(WRITE_ROLES)).order_by(User.id).all()]
+
+
+class AssignIn(BaseModel):
+    username: str | None = Field(default=None, max_length=60)
+
+
+@router.post("/reviews/{task_id}/assign")
+def assign_task(task_id: int, body: AssignIn, db: Session = Depends(get_db), user: User = Depends(writer)):
+    """Take, hand over or release an open review task. Adjusters take and release their own; supervisors reassign."""
+    t = db.get(WorkflowTask, task_id)
+    if t is None:
+        raise HTTPException(404, f"Review task {task_id} not found")
+    if t.status != "OPEN":
+        raise HTTPException(409, f"Review task {task_id} is {t.status.lower()}")
+    target = None
+    if body.username is not None:
+        target = db.query(User).filter_by(username=body.username, active=True).first()
+        if target is None or target.role not in WRITE_ROLES:
+            raise HTTPException(422, f"{body.username} is not a reviewer")
+    if user.role != "SUPERVISOR":
+        if target is not None and target.id != user.id:
+            raise HTTPException(403, "Only a supervisor can assign a task to someone else")
+        if t.queue == "SUPERVISOR_REVIEW" and target is not None:
+            raise HTTPException(403, "This task is in the supervisor queue")
+        if t.assignee not in (None, user.display_name):
+            raise HTTPException(409, f"Assigned to {t.assignee}; a supervisor can reassign it")
+    before, t.assignee = t.assignee, target.display_name if target else None
+    claim = db.get(Claim, t.claim_id)
+    audit.log(db, claim.id, "TASK_ASSIGNED" if target else "TASK_RELEASED", user.username,
+              {"task_id": t.id, "queue": t.queue, "from": before, "to": t.assignee})
+    db.commit()
+    return {"task_id": t.id, "claim_number": claim.claim_number, "queue": t.queue, "assignee": t.assignee}
 
 
 # ---------------------------------------------------------------- policies
@@ -280,19 +434,36 @@ def list_policies(db: Session = Depends(get_db)):
                           for v in p.versions]} for p in db.query(Policy).order_by(Policy.product_code).all()]
 
 
+def _ingestion_view(r: PolicyIngestion) -> dict:
+    return {"id": r.id, "filename": r.filename, "file_type": r.file_type, "sha256": r.sha256, "size_bytes": r.size_bytes,
+            "status": r.status, "stages": r.stages, "product_code": r.product_code, "version": r.version, "pages": r.pages,
+            "clauses": r.clauses, "warnings": r.warnings, "error": r.error, "actor": r.actor, "created_at": r.created_at,
+            "finished_at": r.finished_at}
+
+
 @router.post("/policies", status_code=201)
 async def upload_policy(wording: UploadFile = File(...), terms: UploadFile = File(...), db: Session = Depends(get_db),
                         user: User = Depends(supervisor)):
+    """Ingest a policy wording (PDF, Markdown or text) with its structured terms (JSON)."""
     try:
-        md = (await wording.read()).decode("utf-8")
         t = json.loads((await terms.read()).decode("utf-8"))
-        v = ingest_policy(db, md, t, wording.filename or "policy.md", actor=user.username)
-    except (ValidationProblem, json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
-        db.rollback()
-        raise HTTPException(422, str(exc)) from exc
+        if not isinstance(t, dict):
+            raise ValueError("terms must be a JSON object")
+    except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
+        raise HTTPException(422, f"Structured terms are not valid JSON: {exc}") from exc
+    try:
+        rec = ingest_policy_file(db, wording.filename or "policy", await wording.read(), t, actor=user.username)
+    except IngestionFailed as exc:
+        db.commit()  # keep the FAILED ingestion record and its audit event
+        raise HTTPException(422, f"Ingestion #{exc.record.id} failed: {exc}") from exc
     db.commit()
     rag.rebuild_index(db)
-    return {"product_code": v.policy.product_code, "version": v.version, "clauses": len(v.clauses)}
+    return {"product_code": rec.product_code, "version": rec.version, "clauses": rec.clauses, "ingestion": _ingestion_view(rec)}
+
+
+@router.get("/policy-ingestions")
+def policy_ingestions(db: Session = Depends(get_db)):
+    return [_ingestion_view(r) for r in db.query(PolicyIngestion).order_by(PolicyIngestion.id.desc()).limit(50).all()]
 
 
 def _policy(db: Session, code: str) -> Policy:
@@ -363,7 +534,22 @@ def get_analytics(db: Session = Depends(get_db)):
     return analytics.dashboard(db)
 
 
+@router.get("/evaluation")
+def evaluation_report():
+    """Latest golden evaluation report, produced by `python scripts/evaluate.py` and committed with the code."""
+    path = REPO_ROOT / "reports" / "evaluation.json"
+    if not path.exists():
+        raise HTTPException(404, "No evaluation report yet. Run python scripts/evaluate.py.")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 @router.get("/datasets")
-def datasets(db: Session = Depends(get_db)):
-    return [{"name": d.name, "publisher": d.publisher, "year": d.year, "url": d.url, "purpose": d.purpose,
-             "status": d.status} for d in db.query(DatasetSource).order_by(DatasetSource.id).all()]
+def datasets():
+    """The source registry, validated now: required provenance fields and, for in-use sources, file checksums."""
+    return provenance.load_registry()
+
+
+@router.get("/knowledge-base/manifest")
+def knowledge_base_manifest(db: Session = Depends(get_db)):
+    """Every indexed policy chunk with its source file, version, page, section/clause and extraction run."""
+    return provenance.rag_manifest(db)

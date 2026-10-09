@@ -29,6 +29,12 @@ export function ErrorBox({ error, onRetry }: { error: ApiError | null; onRetry?:
   );
 }
 
+export function Due({ s }: { s: { due_date: string; days_left: number | null; state: string } | null | undefined }) {
+  if (!s) return <span className="muted">—</span>;
+  const label = s.days_left === null ? s.state.toLowerCase() : s.days_left < 0 ? `${-s.days_left}d overdue` : `${s.days_left}d left`;
+  return <span title={`Settle by ${s.due_date}`}><Badge value={s.state} /> <span className="muted small">{label}</span></span>;
+}
+
 export const Loading = () => <div className="loading">Loading…</div>;
 
 const TONE: Record<string, string> = {
@@ -36,7 +42,10 @@ const TONE: Record<string, string> = {
   RECOMMEND_REJECT: "red", REJECTED: "red", REJECT: "red", INVESTIGATE: "red", UNDER_INVESTIGATION: "red",
   REQUEST_INFO: "amber", INFO_REQUESTED: "amber", PENDING_REVIEW: "blue", ESCALATED: "purple", ESCALATE: "purple",
   COVERED: "green", NOT_COVERED: "red", UNCERTAIN: "amber", PASS: "green", FAIL: "red", MISSING: "amber",
+  ON_TRACK: "green", DUE_SOON: "amber", OVERDUE: "red", MET: "green", BREACHED: "red", FINAL: "green", DRAFT: "amber",
+  READY: "green", UPLOADED: "gray", VALIDATING: "blue", EXTRACTING: "blue", INDEXING: "blue",
   SUCCEEDED: "green", FAILED: "red", NEEDS_ATTENTION: "red", DOCUMENTS_RECEIVED: "gray", SUBMITTED: "gray",
+  CORRECTED: "purple", IN_USE: "green", REGISTERED: "gray", VERIFIED: "green", COMPLETE: "blue", CHECK_SOURCE: "amber",
 };
 export function Badge({ value }: { value: string | null | undefined }) {
   if (!value) return <span className="muted">—</span>;

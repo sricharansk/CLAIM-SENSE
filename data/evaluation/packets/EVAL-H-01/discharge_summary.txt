@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Patient Name: Suresh Nair
+Admission Date: 2025-11-10
+Discharge Date: 2025-11-12
+Diagnosis: Acute gastroenteritis with moderate dehydration
+Procedure: Medical management with IV fluids
+
+Clinical Notes:
+Recovered. Discharged on oral rehydration.

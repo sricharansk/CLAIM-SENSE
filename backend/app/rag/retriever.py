@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 
 STOPWORDS = set("""a an and are as at be by for from has have if in into is it its of on or that the this to was
 were will with any all not no than then there these those such which who whom what when where why how
-i me my we our you your he she they them their his her do does did shall may can""".split())
+i me my we our you your he she they them their his her do does did shall may can every each""".split())
 WORD_RE = re.compile(r"[a-z0-9]+")
 # Small insurance query-expansion map: lay terms -> policy vocabulary.
 SYNONYMS = {
@@ -25,13 +25,22 @@ SYNONYMS = {
     "baby": "maternity childbirth", "plastic surgery": "cosmetic", "first year": "waiting period months",
     "car": "vehicle", "bike": "vehicle", "crash": "collision accident", "stolen": "theft",
     "hospital room": "room rent", "documents": "documents required", "paperwork": "documents required",
+    "icu": "intensive care unit",
 }
 
 
 def expand_query(q: str) -> str:
+    """Add policy vocabulary for lay terms. A multi-word lay phrase is replaced by its policy wording, so its
+    everyday words (e.g. "first" in "first year") do not pull in unrelated clauses."""
     low = q.lower()
-    extra = [v for k, v in SYNONYMS.items() if re.search(rf"\b{re.escape(k)}\b", low)]
-    return q + (" " + " ".join(extra) if extra else "")
+    extra = []
+    for k, v in SYNONYMS.items():
+        pattern = rf"\b{re.escape(k)}\b"
+        if re.search(pattern, low):
+            extra.append(v)
+            if " " in k:
+                low = re.sub(pattern, " ", low)
+    return (low if low != q.lower() else q) + (" " + " ".join(extra) if extra else "")
 
 
 def _stem(tok: str) -> str:

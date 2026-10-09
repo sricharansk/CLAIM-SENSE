@@ -12,7 +12,9 @@ import hmac
 import json
 import logging
 import secrets
+import threading
 import time
+from collections import deque
 from decimal import Decimal
 
 from fastapi import Depends, HTTPException, Request
@@ -23,6 +25,44 @@ from .db import get_db
 from .models import User
 
 log = logging.getLogger("claimsense.auth")
+
+
+class LoginThrottle:
+    """In-process limit on failed sign-ins per (client address, username). One app instance holds the state;
+    a multi-instance deployment would move this to a shared store."""
+
+    def __init__(self) -> None:
+        self._fails: dict[str, deque] = {}
+        self._lock = threading.Lock()
+
+    def _recent(self, key: str, now: float) -> deque:
+        q = self._fails.setdefault(key, deque())
+        while q and now - q[0] > settings.login_window_seconds:
+            q.popleft()
+        return q
+
+    def retry_after(self, key: str) -> int:
+        """Seconds until the key may try again, or 0 when it is not locked."""
+        now = time.monotonic()
+        with self._lock:
+            q = self._recent(key, now)
+            if len(q) < settings.login_max_failures:
+                return 0
+            return max(1, int(settings.login_window_seconds - (now - q[0])) + 1)
+
+    def fail(self, key: str) -> None:
+        with self._lock:
+            self._recent(key, time.monotonic()).append(time.monotonic())
+
+    def reset(self, key: str | None = None) -> None:
+        with self._lock:
+            if key is None:
+                self._fails.clear()
+            else:
+                self._fails.pop(key, None)
+
+
+throttle = LoginThrottle()
 _secret = settings.auth_secret.encode() or secrets.token_bytes(32)
 if not settings.auth_secret:
     log.warning("AUTH_SECRET not set: using a random per-process signing key")

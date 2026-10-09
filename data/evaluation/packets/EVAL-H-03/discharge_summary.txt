@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Ravi Kumar
+Admission Date: 2025-04-01
+Discharge Date: 2025-04-04
+Diagnosis: Viral fever with thrombocytopenia
+Procedure: Medical management
+
+Clinical Notes:
+Platelets recovered. Discharged.

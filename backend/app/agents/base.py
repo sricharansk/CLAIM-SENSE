@@ -23,6 +23,7 @@ class ClaimContext:
     fact_sources: dict[str, dict] = field(default_factory=dict)
     line_items: list[dict] = field(default_factory=list)
     doc_types: list[str] = field(default_factory=list)
+    embedded_instructions: list[dict] = field(default_factory=list)
     insured: InsuredPolicy | None = None
     version: PolicyVersion | None = None
     retrieved: list[dict] = field(default_factory=list)

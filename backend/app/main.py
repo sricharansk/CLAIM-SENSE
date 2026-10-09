@@ -64,14 +64,14 @@ async def correlation_id(request: Request, call_next):
     return response
 
 
-def _error(request: Request, status: int, message, code: str):
-    return JSONResponse(status_code=status, content={"error": {"code": code, "message": message,
+def _error(request: Request, status: int, message, code: str, headers: dict | None = None):
+    return JSONResponse(status_code=status, headers=headers, content={"error": {"code": code, "message": message,
                         "correlation_id": getattr(request.state, "correlation_id", None)}})
 
 
 @app.exception_handler(HTTPException)
 async def http_error(request: Request, exc: HTTPException):
-    return _error(request, exc.status_code, exc.detail, f"HTTP_{exc.status_code}")
+    return _error(request, exc.status_code, exc.detail, f"HTTP_{exc.status_code}", exc.headers)
 
 
 @app.exception_handler(RequestValidationError)

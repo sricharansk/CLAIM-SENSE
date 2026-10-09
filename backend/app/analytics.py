@@ -8,9 +8,10 @@ from functools import lru_cache
 
 from sqlalchemy.orm import Session
 
+from . import sla
 from .agents.risk import level, score_features
 from .config import settings
-from .models import AnalysisRun, Claim, ClaimDecision, WorkflowTask
+from .models import AnalysisRun, Claim, ClaimDecision, PolicyVersion, WorkflowTask
 
 
 def _latest_ai(db: Session) -> dict[int, ClaimDecision]:
@@ -35,19 +36,37 @@ def dashboard(db: Session) -> dict:
     last_human: dict[int, ClaimDecision] = {}
     for d in sorted(human, key=lambda d: d.id):
         last_human[d.claim_id] = d
-    agree = sum(1 for cid, h in last_human.items() if cid in ai and _agrees(ai[cid].decision, h.decision))
+    # override rate is measured on decisions; an escalation hands the claim up rather than disagreeing with the AI
+    final = {cid: h for cid, h in last_human.items() if h.decision != "ESCALATE" and cid in ai}
+    agree = sum(1 for cid, h in final.items() if _agrees(ai[cid].decision, h.decision))
+    amount_overrides = sum(1 for cid, h in final.items() if h.decision == "APPROVE" and h.payable_amount is not None
+                           and ai[cid].payable_amount is not None and Decimal(h.payable_amount) != Decimal(ai[cid].payable_amount))
+    reviewed = {d.claim_id for d in human}
+    escalated = {d.claim_id for d in human if d.decision == "ESCALATE"}
     open_tasks = db.query(WorkflowTask).filter_by(status="OPEN").all()
+    clocks = Counter()
+    for c in claims:
+        run = latest_run.get(c.id)
+        terms = db.get(PolicyVersion, run.policy_version_id).terms if run and run.policy_version_id else None
+        clocks[sla.settlement_clock(c, terms, last_human.get(c.id))["state"]] += 1
     return {
         "totals": {"claims": len(claims), "pending_review": sum(1 for c in claims if c.status == "PENDING_REVIEW"),
                    "high_risk": risk.get("HIGH", 0), "decided": len(last_human),
                    "claimed_amount": str(claimed), "recommended_payable": str(recommended),
-                   "avg_analysis_ms": round(sum(durations) / len(durations)) if durations else None},
+                   "avg_analysis_ms": round(sum(durations) / len(durations)) if durations else None,
+                   "overdue": clocks.get("OVERDUE", 0) + clocks.get("BREACHED", 0)},
         "by_status": dict(Counter(c.status for c in claims)),
         "by_recommendation": dict(Counter(d.decision for d in ai.values())),
         "by_risk": dict(risk),
         "by_line": dict(Counter(c.claim_type for c in claims)),
         "queues": dict(Counter(t.queue for t in open_tasks)),
-        "human_vs_ai": {"decided": len(last_human), "agreed": agree, "overridden": len(last_human) - agree},
+        "settlement": dict(clocks),
+        "human_vs_ai": {"decided": len(final), "agreed": agree, "overridden": len(final) - agree,
+                        "amount_overridden": amount_overrides,
+                        "override_rate": round((len(final) - agree) / len(final), 3) if final else None,
+                        "reviewed": len(reviewed), "escalated": len(escalated),
+                        "escalation_rate": round(len(escalated) / len(reviewed), 3) if reviewed else None},
+        "human_outcomes": dict(Counter(h.decision for h in last_human.values())),
         "portfolio": portfolio_evaluation(),
     }
 

@@ -8,27 +8,31 @@ Claim Sense takes a health or motor claim from intake to a human decision. It re
 
 All policies, people and claims in this repository are **synthetic**. See [Data](#data-and-datasets).
 
-![Dashboard](docs/screenshots/01-dashboard.png)
+![Dashboard](docs/screenshots/14-dashboard-after-review.png)
 
 ## What works today
 
 | Area | What you can do | Where |
 |---|---|---|
 | Sign-in and roles | Adjuster (approves up to ₹2,00,000), Supervisor (no limit, decides escalations, ingests policies), Auditor (read-only); signed tokens; every action audited under the signed-in user | `/` |
-| Dashboard | Live claim counts, recommendations, risk mix, review progress, portfolio evaluation | `/` |
+| Dashboard | Live claim counts, recommendations, risk mix, override and escalation rates, reviewer actions, settlement clock, portfolio evaluation | `/` |
 | Claim intake | Create a claim, upload PDF or text documents, run the agent pipeline | `/claims/new` |
-| Document intelligence | Document classification, extracted facts with source file, line and confidence, itemised charges | claim page |
+| Document intelligence | Document classification, extracted facts with source file, line and confidence, itemised charges; reviewers correct a fact with a reason before (re-)running the analysis, the extracted value is kept and the correction audited | claim page |
 | Policy versioning | Picks the wording version in force on the incident date (HLT-SHIELD 2024.1 vs 2025.1) | claim page |
 | Hybrid RAG | BM25 + character n-gram vectors fused with reciprocal rank fusion; clause, section and page citations; refuses when evidence is weak | `/assistant` |
 | Coverage | Policy period, initial and specified-disease waiting periods, exclusions, required documents, each citing its clause | claim page |
 | Adjudication | Decimal rules engine: non-payable items, per-day limits, depreciation, deductible, co-pay, sum-insured cap, shown as a waterfall | claim page |
-| Risk / fraud | Transparent weighted signals: amount ratio, early claim, frequency, duplicates, amount and name mismatches, missing documents | claim page |
+| Risk / fraud | Transparent weighted signals: amount ratio, early claim, frequency, duplicates, amount and name mismatches, missing documents, text in documents addressed to an AI | claim page |
 | Recommendation | Approve, partial approval, reject, request info or investigate, with reasons and an evidence package | claim page |
 | Human review | Approve (with amount override), reject, request info, investigate, escalate; notes required for adverse actions; approval limits enforced; escalated claims need a supervisor | claim page, `/reviews` |
-| Workflow | Routing to adjuster, investigation (SIU), pending-information and supervisor queues | `/reviews` |
+| Workflow | Routing to adjuster, investigation (SIU), pending-information and supervisor queues; queue shows status, risk, age and assignee; adjusters take and release tasks, supervisors reassign | `/reviews` |
+| Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
+| Decision letters | Settlement, repudiation (quotes the clause relied on), document-request and under-review letters built from data, no LLM; printable; marked draft until a human decides | claim page |
+| Export | Download the claim register as CSV with decision, payable amount, risk and settlement status | `/claims` |
+| Golden evaluation | 12 hand-worked claim cases (all 10 required types) and 21 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
-| Policy library | Browse clauses by version, view structured terms, ingest new wordings | `/policies` |
-| Provenance | Which datasets are used and which public 2024–2026 sources are registered | `/datasets` |
+| Policy library | Browse clauses by version, view structured terms, ingest new wordings as PDF or Markdown with checksum, page-preserving extraction and visible processing states (Uploaded → Validating → Extracting → Indexing → Ready / Failed) | `/policies` |
+| Provenance | Source registry with publisher, dates, licence, intended use and SHA-256 checked on every request; RAG manifest tracing every indexed chunk to file, version, page, clause and extraction run; chunks without provenance are kept out of the index | `/datasets`, [docs/DATA_PROVENANCE.md](docs/DATA_PROVENANCE.md) |
 
 ## Real results from the golden scenarios
 
@@ -63,6 +67,11 @@ CLM-H-1001 waterfall, as the app shows it:
 | ![Claim analysis](docs/screenshots/02-claim-analysis.png) | ![Rejected for waiting period](docs/screenshots/04-claim-rejected-waiting-period.png) |
 | ![High-risk claim](docs/screenshots/05-claim-high-risk.png) | ![Motor depreciation](docs/screenshots/06-motor-depreciation.png) |
 | ![Policy assistant](docs/screenshots/07-policy-assistant.png) | ![Review queue](docs/screenshots/08-review-queue.png) |
+| ![Repudiation letter](docs/screenshots/12-rejection-letter.png) | ![Golden evaluation](docs/screenshots/13-evaluation.png) |
+| ![Policy PDF ingestion](docs/screenshots/15-policy-pdf-ingestion.png) | ![Claim evidence tab](docs/screenshots/16-claim-evidence.png) |
+| ![Data provenance](docs/screenshots/17-data-provenance.png) | ![Fact correction](docs/screenshots/18-fact-correction.png) |
+
+On a phone the navigation collapses into a menu: [screenshot](docs/screenshots/19-mobile-dashboard.png).
 
 ## Architecture
 
@@ -87,7 +96,7 @@ flowchart TD
 - The LLM is optional and never computes money or decides claims. Without `ANTHROPIC_API_KEY`, the assistant answers by quoting the wording it retrieved.
 - Agent failures stop the run safely and route the claim to `NEEDS_ATTENTION`. Re-running analysis supersedes the previous recommendation and task.
 
-More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/DECISIONS.md](docs/DECISIONS.md).
+More detail: [product requirements](docs/PRD.md), [architecture](docs/ARCHITECTURE.md), [database](docs/DATABASE.md), [decisions](docs/DECISIONS.md), [design system](docs/DESIGN_SYSTEM.md), [code style](docs/CODE_STYLE.md), [testing](docs/TESTING.md), [agents](docs/AGENTS.md), [release readiness](docs/RELEASE_READINESS.md), [final validation report](docs/FINAL_VALIDATION_REPORT.md) and [release notes](RELEASE_NOTES.md).
 
 ## Run it
 
@@ -130,17 +139,23 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 
 1. Sign in as `adjuster`, open **New claim**, pick policy `CS-HLT-23-000089` (Fatima Shaikh).
 2. Upload the three files in [`data/claims/demo_upload/`](data/claims/demo_upload) and press **Create, upload and analyse**.
-3. Review the recommendation, coverage checks, waterfall (₹78,000 billed, ₹64,080 payable), risk and evidence.
-4. Approve it. The claim, review queue, dashboard and audit trail all update.
+3. Review the recommendation on the Overview tab, then the Coverage, Adjudication (₹78,000 billed, ₹64,080 payable), Risk and Policy & evidence tabs.
+4. Approve it on the Review tab. The claim, review queue, dashboard and audit trail all update.
+5. Press **Generate letter** for the settlement letter (₹64,080.00), or open `CLM-H-1002` for a repudiation letter citing clause 3.3.
+6. Before analysing, the Documents tab lists the extracted facts; **Correct** one with a reason and re-run the analysis to use it.
+7. Sign in as `supervisor`, open **Policy library** and ingest `data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf` with its `.terms.json`: the 6-page PDF becomes 21 cited clauses of a new 2026.1 version, and the assistant can answer from it.
 
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 42 tests
+cd backend && ruff check app tests && python -m pytest -q    # 71 tests
+python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
+python3 scripts/provenance.py --check                        # source registry, checksums, RAG manifest
 cd frontend && npm run build                                 # type check + production build
+cd e2e && npm ci && npx playwright test                      # 10 browser tests against a fresh stack on :8080
 ```
 
-Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus `pip-audit`, `npm audit` and a Docker + PostgreSQL smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
+Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 256 / 256 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Data and datasets
 
@@ -149,17 +164,19 @@ Tests cover sign-in, roles, approval limits and escalation, security headers and
 | Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, each with structured terms that cite clauses | In use |
 | Eight synthetic golden claim packets (claim forms, bills, estimates, discharge summaries, police reports; one as PDF) | In use |
 | 1,000-claim synthetic portfolio with labelled injected anomaly patterns | In use for analytics and rule evaluation |
-| IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with purpose and URL; not downloaded in this build |
+| IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with publication date, URL, licence status and intended use; not downloaded in this build |
 
-Everything is regenerated deterministically with `python data/synthetic/generate.py`. The wording borrows common Indian retail-insurance concepts but is not any insurer's product and not regulatory text. Never commit real customer data or confidential policy documents.
+Everything is regenerated deterministically with `python data/synthetic/generate.py`; then `python scripts/provenance.py --write` re-stamps the checksums in [data/source_registry.json](data/source_registry.json). The wording borrows common Indian retail-insurance concepts but is not any insurer's product and not regulatory text. Never commit real customer data or confidential policy documents.
 
 ## Deployment
 
 - **Docker**: one image serves the UI and the API (`Dockerfile`); `docker-compose.yml` adds PostgreSQL.
 - **Azure Container Apps**: manual workflow [.github/workflows/deploy-azure.yml](.github/workflows/deploy-azure.yml) builds, deploys and runs the smoke test. Needs Azure credentials in repository secrets.
-- **Render**: [render.yaml](render.yaml) blueprint for a one-click demo deployment.
+- **Render**: [render.yaml](render.yaml) blueprint for a one-click demo deployment. After merging to `main`, use the button below, or on render.com choose New → Blueprint and pick this repository. Set `DEMO_PASSWORD` when asked.
 
-The cloud deployment has **not** been run yet. No cloud credentials were available while building. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+  [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sricharansk/CLAIM-SENSE)
+
+The cloud deployment has **not** been run yet. No cloud credentials were available while building. Once deployed, run `python3 scripts/smoke_test.py https://<service> <DEMO_PASSWORD>` (or the **Verify deployment** workflow in GitHub Actions) before calling it live. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Repository layout
 
@@ -171,10 +188,12 @@ backend/app/
   api/routes.py  REST API v1
 backend/tests/   pytest suite
 frontend/src/    React + TypeScript UI (pages/, components/, api.ts)
-data/            synthetic policies, claim packets, portfolio, dataset register, generator
-docs/            blueprint, status, architecture, decisions, deployment, screenshots
+data/            synthetic policies, claim packets, portfolio, source registry, generator
+docs/            blueprint, status, architecture, decisions, deployment, validation report, screenshots
+e2e/             Playwright browser tests (run against a running stack)
+reports/         golden evaluation report and RAG ingestion manifest
 references/      supporting planning documents
-scripts/         smoke_test.py
+scripts/         smoke_test.py, evaluate.py, provenance.py
 ```
 
 ## Roadmap

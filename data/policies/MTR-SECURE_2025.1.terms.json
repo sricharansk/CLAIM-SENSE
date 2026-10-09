@@ -101,5 +101,9 @@
     ],
     "clause": "4.2"
   },
+  "settlement_days": {
+    "value": 30,
+    "clause": "4.3"
+  },
   "coverage_clause": "2.1"
 }

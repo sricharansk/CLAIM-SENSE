@@ -19,8 +19,17 @@ jobs:
           cache: pip
           cache-dependency-path: backend/requirements*.txt
       - run: pip install -r requirements-dev.txt
-      - run: ruff check app tests
+      - run: ruff check app tests ../scripts
       - run: python -m pytest -q
+      - name: Golden evaluation (fails on any check)
+        run: python ../scripts/evaluate.py --out ../evaluation-ci
+      - name: Data provenance and RAG manifest (registry valid, checksums match, manifest reproducible)
+        run: python ../scripts/provenance.py --check
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evaluation-report
+          path: evaluation-ci/
       - run: pip-audit -r requirements.txt
 
   frontend:
@@ -50,6 +59,22 @@ jobs:
         run: |
           for i in $(seq 1 60); do curl -sf http://localhost:8080/api/v1/ready && exit 0; sleep 2; done
           docker compose logs app; exit 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: e2e/package-lock.json
+      - name: Browser tests (Playwright, Chromium)
+        working-directory: e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: e2e/report/
       - name: Golden-path smoke test
         run: python3 scripts/smoke_test.py http://localhost:8080
       - if: always()

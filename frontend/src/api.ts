@@ -1,5 +1,12 @@
 // Typed client for the Claim Sense API. Every screen calls these real endpoints.
+export type Settlement = { start: string; due_date: string; days: number; clause: string | null; days_left: number | null;
+  state: "ON_TRACK" | "DUE_SOON" | "OVERDUE" | "MET" | "BREACHED"; decided_on: string | null };
+export type Letter = { claim_number: string; kind: string; status: "FINAL" | "DRAFT"; date: string;
+  to: { name: string; policy_number: string; holder: string }; from: string; subject: string; paragraphs: string[];
+  references: { clause_ref: string; title: string; page: number; text: string; policy: string }[];
+  signed_by: string | null; based_on: string };
 export type ClaimSummary = {
+  settlement: Settlement;
   claim_number: string; policy_number: string; claim_type: "health" | "motor"; claimant_name: string;
   incident_date: string | null; claimed_amount: string | null; status: string; created_at: string; updated_at: string;
   recommendation: string | null; recommended_payable: string | null; risk_level: string | null; documents: number;
@@ -32,10 +39,13 @@ export type Analysis = {
   agents: { agent: string; status: string; summary: string; duration_ms: number; tool_calls: { tool: string; args: unknown; result: string; ms: number }[] }[];
   result: AnalysisResult | null;
 };
+export type FactView = { name: string; value: string; corrected: boolean; extracted_value: string | null; correctable: boolean;
+  source: { document: string | null; document_type: string; line: number | null; confidence: number; text: string } };
 export type ClaimDetail = Omit<ClaimSummary, "documents"> & {
   description: string;
   documents: { id: number; filename: string; doc_type: string; pages: number; status: string; sha256: string; uploaded_at: string }[];
-  facts: { id: number; document_id: number; name: string; value: string; confidence: number; line: number | null; source_text: string }[];
+  facts: { id: number; document_id: number | null; name: string; value: string; confidence: number; line: number | null; source_text: string }[];
+  fact_view: FactView[];
   analysis: Analysis | null;
   decisions: { id: number; source: string; decision: string; payable_amount: string | null; actor: string; notes: string; created_at: string }[];
   workflow_task: { id: number; queue: string; priority: string; status: string; assignee: string | null } | null;
@@ -48,17 +58,48 @@ export type PolicyVersionFull = { id: number; version: string; effective_from: s
   clauses: { id: number; clause_ref: string; title: string; section: string; page: number; text: string }[] };
 export type InsuredPolicy = { policy_number: string; product_code: string; holder_name: string; start_date: string; end_date: string; sum_insured: string };
 export type RagAnswer = { question: string; grounded: boolean; mode: string; answer: string; citations: Citation[] };
-export type ReviewTask = { task_id: number; queue: string; priority: string; claim_number: string; claimant_name: string; claim_type: string;
-  claimed_amount: string | null; status: string; recommendation: string | null; recommended_payable: string | null; created_at: string };
+export type ReviewTask = { settlement: Settlement; task_id: number; queue: string; priority: string; claim_number: string; claimant_name: string; claim_type: string;
+  claimed_amount: string | null; status: string; recommendation: string | null; recommended_payable: string | null; created_at: string;
+  age_hours: number; assignee: string | null; risk_level: string | null };
+export type Reviewer = { username: string; display_name: string; role: string };
 export type Analytics = {
-  totals: { claims: number; pending_review: number; high_risk: number; decided: number; claimed_amount: string; recommended_payable: string; avg_analysis_ms: number | null };
+  settlement: Record<string, number>;
+  totals: { overdue: number; claims: number; pending_review: number; high_risk: number; decided: number; claimed_amount: string; recommended_payable: string; avg_analysis_ms: number | null };
   by_status: Record<string, number>; by_recommendation: Record<string, number>; by_risk: Record<string, number>;
   by_line: Record<string, number>; queues: Record<string, number>;
-  human_vs_ai: { decided: number; agreed: number; overridden: number };
+  human_vs_ai: { decided: number; agreed: number; overridden: number; amount_overridden: number; override_rate: number | null;
+    reviewed: number; escalated: number; escalation_rate: number | null };
+  human_outcomes: Record<string, number>;
   portfolio: null | { claims: number; by_risk: Record<string, number>; by_line: Record<string, number>; injected_anomalies: number;
     flagged: number; precision: number; recall: number; confusion: Record<string, number>; median_claim: number; note: string };
 };
-export type Dataset = { name: string; publisher: string; year: string; url: string; purpose: string; status: string };
+export type EvalCheck = { dimension: string; check: string; expected: unknown; actual: unknown; passed: boolean };
+export type Evaluation = {
+  suite: string; generated_at: string; rules_version: string; risk_version: string; llm: string; data: string; duration_s: number;
+  summary: { claim_cases: number; claim_cases_passed: number; questions: number; questions_passed: number; checks: number;
+    checks_passed: number; retrieval_hit_at_1: number; retrieval_hit_at_3: number; mean_reciprocal_rank: number;
+    refusal_accuracy: number; required_categories_covered: boolean; all_passed: boolean; avg_claim_case_ms: number };
+  dimensions: Record<string, { label: string; passed: number; total: number; score: number | null }>;
+  categories: Record<string, string[]>;
+  claims: { id: string; title: string; categories: string[]; claim_number: string; source: string; packet: string | null; working: string | null; passed: boolean;
+    expected: { recommendation: string; payable_amount: string };
+    actual: { recommendation: string; payable_amount: string; risk_level: string; policy_version: string }; checks: EvalCheck[] }[];
+  questions: { id: string; kind: string; question: string; scope: string; mode: string; top_citation: string | null;
+    expected_clause: string | null; rank: number | null; passed: boolean; checks: EvalCheck[] }[];
+};
+export type Ingestion = { id: number; filename: string; file_type: string; sha256: string; size_bytes: number; status: string;
+  stages: { status: string; at: string; detail: string }[]; product_code: string | null; version: string | null; pages: number;
+  clauses: number; warnings: string[]; error: string | null; actor: string; created_at: string; finished_at: string | null };
+export type Source = { id: string; name: string; publisher: string; source_type: string; data_type: string; claim_level: boolean | null;
+  url: string; publication_date: string; retrieval_date: string | null; data_period: string; license: string; intended_use: string[];
+  status: string; paths: string[]; transformation_script: string | null; checksum_sha256: string | null; valid: boolean; problems: string[] };
+export type Registry = { schema_version: string; sources: Source[]; problems: string[]; valid: boolean };
+export type Manifest = { manifest_version: string; indexed_chunks: number; rejected_chunks: number;
+  documents: { document: string; source_file: string; source_sha256: string; file_type: string; extraction_run: number; pages: number;
+    effective_from: string; effective_to: string; chunks: number }[];
+  chunks: { chunk_id: string; document: string; source_file: string; page: number; section: string; clause_ref: string; title: string;
+    extraction_run: number; text_sha256: string }[];
+  rejected: { clause_id: number; product_code: string; version: string; clause_ref: string; missing: string[] }[] };
 export type Ready = { status: string; database: string; policy_index: string; llm: string; database_backend: string };
 
 export type User = { username: string; display_name: string; role: "ADJUSTER" | "SUPERVISOR" | "AUDITOR";
@@ -114,27 +155,46 @@ export const api = {
     files.forEach((f) => fd.append("files", f));
     return request<{ id: number; filename: string; doc_type: string; facts_extracted: number }[]>(`/claims/${n}/documents`, { method: "POST", body: fd });
   },
+  letter: (n: string) => request<Letter>(`/claims/${n}/letter`),
+  exportCsv: async () => {
+    const res = await fetch("/api/v1/claims-export.csv", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    if (!res.ok) throw new ApiError(`Export failed (${res.status})`, res.status);
+    const url = URL.createObjectURL(await res.blob());
+    const a = document.createElement("a");
+    a.href = url; a.download = "claim-sense-claims.csv"; a.click();
+    URL.revokeObjectURL(url);
+  },
   document: (n: string, id: number) => request<{ filename: string; doc_type: string; text: string }>(`/claims/${n}/documents/${id}`),
   analyze: (n: string) => request<Analysis>(`/claims/${n}/analyze`, { method: "POST" }),
+  correctFact: (n: string, data: { name: string; value: string; reason: string }) =>
+    request<{ id: number; value: string; previous: string | null }>(`/claims/${n}/facts`, json("POST", data)),
   review: (n: string, data: { action: string; notes: string; payable_amount?: string }) =>
     request<{ status: string }>(`/claims/${n}/review`, json("POST", data)),
   reviews: () => request<ReviewTask[]>("/reviews"),
+  reviewers: () => request<Reviewer[]>("/reviewers"),
+  assign: (taskId: number, username: string | null) =>
+    request<{ task_id: number; assignee: string | null }>(`/reviews/${taskId}/assign`, json("POST", { username })),
   policies: () => request<Policy[]>("/policies"),
   versions: (code: string) => request<PolicyVersionFull[]>(`/policies/${code}/versions`),
   uploadPolicy: (wording: File, terms: File) => {
     const fd = new FormData();
     fd.append("wording", wording);
     fd.append("terms", terms);
-    return request<{ product_code: string; version: string; clauses: number }>("/policies", { method: "POST", body: fd });
+    return request<{ product_code: string; version: string; clauses: number; ingestion: Ingestion }>("/policies", { method: "POST", body: fd });
   },
+  ingestions: () => request<Ingestion[]>("/policy-ingestions"),
   insured: () => request<InsuredPolicy[]>("/insured-policies"),
   ask: (question: string, product_code?: string, version?: string) =>
     request<RagAnswer>("/rag/query", json("POST", { question, product_code: product_code || null, version: version || null })),
   audit: (claim_number?: string) => request<AuditEvent[]>(`/audit${claim_number ? `?claim_number=${claim_number}` : ""}`),
-  datasets: () => request<Dataset[]>("/datasets"),
+  datasets: () => request<Registry>("/datasets"),
+  manifest: () => request<Manifest>("/knowledge-base/manifest"),
+  evaluation: () => request<Evaluation>("/evaluation"),
 };
 
 export const inr = (v: string | number | null | undefined) =>
   v === null || v === undefined || v === "" ? "—" : `₹${Number(v).toLocaleString("en-IN", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}`;
 export const when = (s: string | null | undefined) => (s ? new Date(s).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) : "—");
-export const words = (s: string | null | undefined) => (s ? s.replace(/_/g, " ").toLowerCase().replace(/^\w/, (c) => c.toUpperCase()) : "—");
+const ACRONYMS = /\b(siu|ai|icu|llm|pdf|rag|ot)\b/g;
+export const words = (s: string | null | undefined) =>
+  (s ? s.replace(/_/g, " ").toLowerCase().replace(ACRONYMS, (w) => w.toUpperCase()).replace(/^\w/, (c) => c.toUpperCase()) : "—");

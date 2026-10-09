@@ -24,6 +24,9 @@ class Settings:
     token_ttl_hours = int(os.getenv("TOKEN_TTL_HOURS", "12"))
     # Password for the seeded synthetic demo accounts (adjuster, supervisor, auditor).
     demo_password = os.getenv("DEMO_PASSWORD", "claimsense-demo")
+    # Sign-in throttle: this many failed attempts for one username from one address locks it for the window.
+    login_max_failures = int(os.getenv("LOGIN_MAX_FAILURES", "5"))
+    login_window_seconds = int(os.getenv("LOGIN_WINDOW_SECONDS", "300"))
     rules_version = "adjudication-rules/1.0.0"
     risk_version = "risk-rules/1.0.0"
 
