@@ -68,6 +68,7 @@ CLM-H-1001 waterfall, as the app shows it:
 | ![High-risk claim](docs/screenshots/05-claim-high-risk.png) | ![Motor depreciation](docs/screenshots/06-motor-depreciation.png) |
 | ![Policy assistant](docs/screenshots/07-policy-assistant.png) | ![Review queue](docs/screenshots/08-review-queue.png) |
 | ![Repudiation letter](docs/screenshots/12-rejection-letter.png) | ![Golden evaluation](docs/screenshots/13-evaluation.png) |
+| ![Policy PDF ingestion](docs/screenshots/15-policy-pdf-ingestion.png) | ![Claim evidence tab](docs/screenshots/16-claim-evidence.png) |
 
 ## Architecture
 
@@ -135,8 +136,8 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 
 1. Sign in as `adjuster`, open **New claim**, pick policy `CS-HLT-23-000089` (Fatima Shaikh).
 2. Upload the three files in [`data/claims/demo_upload/`](data/claims/demo_upload) and press **Create, upload and analyse**.
-3. Review the recommendation, coverage checks, waterfall (₹78,000 billed, ₹64,080 payable), risk and evidence.
-4. Approve it. The claim, review queue, dashboard and audit trail all update.
+3. Review the recommendation on the Overview tab, then the Coverage, Adjudication (₹78,000 billed, ₹64,080 payable), Risk and Policy & evidence tabs.
+4. Approve it on the Review tab. The claim, review queue, dashboard and audit trail all update.
 5. Press **Generate letter** for the settlement letter (₹64,080.00), or open `CLM-H-1002` for a repudiation letter citing clause 3.3.
 6. Sign in as `supervisor`, open **Policy library** and ingest `data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf` with its `.terms.json`: the 6-page PDF becomes 21 cited clauses of a new 2026.1 version, and the assistant can answer from it.
 

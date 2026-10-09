@@ -4,6 +4,15 @@ import { ApiError, AnalysisResult, ClaimDetail as Detail, Letter, api, inr, when
 import { useSession } from "../components/session";
 import { Badge, Card, Due, ErrorBox, Loading, useLoad } from "../components/ui";
 
+const TABS = [["overview", "Overview"], ["documents", "Documents"], ["evidence", "Policy & evidence"], ["coverage", "Coverage"],
+  ["adjudication", "Adjudication"], ["risk", "Risk"], ["review", "Review"], ["audit", "Audit"]] as const;
+type Tab = (typeof TABS)[number][0];
+const initialTab = (): Tab => {
+  const h = window.location.hash.slice(1);
+  return (TABS.find(([id]) => id === h)?.[0] ?? "overview") as Tab;
+};
+const NoAnalysis = () => <Card><p className="muted">Run the AI analysis to see this section.</p></Card>;
+
 export default function ClaimDetail() {
   const { claimNumber = "" } = useParams();
   const { user } = useSession();
@@ -11,6 +20,8 @@ export default function ClaimDetail() {
   const [busy, setBusy] = useState("");
   const [error, setError] = useState<ApiError | null>(null);
   const [doc, setDoc] = useState<{ filename: string; text: string } | null>(null);
+  const [tab, setTab] = useState<Tab>(initialTab);
+  const pick = (t: Tab) => { setTab(t); window.history.replaceState(null, "", `#${t}`); };
 
   if (claim.loading && !claim.data) return <Loading />;
   if (!claim.data) return <ErrorBox error={claim.error} onRetry={claim.reload} />;
@@ -18,6 +29,8 @@ export default function ClaimDetail() {
   const r = c.analysis?.result ?? null;
   const closed = c.status === "APPROVED" || c.status === "REJECTED" || !user.can_write;
 
+  const counts: Partial<Record<Tab, number>> = { documents: c.documents.length, audit: c.audit.length,
+    ...(r ? { evidence: r.evidence.length, risk: r.risk.signals.length } : {}) };
   const run = async (label: string, fn: () => Promise<unknown>) => {
     setBusy(label); setError(null);
     try { await fn(); claim.reload(); } catch (e) { setError(e as ApiError); } finally { setBusy(""); }
@@ -48,10 +61,26 @@ export default function ClaimDetail() {
       <ErrorBox error={error} />
       {c.analysis?.status === "FAILED" && <div className="error">Analysis stopped safely: {c.analysis.error}</div>}
 
-      {r && <Recommendation r={r} />}
-      {r && <ReviewPanel claim={c} r={r} disabled={closed} onDone={claim.reload} />}
+      <nav className="tabs" role="tablist">
+        {TABS.map(([id, label]) => {
+          const n = counts[id];
+          return <button key={id} role="tab" aria-selected={tab === id} className={tab === id ? "active" : ""} onClick={() => pick(id)}>
+            {label}{n !== undefined && <span className="count">{n}</span>}</button>;
+        })}
+      </nav>
 
-      <div className="grid2">
+      {tab === "overview" && <>
+        {r ? <Recommendation r={r} /> : <Card><p className="muted">{c.documents.length ? "Documents are uploaded. Run the AI analysis to get a recommendation." : "No documents yet. Upload the claim form and the bill or estimate, then run the analysis."}</p></Card>}
+        {r && !closed && c.status !== "NEEDS_ATTENTION" && <div className="notice row between">
+          <span>Waiting for a human decision{c.workflow_task ? ` in the ${words(c.workflow_task.queue).toLowerCase()} queue` : ""}.</span>
+          <button className="btn primary" onClick={() => pick("review")}>Open review</button></div>}
+        {r && <div className="kpis">
+          <div className="kpi"><span>Policy version</span><strong>{r.policy.product_code} v{r.policy.version}</strong></div>
+          <div className="kpi"><span>Coverage</span><strong><Badge value={r.coverage.status} /></strong></div>
+          <div className="kpi"><span>Risk</span><strong><Badge value={r.risk.level} /> {r.risk.score}</strong></div>
+          <div className="kpi"><span>Evidence items</span><strong>{r.evidence.length}</strong></div>
+          <div className="kpi"><span>Settlement</span><strong><Due s={c.settlement} /></strong></div>
+        </div>}
         {c.analysis && <Card title={`Agent pipeline · run ${c.analysis.run_id}`} actions={<span className="mono muted small">{c.analysis.correlation_id}</span>}>
           <ol className="pipeline">
             {c.analysis.agents.map((a, i) => (
@@ -64,6 +93,9 @@ export default function ClaimDetail() {
             ))}
           </ol>
         </Card>}
+      </>}
+
+      {tab === "documents" && <>
         <Card title="Documents">
           <table>
             <thead><tr><th>File</th><th>Type</th><th>Pages</th><th>Uploaded</th></tr></thead>
@@ -77,37 +109,7 @@ export default function ClaimDetail() {
           </table>
           {doc && <div className="doc-view"><div className="row between"><strong>{doc.filename}</strong><button className="btn small" onClick={() => setDoc(null)}>Close</button></div><pre>{doc.text}</pre></div>}
         </Card>
-      </div>
-
-      {r && <>
-        <div className="grid2">
-          <Card title={<>Coverage <Badge value={r.coverage.status} /></>}>
-            <p className="muted small">{r.policy.product_name} v{r.policy.version} (in force {r.policy.effective_from} to {r.policy.effective_to}) · sum insured {inr(r.policy.sum_insured)} · cover since {r.policy.start_date}</p>
-            <ul className="checks">{r.coverage.findings.map((f, i) => (
-              <li key={i}><Badge value={f.outcome} /> <strong>{words(f.code)}</strong>: {f.message}
-                {f.citation && <Cite c={f.citation} />}</li>))}
-            </ul>
-          </Card>
-          <Card title={<>Risk <Badge value={r.risk.level} /> <span className="muted small">score {r.risk.score}/100</span></>}>
-            {r.risk.signals.length ? <ul className="checks">{r.risk.signals.map((s) => <li key={s.code}><span className="badge gray">+{s.weight}</span> <strong>{words(s.code)}</strong>: {s.message}</li>)}</ul>
-              : <p className="muted">No risk signals fired.</p>}
-            <p className="muted small">{r.risk.rules_version}. A risk score never decides a claim on its own.</p>
-          </Card>
-        </div>
-        <Card title="Adjudication waterfall" actions={<span className="muted small">{r.adjudication.rules_version} · deterministic, no LLM arithmetic</span>}>
-          <table>
-            <thead><tr><th>Rule</th><th>Step</th><th className="num">Adjustment</th><th className="num">Running total</th><th>Clause</th><th>Detail</th></tr></thead>
-            <tbody>{r.adjudication.waterfall.map((s, i) => (
-              <tr key={i} className={Number(s.adjustment) < 0 ? "neg" : ""}>
-                <td className="mono small">{s.rule_id}</td><td>{s.label}</td>
-                <td className="num">{i === 0 ? inr(s.adjustment) : Number(s.adjustment) === 0 ? "—" : inr(s.adjustment)}</td>
-                <td className="num">{inr(s.running_total)}</td><td>{s.clause_ref ? `§${s.clause_ref}` : "—"}</td><td className="muted small">{s.detail}</td>
-              </tr>))}
-              <tr className="total"><td /><td>Payable amount</td><td /><td className="num">{inr(r.adjudication.payable_amount)}</td><td /><td /></tr>
-            </tbody>
-          </table>
-        </Card>
-        <div className="grid2">
+        {r && <div className="grid2">
           <Card title="Extracted claim facts">
             <table>
               <thead><tr><th>Fact</th><th>Value</th><th>Source</th></tr></thead>
@@ -124,7 +126,14 @@ export default function ClaimDetail() {
               <tbody>{r.line_items.map((li, i) => <tr key={i}><td>{li.description}<div className="muted small">{li.source.document_type} line {li.source.line}</div></td><td><Badge value={li.category} /></td><td className="num">{inr(li.amount)}</td></tr>)}</tbody>
             </table>
           </Card>
-        </div>
+        </div>}
+      </>}
+
+      {tab === "evidence" && (r ? <>
+        <Card title="Policy in force">
+          <p>{r.policy.product_name} <strong>v{r.policy.version}</strong>, in force {r.policy.effective_from} to {r.policy.effective_to}, chosen for incident date {String(r.facts.incident_date ?? c.incident_date)}. Contract {r.policy.policy_number} for {r.policy.holder}, cover {r.policy.start_date} to {r.policy.end_date}, sum insured {inr(r.policy.sum_insured)}.</p>
+          <Link to="/policies" className="small">Open the policy library</Link>
+        </Card>
         <Card title={`Evidence package (${r.evidence.length})`}>
           <ul className="evidence">{r.evidence.map((e, i) => (
             <li key={i}><Badge value={e.kind} /> <strong>{words(e.used_for)}</strong>: {e.finding}
@@ -132,23 +141,53 @@ export default function ClaimDetail() {
             </li>))}
           </ul>
         </Card>
-      </>}
+      </> : <NoAnalysis />)}
 
-      {r && <LetterCard claimNumber={c.claim_number} version={c.decisions.length} />}
+      {tab === "coverage" && (r ? <Card title={<>Coverage <Badge value={r.coverage.status} /></>}>
+        <p className="muted small">{r.policy.product_name} v{r.policy.version} (in force {r.policy.effective_from} to {r.policy.effective_to}) · sum insured {inr(r.policy.sum_insured)} · cover since {r.policy.start_date}</p>
+        <ul className="checks">{r.coverage.findings.map((f, i) => (
+          <li key={i}><Badge value={f.outcome} /> <strong>{words(f.code)}</strong>: {f.message}
+            {f.citation && <Cite c={f.citation} />}</li>))}
+        </ul>
+      </Card> : <NoAnalysis />)}
 
-      <div className="grid2">
+      {tab === "adjudication" && (r ? <Card title="Adjudication waterfall" actions={<span className="muted small">{r.adjudication.rules_version} · deterministic, no LLM arithmetic</span>}>
+        <table>
+          <thead><tr><th>Rule</th><th>Step</th><th className="num">Adjustment</th><th className="num">Running total</th><th>Clause</th><th>Detail</th></tr></thead>
+          <tbody>{r.adjudication.waterfall.map((s, i) => (
+            <tr key={i} className={Number(s.adjustment) < 0 ? "neg" : ""}>
+              <td className="mono small">{s.rule_id}</td><td>{s.label}</td>
+              <td className="num">{i === 0 ? inr(s.adjustment) : Number(s.adjustment) === 0 ? "—" : inr(s.adjustment)}</td>
+              <td className="num">{inr(s.running_total)}</td><td>{s.clause_ref ? `§${s.clause_ref}` : "—"}</td><td className="muted small">{s.detail}</td>
+            </tr>))}
+            <tr className="total"><td /><td>Payable amount</td><td /><td className="num">{inr(r.adjudication.payable_amount)}</td><td /><td /></tr>
+          </tbody>
+        </table>
+      </Card> : <NoAnalysis />)}
+
+      {tab === "risk" && (r ? <Card title={<>Risk <Badge value={r.risk.level} /> <span className="muted small">score {r.risk.score}/100</span></>}>
+        {r.risk.signals.length ? <ul className="checks">{r.risk.signals.map((s) => <li key={s.code}><span className="badge gray">+{s.weight}</span> <strong>{words(s.code)}</strong>: {s.message}</li>)}</ul>
+          : <p className="muted">No risk signals fired.</p>}
+        <p className="muted small">{r.risk.rules_version}. A risk score never decides a claim on its own.</p>
+      </Card> : <NoAnalysis />)}
+
+      {tab === "review" && <>
+        {r && <ReviewPanel claim={c} r={r} disabled={closed} onDone={claim.reload} />}
+        {r && closed && c.status !== "APPROVED" && c.status !== "REJECTED" && <p className="muted">You can view this claim but not decide it.</p>}
         <Card title="Decisions">
           {c.decisions.length ? <ul className="timeline">{c.decisions.map((d) => (
             <li key={d.id}><Badge value={d.decision} /> <strong>{d.source === "AI" ? "AI recommendation" : `Reviewer ${d.actor}`}</strong> · {inr(d.payable_amount)} · <span className="muted small">{when(d.created_at)}</span>
               {d.notes && <div className="small">{d.notes}</div>}</li>))}</ul> : <p className="muted">No decisions yet.</p>}
           {c.workflow_task && <p className="small">Workflow: <Badge value={c.workflow_task.queue} /> {c.workflow_task.priority} priority · {words(c.workflow_task.status)}{c.workflow_task.assignee ? ` · ${c.workflow_task.assignee}` : ""}</p>}
         </Card>
-        <Card title="Audit trail">
-          <ul className="timeline">{c.audit.map((e) => (
-            <li key={e.id}><strong>{words(e.event_type)}</strong> · {e.actor} · <span className="muted small">{when(e.created_at)}</span>
-              <div className="muted small mono">{JSON.stringify(e.details)}</div></li>))}</ul>
-        </Card>
-      </div>
+        {r && <LetterCard claimNumber={c.claim_number} version={c.decisions.length} />}
+      </>}
+
+      {tab === "audit" && <Card title="Audit trail">
+        <ul className="timeline">{c.audit.map((e) => (
+          <li key={e.id}><strong>{words(e.event_type)}</strong> · {e.actor} · <span className="muted small">{when(e.created_at)}</span>
+            <div className="muted small mono">{JSON.stringify(e.details)}</div></li>))}</ul>
+      </Card>}
     </>
   );
 }
