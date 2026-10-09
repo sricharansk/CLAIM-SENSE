@@ -51,6 +51,7 @@ table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
 th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { color: var(--muted); font-weight: 600; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.02em; }
 td.num, th.num { text-align: right; white-space: nowrap; }
+td.nowrap { white-space: nowrap; }
 tr.neg td.num:nth-child(3) { color: var(--red); }
 tr.total td { font-weight: 700; border-top: 2px solid var(--ink); }
 .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 600; white-space: nowrap; }

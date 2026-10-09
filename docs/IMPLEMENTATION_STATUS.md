@@ -20,7 +20,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | 8 | Deterministic adjudication | `adjudication/rules.py` (Decimal, waterfall) | `test_adjudication.py` hand calculations |
 | 9 | Fraud/risk signals | `agents/risk.py` | `test_risk_levels`, duplicate test, portfolio evaluation |
 | 10 | Evidence-backed recommendation | `agents/evidence.py` | 8 golden scenarios |
-| 11 | Human review and workflow | `agents/review.py`, `/review`, `/reviews` | API test incl. validation and override audit; browser approve |
+| 11 | Human review and workflow | `agents/review.py`, `/review`, `/reviews`; queue shows status, risk, age, priority and assignee (blueprint Prompt 13); `POST /reviews/{task}/assign`: adjusters take and release their own tasks, supervisors reassign, adjusters cannot take supervisor-queue tasks or decide a claim assigned to someone else; `TASK_ASSIGNED`/`TASK_RELEASED` audited | API test incl. validation and override audit; `test_review_assignment.py`; browser take, release and supervisor reassign, 0 console errors |
 | 12 | Audit trail | `audit_events`, `/audit` | API test, browser |
 | 13 | Interactive frontend | 11 screens (sign-in, dashboard, claims, new claim, claim workspace with 8 tabs, review queue, policy library, assistant, audit, evaluation, data sources), all calling real endpoints | Playwright golden path: 0 console errors |
 | – | Supervisor/orchestrator | `agents/supervisor.py`, `analysis_runs`, `agent_runs` with tool calls | Safe-failure and re-run tests |
@@ -40,7 +40,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 ## Validation results (this session)
 
 - `ruff check app tests`: clean.
-- `pytest`: 60 passed.
+- `pytest`: 63 passed.
 - `python scripts/evaluate.py`: 256 / 256 checks passed (retrieval hit@1 100%, MRR 1.00, all refusals correct). The first run found three assistant misses (ICU question cited the room-rent clause, a cataract question cited the 30-day waiting period, two off-topic prompts were answered); fixed in `rag/retriever.py` and `rag/service.py`.
 - `npm run build` (tsc + vite): passed.
 - `pip-audit -r backend/requirements.txt`: no known vulnerabilities. `npm audit`: 0 vulnerabilities.

@@ -4,7 +4,7 @@ from __future__ import annotations
 import csv
 import io
 import json
-from datetime import date
+from datetime import date, datetime, timezone
 from decimal import Decimal
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
@@ -17,7 +17,7 @@ from .. import analytics, letters, llm, sla
 from ..agents import audit
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
-from ..auth import current_user, issue_token, supervisor, throttle, user_view, verify_password, writer
+from ..auth import WRITE_ROLES, current_user, issue_token, supervisor, throttle, user_view, verify_password, writer
 from ..config import REPO_ROOT, settings
 from ..db import get_db
 from ..models import (
@@ -288,6 +288,9 @@ def review_claim(claim_number: str, body: ReviewIn, db: Session = Depends(get_db
         raise HTTPException(422, "Notes are required to reject, escalate or refer for investigation")
     if c.status == "ESCALATED" and user.role != "SUPERVISOR":
         raise HTTPException(403, "This claim is escalated; a supervisor must decide it")
+    task = db.query(WorkflowTask).filter_by(claim_id=c.id, status="OPEN").first()
+    if task and task.assignee not in (None, user.display_name) and user.role != "SUPERVISOR":
+        raise HTTPException(409, f"This review is assigned to {task.assignee}; a supervisor can reassign it")
     if body.action == "APPROVE" and user.approval_limit is not None:
         amount = body.payable_amount if body.payable_amount is not None else ai.payable_amount
         if amount is not None and Decimal(amount) > user.approval_limit:
@@ -303,17 +306,60 @@ def review_claim(claim_number: str, body: ReviewIn, db: Session = Depends(get_db
 def review_queue(db: Session = Depends(get_db)):
     tasks = db.query(WorkflowTask).filter_by(status="OPEN").order_by(WorkflowTask.id).all()
     order = {"HIGH": 0, "MEDIUM": 1, "NORMAL": 2}
+    now = datetime.now(timezone.utc)
     out = []
     for t in sorted(tasks, key=lambda t: (order.get(t.priority, 9), t.id)):
         c = db.get(Claim, t.claim_id)
         ai = db.query(ClaimDecision).filter_by(claim_id=c.id, source="AI").order_by(ClaimDecision.id.desc()).first()
+        run = db.query(AnalysisRun).filter_by(claim_id=c.id, status="SUCCEEDED").order_by(AnalysisRun.id.desc()).first()
+        opened = t.created_at if t.created_at.tzinfo else t.created_at.replace(tzinfo=timezone.utc)
         out.append({"task_id": t.id, "queue": t.queue, "priority": t.priority, "assignee": t.assignee,
-                    "created_at": t.created_at, "claim_number": c.claim_number, "claimant_name": c.claimant_name,
+                    "created_at": t.created_at, "age_hours": round((now - opened).total_seconds() / 3600, 1),
+                    "claim_number": c.claim_number, "claimant_name": c.claimant_name,
                     "claim_type": c.claim_type, "claimed_amount": _money(c.claimed_amount), "status": c.status,
+                    "risk_level": run.result["risk"]["level"] if run and run.result else None,
                     "recommendation": ai.decision if ai else None,
                     "recommended_payable": _money(ai.payable_amount) if ai else None,
                     "settlement": _clock(db, c)})
     return out
+
+
+@router.get("/reviewers")
+def reviewers(db: Session = Depends(get_db)):
+    return [{"username": u.username, "display_name": u.display_name, "role": u.role}
+            for u in db.query(User).filter(User.active.is_(True), User.role.in_(WRITE_ROLES)).order_by(User.id).all()]
+
+
+class AssignIn(BaseModel):
+    username: str | None = Field(default=None, max_length=60)
+
+
+@router.post("/reviews/{task_id}/assign")
+def assign_task(task_id: int, body: AssignIn, db: Session = Depends(get_db), user: User = Depends(writer)):
+    """Take, hand over or release an open review task. Adjusters take and release their own; supervisors reassign."""
+    t = db.get(WorkflowTask, task_id)
+    if t is None:
+        raise HTTPException(404, f"Review task {task_id} not found")
+    if t.status != "OPEN":
+        raise HTTPException(409, f"Review task {task_id} is {t.status.lower()}")
+    target = None
+    if body.username is not None:
+        target = db.query(User).filter_by(username=body.username, active=True).first()
+        if target is None or target.role not in WRITE_ROLES:
+            raise HTTPException(422, f"{body.username} is not a reviewer")
+    if user.role != "SUPERVISOR":
+        if target is not None and target.id != user.id:
+            raise HTTPException(403, "Only a supervisor can assign a task to someone else")
+        if t.queue == "SUPERVISOR_REVIEW" and target is not None:
+            raise HTTPException(403, "This task is in the supervisor queue")
+        if t.assignee not in (None, user.display_name):
+            raise HTTPException(409, f"Assigned to {t.assignee}; a supervisor can reassign it")
+    before, t.assignee = t.assignee, target.display_name if target else None
+    claim = db.get(Claim, t.claim_id)
+    audit.log(db, claim.id, "TASK_ASSIGNED" if target else "TASK_RELEASED", user.username,
+              {"task_id": t.id, "queue": t.queue, "from": before, "to": t.assignee})
+    db.commit()
+    return {"task_id": t.id, "claim_number": claim.claim_number, "queue": t.queue, "assignee": t.assignee}
 
 
 # ---------------------------------------------------------------- policies

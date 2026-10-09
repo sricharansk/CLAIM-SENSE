@@ -20,7 +20,7 @@ Status on 2026-10-09: **ready to deploy, not yet deployed.** The application wor
 | Dashboard | Done | Screenshot `14-dashboard-after-review.png` |
 | Error states | Done | Uniform error body with correlation ID; `ErrorBox` on every screen; safe-failure test |
 | Security controls reviewed; injection protections tested | Done | `SECURITY.md`; `test_security_guards.py`; evaluation Q21 |
-| Tests pass | Done | 60 pytest, 256/256 evaluation checks, CI green on PR #1; PR #2 CI runs every push |
+| Tests pass | Done | 63 pytest, 256/256 evaluation checks, CI green on PR #1; PR #2 CI runs every push |
 | Docker build works; README setup from a clean checkout | Done | Fresh clone of the branch built with `--no-cache` and passed the smoke test (2026-10-09). Behind a TLS-inspecting proxy, the build needs `--secret id=ca,src=<ca.crt>` (see README). |
 | No secrets or confidential data tracked | Done | `.gitignore`, `.dockerignore`; synthetic data only; `AUTH_SECRET` and `DEMO_PASSWORD` set by the environment |
 | Deployment and deployed smoke test | **Blocked** | No cloud account in this environment. Render Blueprint (`render.yaml`) and Azure workflow are ready. |

@@ -56,7 +56,9 @@ export type PolicyVersionFull = { id: number; version: string; effective_from: s
 export type InsuredPolicy = { policy_number: string; product_code: string; holder_name: string; start_date: string; end_date: string; sum_insured: string };
 export type RagAnswer = { question: string; grounded: boolean; mode: string; answer: string; citations: Citation[] };
 export type ReviewTask = { settlement: Settlement; task_id: number; queue: string; priority: string; claim_number: string; claimant_name: string; claim_type: string;
-  claimed_amount: string | null; status: string; recommendation: string | null; recommended_payable: string | null; created_at: string };
+  claimed_amount: string | null; status: string; recommendation: string | null; recommended_payable: string | null; created_at: string;
+  age_hours: number; assignee: string | null; risk_level: string | null };
+export type Reviewer = { username: string; display_name: string; role: string };
 export type Analytics = {
   settlement: Record<string, number>;
   totals: { overdue: number; claims: number; pending_review: number; high_risk: number; decided: number; claimed_amount: string; recommended_payable: string; avg_analysis_ms: number | null };
@@ -155,6 +157,9 @@ export const api = {
   review: (n: string, data: { action: string; notes: string; payable_amount?: string }) =>
     request<{ status: string }>(`/claims/${n}/review`, json("POST", data)),
   reviews: () => request<ReviewTask[]>("/reviews"),
+  reviewers: () => request<Reviewer[]>("/reviewers"),
+  assign: (taskId: number, username: string | null) =>
+    request<{ task_id: number; assignee: string | null }>(`/reviews/${taskId}/assign`, json("POST", { username })),
   policies: () => request<Policy[]>("/policies"),
   versions: (code: string) => request<PolicyVersionFull[]>(`/policies/${code}/versions`),
   uploadPolicy: (wording: File, terms: File) => {
@@ -175,4 +180,6 @@ export const api = {
 export const inr = (v: string | number | null | undefined) =>
   v === null || v === undefined || v === "" ? "—" : `₹${Number(v).toLocaleString("en-IN", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}`;
 export const when = (s: string | null | undefined) => (s ? new Date(s).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) : "—");
-export const words = (s: string | null | undefined) => (s ? s.replace(/_/g, " ").toLowerCase().replace(/^\w/, (c) => c.toUpperCase()) : "—");
+const ACRONYMS = /\b(siu|ai|icu|llm|pdf|rag)\b/g;
+export const words = (s: string | null | undefined) =>
+  (s ? s.replace(/_/g, " ").toLowerCase().replace(ACRONYMS, (w) => w.toUpperCase()).replace(/^\w/, (c) => c.toUpperCase()) : "—");
