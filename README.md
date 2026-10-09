@@ -8,7 +8,7 @@ Claim Sense takes a health or motor claim from intake to a human decision. It re
 
 All policies, people and claims in this repository are **synthetic**. See [Data](#data-and-datasets).
 
-![Dashboard](docs/screenshots/01-dashboard.png)
+![Dashboard](docs/screenshots/14-dashboard-after-review.png)
 
 ## What works today
 

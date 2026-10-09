@@ -43,7 +43,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 - `npm run build` (tsc + vite): passed.
 - `pip-audit -r backend/requirements.txt`: no known vulnerabilities. `npm audit`: 0 vulnerabilities.
 - GitHub Actions CI run 1 on PR #1: backend, frontend and docker-smoke jobs passed.
-- Browser (Playwright, Chromium) against Vite dev server and against the Docker image on PostgreSQL: create claim, upload 3 documents, analyse (₹78,000 billed, ₹64,080 payable, partial approval), approve, generate the settlement letter (INR 64,080.00) and a repudiation letter, export CSV, assistant answer and refusal, evaluation scorecard (256 / 256), all pages load. No console errors on the Docker run.
+- Browser (Playwright, Chromium) against Vite dev server and against the Docker image on PostgreSQL: create claim, upload 3 documents, analyse (₹78,000 billed, ₹64,080 payable, partial approval), approve, generate the settlement letter (INR 64,080.00) and a repudiation letter, export CSV, assistant answer and refusal, evaluation scorecard (256 / 256), adjuster escalates the over-limit claim and the dashboard shows escalation rate 50% (1/2) and override rate 0% (0/1), all pages load (2026-10-09, image built from this branch, screenshot `14-dashboard-after-review.png`). No console errors on the Docker run.
 - `scripts/smoke_test.py http://localhost:8080` against Docker + PostgreSQL: all checks passed.
 
 ## Definition of done (blueprint PART 20)
