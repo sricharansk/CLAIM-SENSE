@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Bill Number: HB-1111
+Admission Date: 2025-10-30
+Discharge Date: 2025-10-30
+Patient/Insured Name: Kavitha Rao
+
+Itemised Charges:
+Room Rent - Day Care (1 day @ 3,000)                             3,000.00
+Oncologist Fees                                                  8,000.00
+Pharmacy - Chemotherapy Drugs                                   64,000.00
+Laboratory Tests                                                 4,500.00
+
+Total Amount                                                    79,500.00

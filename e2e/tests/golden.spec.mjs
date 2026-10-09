@@ -127,6 +127,25 @@ test("dashboard shows the review rates", async ({ page }) => {
   await expect(page.locator(".kpi", { hasText: "Escalation rate" })).toBeVisible();
 });
 
+test("dashboard filters and tiles drill down to the matching claims", async ({ page }) => {
+  await signIn(page, "Supervisor");
+  await page.getByRole("group", { name: "Line of business" }).getByRole("button", { name: "Motor" }).click();
+  await expect(page).toHaveURL(/line=motor/);
+  await page.locator(".kpi", { hasText: "High risk" }).click();
+  await expect(page).toHaveURL(/\/claims\?.*claim_type=motor.*risk=HIGH/);
+  const rows = page.locator("table.clickable tbody tr");
+  await expect(rows.first()).toBeVisible();
+  for (const row of await rows.all()) {
+    await expect(row.locator("td").nth(1)).toHaveText("motor");
+    await expect(row).toContainText("High");
+  }
+  await page.getByRole("button", { name: "Clear all filters" }).click();
+  await expect(page.locator(".tag.removable")).toHaveCount(0);
+  await page.goto("/guide");
+  await page.getByRole("link", { name: "Open CLM-H-1001" }).click();
+  await expect(page).toHaveURL(/\/claims\/CLM-H-1001$/);
+});
+
 test("phone layout: navigation behind a menu, no sideways scrolling", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await signIn(page, "Adjuster");
@@ -135,7 +154,7 @@ test("phone layout: navigation behind a menu, no sideways scrolling", async ({ p
   await page.getByRole("link", { name: "Review queue" }).click();
   await expect(page.getByText("Open tasks")).toBeVisible();
   await expect(page.locator("#main-nav")).toBeHidden();
-  for (const path of ["/", "/claims", "/claims/CLM-H-1001", "/reviews"]) {
+  for (const path of ["/", "/claims", "/claims/CLM-H-1001", "/reviews", "/guide"]) {
     await page.goto(path);
     await page.waitForLoadState("networkidle");
     const [scroll, client] = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);

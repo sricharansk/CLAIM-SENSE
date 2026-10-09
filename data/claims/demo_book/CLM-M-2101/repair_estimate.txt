@@ -1,0 +1,15 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2101
+Vehicle Registration: MH-12-SY-3307
+Patient/Insured Name: Anjali Desai
+
+Itemised Charges:
+Left Front Door Panel (metal) - replace                         24,000.00
+Front Fender (metal) - repair                                    8,000.00
+Painting Material                                                7,000.00
+Denting and Fitting Labour                                       6,500.00
+
+Total Amount                                                    45,500.00

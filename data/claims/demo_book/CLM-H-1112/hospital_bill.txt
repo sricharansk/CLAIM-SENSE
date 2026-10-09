@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Community Hospital (fictional)
+Bill Number: HB-1112
+Admission Date: 2025-09-12
+Discharge Date: 2025-09-19
+Patient/Insured Name: Harish Patel
+
+Itemised Charges:
+ICU Charges (3 days @ 11,000)                                   33,000.00
+Room Rent - Twin Sharing (4 days @ 5,000)                       20,000.00
+Consultant and Intensivist Fees                                 36,000.00
+Pharmacy - Medicines and Drugs                                  38,000.00
+Platelet Transfusion and Laboratory Tests                       35,000.00
+
+Total Amount                                                   162,000.00

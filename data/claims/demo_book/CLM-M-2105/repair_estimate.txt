@@ -1,0 +1,15 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2105
+Vehicle Registration: KA-01-SY-8890
+Patient/Insured Name: Tanvi Shah
+
+Itemised Charges:
+Front Panel (plastic) - replace                                  3,800.00
+Rear View Mirror Glass                                             900.00
+Headlamp Assembly (plastic)                                      2,600.00
+Fitting Labour                                                   1,200.00
+
+Total Amount                                                     8,500.00

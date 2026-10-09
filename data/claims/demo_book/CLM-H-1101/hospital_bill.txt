@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Bill Number: HB-1101
+Admission Date: 2025-10-14
+Discharge Date: 2025-10-18
+Patient/Insured Name: Anil Deshpande
+
+Itemised Charges:
+Room Rent - Twin Sharing (4 days @ 5,500)                       22,000.00
+Consultant Physician Fees                                        9,500.00
+Pharmacy - Medicines and Drugs                                  11,800.00
+Laboratory Tests - Widal and Blood Culture                       4,200.00
+Consumables - Gloves, Masks, Admission Kit                       1,600.00
+
+Total Amount                                                    49,100.00

@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Patient Name: Rohan Kapoor
+Admission Date: 2026-01-08
+Discharge Date: 2026-01-13
+Diagnosis: Coronary artery disease, single vessel
+Procedure: Coronary angioplasty with drug-eluting stent
+
+Clinical Notes:
+Recovered and discharged in stable condition.

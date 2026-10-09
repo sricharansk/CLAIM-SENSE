@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Lakshmi Venkatesh
+Admission Date: 2025-11-20
+Discharge Date: 2025-11-23
+Diagnosis: Cholelithiasis with chronic cholecystitis
+Procedure: Laparoscopic cholecystectomy
+
+Clinical Notes:
+Recovered and discharged in stable condition.

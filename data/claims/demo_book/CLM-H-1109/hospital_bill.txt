@@ -1,0 +1,18 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Bill Number: HB-1109
+Admission Date: 2026-02-11
+Discharge Date: 2026-02-13
+Patient/Insured Name: Sanjay Gupta
+
+Itemised Charges:
+Room Rent - Twin Sharing (2 days @ 6,000)                       12,000.00
+Surgeon Fees                                                    40,000.00
+Operation Theatre Charges                                       15,000.00
+Pharmacy - Medicines and Drugs                                   8,000.00
+Laboratory Tests and CT Abdomen                                  7,000.00
+Consumables - Gloves, Masks, Admission Kit                       2,500.00
+
+Total Amount                                                    84,500.00

@@ -1,0 +1,18 @@
+CLAIM FORM — Synthetic Assurance Co. Ltd. (fictional)
+SYNTHETIC DEMO DOCUMENT
+
+Claim Type: Motor
+Policy Number: CS-MTR-25-001510
+Claimant Name: Pranav Kulkarni
+Incident Date: 2025-09-07
+Vehicle Registration: MH-02-SY-1184
+Vehicle Make and Model: Sedan 1497cc
+Date of First Registration: 2020-01-20
+Engine Capacity cc: 1497
+Claimed Amount: INR 80,000.00
+
+Description of Loss:
+Engine seized on the highway; the workshop reports a mechanical breakdown from oil starvation.
+
+I declare that the information given is true and complete.
+Signed: Pranav Kulkarni

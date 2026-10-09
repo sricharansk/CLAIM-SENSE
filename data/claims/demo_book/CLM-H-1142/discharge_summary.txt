@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Ajay Chauhan
+Admission Date: 2025-09-30
+Discharge Date: 2025-10-03
+Diagnosis: Acute calculous cholecystitis
+Procedure: Laparoscopic cholecystectomy
+
+Clinical Notes:
+Recovered and discharged in stable condition.

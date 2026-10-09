@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Deepa Menon
+Admission Date: 2025-09-22
+Discharge Date: 2025-09-24
+Diagnosis: Right inguinal hernia
+Procedure: Laparoscopic hernia repair with mesh
+
+Clinical Notes:
+Recovered and discharged in stable condition.

@@ -24,7 +24,7 @@ The checksum of a source spanning several files or folders is a SHA-256 over eac
 
 | Status | Sources | What it means |
 |---|---|---|
-| IN_USE | 5 synthetic sources: policy corpus, PDF ingestion demo, golden claim packets, claims portfolio, evaluation set | Generated or written in this repository; checksums verified on every request |
+| IN_USE | 5 synthetic sources: policy corpus, PDF ingestion demo, golden claim packets and the 42-claim demo book, claims portfolio, evaluation set | Generated or written in this repository; checksums verified on every request |
 | REGISTERED | 9 public sources: three IRDAI master circulars, IRDAI handbook 2024-25, APRA NCPD, CMS TiC PUF PY2026, Figshare and two Zenodo benchmarks | Dates and URLs come from the blueprint's verified register. They are not downloaded in this build, and most licences are still `CHECK_SOURCE` |
 
 No public dataset is described as live 2026 claim-level data. APRA NCPD is a 2026 publication of data through December 2024.

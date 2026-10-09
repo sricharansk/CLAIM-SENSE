@@ -1,0 +1,20 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2106
+Vehicle Registration: MH-14-SY-6602
+Patient/Insured Name: Arvind Bhat
+
+Itemised Charges:
+Front Bumper (plastic) - replace                                22,000.00
+Bonnet (metal) - replace                                        48,000.00
+Right Front Door Panel (metal) - replace                        38,000.00
+Right Rear Door Panel (metal) - replace                         36,000.00
+Headlamp Assembly (plastic)                                     28,000.00
+Front Windshield Glass                                          26,000.00
+Radiator Support Panel (metal)                                  18,000.00
+Painting Material                                               24,000.00
+Denting and Fitting Labour                                      40,000.00
+
+Total Amount                                                   280,000.00

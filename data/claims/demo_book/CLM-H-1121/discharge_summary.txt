@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Clearsight Eye Institute (fictional)
+Patient Name: Sunita Reddy
+Admission Date: 2025-12-09
+Discharge Date: 2025-12-09
+Diagnosis: Senile cataract, right eye
+Procedure: Cataract surgery with IOL implant
+
+Clinical Notes:
+Recovered and discharged in stable condition.

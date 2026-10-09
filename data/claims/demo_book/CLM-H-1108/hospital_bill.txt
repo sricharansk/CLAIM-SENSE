@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Community Hospital (fictional)
+Bill Number: HB-1108
+Admission Date: 2025-01-18
+Discharge Date: 2025-01-22
+Patient/Insured Name: Geeta Pillai
+
+Itemised Charges:
+Room Rent - Twin Sharing (4 days @ 4,500)                       18,000.00
+Consultant Physician Fees                                       10,000.00
+Pharmacy - Medicines and Drugs                                  15,500.00
+Laboratory Tests and Chest X-Ray                                 6,800.00
+
+Total Amount                                                    50,300.00

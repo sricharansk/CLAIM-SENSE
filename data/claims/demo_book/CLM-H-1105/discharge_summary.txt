@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Patient Name: Imran Qureshi
+Admission Date: 2025-12-02
+Discharge Date: 2025-12-06
+Diagnosis: Acute exacerbation of bronchial asthma
+Procedure: Medical management, nebulisation and steroids
+
+Clinical Notes:
+Recovered and discharged in stable condition.

@@ -1,0 +1,13 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2103
+Vehicle Registration: KA-03-SY-5521
+Patient/Insured Name: Swati Nair
+
+Itemised Charges:
+Front Windshield Glass - replace                                18,500.00
+Windshield Fitting Labour                                        2,500.00
+
+Total Amount                                                    21,000.00

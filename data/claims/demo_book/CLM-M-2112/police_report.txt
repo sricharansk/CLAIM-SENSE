@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-2112
+Date of Accident: 2025-12-11
+Vehicle Registration: KA-02-SY-6258
+
+Findings:
+Driver's licence expired on 2025-08-31 and had not been renewed.

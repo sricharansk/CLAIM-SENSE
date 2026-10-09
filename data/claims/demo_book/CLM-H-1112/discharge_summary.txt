@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Community Hospital (fictional)
+Patient Name: Harish Patel
+Admission Date: 2025-09-12
+Discharge Date: 2025-09-19
+Diagnosis: Dengue haemorrhagic fever
+Procedure: Medical management with platelet transfusion
+
+Clinical Notes:
+Recovered and discharged in stable condition.

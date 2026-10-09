@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Community Hospital (fictional)
+Bill Number: HB-1131
+Admission Date: 2025-11-26
+Discharge Date: 2025-11-29
+Patient/Insured Name: Farhan Ali
+
+Itemised Charges:
+Room Rent - Twin Sharing (3 days @ 4,500)                       13,500.00
+Consultant Physician Fees                                        7,000.00
+Pharmacy - Medicines and Drugs                                   5,600.00
+Laboratory Tests - Serology                                      4,400.00
+
+Total Amount                                                    30,500.00

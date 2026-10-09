@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Pooja Bansal
+Admission Date: 2025-10-17
+Discharge Date: 2025-10-20
+Diagnosis: Viral fever with dehydration
+Procedure: Medical management with IV fluids
+
+Clinical Notes:
+Recovered and discharged in stable condition.

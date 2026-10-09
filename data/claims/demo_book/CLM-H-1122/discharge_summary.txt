@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Urology Centre (fictional)
+Patient Name: Manoj Tiwari
+Admission Date: 2025-10-16
+Discharge Date: 2025-10-18
+Diagnosis: Left renal calculus (kidney stone), 8 mm
+Procedure: Ureteroscopic lithotripsy (URSL)
+
+Clinical Notes:
+Recovered and discharged in stable condition.

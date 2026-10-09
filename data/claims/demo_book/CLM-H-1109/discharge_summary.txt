@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Patient Name: Sanjay Gupta
+Admission Date: 2026-02-11
+Discharge Date: 2026-02-13
+Diagnosis: Acute appendicitis
+Procedure: Laparoscopic appendicectomy
+
+Clinical Notes:
+Recovered and discharged in stable condition.

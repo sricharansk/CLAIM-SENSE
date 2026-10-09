@@ -1,0 +1,13 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2113
+Vehicle Registration: MH-02-SY-1184
+Patient/Insured Name: Pranav Kulkarni
+
+Itemised Charges:
+Engine Block (metal) - overhaul                                 68,000.00
+Engine Labour                                                   12,000.00
+
+Total Amount                                                    80,000.00

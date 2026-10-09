@@ -10,8 +10,8 @@
       "data_type": "synthetic_policies",
       "claim_level": false,
       "url": "data/synthetic/generate.py",
-      "publication_date": "2026-10-08",
-      "retrieval_date": "2026-10-08",
+      "publication_date": "2026-10-09",
+      "retrieval_date": "2026-10-09",
       "data_period": "Policy years 2024-2026",
       "license": "Synthetic; generated in this repository; no third-party terms",
       "intended_use": [
@@ -29,7 +29,7 @@
         "data/policies/insured_policies.json"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "7e829eade7f773598085ef0485cd834a7c838b5af0c7592174c0b5dadc7866ab"
+      "checksum_sha256": "3b22b5dbce80dea936bcd808ec2250f8a497a26a8cfd825c8c192af3da3f0327"
     },
     {
       "id": "synthetic-policy-pdf-demo",
@@ -56,14 +56,14 @@
     },
     {
       "id": "synthetic-golden-claims",
-      "name": "Synthetic golden claim packets (8 scenarios and the demo upload)",
+      "name": "Synthetic claim packets (8 golden scenarios, a 42-claim demo book with review history, and the demo upload)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_claims",
       "claim_level": true,
       "url": "data/claims/scenarios.json",
-      "publication_date": "2026-10-08",
-      "retrieval_date": "2026-10-08",
+      "publication_date": "2026-10-09",
+      "retrieval_date": "2026-10-09",
       "data_period": "Synthetic incidents 2023-2026",
       "license": "Synthetic; generated in this repository; no third-party terms",
       "intended_use": [
@@ -75,7 +75,7 @@
         "data/claims"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "cdc377be178a613bbf214da6ff169d19e51746146e252b2f1de3646c1adbefb2"
+      "checksum_sha256": "8e52f56dd85b0419f5baf94865ef1e6094e933da5cba54df0403ba2faa4f214a"
     },
     {
       "id": "synthetic-claims-portfolio",
