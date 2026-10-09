@@ -172,9 +172,11 @@ Everything is regenerated deterministically with `python data/synthetic/generate
 
 - **Docker**: one image serves the UI and the API (`Dockerfile`); `docker-compose.yml` adds PostgreSQL.
 - **Azure Container Apps**: manual workflow [.github/workflows/deploy-azure.yml](.github/workflows/deploy-azure.yml) builds, deploys and runs the smoke test. Needs Azure credentials in repository secrets.
-- **Render**: [render.yaml](render.yaml) blueprint for a one-click demo deployment.
+- **Render**: [render.yaml](render.yaml) blueprint for a one-click demo deployment. After merging to `main`, use the button below, or on render.com choose New → Blueprint and pick this repository. Set `DEMO_PASSWORD` when asked.
 
-The cloud deployment has **not** been run yet. No cloud credentials were available while building. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+  [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sricharansk/CLAIM-SENSE)
+
+The cloud deployment has **not** been run yet. No cloud credentials were available while building. Once deployed, run `python3 scripts/smoke_test.py https://<service> <DEMO_PASSWORD>` before calling it live. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Repository layout
 
@@ -187,9 +189,11 @@ backend/app/
 backend/tests/   pytest suite
 frontend/src/    React + TypeScript UI (pages/, components/, api.ts)
 data/            synthetic policies, claim packets, portfolio, source registry, generator
-docs/            blueprint, status, architecture, decisions, deployment, screenshots
+docs/            blueprint, status, architecture, decisions, deployment, validation report, screenshots
+e2e/             Playwright browser tests (run against a running stack)
+reports/         golden evaluation report and RAG ingestion manifest
 references/      supporting planning documents
-scripts/         smoke_test.py
+scripts/         smoke_test.py, evaluate.py, provenance.py
 ```
 
 ## Roadmap
