@@ -1,6 +1,6 @@
 # Claim Sense evaluation report
 
-Generated 2026-10-09T00:55:18+00:00 by `python scripts/evaluate.py` on a fresh database with synthetic data only. Rules adjudication-rules/1.0.0, risk risk-rules/1.0.0, LLM off (extractive answers).
+Generated 2026-10-09T09:37:13+00:00 by `python scripts/evaluate.py` on a fresh database with synthetic data only. Rules adjudication-rules/1.0.0, risk risk-rules/1.0.0, LLM off (extractive answers).
 
 **Result: all checks passed.** 256 of 256 checks passed across 12 claim cases and 21 policy questions.
 
@@ -87,7 +87,7 @@ None.
 
 ## Hand-worked expectations
 
-- **C01** (CLM-H-3009): 25,000 billed; room rent 4,000/day is within the 5,000 limit (2.2); deductible 5,000 (5.1) -> 20,000; co-pay 10% (5.2) = 2,000 -> 18,000.
+- **C01** (CLM-H-3051): 25,000 billed; room rent 4,000/day is within the 5,000 limit (2.2); deductible 5,000 (5.1) -> 20,000; co-pay 10% (5.2) = 2,000 -> 18,000.
 - **C02** (CLM-M-2002): Police report says the driver was under the influence of alcohol; exclusion 3.1 applies, nothing is payable.
 - **C03** (CLM-H-1002): Policy started 2025-02-10, surgery 2025-09-05, about 6 months of cover; cataract needs 24 months (3.3).
 - **C04** (CLM-H-1001): 106,600 billed; consumables 3,400 not payable (4.3); room 3 days x (6,500 - 5,000) = 4,500 over the limit (2.2); deductible 5,000; co-pay 10% of 93,700 = 9,370 -> 84,330.
@@ -95,7 +95,7 @@ None.
 - **C06** (CLM-H-1004): Required documents (6.2) include the discharge summary, which is missing. Provisional amount: 43,400 - 5,000 = 38,400, co-pay 3,840 -> 34,560.
 - **C07** (CLM-H-1003): Form says 468,000, bill totals 442,000 (gap 5.9%); 50 days after start; 468,000 / 500,000 = 94%. ICU 6 x (18,000 - 10,000) = 48,000 and room 5 x (9,000 - 5,000) = 20,000 over limits -> 374,000; deductible 5,000; co-pay 36,900 -> 332,100.
 - **C08** (CLM-H-1005): 2024.1 wording: room limit 4,000/day so 2 x 1,500 = 3,000 over; 76,500 - 3,000 = 73,500; deductible 10,000; co-pay 20% of 63,500 = 12,700 -> 50,800.
-- **C09** (CLM-H-3010): 410,000 billed; room and ICU at exactly their limits; deductible 5,000 -> 405,000; co-pay 40,500 -> 364,500; capped at the 300,000 sum insured (5.3). 410,000 / 300,000 is above 80%, the only risk signal (score 30, MEDIUM).
+- **C09** (CLM-H-3052): 410,000 billed; room and ICU at exactly their limits; deductible 5,000 -> 405,000; co-pay 40,500 -> 364,500; capped at the 300,000 sum insured (5.3). 410,000 / 300,000 is above 80%, the only risk signal (score 30, MEDIUM).
 - **C10** (CLM-H-1006): Same policy, incident date and amount as CLM-H-1001, which was filed first.
-- **C11** (CLM-H-3011): 2025.1: room 4,500/day is within 5,000; 36,000 - 5,000 = 31,000; co-pay 10% = 3,100 -> 27,900.
-- **C12** (CLM-H-3012): 2024.1: room limit 4,000 so 3 x 500 = 1,500 over; 34,500 - 10,000 = 24,500; co-pay 20% = 4,900 -> 19,600.
+- **C11** (CLM-H-3053): 2025.1: room 4,500/day is within 5,000; 36,000 - 5,000 = 31,000; co-pay 10% = 3,100 -> 27,900.
+- **C12** (CLM-H-3054): 2024.1: room limit 4,000 so 3 x 500 = 1,500 over; 34,500 - 10,000 = 24,500; co-pay 20% = 4,900 -> 19,600.

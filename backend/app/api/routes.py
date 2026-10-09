@@ -4,11 +4,11 @@ from __future__ import annotations
 import csv
 import io
 import json
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
-from fastapi.responses import StreamingResponse
+from fastapi.responses import PlainTextResponse, StreamingResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import func, text
 from sqlalchemy.orm import Session
@@ -19,7 +19,7 @@ from ..agents.intake import CORRECTABLE, CORRECTION, SINGLE_VALUE, consolidate
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
 from ..auth import WRITE_ROLES, current_user, issue_token, supervisor, throttle, user_view, verify_password, writer
-from ..config import REPO_ROOT, settings
+from ..config import DEFAULT_DEMO_PASSWORD, REPO_ROOT, settings
 from ..db import get_db
 from ..models import (
     AgentRun,
@@ -72,6 +72,12 @@ def ready(db: Session = Depends(get_db)):
 class LoginIn(BaseModel):
     username: str = Field(min_length=1, max_length=60)
     password: str = Field(min_length=1, max_length=200)
+
+
+@public.get("/auth/demo-info")
+def demo_info():
+    """Whether the documented default demo password is in use, so the sign-in screen knows if it may fill it in."""
+    return {"default_password": settings.demo_password == DEFAULT_DEMO_PASSWORD}
 
 
 @public.post("/auth/login")
@@ -144,19 +150,33 @@ def create_claim(body: ClaimIn, db: Session = Depends(get_db), user: User = Depe
 
 
 @router.get("/claims")
-def list_claims(status: str | None = None, q: str | None = None, db: Session = Depends(get_db)):
+def list_claims(status: str | None = None, q: str | None = None, db: Session = Depends(get_db),
+                claim_type: str | None = None, risk: str | None = None, recommendation: str | None = None,
+                settlement: str | None = None, days: int | None = None):
+    """Claims, newest first. Every filter is optional; dashboard drill-downs link here with them."""
     query = db.query(Claim)
     if status:
-        query = query.filter(Claim.status == status)
+        query = query.filter(Claim.status.in_(status.split(",")))
+    if claim_type:
+        query = query.filter(Claim.claim_type == claim_type)
+    if days:
+        query = query.filter(Claim.created_at >= datetime.now(timezone.utc) - timedelta(days=days))
     if q:
         like = f"%{q}%"
         query = query.filter((Claim.claim_number.ilike(like)) | (Claim.claimant_name.ilike(like)) | (Claim.policy_number.ilike(like)))
     claims = query.order_by(Claim.id.desc()).all()
     ai = {d.claim_id: d for d in db.query(ClaimDecision).filter_by(source="AI").order_by(ClaimDecision.id).all()}
-    risk = {}
+    levels = {}
     for r in db.query(AnalysisRun).filter_by(status="SUCCEEDED").order_by(AnalysisRun.id).all():
-        risk[r.claim_id] = r.result["risk"]["level"] if r.result else None
-    return [_claim_summary(c, ai.get(c.id), risk.get(c.id), _clock(db, c)) for c in claims]
+        levels[r.claim_id] = r.result["risk"]["level"] if r.result else None
+    rows = [_claim_summary(c, ai.get(c.id), levels.get(c.id), _clock(db, c)) for c in claims]
+    if risk:
+        rows = [r for r in rows if r["risk_level"] == risk]
+    if recommendation:
+        rows = [r for r in rows if r["recommendation"] == recommendation]
+    if settlement:
+        rows = [r for r in rows if r["settlement"] and r["settlement"]["state"] in settlement.split(",")]
+    return rows
 
 
 EXPORT_FIELDS = ["claim_number", "claim_type", "policy_number", "claimant_name", "incident_date", "claimed_amount",
@@ -529,9 +549,34 @@ def audit_log(claim_number: str | None = None, limit: int = Query(100, le=500), 
              "details": e.details, "correlation_id": e.correlation_id, "created_at": e.created_at} for e in events]
 
 
+def _demo_packet_dir():
+    return settings.data_dir / "claims" / "demo_upload"
+
+
+@router.get("/demo-packet")
+def demo_packet():
+    """The synthetic sample packet (not seeded), so a deployed demo can create a claim without local files."""
+    files = sorted(_demo_packet_dir().glob("*.txt"))
+    lines = (_demo_packet_dir() / "claim_form.txt").read_text(encoding="utf-8").splitlines()
+    form = {k.strip(): v.strip() for k, _, v in (ln.partition(":") for ln in lines) if v.strip()}
+    loss = lines[lines.index("Description of Loss:") + 1] if "Description of Loss:" in lines else ""
+    return {"policy_number": form.get("Policy Number"), "claim_type": form.get("Claim Type", "").lower(),
+            "claimant_name": form.get("Claimant Name"), "description": loss,
+            "files": [{"name": f.name, "size": f.stat().st_size} for f in files]}
+
+
+@router.get("/demo-packet/{name}")
+def demo_packet_file(name: str):
+    allowed = {f.name: f for f in _demo_packet_dir().glob("*.txt")}
+    if name not in allowed:
+        raise HTTPException(404, "No such sample document")
+    return PlainTextResponse(allowed[name].read_text(encoding="utf-8"))
+
+
 @router.get("/analytics")
-def get_analytics(db: Session = Depends(get_db)):
-    return analytics.dashboard(db)
+def get_analytics(line: str | None = Query(None, pattern="^(health|motor)$"), days: int | None = Query(None, ge=1, le=3650),
+                  db: Session = Depends(get_db)):
+    return analytics.dashboard(db, line, days)
 
 
 @router.get("/evaluation")

@@ -11,6 +11,7 @@ Outputs (deterministic, seed=2025):
   data/policies/insured_policies.json           customer policy contracts
   data/claims/<CLAIM>/*.txt|pdf                 claim document packets for the golden scenarios
   data/claims/scenarios.json                    claim headers + expected outcome
+  data/claims/demo_book/<CLAIM>/*.txt, demo_book.json  a larger demo book of business (42 claims, seeded)
   data/evaluation/packets/<CASE>/*.txt          extra packets used only by scripts/evaluate.py (never seeded)
   data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf  a new wording version as a multi-page PDF, for live ingestion
   data/synthetic/claims_portfolio.csv           1,000 claims with injected fraud patterns
@@ -296,7 +297,7 @@ def police_report(c: dict, text: str) -> str:
 def licence(c: dict) -> str:
     return "\n".join(["DRIVING LICENCE (COPY)", "SYNTHETIC DEMO DOCUMENT", "",
                       f"Name: {c['claimant']}", "Licence Number: KA01-2016-00SYN" + str(c['claim_number'][-2:]),
-                      "Valid Till: 2036-03-31", "Class: LMV"]) + "\n"
+                      f"Valid Till: {c.get('licence_valid_till', '2036-03-31')}", "Class: LMV"]) + "\n"
 
 
 def golden_claims() -> list[dict]:
@@ -419,6 +420,408 @@ def write_demo_upload() -> None:
                                               "Admission Date": "2025-11-03", "Discharge Date": "2025-11-05"}), encoding="utf-8")
     (d / "discharge_summary.txt").write_text(discharge(c, "2025-11-03", "2025-11-05", "Left renal calculus (kidney stone), 9 mm",
                                                        "Ureteroscopic lithotripsy (URSL)", "Stone cleared. Discharged with stent."), encoding="utf-8")
+
+
+# ------------------------------------------------------------ demo book ---
+# A larger synthetic book of business so the dashboard, queues and claims list have something to show.
+# Each claim is designed to reach one outcome through the policy rules (the expected recommendation is
+# checked by backend/tests/test_demo_book.py). age_days spreads filing dates over the eight weeks before
+# seeding; history lists reviewer actions the seeder replays as labelled demo history.
+DEMO_INSURED = [
+    ("CS-HLT-24-000611", "HLT-SHIELD", "Anil Deshpande", "2024-03-01", "2026-02-28", 500000),
+    ("CS-HLT-23-000624", "HLT-SHIELD", "Lakshmi Venkatesh", "2023-07-01", "2026-06-30", 500000),
+    ("CS-HLT-22-000637", "HLT-SHIELD", "Rohan Kapoor", "2022-12-01", "2026-11-30", 1000000),
+    ("CS-HLT-24-000648", "HLT-SHIELD", "Neha Joshi", "2024-05-15", "2026-05-14", 300000),
+    ("CS-HLT-23-000655", "HLT-SHIELD", "Imran Qureshi", "2023-04-10", "2026-04-09", 500000),
+    ("CS-HLT-22-000662", "HLT-SHIELD", "Deepa Menon", "2022-06-01", "2026-05-31", 500000),
+    ("CS-HLT-25-000679", "HLT-SHIELD", "Vikram Singh", "2025-09-10", "2026-09-09", 500000),
+    ("CS-HLT-24-000686", "HLT-SHIELD", "Geeta Pillai", "2024-02-01", "2026-01-31", 300000),
+    ("CS-HLT-23-000693", "HLT-SHIELD", "Sanjay Gupta", "2023-10-01", "2026-09-30", 500000),
+    ("CS-HLT-24-000707", "HLT-SHIELD", "Ayesha Khan", "2024-08-01", "2026-07-31", 500000),
+    ("CS-HLT-22-000714", "HLT-SHIELD", "Kavitha Rao", "2022-03-15", "2026-03-14", 1000000),
+    ("CS-HLT-25-000721", "HLT-SHIELD", "Harish Patel", "2025-07-01", "2026-06-30", 300000),
+    ("CS-HLT-24-000738", "HLT-SHIELD", "Sunita Reddy", "2024-11-05", "2026-11-04", 300000),
+    ("CS-HLT-25-000745", "HLT-SHIELD", "Manoj Tiwari", "2025-01-20", "2026-01-19", 300000),
+    ("CS-HLT-25-000752", "HLT-SHIELD", "Pooja Bansal", "2025-10-01", "2026-09-30", 500000),
+    ("CS-HLT-23-000769", "HLT-SHIELD", "Nikhil Arora", "2023-05-01", "2026-04-30", 500000),
+    ("CS-HLT-24-000776", "HLT-SHIELD", "Shreya Kulkarni", "2024-04-01", "2026-03-31", 500000),
+    ("CS-HLT-24-000783", "HLT-SHIELD", "Rahul Saxena", "2024-10-01", "2025-09-30", 300000),
+    ("CS-HLT-23-000790", "HLT-SHIELD", "Prakash Yadav", "2023-08-01", "2026-07-31", 500000),
+    ("CS-HLT-24-000805", "HLT-SHIELD", "Farhan Ali", "2024-06-10", "2026-06-09", 500000),
+    ("CS-HLT-23-000812", "HLT-SHIELD", "Leela Thomas", "2023-02-01", "2026-01-31", 300000),
+    ("CS-HLT-24-000829", "HLT-SHIELD", "Mohan Das", "2024-09-01", "2026-08-31", 500000),
+    ("CS-HLT-25-000836", "HLT-SHIELD", "Ritu Malhotra", "2025-08-01", "2026-07-31", 300000),
+    ("CS-HLT-25-000843", "HLT-SHIELD", "Ajay Chauhan", "2025-07-15", "2026-07-14", 300000),
+    ("CS-MTR-25-001411", "MTR-SECURE", "Anjali Desai", "2025-05-01", "2026-04-30", 720000),
+    ("CS-MTR-25-001428", "MTR-SECURE", "Rajiv Menon", "2025-04-20", "2026-04-19", 1100000),
+    ("CS-MTR-25-001435", "MTR-SECURE", "Swati Nair", "2025-04-05", "2026-04-04", 560000),
+    ("CS-MTR-25-001442", "MTR-SECURE", "Gopal Krishnan", "2025-06-01", "2026-05-31", 260000),
+    ("CS-MTR-25-001459", "MTR-SECURE", "Tanvi Shah", "2025-04-12", "2026-04-11", 95000),
+    ("CS-MTR-25-001466", "MTR-SECURE", "Arvind Bhat", "2025-05-20", "2026-05-19", 900000),
+    ("CS-MTR-25-001473", "MTR-SECURE", "Divya Hegde", "2025-07-10", "2026-07-09", 640000),
+    ("CS-MTR-25-001480", "MTR-SECURE", "Kiran Kumar", "2025-04-25", "2026-04-24", 480000),
+    ("CS-MTR-25-001497", "MTR-SECURE", "Varun Malhotra", "2025-04-01", "2026-03-31", 700000),
+    ("CS-MTR-25-001503", "MTR-SECURE", "Sneha Iyer", "2025-06-15", "2026-06-14", 520000),
+    ("CS-MTR-25-001510", "MTR-SECURE", "Pranav Kulkarni", "2025-04-18", "2026-04-17", 610000),
+    ("CS-MTR-25-001527", "MTR-SECURE", "Nisha Agarwal", "2025-04-02", "2026-04-01", 830000),
+    ("CS-MTR-25-001534", "MTR-SECURE", "Sameer Joshi", "2025-09-01", "2026-08-31", 450000),
+    ("CS-MTR-25-001541", "MTR-SECURE", "Alok Verma", "2025-05-05", "2026-05-04", 500000),
+    ("CS-MTR-25-001558", "MTR-SECURE", "Bhavna Shetty", "2025-04-28", "2026-04-27", 540000),
+    ("CS-MTR-25-001565", "MTR-SECURE", "Jatin Sethi", "2025-11-01", "2026-10-31", 400000),
+    ("CS-MTR-25-001572", "MTR-SECURE", "Ishaan Bose", "2025-08-20", "2026-08-19", 300000),
+]
+_HOLDER = {p[0]: p[2] for p in DEMO_INSURED}
+
+
+def _act(action: str, after: int, role: str = "adjuster", notes: str = "", payable_delta: int | None = None) -> dict:
+    return {"action": action, "after_days": after, "actor": role, "notes": notes, "payable_delta": payable_delta}
+
+
+def H(number, policy, incident, hospital, narrative, diagnosis, procedure, items, days, expected, story, age, history=(),
+      notes="Recovered and discharged in stable condition.", **extra) -> dict:
+    disch = (date.fromisoformat(incident) + timedelta(days=days)).isoformat()
+    return dict(claim_number=number, claim_type="health", policy_number=policy, claimant=_HOLDER[policy],
+                incident_date=incident, hospital=f"{hospital} (fictional)", narrative=narrative, items=items,
+                admit=incident, disch=disch, diagnosis=diagnosis, procedure=procedure, notes=notes,
+                expected=expected, story=story, age_days=age, history=list(history), **extra)
+
+
+def M(number, policy, incident, vehicle, cc, first_reg, reg_no, narrative, items, expected, story, age, history=(),
+      police="Collision confirmed. No injuries reported.", **extra) -> dict:
+    return dict(claim_number=number, claim_type="motor", policy_number=policy, claimant=_HOLDER[policy],
+                incident_date=incident, fir=f"FIR-SYN-{number[-4:]}",
+                form_extra={"Vehicle Registration": reg_no, "Vehicle Make and Model": vehicle,
+                            "Date of First Registration": first_reg, "Engine Capacity cc": str(cc)},
+                narrative=narrative, items=items, police=police, expected=expected, story=story, age_days=age,
+                history=list(history), **extra)
+
+
+def demo_book() -> list[dict]:
+    room = "Room Rent - Twin Sharing"
+    B = []
+    # ---- health: covered, paid after the policy's deductions
+    B.append(H("CLM-H-1101", "CS-HLT-24-000611", "2025-10-14", "Lakeview Multispeciality Hospital",
+               "High fever for a week with abdominal pain; admitted and treated for typhoid fever.",
+               "Typhoid fever", "Medical management with IV antibiotics",
+               [(f"{room} (4 days @ 5,500)", 22000), ("Consultant Physician Fees", 9500),
+                ("Pharmacy - Medicines and Drugs", 11800), ("Laboratory Tests - Widal and Blood Culture", 4200),
+                ("Consumables - Gloves, Masks, Admission Kit", 1600)], 4,
+               "PARTIAL_APPROVAL", "Room rent above the daily cap, consumables excluded, deductible and co-pay", 41,
+               [_act("APPROVE", 6, notes="Bill matches the discharge summary.")]))
+    B.append(H("CLM-H-1102", "CS-HLT-23-000624", "2025-11-20", "Greenfield General Hospital",
+               "Recurrent pain in the upper right abdomen; gallstones found on ultrasound and operated.",
+               "Cholelithiasis with chronic cholecystitis", "Laparoscopic cholecystectomy",
+               [("Room Rent - Single Private (3 days @ 7,000)", 21000), ("Surgeon Fees", 42000),
+                ("Operation Theatre Charges", 16000), ("Pharmacy - Medicines and Drugs", 9800),
+                ("Laboratory Tests and Ultrasound", 6500), ("Consumables - Surgical Kit", 2900)], 3,
+               "PARTIAL_APPROVAL", "Planned surgery in a private room above the room-rent cap", 33,
+               [_act("APPROVE", 9, notes="Operative notes support the procedure.")]))
+    B.append(H("CLM-H-1103", "CS-HLT-22-000637", "2026-01-08", "Sunrise Care Hospital",
+               "Chest pain on exertion; coronary angiography showed a blocked artery, treated with a stent.",
+               "Coronary artery disease, single vessel", "Coronary angioplasty with drug-eluting stent",
+               [("ICU Charges (2 days @ 14,000)", 28000), ("Room Rent - Single Private (3 days @ 8,000)", 24000),
+                ("Cardiologist and Procedure Fees", 95000), ("Cath Lab Charges", 60000),
+                ("Drug-eluting Stent", 75000), ("Pharmacy - Medicines and Drugs", 22000),
+                ("Laboratory Tests and Echocardiography", 14000)], 5,
+               "PARTIAL_APPROVAL", "Cardiac admission above the adjuster's approval limit, escalated to a supervisor", 4,
+               [_act("ESCALATE", 1, notes="Payable is above my approval limit; cardiac case for supervisor sign-off.")]))
+    B.append(H("CLM-H-1104", "CS-HLT-24-000648", "2025-08-03", "Riverside Community Hospital",
+               "Fever with chills every other day; admitted with falciparum malaria.",
+               "Plasmodium falciparum malaria", "Medical management with antimalarials",
+               [("Room Rent - General Ward (3 days @ 3,200)", 9600), ("Consultant Physician Fees", 7000),
+                ("Pharmacy - Antimalarials", 6400), ("Laboratory Tests - Smear and Platelets", 3800)], 3,
+               "PARTIAL_APPROVAL", "Room rent within the cap: only the deductible and co-pay apply", 52,
+               [_act("APPROVE", 4)]))
+    B.append(H("CLM-H-1105", "CS-HLT-23-000655", "2025-12-02", "Lakeview Multispeciality Hospital",
+               "Severe breathlessness not settling with inhalers; admitted to the ICU.",
+               "Acute exacerbation of bronchial asthma", "Medical management, nebulisation and steroids",
+               [("ICU Charges (2 days @ 12,500)", 25000), (f"{room} (2 days @ 5,000)", 10000),
+                ("Pulmonologist Fees", 12000), ("Pharmacy - Nebulisation and Steroids", 9600),
+                ("Laboratory Tests and Chest X-Ray", 5400)], 4,
+               "PARTIAL_APPROVAL", "ICU charges above the ICU daily cap", 12))
+    B.append(H("CLM-H-1106", "CS-HLT-22-000662", "2025-09-22", "Greenfield General Hospital",
+               "Swelling in the right groin for some months; planned surgical repair.",
+               "Right inguinal hernia", "Laparoscopic hernia repair with mesh",
+               [(f"{room} (2 days @ 5,000)", 10000), ("Surgeon Fees", 38000), ("Operation Theatre Charges", 15000),
+                ("Mesh and Medicines", 14000), ("Laboratory Tests", 3500)], 2,
+               "PARTIAL_APPROVAL", "Hernia after the 24-month specified-disease waiting period, so it is covered", 27,
+               [_act("APPROVE", 5, notes="Mesh charge billed twice on the hospital ledger; approved INR 2,000 less.",
+                     payable_delta=-2000)]))
+    B.append(H("CLM-H-1107", "CS-HLT-25-000679", "2025-09-28", "Sunrise Care Hospital",
+               "Injured in a road traffic accident while commuting; fracture of the left leg.",
+               "Fracture shaft of left tibia following road traffic accident", "Intramedullary nailing of tibia",
+               [(f"{room} (3 days @ 5,000)", 15000), ("Orthopaedic Surgeon Fees", 40000),
+                ("Operation Theatre Charges", 14000), ("Implants - Tibial Nail", 30000), ("X-Ray and Diagnostics", 4000)],
+               3, "PARTIAL_APPROVAL",
+               "Accident 18 days after cover began: exempt from the 30-day initial waiting period", 33))
+    B.append(H("CLM-H-1108", "CS-HLT-24-000686", "2025-01-18", "Riverside Community Hospital",
+               "Cough, fever and chest pain; admitted with pneumonia of the right lower lobe.",
+               "Right lower lobe pneumonia", "Medical management with IV antibiotics",
+               [(f"{room} (4 days @ 4,500)", 18000), ("Consultant Physician Fees", 10000),
+                ("Pharmacy - Medicines and Drugs", 15500), ("Laboratory Tests and Chest X-Ray", 6800)], 4,
+               "PARTIAL_APPROVAL", "Incident in January 2025, so the 2024.1 wording applies (higher deductible and co-pay)",
+               58, [_act("APPROVE", 12)]))
+    B.append(H("CLM-H-1109", "CS-HLT-23-000693", "2026-02-11", "Lakeview Multispeciality Hospital",
+               "Sudden pain in the lower right abdomen with vomiting; operated the same night.",
+               "Acute appendicitis", "Laparoscopic appendicectomy",
+               [(f"{room} (2 days @ 6,000)", 12000), ("Surgeon Fees", 40000), ("Operation Theatre Charges", 15000),
+                ("Pharmacy - Medicines and Drugs", 8000), ("Laboratory Tests and CT Abdomen", 7000),
+                ("Consumables - Gloves, Masks, Admission Kit", 2500)], 2,
+               "PARTIAL_APPROVAL", "Emergency surgery; room-rent cap and consumables exclusion apply", 2))
+    B.append(H("CLM-H-1110", "CS-HLT-24-000707", "2025-12-21", "Greenfield General Hospital",
+               "Twisted the right knee during a football match; ligament injury confirmed on MRI.",
+               "Anterior cruciate ligament tear, right knee (sports injury)", "Arthroscopic ligament reconstruction",
+               [(f"{room} (2 days @ 5,000)", 10000), ("Orthopaedic Surgeon Fees", 55000),
+                ("Operation Theatre Charges", 18000), ("Implants - Graft Fixation", 26000), ("MRI and Diagnostics", 9000)],
+               2, "PARTIAL_APPROVAL", "Sports injury; covered, paid after the deductible and co-pay", 19,
+               [_act("APPROVE", 3)]))
+    B.append(H("CLM-H-1111", "CS-HLT-22-000714", "2025-10-30", "Sunrise Care Hospital",
+               "Scheduled day-care chemotherapy cycle for breast carcinoma.",
+               "Carcinoma of the left breast", "Day-care chemotherapy, cycle 3",
+               [("Room Rent - Day Care (1 day @ 3,000)", 3000), ("Oncologist Fees", 8000),
+                ("Pharmacy - Chemotherapy Drugs", 64000), ("Laboratory Tests", 4500)], 0,
+               "PARTIAL_APPROVAL", "Day-care cancer treatment; deductible and co-pay apply", 7))
+    B.append(H("CLM-H-1112", "CS-HLT-25-000721", "2025-09-12", "Riverside Community Hospital",
+               "High fever with bleeding gums; admitted to the ICU with severe dengue.",
+               "Dengue haemorrhagic fever", "Medical management with platelet transfusion",
+               [("ICU Charges (3 days @ 11,000)", 33000), (f"{room} (4 days @ 5,000)", 20000),
+                ("Consultant and Intensivist Fees", 36000), ("Pharmacy - Medicines and Drugs", 38000),
+                ("Platelet Transfusion and Laboratory Tests", 35000)], 7,
+               "PARTIAL_APPROVAL", "Medium risk: an early claim at 54% of the sum insured, still payable after caps", 15,
+               [_act("APPROVE", 2, notes="Platelet counts on the lab reports support the ICU stay.")]))
+    # ---- health: not covered under a clause
+    B.append(H("CLM-H-1121", "CS-HLT-24-000738", "2025-12-09", "Clearsight Eye Institute",
+               "Gradual blurring of vision in the right eye; planned surgery.",
+               "Senile cataract, right eye", "Cataract surgery with IOL implant",
+               [("Room Rent - Day Care (1 day @ 3,000)", 3000), ("Surgeon Fees - Phacoemulsification", 30000),
+                ("Intraocular Lens and Medicines", 22000), ("Diagnostic Tests - Biometry", 2500)], 0,
+               "RECOMMEND_REJECT", "Cataract 13 months into cover, inside the 24-month waiting period (clause 3.3)", 36,
+               [_act("REJECT", 3, notes="Cataract is a specified condition; 24-month waiting period not yet served (clause 3.3).")]))
+    B.append(H("CLM-H-1122", "CS-HLT-25-000745", "2025-10-16", "Riverside Urology Centre",
+               "Severe flank pain; diagnosed with a kidney stone and treated with ureteroscopic lithotripsy.",
+               "Left renal calculus (kidney stone), 8 mm", "Ureteroscopic lithotripsy (URSL)",
+               [(f"{room} (2 days @ 4,800)", 9600), ("Urologist Fees", 36000), ("Operation Theatre Charges", 15000),
+                ("Pharmacy - Medicines and Drugs", 7000), ("Diagnostic Tests - CT KUB", 6200)], 2,
+               "RECOMMEND_REJECT", "Kidney stone eight months into cover, inside the 24-month waiting period", 22,
+               [_act("REJECT", 4, notes="Kidney stone within the specified-disease waiting period (clause 3.3).")]))
+    B.append(H("CLM-H-1123", "CS-HLT-25-000752", "2025-10-17", "Greenfield General Hospital",
+               "High fever with body ache and vomiting; admitted for viral fever.",
+               "Viral fever with dehydration", "Medical management with IV fluids",
+               [(f"{room} (3 days @ 4,500)", 13500), ("Consultant Physician Fees", 7500),
+                ("Pharmacy - Medicines and Drugs", 6200), ("Laboratory Tests", 4800)], 3,
+               "RECOMMEND_REJECT", "Illness 16 days after cover began, inside the 30-day initial waiting period", 11,
+               [_act("REJECT", 2, notes="Illness within the 30-day initial waiting period (clause 3.1).")]))
+    B.append(H("CLM-H-1124", "CS-HLT-23-000769", "2025-11-04", "Silverline Day Surgery Centre",
+               "Elective liposuction of the abdomen and flanks for weight reduction.",
+               "Localised adiposity", "Liposuction (cosmetic)",
+               [("Room Rent - Single Private (1 day @ 6,000)", 6000), ("Surgeon Fees", 85000),
+                ("Operation Theatre Charges", 20000), ("Pharmacy - Medicines and Drugs", 6000)], 1,
+               "RECOMMEND_REJECT", "Cosmetic procedure, excluded under clause 4.1", 47,
+               [_act("REJECT", 6, notes="Cosmetic procedure; excluded under clause 4.1.")]))
+    B.append(H("CLM-H-1125", "CS-HLT-24-000776", "2025-08-25", "Motherhood Care Hospital",
+               "Admitted at full term; baby born by caesarean section.",
+               "Full-term pregnancy", "Lower segment caesarean section",
+               [(f"{room} (4 days @ 5,000)", 20000), ("Obstetrician Fees", 45000), ("Operation Theatre Charges", 18000),
+                ("Pharmacy - Medicines and Drugs", 9000), ("Laboratory Tests", 4000)], 4,
+               "RECOMMEND_REJECT", "Maternity, excluded under clause 4.4", 5))
+    B.append(H("CLM-H-1126", "CS-HLT-24-000783", "2025-11-12", "Lakeview Multispeciality Hospital",
+               "Vomiting and loose stools for two days; admitted with dehydration.",
+               "Acute gastroenteritis with dehydration", "Medical management with IV fluids",
+               [(f"{room} (2 days @ 4,500)", 9000), ("Consultant Physician Fees", 6000),
+                ("Pharmacy - Medicines and IV Fluids", 5800), ("Laboratory Tests", 3200)], 2,
+               "RECOMMEND_REJECT", "Policy expired on 2025-09-30, before the admission", 29,
+               [_act("REJECT", 3, notes="Policy had lapsed before the admission date.")]))
+    B.append(H("CLM-H-1127", "CS-HLT-23-000790", "2025-12-28", "Sunrise Care Hospital",
+               "Severe upper abdominal pain after a weekend of heavy alcohol intake.",
+               "Acute pancreatitis related to alcohol intake", "Medical management",
+               [(f"{room} (5 days @ 5,000)", 25000), ("Gastroenterologist Fees", 14000),
+                ("Pharmacy - Medicines and Drugs", 21000), ("Laboratory Tests and CT Abdomen", 12000)], 5,
+               "RECOMMEND_REJECT", "Alcohol-related condition, excluded under clause 4.2", 1))
+    # ---- health: documents missing
+    B.append(H("CLM-H-1131", "CS-HLT-24-000805", "2025-11-26", "Riverside Community Hospital",
+               "Fever with severe joint pains; admitted for chikungunya.", "Chikungunya fever", "Medical management",
+               [(f"{room} (3 days @ 4,500)", 13500), ("Consultant Physician Fees", 7000),
+                ("Pharmacy - Medicines and Drugs", 5600), ("Laboratory Tests - Serology", 4400)], 3,
+               "REQUEST_INFO", "Discharge summary not submitted", 18,
+               [_act("REQUEST_INFO", 2, notes="Asked the hospital for the discharge summary.")], skip_discharge=True))
+    B.append(H("CLM-H-1132", "CS-HLT-23-000812", "2025-12-14", "Greenfield General Hospital",
+               "Burning urination and high fever; admitted with a urinary tract infection.",
+               "Acute pyelonephritis", "Medical management with IV antibiotics", [], 3,
+               "REQUEST_INFO", "Hospital bill not submitted, so the amount cannot be assessed", 6,
+               skip_bill=True, form_amount=28400))
+    B.append(H("CLM-H-1133", "CS-HLT-24-000829", "2026-03-03", "Lakeview Multispeciality Hospital",
+               "Persistent cough with fever; admitted for acute bronchitis.", "Acute bronchitis", "Medical management",
+               [(f"{room} (2 days @ 4,500)", 9000), ("Consultant Physician Fees", 5000),
+                ("Pharmacy - Medicines and Drugs", 4600), ("Laboratory Tests and Chest X-Ray", 3400)], 2,
+               "REQUEST_INFO", "Discharge summary not submitted", 3, skip_discharge=True))
+    # ---- health: refer for investigation
+    B.append(H("CLM-H-1141", "CS-HLT-25-000836", "2025-10-05", "Sunrise Care Hospital",
+               "High fever with low blood pressure; admitted to the ICU with a severe kidney infection.",
+               "Acute pyelonephritis with sepsis", "Medical management in ICU, haemodialysis",
+               [("ICU Charges (6 days @ 16,000)", 96000), ("Room Rent - Single Private (4 days @ 7,000)", 28000),
+                ("Intensivist and Nephrologist Fees", 52000), ("Pharmacy - IV Antibiotics", 58000),
+                ("Dialysis and Laboratory Tests", 30000)], 10,
+               "INVESTIGATE", "High risk: 88% of the sum insured, 65 days after cover began", 24,
+               [_act("INVESTIGATE", 5, notes="Referred to investigation: 88% of sum insured 65 days into cover.")]))
+    B.append(H("CLM-H-1142", "CS-HLT-25-000843", "2025-09-30", "Greenfield General Hospital",
+               "Pain in the upper right abdomen with fever; gallbladder removed.",
+               "Acute calculous cholecystitis", "Laparoscopic cholecystectomy",
+               [(f"{room} (3 days @ 5,000)", 15000), ("Surgeon Fees", 45000), ("Operation Theatre Charges", 18000),
+                ("Pharmacy - Medicines and Drugs", 16000), ("Laboratory Tests and Ultrasound", 14000)], 3,
+               "INVESTIGATE", "High risk: claim form asks for 1,52,000 against a 1,08,000 bill, 77 days into cover", 14,
+               form_amount=152000))
+    B.append(H("CLM-H-1143", "CS-HLT-24-000611", "2025-10-14", "Lakeview Multispeciality Hospital",
+               "Claim for hospitalisation for typhoid fever.", "Typhoid fever", "Medical management with IV antibiotics",
+               [(f"{room} (4 days @ 5,500)", 22000), ("Consultant Physician Fees", 9500),
+                ("Pharmacy - Medicines and Drugs", 11800), ("Laboratory Tests - Widal and Blood Culture", 4200),
+                ("Consumables - Gloves, Masks, Admission Kit", 1600)], 4,
+               "INVESTIGATE", "Possible duplicate of CLM-H-1101 (same policy, date and amount)", 8,
+               [_act("REJECT", 1, notes="Duplicate of CLM-H-1101, which is already settled.")]))
+
+    # ---- motor: covered, paid after depreciation and the deductible
+    B.append(M("CLM-M-2101", "CS-MTR-25-001411", "2025-07-12", "Compact SUV 1199cc", 1199, "2025-03-18", "MH-12-SY-3307",
+               "Side-swiped by a two-wheeler while parked; left front door and fender dented.",
+               [("Left Front Door Panel (metal) - replace", 24000), ("Front Fender (metal) - repair", 8000),
+                ("Painting Material", 7000), ("Denting and Fitting Labour", 6500)],
+               "PARTIAL_APPROVAL", "Nearly new car: no metal depreciation, paint at 50% and the deductible", 44,
+               [_act("APPROVE", 5)]))
+    B.append(M("CLM-M-2102", "CS-MTR-25-001428", "2025-08-30", "SUV 1997cc", 1997, "2023-01-15", "KA-51-SY-7714",
+               "Hit a stray animal on the highway at night; front bumper, bonnet and headlamp damaged.",
+               [("Front Bumper (plastic) - replace", 18000), ("Bonnet (metal) - replace", 42000),
+                ("Headlamp Assembly (plastic)", 16000), ("Radiator Grille (plastic)", 6500),
+                ("Painting Material", 9000), ("Denting and Fitting Labour", 12000)],
+               "PARTIAL_APPROVAL", "Engine above 1500cc: higher deductible; metal at 15% for a 31-month-old car", 31,
+               [_act("APPROVE", 8, notes="Surveyor photos match the estimate.")]))
+    B.append(M("CLM-M-2103", "CS-MTR-25-001435", "2025-10-21", "Hatchback 1197cc", 1197, "2022-08-10", "KA-03-SY-5521",
+               "A branch came down on the car during a storm and shattered the front windshield.",
+               [("Front Windshield Glass - replace", 18500), ("Windshield Fitting Labour", 2500)],
+               "PARTIAL_APPROVAL", "Glass carries no depreciation: only the deductible applies", 13,
+               [_act("APPROVE", 1)]))
+    B.append(M("CLM-M-2104", "CS-MTR-25-001442", "2025-11-08", "Sedan 1497cc", 1497, "2019-02-11", "TN-09-SY-2048",
+               "Reversed into a pillar in a basement car park; rear bumper and boot lid damaged.",
+               [("Rear Bumper (plastic) - replace", 9000), ("Boot Lid Panel (metal) - repair", 14000),
+                ("Tail Lamp Assembly (plastic)", 4200), ("Painting Material", 5000), ("Denting and Fitting Labour", 6000)],
+               "PARTIAL_APPROVAL", "Older car: 40% depreciation on metal parts", 39,
+               [_act("APPROVE", 34, notes="Approved after a second survey; settlement period missed.")]))
+    B.append(M("CLM-M-2105", "CS-MTR-25-001459", "2025-12-03", "Scooter 125cc", 125, "2023-06-01", "KA-01-SY-8890",
+               "Skidded on a wet road; front panel, mirror and headlamp broken.",
+               [("Front Panel (plastic) - replace", 3800), ("Rear View Mirror Glass", 900),
+                ("Headlamp Assembly (plastic)", 2600), ("Fitting Labour", 1200)],
+               "PARTIAL_APPROVAL", "Two-wheeler: plastic parts at 50% and the deductible", 3))
+    B.append(M("CLM-M-2106", "CS-MTR-25-001466", "2026-01-17", "SUV 2179cc", 2179, "2024-09-05", "MH-14-SY-6602",
+               "Multi-vehicle collision on the expressway; front and right side extensively damaged.",
+               [("Front Bumper (plastic) - replace", 22000), ("Bonnet (metal) - replace", 48000),
+                ("Right Front Door Panel (metal) - replace", 38000), ("Right Rear Door Panel (metal) - replace", 36000),
+                ("Headlamp Assembly (plastic)", 28000), ("Front Windshield Glass", 26000),
+                ("Radiator Support Panel (metal)", 18000), ("Painting Material", 24000),
+                ("Denting and Fitting Labour", 40000)],
+               "PARTIAL_APPROVAL", "Large repair above the adjuster's limit: escalated, then approved by a supervisor", 26,
+               [_act("ESCALATE", 2, notes="Above my approval limit; needs supervisor sign-off."),
+                _act("APPROVE", 4, role="supervisor", notes="Reviewed the survey report; approved.")]))
+    B.append(M("CLM-M-2107", "CS-MTR-25-001473", "2025-12-29", "Hatchback 1199cc", 1199, "2024-12-20", "KA-05-SY-1736",
+               "Rear-ended in slow traffic; rear bumper and tail lamps damaged.",
+               [("Rear Bumper (plastic) - replace", 11000), ("Tail Lamp Assembly (plastic) x2", 9800),
+                ("Boot Lid Panel (metal) - repair", 7000), ("Painting Material", 5200), ("Denting and Fitting Labour", 4500)],
+               "PARTIAL_APPROVAL", "One-year-old car: metal at 5%", 10))
+    B.append(M("CLM-M-2108", "CS-MTR-25-001480", "2026-02-14", "Sedan 1462cc", 1462, "2021-11-02", "TS-08-SY-4419",
+               "Front wheel dropped into an open drain; front bumper and fender damaged.",
+               [("Front Bumper (plastic) - replace", 12500), ("Front Fender (metal) - replace", 15000),
+                ("Painting Material", 5500), ("Denting and Fitting Labour", 5000)],
+               "PARTIAL_APPROVAL", "Car over four years old: metal at 35%", 6))
+    # ---- motor: not covered under a clause
+    B.append(M("CLM-M-2111", "CS-MTR-25-001497", "2025-11-30", "Sedan 1498cc", 1498, "2022-05-05", "DL-08-SY-9031",
+               "Lost control late at night and struck a parked truck.",
+               [("Front Bumper (plastic) - replace", 16000), ("Bonnet (metal) - replace", 34000),
+                ("Headlamp Assembly (plastic)", 12000), ("Denting and Fitting Labour", 10000)],
+               "RECOMMEND_REJECT", "Driving under the influence, excluded under clause 3.1", 34,
+               [_act("REJECT", 4, notes="Police report records a positive breath analyser test (clause 3.1).")],
+               police="Driver examined at the spot. Breath analyser test positive; driver was under the influence of alcohol."))
+    B.append(M("CLM-M-2112", "CS-MTR-25-001503", "2025-12-11", "Hatchback 1197cc", 1197, "2020-09-09", "KA-02-SY-6258",
+               "Swerved to avoid a pedestrian and hit a road divider.",
+               [("Front Bumper (plastic) - replace", 9500), ("Front Fender (metal) - repair", 7000),
+                ("Painting Material", 4000), ("Denting and Fitting Labour", 3500)],
+               "RECOMMEND_REJECT", "Driving licence expired before the accident (clause 3.2)", 17,
+               [_act("REJECT", 3, notes="Licence expired on 2025-08-31 and was not renewed (clause 3.2).")],
+               police="Driver's licence expired on 2025-08-31 and had not been renewed.", licence_valid_till="2025-08-31"))
+    B.append(M("CLM-M-2113", "CS-MTR-25-001510", "2025-09-07", "Sedan 1497cc", 1497, "2020-01-20", "MH-02-SY-1184",
+               "Engine seized on the highway; the workshop reports a mechanical breakdown from oil starvation.",
+               [("Engine Block (metal) - overhaul", 68000), ("Engine Labour", 12000)],
+               "RECOMMEND_REJECT", "Mechanical breakdown, excluded under clause 3.3", 28,
+               [_act("REJECT", 2, notes="Mechanical breakdown is excluded (clause 3.3).")],
+               police="No collision. Vehicle towed from the highway after the engine failed."))
+    B.append(M("CLM-M-2114", "CS-MTR-25-001527", "2025-10-24", "SUV 1956cc", 1956, "2023-03-03", "UK-07-SY-3390",
+               "Hit by falling rocks and slid into a barrier on a mountain road during a trip in Nepal.",
+               [("Bonnet (metal) - replace", 46000), ("Front Windshield Glass", 24000),
+                ("Front Bumper (plastic) - replace", 19000), ("Denting and Fitting Labour", 15000)],
+               "RECOMMEND_REJECT", "Loss outside India, excluded under clause 3.4", 9,
+               police="Report filed with the local police in Nepal."))
+    B.append(M("CLM-M-2115", "CS-MTR-25-001534", "2025-08-20", "Hatchback 1197cc", 1197, "2021-04-14", "GJ-01-SY-7012",
+               "Scraped against a bus at a junction; right side doors damaged.",
+               [("Right Front Door Panel (metal) - repair", 12000), ("Right Rear Door Panel (metal) - repair", 11000),
+                ("Painting Material", 6000), ("Denting and Fitting Labour", 5000)],
+               "RECOMMEND_REJECT", "Accident 12 days before the policy began", 21,
+               [_act("REJECT", 2, notes="Loss occurred before the policy start date.")]))
+    # ---- motor: documents missing
+    B.append(M("CLM-M-2121", "CS-MTR-25-001541", "2025-12-19", "Hatchback 1199cc", 1199, "2022-02-22", "KA-41-SY-2675",
+               "Rear-ended at a toll plaza; rear bumper damaged.",
+               [("Rear Bumper (plastic) - replace", 10500), ("Painting Material", 3500), ("Fitting Labour", 2000)],
+               "REQUEST_INFO", "Driving licence not submitted", 16,
+               [_act("REQUEST_INFO", 1, notes="Requested a copy of the driving licence.")], skip_licence=True))
+    B.append(M("CLM-M-2122", "CS-MTR-25-001558", "2026-01-26", "Sedan 1497cc", 1497, "2023-09-30", "KA-53-SY-4480",
+               "Side mirror and door damaged by a passing truck.", [],
+               "REQUEST_INFO", "Repair estimate not submitted, so the amount cannot be assessed", 4,
+               skip_estimate=True, form_amount=26000))
+    # ---- motor: refer for investigation
+    B.append(M("CLM-M-2131", "CS-MTR-25-001565", "2025-12-06", "Hatchback 1197cc", 1197, "2021-07-07", "KA-19-SY-0559",
+               "Car rolled over on a ghat road; extensive body damage.",
+               [("Roof Panel (metal) - replace", 70000), ("Left Door Panels (metal) - replace", 80000),
+                ("Bonnet (metal) - replace", 40000), ("Front Bumper (plastic) - replace", 18000),
+                ("Front Windshield Glass", 22000), ("Headlamp Assembly (plastic)", 14000),
+                ("Painting Material", 32000), ("Denting and Fitting Labour", 60000)],
+               "INVESTIGATE", "High risk: 84% of the insured value, 35 days after cover began", 20,
+               [_act("INVESTIGATE", 3, notes="Referred to investigation: near total loss five weeks into cover.")]))
+    B.append(M("CLM-M-2132", "CS-MTR-25-001572", "2025-10-25", "Sedan 1497cc", 1497, "2019-10-10", "WB-02-SY-3815",
+               "Hit from the side at an intersection; left doors and pillar damaged.",
+               [("Left Front Door Panel (metal) - replace", 36000), ("Left Rear Door Panel (metal) - replace", 34000),
+                ("Centre Pillar Panel (metal) - repair", 22000), ("Painting Material", 12000),
+                ("Denting and Fitting Labour", 16000)],
+               "INVESTIGATE", "High risk: claim form asks for 1,65,000 against a 1,20,000 estimate, 66 days into cover", 37,
+               form_amount=165000))
+    return B
+
+
+def write_demo_book() -> list[dict]:
+    root = CLM / "demo_book"
+    out = []
+    for c in demo_book():
+        d = root / c["claim_number"]
+        d.mkdir(parents=True, exist_ok=True)
+        c.setdefault("form_amount", sum(a for _, a in c["items"]))
+        files = {"claim_form.txt": claim_form(c)}
+        if c["claim_type"] == "health":
+            if not c.get("skip_bill"):
+                files["hospital_bill.txt"] = bill("FINAL HOSPITAL BILL", c, c["items"],
+                                                  {"Hospital": c["hospital"], "Bill Number": f"HB-{c['claim_number'][-4:]}",
+                                                   "Admission Date": c["admit"], "Discharge Date": c["disch"]})
+            if not c.get("skip_discharge"):
+                files["discharge_summary.txt"] = discharge(c, c["admit"], c["disch"], c["diagnosis"], c["procedure"],
+                                                           c["notes"])
+        else:
+            if not c.get("skip_estimate"):
+                files["repair_estimate.txt"] = bill("WORKSHOP REPAIR ESTIMATE", c, c["items"],
+                                                    {"Workshop": "Highway Motors Service Centre (fictional)",
+                                                     "Estimate Number": f"RE-{c['claim_number'][-4:]}",
+                                                     "Vehicle Registration": c["form_extra"]["Vehicle Registration"]})
+            if not c.get("skip_licence"):
+                files["driving_licence.txt"] = licence(c)
+            files["police_report.txt"] = police_report(c, c["police"])
+        for name, body in files.items():
+            (d / name).write_text(body, encoding="utf-8")
+        out.append({"claim_number": c["claim_number"], "claim_type": c["claim_type"], "policy_number": c["policy_number"],
+                    "claimant_name": c["claimant"], "incident_date": c["incident_date"], "description": c["narrative"],
+                    "documents": sorted(files), "expected_recommendation": c["expected"], "scenario": c["story"],
+                    "age_days": c["age_days"], "history": c["history"]})
+    return out
 
 
 def evaluation_claims() -> list[dict]:
@@ -593,14 +996,16 @@ def main() -> None:
     (POL / "MTR-SECURE_2025.1.terms.json").write_text(json.dumps(motor_terms(), indent=2), encoding="utf-8")
     (POL / "insured_policies.json").write_text(json.dumps([
         dict(policy_number=a, product_code=b, holder_name=c, start_date=d, end_date=e, sum_insured=f)
-        for a, b, c, d, e, f in INSURED], indent=2), encoding="utf-8")
+        for a, b, c, d, e, f in INSURED + DEMO_INSURED], indent=2), encoding="utf-8")
     scen = write_claim_packets()
+    book = write_demo_book()
+    (CLM / "demo_book.json").write_text(json.dumps(book, indent=2), encoding="utf-8")
     write_demo_upload()
     write_evaluation_packets()
     write_ingest_demo()
     (CLM / "scenarios.json").write_text(json.dumps(scen, indent=2), encoding="utf-8")
     portfolio()
-    print(f"policies: {len(list(POL.glob('*.md')))}, claims: {len(scen)}, portfolio rows: 1000")
+    print(f"policies: {len(list(POL.glob('*.md')))}, claims: {len(scen)} golden + {len(book)} demo book, portfolio rows: 1000")
 
 
 if __name__ == "__main__":

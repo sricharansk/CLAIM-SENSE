@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Patient Name: Kavitha Rao
+Admission Date: 2025-10-30
+Discharge Date: 2025-10-30
+Diagnosis: Carcinoma of the left breast
+Procedure: Day-care chemotherapy, cycle 3
+
+Clinical Notes:
+Recovered and discharged in stable condition.

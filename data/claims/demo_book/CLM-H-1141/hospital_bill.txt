@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Bill Number: HB-1141
+Admission Date: 2025-10-05
+Discharge Date: 2025-10-15
+Patient/Insured Name: Ritu Malhotra
+
+Itemised Charges:
+ICU Charges (6 days @ 16,000)                                   96,000.00
+Room Rent - Single Private (4 days @ 7,000)                     28,000.00
+Intensivist and Nephrologist Fees                               52,000.00
+Pharmacy - IV Antibiotics                                       58,000.00
+Dialysis and Laboratory Tests                                   30,000.00
+
+Total Amount                                                   264,000.00

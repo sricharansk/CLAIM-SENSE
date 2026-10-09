@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-2105
+Date of Accident: 2025-12-03
+Vehicle Registration: KA-01-SY-8890
+
+Findings:
+Collision confirmed. No injuries reported.

@@ -1,0 +1,14 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2121
+Vehicle Registration: KA-41-SY-2675
+Patient/Insured Name: Alok Verma
+
+Itemised Charges:
+Rear Bumper (plastic) - replace                                 10,500.00
+Painting Material                                                3,500.00
+Fitting Labour                                                   2,000.00
+
+Total Amount                                                    16,000.00

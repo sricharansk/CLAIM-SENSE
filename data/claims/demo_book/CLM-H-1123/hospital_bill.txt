@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1123
+Admission Date: 2025-10-17
+Discharge Date: 2025-10-20
+Patient/Insured Name: Pooja Bansal
+
+Itemised Charges:
+Room Rent - Twin Sharing (3 days @ 4,500)                       13,500.00
+Consultant Physician Fees                                        7,500.00
+Pharmacy - Medicines and Drugs                                   6,200.00
+Laboratory Tests                                                 4,800.00
+
+Total Amount                                                    32,000.00

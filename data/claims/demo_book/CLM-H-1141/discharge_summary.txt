@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Patient Name: Ritu Malhotra
+Admission Date: 2025-10-05
+Discharge Date: 2025-10-15
+Diagnosis: Acute pyelonephritis with sepsis
+Procedure: Medical management in ICU, haemodialysis
+
+Clinical Notes:
+Recovered and discharged in stable condition.

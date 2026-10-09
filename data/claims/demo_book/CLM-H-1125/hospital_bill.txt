@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Motherhood Care Hospital (fictional)
+Bill Number: HB-1125
+Admission Date: 2025-08-25
+Discharge Date: 2025-08-29
+Patient/Insured Name: Shreya Kulkarni
+
+Itemised Charges:
+Room Rent - Twin Sharing (4 days @ 5,000)                       20,000.00
+Obstetrician Fees                                               45,000.00
+Operation Theatre Charges                                       18,000.00
+Pharmacy - Medicines and Drugs                                   9,000.00
+Laboratory Tests                                                 4,000.00
+
+Total Amount                                                    96,000.00

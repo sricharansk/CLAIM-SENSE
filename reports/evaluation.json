@@ -1,6 +1,6 @@
 {
   "suite": "Claim Sense golden evaluation",
-  "generated_at": "2026-10-09T00:55:18+00:00",
+  "generated_at": "2026-10-09T09:37:13+00:00",
   "rules_version": "adjudication-rules/1.0.0",
   "risk_version": "risk-rules/1.0.0",
   "llm": "off (extractive answers)",
@@ -17,7 +17,7 @@
     "mean_reciprocal_rank": 1.0,
     "refusal_accuracy": 1.0,
     "required_categories_covered": true,
-    "avg_claim_case_ms": 58,
+    "avg_claim_case_ms": 114,
     "all_passed": true
   },
   "dimensions": {
@@ -109,7 +109,7 @@
         "clearly_covered",
         "deductible"
       ],
-      "claim_number": "CLM-H-3009",
+      "claim_number": "CLM-H-3051",
       "source": "new packet",
       "packet": "EVAL-H-01",
       "expected": {
@@ -224,7 +224,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 111
+      "duration_ms": 149
     },
     {
       "id": "C02",
@@ -332,7 +332,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 41
+      "duration_ms": 102
     },
     {
       "id": "C03",
@@ -439,7 +439,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 42
+      "duration_ms": 95
     },
     {
       "id": "C04",
@@ -556,7 +556,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 37
+      "duration_ms": 82
     },
     {
       "id": "C05",
@@ -658,7 +658,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 36
+      "duration_ms": 109
     },
     {
       "id": "C06",
@@ -750,7 +750,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 36
+      "duration_ms": 118
     },
     {
       "id": "C07",
@@ -860,7 +860,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 37
+      "duration_ms": 89
     },
     {
       "id": "C08",
@@ -970,7 +970,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 34
+      "duration_ms": 92
     },
     {
       "id": "C09",
@@ -978,7 +978,7 @@
       "categories": [
         "max_coverage"
       ],
-      "claim_number": "CLM-H-3010",
+      "claim_number": "CLM-H-3052",
       "source": "new packet",
       "packet": "EVAL-H-02",
       "expected": {
@@ -1097,7 +1097,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 96
+      "duration_ms": 138
     },
     {
       "id": "C10",
@@ -1189,7 +1189,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 41
+      "duration_ms": 95
     },
     {
       "id": "C11",
@@ -1197,7 +1197,7 @@
       "categories": [
         "ambiguous_policy_version"
       ],
-      "claim_number": "CLM-H-3011",
+      "claim_number": "CLM-H-3053",
       "source": "new packet",
       "packet": "EVAL-H-03",
       "expected": {
@@ -1291,7 +1291,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 92
+      "duration_ms": 140
     },
     {
       "id": "C12",
@@ -1299,7 +1299,7 @@
       "categories": [
         "ambiguous_policy_version"
       ],
-      "claim_number": "CLM-H-3012",
+      "claim_number": "CLM-H-3054",
       "source": "new packet",
       "packet": "EVAL-H-04",
       "expected": {
@@ -1393,7 +1393,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 92
+      "duration_ms": 165
     }
   ],
   "questions": [
@@ -2574,5 +2574,5 @@
       ]
     }
   ],
-  "duration_s": 0.98
+  "duration_s": 1.67
 }

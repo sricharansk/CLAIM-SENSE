@@ -28,6 +28,7 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | `test_policy_ingestion.py` | 4 | PDF ingestion with pages and states; duplicate, scanned, unreadable and wrong-type failures; supervisor only; seeded records |
 | `test_fact_correction.py` | 2 | Correction used by the next analysis, audited, extracted value kept, latest wins; date, amount, reason, role and decided-claim validation |
 | `test_provenance.py` | 6 | Committed registry valid; validator rejects missing or wrong provenance and checksum drift; `/datasets`; every indexed chunk resolves; a chunk without an extraction run is kept out of the index; backfill |
+| `test_demo_book.py` | 74 | Each of the 42 demo-book claims reaches its designed recommendation; replayed reviewer history (status, labelled notes, display-name actors, review rules, backdated timestamps, audit events); dashboard line and period filters and panels; claims-list drill-down filters; sample packet endpoints |
 | `test_review_assignment.py` | 3 | Queue shows risk, age and assignee; take, release and supervisor reassignment; others cannot take or decide an assigned task; supervisor-queue and auditor limits; audit events |
 
 Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is always off.
@@ -59,7 +60,7 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
 
 ## Browser tests (`e2e/`)
 
-`e2e/tests/golden.spec.mjs` has 10 Playwright tests that drive the real UI against a running stack (`BASE_URL`, default `http://localhost:8080`):
+`e2e/tests/golden.spec.mjs` has 11 Playwright tests that drive the real UI against a running stack (`BASE_URL`, default `http://localhost:8080`):
 
 - golden claim to approval and letter, with the stage audit events;
 - approval-limit block;
@@ -70,7 +71,8 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
 - fact correction and re-run;
 - data provenance;
 - dashboard rates;
-- phone layout.
+- dashboard filters and tiles drilling down to the matching claims, and the guide's links;
+- phone layout (dashboard, claims, claim, review queue, guide).
 
 Any browser console error fails a test. They need a freshly seeded stack, because a second run files the golden claim again and the system flags it as a duplicate. CI runs them in the `docker-smoke` job before the smoke test.
 

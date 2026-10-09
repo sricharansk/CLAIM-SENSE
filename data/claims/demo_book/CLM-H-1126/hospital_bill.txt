@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Bill Number: HB-1126
+Admission Date: 2025-11-12
+Discharge Date: 2025-11-14
+Patient/Insured Name: Rahul Saxena
+
+Itemised Charges:
+Room Rent - Twin Sharing (2 days @ 4,500)                        9,000.00
+Consultant Physician Fees                                        6,000.00
+Pharmacy - Medicines and IV Fluids                               5,800.00
+Laboratory Tests                                                 3,200.00
+
+Total Amount                                                    24,000.00

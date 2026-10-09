@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Bill Number: HB-1127
+Admission Date: 2025-12-28
+Discharge Date: 2026-01-02
+Patient/Insured Name: Prakash Yadav
+
+Itemised Charges:
+Room Rent - Twin Sharing (5 days @ 5,000)                       25,000.00
+Gastroenterologist Fees                                         14,000.00
+Pharmacy - Medicines and Drugs                                  21,000.00
+Laboratory Tests and CT Abdomen                                 12,000.00
+
+Total Amount                                                    72,000.00

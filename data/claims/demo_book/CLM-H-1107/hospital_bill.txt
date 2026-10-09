@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Bill Number: HB-1107
+Admission Date: 2025-09-28
+Discharge Date: 2025-10-01
+Patient/Insured Name: Vikram Singh
+
+Itemised Charges:
+Room Rent - Twin Sharing (3 days @ 5,000)                       15,000.00
+Orthopaedic Surgeon Fees                                        40,000.00
+Operation Theatre Charges                                       14,000.00
+Implants - Tibial Nail                                          30,000.00
+X-Ray and Diagnostics                                            4,000.00
+
+Total Amount                                                   103,000.00

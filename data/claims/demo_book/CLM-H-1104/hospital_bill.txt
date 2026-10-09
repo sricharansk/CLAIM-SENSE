@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Community Hospital (fictional)
+Bill Number: HB-1104
+Admission Date: 2025-08-03
+Discharge Date: 2025-08-06
+Patient/Insured Name: Neha Joshi
+
+Itemised Charges:
+Room Rent - General Ward (3 days @ 3,200)                        9,600.00
+Consultant Physician Fees                                        7,000.00
+Pharmacy - Antimalarials                                         6,400.00
+Laboratory Tests - Smear and Platelets                           3,800.00
+
+Total Amount                                                    26,800.00

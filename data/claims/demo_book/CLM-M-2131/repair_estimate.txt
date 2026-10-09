@@ -1,0 +1,19 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2131
+Vehicle Registration: KA-19-SY-0559
+Patient/Insured Name: Jatin Sethi
+
+Itemised Charges:
+Roof Panel (metal) - replace                                    70,000.00
+Left Door Panels (metal) - replace                              80,000.00
+Bonnet (metal) - replace                                        40,000.00
+Front Bumper (plastic) - replace                                18,000.00
+Front Windshield Glass                                          22,000.00
+Headlamp Assembly (plastic)                                     14,000.00
+Painting Material                                               32,000.00
+Denting and Fitting Labour                                      60,000.00
+
+Total Amount                                                   336,000.00

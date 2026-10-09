@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Patient Name: Anil Deshpande
+Admission Date: 2025-10-14
+Discharge Date: 2025-10-18
+Diagnosis: Typhoid fever
+Procedure: Medical management with IV antibiotics
+
+Clinical Notes:
+Recovered and discharged in stable condition.

@@ -61,7 +61,12 @@ except urllib.error.HTTPError as e:
 TOKEN = call("POST", "/auth/login", {"username": "supervisor", "password": PASSWORD})["token"]
 check("sign in", bool(TOKEN))
 claims = call("GET", "/claims")
-check("seeded claims", len(claims) >= 8, f"{len(claims)} claims")
+check("seeded claims", len(claims) >= 50, f"{len(claims)} claims")
+motor = call("GET", "/analytics?line=motor&days=90")
+check("dashboard filters", motor["filters"] == {"line": "motor", "days": 90} and 0 < motor["totals"]["claims"] < len(claims)
+      and len(motor["trend"]) == 8, f"{motor['totals']['claims']} motor claims in 90 days")
+packet = call("GET", "/demo-packet")
+check("sample packet", len(packet["files"]) == 3, packet["policy_number"])
 ingestions = call("GET", "/policy-ingestions")
 check("policy wordings ingested", sum(i["status"] == "READY" for i in ingestions) >= 3,
       ", ".join(f"{i['filename']}={i['status']}" for i in ingestions[:4]))

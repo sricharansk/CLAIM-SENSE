@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Community Hospital (fictional)
+Patient Name: Neha Joshi
+Admission Date: 2025-08-03
+Discharge Date: 2025-08-06
+Diagnosis: Plasmodium falciparum malaria
+Procedure: Medical management with antimalarials
+
+Clinical Notes:
+Recovered and discharged in stable condition.

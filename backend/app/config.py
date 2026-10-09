@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_DEMO_PASSWORD = "claimsense-demo"
 
 
 class Settings:
@@ -23,7 +24,7 @@ class Settings:
     auth_secret = os.getenv("AUTH_SECRET", "")
     token_ttl_hours = int(os.getenv("TOKEN_TTL_HOURS", "12"))
     # Password for the seeded synthetic demo accounts (adjuster, supervisor, auditor).
-    demo_password = os.getenv("DEMO_PASSWORD", "claimsense-demo")
+    demo_password = os.getenv("DEMO_PASSWORD") or DEFAULT_DEMO_PASSWORD
     # Sign-in throttle: this many failed attempts for one username from one address locks it for the window.
     login_max_failures = int(os.getenv("LOGIN_MAX_FAILURES", "5"))
     login_window_seconds = int(os.getenv("LOGIN_WINDOW_SECONDS", "300"))

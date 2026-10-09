@@ -8,14 +8,17 @@ Claim Sense takes a health or motor claim from intake to a human decision. It re
 
 All policies, people and claims in this repository are **synthetic**. See [Data](#data-and-datasets).
 
-![Dashboard](docs/screenshots/14-dashboard-after-review.png)
+![Dashboard](docs/screenshots/20-dashboard-interactive.png)
+
+New to the app? Read [docs/USER_GUIDE.md](docs/USER_GUIDE.md), or open **How to use** in the app.
 
 ## What works today
 
 | Area | What you can do | Where |
 |---|---|---|
 | Sign-in and roles | Adjuster (approves up to ₹2,00,000), Supervisor (no limit, decides escalations, ingests policies), Auditor (read-only); signed tokens; every action audited under the signed-in user | `/` |
-| Dashboard | Live claim counts, recommendations, risk mix, override and escalation rates, reviewer actions, settlement clock, portfolio evaluation | `/` |
+| Dashboard | Filter by line of business and period; every tile and bar opens the matching claims; weekly filed-vs-decided trend, needs-attention list, open-claim ageing, decline reasons with clauses, workload by assignee, amounts by line, override and escalation rates, settlement clock, portfolio evaluation | `/` |
+| Claims list | Filters for status, line, recommendation, risk, settlement state and period kept in the address; removable filter tags; sortable columns | `/claims` |
 | Claim intake | Create a claim, upload PDF or text documents, run the agent pipeline | `/claims/new` |
 | Document intelligence | Document classification, extracted facts with source file, line and confidence, itemised charges; reviewers correct a fact with a reason before (re-)running the analysis, the extracted value is kept and the correction audited | claim page |
 | Policy versioning | Picks the wording version in force on the incident date (HLT-SHIELD 2024.1 vs 2025.1) | claim page |
@@ -137,8 +140,8 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 
 ### Try the golden path
 
-1. Sign in as `adjuster`, open **New claim**, pick policy `CS-HLT-23-000089` (Fatima Shaikh).
-2. Upload the three files in [`data/claims/demo_upload/`](data/claims/demo_upload) and press **Create, upload and analyse**.
+1. Sign in as `adjuster`, open **New claim** and press **Use the sample packet** (or pick policy `CS-HLT-23-000089`, Fatima Shaikh, and upload the three files in [`data/claims/demo_upload/`](data/claims/demo_upload) yourself).
+2. Press **Create, upload and analyse**.
 3. Review the recommendation on the Overview tab, then the Coverage, Adjudication (₹78,000 billed, ₹64,080 payable), Risk and Policy & evidence tabs.
 4. Approve it on the Review tab. The claim, review queue, dashboard and audit trail all update.
 5. Press **Generate letter** for the settlement letter (₹64,080.00), or open `CLM-H-1002` for a repudiation letter citing clause 3.3.
@@ -148,11 +151,11 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 71 tests
+cd backend && ruff check app tests && python -m pytest -q    # 145 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
 python3 scripts/provenance.py --check                        # source registry, checksums, RAG manifest
 cd frontend && npm run build                                 # type check + production build
-cd e2e && npm ci && npx playwright test                      # 10 browser tests against a fresh stack on :8080
+cd e2e && npm ci && npx playwright test                      # 11 browser tests against a fresh stack on :8080
 ```
 
 Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 256 / 256 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
@@ -163,6 +166,7 @@ Tests cover sign-in, roles, approval limits and escalation, security headers and
 |---|---|
 | Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, each with structured terms that cite clauses | In use |
 | Eight synthetic golden claim packets (claim forms, bills, estimates, discharge summaries, police reports; one as PDF) | In use |
+| 42-claim synthetic demo book over 41 more policies, with designed outcomes and replayed reviewer history ([data/claims/demo_book.json](data/claims/demo_book.json)) | In use for the demo database and dashboard |
 | 1,000-claim synthetic portfolio with labelled injected anomaly patterns | In use for analytics and rule evaluation |
 | IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with publication date, URL, licence status and intended use; not downloaded in this build |
 
@@ -176,7 +180,7 @@ Everything is regenerated deterministically with `python data/synthetic/generate
 
   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sricharansk/CLAIM-SENSE)
 
-The cloud deployment has **not** been run yet. No cloud credentials were available while building. Once deployed, run `python3 scripts/smoke_test.py https://<service> <DEMO_PASSWORD>` (or the **Verify deployment** workflow in GitHub Actions) before calling it live. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+A Render deployment of `main` runs at https://claim-sense.onrender.com and its readiness check passes. The signed-in smoke test there is pending: add the `DEMO_PASSWORD` repository secret, then run the **Verify deployment** workflow in GitHub Actions (or `python3 scripts/smoke_test.py https://<service> <DEMO_PASSWORD>`). See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Repository layout
 
