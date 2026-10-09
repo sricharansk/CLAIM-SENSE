@@ -1,6 +1,6 @@
 {
   "suite": "Claim Sense golden evaluation",
-  "generated_at": "2026-10-08T23:57:28+00:00",
+  "generated_at": "2026-10-09T00:01:28+00:00",
   "rules_version": "adjudication-rules/1.0.0",
   "risk_version": "risk-rules/1.0.0",
   "llm": "off (extractive answers)",
@@ -17,7 +17,7 @@
     "mean_reciprocal_rank": 1.0,
     "refusal_accuracy": 1.0,
     "required_categories_covered": true,
-    "avg_claim_case_ms": 54,
+    "avg_claim_case_ms": 63,
     "all_passed": true
   },
   "dimensions": {
@@ -111,6 +111,7 @@
       ],
       "claim_number": "CLM-H-3009",
       "source": "new packet",
+      "packet": "EVAL-H-01",
       "expected": {
         "recommendation": "PARTIAL_APPROVAL",
         "payable_amount": "18000.00"
@@ -223,7 +224,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 101
+      "duration_ms": 217
     },
     {
       "id": "C02",
@@ -233,6 +234,7 @@
       ],
       "claim_number": "CLM-M-2002",
       "source": "seeded scenario",
+      "packet": null,
       "expected": {
         "recommendation": "RECOMMEND_REJECT",
         "payable_amount": "0.00"
@@ -330,7 +332,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 42
+      "duration_ms": 37
     },
     {
       "id": "C03",
@@ -340,6 +342,7 @@
       ],
       "claim_number": "CLM-H-1002",
       "source": "seeded scenario",
+      "packet": null,
       "expected": {
         "recommendation": "RECOMMEND_REJECT",
         "payable_amount": "0.00"
@@ -436,7 +439,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 42
+      "duration_ms": 36
     },
     {
       "id": "C04",
@@ -447,6 +450,7 @@
       ],
       "claim_number": "CLM-H-1001",
       "source": "seeded scenario",
+      "packet": null,
       "expected": {
         "recommendation": "PARTIAL_APPROVAL",
         "payable_amount": "84330.00"
@@ -552,7 +556,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 42
+      "duration_ms": 32
     },
     {
       "id": "C05",
@@ -562,6 +566,7 @@
       ],
       "claim_number": "CLM-M-2001",
       "source": "seeded scenario",
+      "packet": null,
       "expected": {
         "recommendation": "PARTIAL_APPROVAL",
         "payable_amount": "55350.00"
@@ -653,7 +658,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 33
+      "duration_ms": 29
     },
     {
       "id": "C06",
@@ -663,6 +668,7 @@
       ],
       "claim_number": "CLM-H-1004",
       "source": "seeded scenario",
+      "packet": null,
       "expected": {
         "recommendation": "REQUEST_INFO",
         "payable_amount": "34560.00"
@@ -744,7 +750,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 31
+      "duration_ms": 32
     },
     {
       "id": "C07",
@@ -754,6 +760,7 @@
       ],
       "claim_number": "CLM-H-1003",
       "source": "seeded scenario",
+      "packet": null,
       "expected": {
         "recommendation": "INVESTIGATE",
         "payable_amount": "332100.00"
@@ -853,7 +860,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 33
+      "duration_ms": 31
     },
     {
       "id": "C08",
@@ -864,6 +871,7 @@
       ],
       "claim_number": "CLM-H-1005",
       "source": "seeded scenario",
+      "packet": null,
       "expected": {
         "recommendation": "PARTIAL_APPROVAL",
         "payable_amount": "50800.00"
@@ -962,7 +970,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 30
+      "duration_ms": 33
     },
     {
       "id": "C09",
@@ -972,6 +980,7 @@
       ],
       "claim_number": "CLM-H-3010",
       "source": "new packet",
+      "packet": "EVAL-H-02",
       "expected": {
         "recommendation": "PARTIAL_APPROVAL",
         "payable_amount": "300000.00"
@@ -1088,7 +1097,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 84
+      "duration_ms": 93
     },
     {
       "id": "C10",
@@ -1098,6 +1107,7 @@
       ],
       "claim_number": "CLM-H-1006",
       "source": "seeded scenario",
+      "packet": null,
       "expected": {
         "recommendation": "INVESTIGATE",
         "payable_amount": "84330.00"
@@ -1179,7 +1189,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 33
+      "duration_ms": 30
     },
     {
       "id": "C11",
@@ -1189,6 +1199,7 @@
       ],
       "claim_number": "CLM-H-3011",
       "source": "new packet",
+      "packet": "EVAL-H-03",
       "expected": {
         "recommendation": "PARTIAL_APPROVAL",
         "payable_amount": "27900.00"
@@ -1280,7 +1291,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 85
+      "duration_ms": 84
     },
     {
       "id": "C12",
@@ -1290,6 +1301,7 @@
       ],
       "claim_number": "CLM-H-3012",
       "source": "new packet",
+      "packet": "EVAL-H-04",
       "expected": {
         "recommendation": "PARTIAL_APPROVAL",
         "payable_amount": "19600.00"
@@ -1381,7 +1393,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 93
+      "duration_ms": 99
     }
   ],
   "questions": [
@@ -2562,5 +2574,5 @@
       ]
     }
   ],
-  "duration_s": 0.94
+  "duration_s": 1.14
 }

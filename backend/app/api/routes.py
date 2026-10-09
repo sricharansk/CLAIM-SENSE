@@ -18,7 +18,7 @@ from ..agents import audit
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
 from ..auth import current_user, issue_token, supervisor, user_view, verify_password, writer
-from ..config import settings
+from ..config import REPO_ROOT, settings
 from ..db import get_db
 from ..models import (
     AgentRun,
@@ -397,6 +397,15 @@ def audit_log(claim_number: str | None = None, limit: int = Query(100, le=500), 
 @router.get("/analytics")
 def get_analytics(db: Session = Depends(get_db)):
     return analytics.dashboard(db)
+
+
+@router.get("/evaluation")
+def evaluation_report():
+    """Latest golden evaluation report, produced by `python scripts/evaluate.py` and committed with the code."""
+    path = REPO_ROOT / "reports" / "evaluation.json"
+    if not path.exists():
+        raise HTTPException(404, "No evaluation report yet. Run python scripts/evaluate.py.")
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 @router.get("/datasets")

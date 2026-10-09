@@ -136,3 +136,5 @@ td.details { max-width: 420px; word-break: break-word; }
   .letter, .letter * { visibility: visible; }
   .letter { position: absolute; left: 0; top: 0; border: 0; max-width: none; color: #000; background: #fff; }
 }
+table.checks { margin-top: 6px; font-size: 0.82rem; }
+table.checks td, table.checks th { padding: 4px 8px; }

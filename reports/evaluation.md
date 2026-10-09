@@ -1,6 +1,6 @@
 # Claim Sense evaluation report
 
-Generated 2026-10-08T23:57:28+00:00 by `python scripts/evaluate.py` on a fresh database with synthetic data only. Rules adjudication-rules/1.0.0, risk risk-rules/1.0.0, LLM off (extractive answers).
+Generated 2026-10-09T00:01:28+00:00 by `python scripts/evaluate.py` on a fresh database with synthetic data only. Rules adjudication-rules/1.0.0, risk risk-rules/1.0.0, LLM off (extractive answers).
 
 **Result: all checks passed.** 256 of 256 checks passed across 12 claim cases and 21 policy questions.
 
@@ -42,7 +42,7 @@ Generated 2026-10-08T23:57:28+00:00 by `python scripts/evaluate.py` on a fresh d
 
 | Case | Claim | What it tests | Recommendation (expected / actual) | Payable (expected / actual) | Result |
 |---|---|---|---|---|---|
-| C01 | CLM-H-3009 | Gastroenteritis admission, every check passes; only the deductible and co-pay apply | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 18000.00 / 18000.00 | pass |
+| C01 | EVAL-H-01 | Gastroenteritis admission, every check passes; only the deductible and co-pay apply | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 18000.00 / 18000.00 | pass |
 | C02 | CLM-M-2002 | Motor claim with a positive breath analyser test | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
 | C03 | CLM-H-1002 | Cataract surgery inside the 24-month specified-disease waiting period | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
 | C04 | CLM-H-1001 | Appendicectomy with a room above the per-day limit and non-payable consumables | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 84330.00 / 84330.00 | pass |
@@ -50,10 +50,10 @@ Generated 2026-10-08T23:57:28+00:00 by `python scripts/evaluate.py` on a fresh d
 | C06 | CLM-H-1004 | Dengue admission without a discharge summary | REQUEST_INFO / REQUEST_INFO | 34560.00 / 34560.00 | pass |
 | C07 | CLM-H-1003 | ICU pneumonia claim: early, 94% of the sum insured, and the form amount differs from the bill | INVESTIGATE / INVESTIGATE | 332100.00 / 332100.00 | pass |
 | C08 | CLM-H-1005 | Fracture before 2025-04-01, so the older wording's lower room limit and higher deductible apply | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 50800.00 / 50800.00 | pass |
-| C09 | CLM-H-3010 | Road accident with bills above the sum insured; payment capped at the available sum insured | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 300000.00 / 300000.00 | pass |
+| C09 | EVAL-H-02 | Road accident with bills above the sum insured; payment capped at the available sum insured | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 300000.00 / 300000.00 | pass |
 | C10 | CLM-H-1006 | Second claim for the same appendicitis admission | INVESTIGATE / INVESTIGATE | 84330.00 / 84330.00 | pass |
-| C11 | CLM-H-3011 | Admission on 2025-04-01, the first day of the 2025.1 wording | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 27900.00 / 27900.00 | pass |
-| C12 | CLM-H-3012 | Same bill admitted on 2025-03-31, the last day of the 2024.1 wording | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 19600.00 / 19600.00 | pass |
+| C11 | EVAL-H-03 | Admission on 2025-04-01, the first day of the 2025.1 wording | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 27900.00 / 27900.00 | pass |
+| C12 | EVAL-H-04 | Same bill admitted on 2025-03-31, the last day of the 2024.1 wording | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 19600.00 / 19600.00 | pass |
 
 ## Policy assistant questions
 

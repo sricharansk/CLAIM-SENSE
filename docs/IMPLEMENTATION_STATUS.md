@@ -1,6 +1,6 @@
 # Implementation Status
 
-Last updated: 2026-10-08. Source of truth: `docs/Claim_Sense_Project_1_..._FINAL_V2_..._Deployment_Ready.md` and `PROJECT_1_FINAL_CONTENTS.md`.
+Last updated: 2026-10-09. Source of truth: `docs/Claim_Sense_Project_1_..._FINAL_V2_..._Deployment_Ready.md` and `PROJECT_1_FINAL_CONTENTS.md`.
 
 ## Starting point
 
@@ -25,7 +25,8 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | 13 | Interactive frontend | 9 screens, all calling real endpoints | Playwright golden path: 0 console errors |
 | – | Supervisor/orchestrator | `agents/supervisor.py`, `analysis_runs`, `agent_runs` with tool calls | Safe-failure and re-run tests |
 | – | Docker | `Dockerfile` (UI + API in one image), `docker-compose.yml` with PostgreSQL | Built and run locally on PostgreSQL; smoke test passed |
-| – | CI | `.github/workflows/ci.yml`: ruff, pytest, pip-audit, npm audit, frontend build, Docker + PostgreSQL smoke test | First run on PR #1: all jobs passed |
+| – | CI | `.github/workflows/ci.yml`: ruff, pytest, golden evaluation, pip-audit, npm audit, frontend build, Docker + PostgreSQL smoke test | All runs on PR #1 passed; PR #1 merged to `main` 2026-10-08 |
+| – | Golden evaluation (blueprint Prompt 17) | `app/evaluation.py`, `scripts/evaluate.py`, cases in `data/evaluation/` (12 claim cases covering all 10 required types, 21 assistant questions), report in `reports/evaluation.{json,md}`, `/evaluation` screen | 256 / 256 checks; CI fails on any failed check; `test_evaluation.py`; browser run, screenshot `13-evaluation.png` |
 | – | Sign-in and roles | `auth.py`, `/auth/login`, `/auth/me`; adjuster / supervisor / auditor; approval limit and escalation rules; sign-in screen and role-aware UI | `test_auth.py` (7 tests); browser run signs in and sees approval blocked over the limit |
 | – | Settlement clock | `sla.py`: due date from the `settlement_days` term (clause 6.3 health, 4.3 motor), counted from the last document; shown on claim page, claims list, review queue and dashboard | `test_letters_sla.py`; browser run |
 | – | Decision letters | `letters.py`, `GET /claims/{n}/letter`: settlement, repudiation (quotes the clause), document request, under review; deterministic, marked draft until a human decides | `test_letters_sla.py`; browser run generates the ₹64,080.00 settlement letter; screenshot `12-rejection-letter.png` |
@@ -35,11 +36,12 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 ## Validation results (this session)
 
 - `ruff check app tests`: clean.
-- `pytest`: 49 passed.
+- `pytest`: 52 passed.
+- `python scripts/evaluate.py`: 256 / 256 checks passed (retrieval hit@1 100%, MRR 1.00, all refusals correct). The first run found three assistant misses (ICU question cited the room-rent clause, a cataract question cited the 30-day waiting period, two off-topic prompts were answered); fixed in `rag/retriever.py` and `rag/service.py`.
 - `npm run build` (tsc + vite): passed.
 - `pip-audit -r backend/requirements.txt`: no known vulnerabilities. `npm audit`: 0 vulnerabilities.
 - GitHub Actions CI run 1 on PR #1: backend, frontend and docker-smoke jobs passed.
-- Browser (Playwright, Chromium) against Vite dev server and against the Docker image on PostgreSQL: create claim, upload 3 documents, analyse (₹78,000 billed, ₹64,080 payable, partial approval), approve, generate the settlement letter (INR 64,080.00) and a repudiation letter, export CSV, assistant answer and refusal, all pages load. No console errors on the Docker run.
+- Browser (Playwright, Chromium) against Vite dev server and against the Docker image on PostgreSQL: create claim, upload 3 documents, analyse (₹78,000 billed, ₹64,080 payable, partial approval), approve, generate the settlement letter (INR 64,080.00) and a repudiation letter, export CSV, assistant answer and refusal, evaluation scorecard (256 / 256), all pages load. No console errors on the Docker run.
 - `scripts/smoke_test.py http://localhost:8080` against Docker + PostgreSQL: all checks passed.
 
 ## Definition of done (blueprint PART 20)
@@ -63,7 +65,7 @@ Nothing in progress.
 
 | Item | Blocker | What unblocks it |
 |---|---|---|
-| Cloud deployment (Azure Container Apps or Render) | No cloud credentials or account access in the build environment | Add `AZURE_CREDENTIALS` secret and variables, then run the *Deploy to Azure Container Apps* workflow; or connect the repo on Render using `render.yaml` |
+| Cloud deployment (Azure Container Apps or Render) | No cloud account in the build environment. Checked 2026-10-09: the only cloud variables present are proxy placeholders (`gcloud` reports no credentialed accounts) | Add `AZURE_CREDENTIALS` secret and variables, then run the *Deploy to Azure Container Apps* workflow; or connect the repo on Render using `render.yaml` |
 | LLM-written answers | No `ANTHROPIC_API_KEY` provided | Set the key; extractive mode works without it |
 | Public 2024–2026 datasets | Registered only; not downloaded or ingested | Download, record provenance, ingest IRDAI circulars into the RAG corpus |
 
@@ -73,4 +75,4 @@ Single sign-on and user management, OCR for scanned images, embedding retriever,
 
 ## Next action
 
-Merge PR #1 (Render deploys from the default branch), then deploy with one of the two prepared paths and run `python3 scripts/smoke_test.py <deployed-url>`. Deployment is not claimed until that passes.
+PR #1 is merged, so `main` can be deployed now: on render.com choose New → Blueprint → CLAIM-SENSE (uses `render.yaml`), or add the Azure secrets and run the Azure workflow. Then run `python3 scripts/smoke_test.py <deployed-url> <DEMO_PASSWORD>`. Deployment is not claimed until that passes. Follow-up work is on PR #2.

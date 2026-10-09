@@ -29,6 +29,7 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
 | Decision letters | Settlement, repudiation (quotes the clause relied on), document-request and under-review letters built from data, no LLM; printable; marked draft until a human decides | claim page |
 | Export | Download the claim register as CSV with decision, payable amount, risk and settlement status | `/claims` |
+| Golden evaluation | 12 hand-worked claim cases (all 10 required types) and 21 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
 | Policy library | Browse clauses by version, view structured terms, ingest new wordings | `/policies` |
 | Provenance | Which datasets are used and which public 2024–2026 sources are registered | `/datasets` |
@@ -66,7 +67,7 @@ CLM-H-1001 waterfall, as the app shows it:
 | ![Claim analysis](docs/screenshots/02-claim-analysis.png) | ![Rejected for waiting period](docs/screenshots/04-claim-rejected-waiting-period.png) |
 | ![High-risk claim](docs/screenshots/05-claim-high-risk.png) | ![Motor depreciation](docs/screenshots/06-motor-depreciation.png) |
 | ![Policy assistant](docs/screenshots/07-policy-assistant.png) | ![Review queue](docs/screenshots/08-review-queue.png) |
-| ![Repudiation letter](docs/screenshots/12-rejection-letter.png) | ![Audit trail](docs/screenshots/10-audit-trail.png) |
+| ![Repudiation letter](docs/screenshots/12-rejection-letter.png) | ![Golden evaluation](docs/screenshots/13-evaluation.png) |
 
 ## Architecture
 
@@ -141,11 +142,12 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 49 tests
+cd backend && ruff check app tests && python -m pytest -q    # 52 tests
+python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
 cd frontend && npm run build                                 # type check + production build
 ```
 
-Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus `pip-audit`, `npm audit` and a Docker + PostgreSQL smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
+Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 256 / 256 checks), `pip-audit`, `npm audit` and a Docker + PostgreSQL smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Data and datasets
 

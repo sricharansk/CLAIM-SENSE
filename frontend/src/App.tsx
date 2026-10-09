@@ -13,10 +13,11 @@ import Policies from "./pages/Policies";
 import Assistant from "./pages/Assistant";
 import AuditLog from "./pages/AuditLog";
 import Datasets from "./pages/Datasets";
+import EvaluationPage from "./pages/Evaluation";
 
 const NAV = [
   ["/", "Dashboard"], ["/claims", "Claims"], ["/claims/new", "New claim"], ["/reviews", "Review queue"],
-  ["/policies", "Policy library"], ["/assistant", "Policy assistant"], ["/audit", "Audit trail"], ["/datasets", "Data sources"],
+  ["/policies", "Policy library"], ["/assistant", "Policy assistant"], ["/audit", "Audit trail"], ["/evaluation", "Evaluation"], ["/datasets", "Data sources"],
 ];
 
 export default function App() {
@@ -73,6 +74,7 @@ function Shell({ user, signOut }: { user: User; signOut: () => void }) {
           <Route path="/policies" element={<Policies />} />
           <Route path="/assistant" element={<Assistant />} />
           <Route path="/audit" element={<AuditLog />} />
+          <Route path="/evaluation" element={<EvaluationPage />} />
           <Route path="/datasets" element={<Datasets />} />
           <Route path="*" element={<p>Page not found.</p>} />
         </Routes>

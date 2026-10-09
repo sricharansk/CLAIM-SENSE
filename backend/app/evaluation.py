@@ -140,7 +140,7 @@ def evaluate_claim(client, case: dict, clauses: dict[int, dict], queues: dict[st
         queues = {t["claim_number"]: t["queue"] for t in _ok(client.get("/api/v1/reviews"), "review queue")}
     k.check("workflow", "routed to queue", exp["queue"], queues.get(number))
     return {"id": case["id"], "title": case["title"], "categories": case["categories"], "claim_number": number,
-            "source": "new packet" if "packet" in case else "seeded scenario",
+            "source": "new packet" if "packet" in case else "seeded scenario", "packet": case.get("packet"),
             "expected": {"recommendation": exp["recommendation"], "payable_amount": exp["payable_amount"]},
             "actual": {"recommendation": rec["decision"], "payable_amount": adj["payable_amount"],
                        "risk_level": risk["level"], "policy_version": version},
@@ -254,7 +254,7 @@ def to_markdown(report: dict) -> str:
               "|---|---|---|---|---|---|"]
     for c in report["claims"]:
         e, a = c["expected"], c["actual"]
-        lines.append(f"| {c['id']} | {c['claim_number']} | {c['title']} | {e['recommendation']} / {a['recommendation']} | "
+        lines.append(f"| {c['id']} | {c['packet'] or c['claim_number']} | {c['title']} | {e['recommendation']} / {a['recommendation']} | "
                      f"{e['payable_amount']} / {a['payable_amount']} | {_mark(c['passed'])} |")
     lines += ["", "## Policy assistant questions", "", "| Q | Kind | Question | Scope | Expected / top citation | Mode | Result |",
               "|---|---|---|---|---|---|---|"]

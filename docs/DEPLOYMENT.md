@@ -21,7 +21,7 @@ Behind a TLS-inspecting proxy, pass its CA to the build: `docker build --secret 
 
 ## Option B: Render (fastest demo)
 
-1. Merge PR #1 into `main` first; Render builds the default branch.
+1. Render builds the default branch (`main`); PR #1 is already merged, so `main` has the app.
 2. On render.com choose **New → Blueprint** and select this repository; `render.yaml` defines a free Docker web service and generates `AUTH_SECRET`. Enter a `DEMO_PASSWORD` when asked (or leave it to use the default).
 3. Wait for the health check on `/api/v1/health`, then run `python3 scripts/smoke_test.py https://<your-app>.onrender.com <DEMO_PASSWORD>`.
 

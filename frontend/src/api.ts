@@ -66,6 +66,20 @@ export type Analytics = {
   portfolio: null | { claims: number; by_risk: Record<string, number>; by_line: Record<string, number>; injected_anomalies: number;
     flagged: number; precision: number; recall: number; confusion: Record<string, number>; median_claim: number; note: string };
 };
+export type EvalCheck = { dimension: string; check: string; expected: unknown; actual: unknown; passed: boolean };
+export type Evaluation = {
+  suite: string; generated_at: string; rules_version: string; risk_version: string; llm: string; data: string; duration_s: number;
+  summary: { claim_cases: number; claim_cases_passed: number; questions: number; questions_passed: number; checks: number;
+    checks_passed: number; retrieval_hit_at_1: number; retrieval_hit_at_3: number; mean_reciprocal_rank: number;
+    refusal_accuracy: number; required_categories_covered: boolean; all_passed: boolean; avg_claim_case_ms: number };
+  dimensions: Record<string, { label: string; passed: number; total: number; score: number | null }>;
+  categories: Record<string, string[]>;
+  claims: { id: string; title: string; categories: string[]; claim_number: string; source: string; packet: string | null; working: string | null; passed: boolean;
+    expected: { recommendation: string; payable_amount: string };
+    actual: { recommendation: string; payable_amount: string; risk_level: string; policy_version: string }; checks: EvalCheck[] }[];
+  questions: { id: string; kind: string; question: string; scope: string; mode: string; top_citation: string | null;
+    expected_clause: string | null; rank: number | null; passed: boolean; checks: EvalCheck[] }[];
+};
 export type Dataset = { name: string; publisher: string; year: string; url: string; purpose: string; status: string };
 export type Ready = { status: string; database: string; policy_index: string; llm: string; database_backend: string };
 
@@ -149,6 +163,7 @@ export const api = {
     request<RagAnswer>("/rag/query", json("POST", { question, product_code: product_code || null, version: version || null })),
   audit: (claim_number?: string) => request<AuditEvent[]>(`/audit${claim_number ? `?claim_number=${claim_number}` : ""}`),
   datasets: () => request<Dataset[]>("/datasets"),
+  evaluation: () => request<Evaluation>("/evaluation"),
 };
 
 export const inr = (v: string | number | null | undefined) =>
