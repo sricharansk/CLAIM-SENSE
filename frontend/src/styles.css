@@ -138,3 +138,11 @@ td.details { max-width: 420px; word-break: break-word; }
 }
 table.checks { margin-top: 6px; font-size: 0.82rem; }
 table.checks td, table.checks th { padding: 4px 8px; }
+ol.stages { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 6px; }
+ol.stages li { display: flex; align-items: center; gap: 4px; }
+ol.stages li + li::before { content: "→"; color: var(--muted); }
+ol.stages li .small { display: none; }
+.form ol.stages li .small { display: inline; }
+.form ol.stages { flex-direction: column; align-items: flex-start; }
+.form ol.stages li + li::before { content: ""; }
+.err-text { color: var(--red); }

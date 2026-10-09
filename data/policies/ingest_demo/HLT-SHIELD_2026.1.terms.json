@@ -1,0 +1,118 @@
+{
+  "product_code": "HLT-SHIELD",
+  "product_name": "ClaimSense Health Shield",
+  "line_of_business": "health",
+  "insurer": "Synthetic Assurance Co. Ltd. (fictional)",
+  "version": "2026.1",
+  "effective_from": "2026-04-01",
+  "effective_to": "2027-03-31",
+  "limits": {
+    "room_rent_per_day": {
+      "amount": 6000,
+      "clause": "2.2"
+    },
+    "icu_per_day": {
+      "amount": 12000,
+      "clause": "2.3"
+    }
+  },
+  "deductible": {
+    "amount": 5000,
+    "clause": "5.1"
+  },
+  "copay_percent": {
+    "value": 10,
+    "clause": "5.2"
+  },
+  "max_liability_clause": "5.3",
+  "waiting_periods": {
+    "initial_days": {
+      "value": 30,
+      "clause": "3.1",
+      "accident_exempt": true
+    },
+    "specified_months": {
+      "value": 24,
+      "clause": "3.3",
+      "conditions": [
+        "cataract",
+        "hernia",
+        "joint replacement",
+        "kidney stone",
+        "sinusitis",
+        "tonsillectomy",
+        "varicose veins"
+      ],
+      "accident_exempt": true
+    },
+    "ped_months": {
+      "value": 36,
+      "clause": "3.2"
+    }
+  },
+  "exclusions": [
+    {
+      "code": "EXCL_COSMETIC",
+      "clause": "4.1",
+      "keywords": [
+        "cosmetic",
+        "aesthetic",
+        "hair transplant",
+        "liposuction",
+        "weight reduction"
+      ]
+    },
+    {
+      "code": "EXCL_ALCOHOL",
+      "clause": "4.2",
+      "keywords": [
+        "alcohol",
+        "intoxication",
+        "drunk",
+        "substance abuse",
+        "self-inflicted",
+        "overdose"
+      ]
+    },
+    {
+      "code": "EXCL_MATERNITY",
+      "clause": "4.4",
+      "keywords": [
+        "maternity",
+        "childbirth",
+        "caesarean",
+        "delivery",
+        "pregnancy"
+      ]
+    },
+    {
+      "code": "EXCL_EXPERIMENTAL",
+      "clause": "4.5",
+      "keywords": [
+        "experimental",
+        "investigational"
+      ]
+    }
+  ],
+  "non_payable_categories": {
+    "consumables": "4.3",
+    "non_medical": "4.3"
+  },
+  "category_limits": {
+    "room_rent": "room_rent_per_day",
+    "icu": "icu_per_day"
+  },
+  "required_documents": {
+    "documents": [
+      "claim_form",
+      "discharge_summary",
+      "hospital_bill"
+    ],
+    "clause": "6.2"
+  },
+  "settlement_days": {
+    "value": 30,
+    "clause": "6.3"
+  },
+  "coverage_clause": "2.1"
+}

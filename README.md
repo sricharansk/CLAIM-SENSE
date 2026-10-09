@@ -31,7 +31,7 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Export | Download the claim register as CSV with decision, payable amount, risk and settlement status | `/claims` |
 | Golden evaluation | 12 hand-worked claim cases (all 10 required types) and 21 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
-| Policy library | Browse clauses by version, view structured terms, ingest new wordings | `/policies` |
+| Policy library | Browse clauses by version, view structured terms, ingest new wordings as PDF or Markdown with checksum, page-preserving extraction and visible processing states (Uploaded → Validating → Extracting → Indexing → Ready / Failed) | `/policies` |
 | Provenance | Which datasets are used and which public 2024–2026 sources are registered | `/datasets` |
 
 ## Real results from the golden scenarios
@@ -138,11 +138,12 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 3. Review the recommendation, coverage checks, waterfall (₹78,000 billed, ₹64,080 payable), risk and evidence.
 4. Approve it. The claim, review queue, dashboard and audit trail all update.
 5. Press **Generate letter** for the settlement letter (₹64,080.00), or open `CLM-H-1002` for a repudiation letter citing clause 3.3.
+6. Sign in as `supervisor`, open **Policy library** and ingest `data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf` with its `.terms.json`: the 6-page PDF becomes 21 cited clauses of a new 2026.1 version, and the assistant can answer from it.
 
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 56 tests
+cd backend && ruff check app tests && python -m pytest -q    # 60 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
 cd frontend && npm run build                                 # type check + production build
 ```

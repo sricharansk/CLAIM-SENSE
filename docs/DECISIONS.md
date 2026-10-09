@@ -17,3 +17,4 @@
 | D13 | Settlement clock counts from the last document upload, using the policy's `settlement_days` term | The synthetic wordings define settlement within 30 days of the last required document, so the clock follows the wording rather than a hard-coded SLA |
 | D14 | Evaluation expectations are worked out by hand from the wording and terms, and the report is committed and served read-only | A scorecard that copies system output proves nothing; the hand working is in `data/evaluation/golden_cases.json` so a reviewer can check it |
 | D15 | The assistant refuses when retrieved clauses share only generic insurance words with the question | Score thresholds alone answered off-topic and instruction-like prompts from loosely related clauses |
+| D16 | Policy ingestion runs synchronously but records each processing state with a timestamp per attempt | The staged history is visible and auditable without a job queue; a background worker can drive the same states later |

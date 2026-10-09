@@ -12,6 +12,7 @@ Outputs (deterministic, seed=2025):
   data/claims/<CLAIM>/*.txt|pdf                 claim document packets for the golden scenarios
   data/claims/scenarios.json                    claim headers + expected outcome
   data/evaluation/packets/<CASE>/*.txt          extra packets used only by scripts/evaluate.py (never seeded)
+  data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf  a new wording version as a multi-page PDF, for live ingestion
   data/synthetic/claims_portfolio.csv           1,000 claims with injected fraud patterns
 
 Run: python data/synthetic/generate.py
@@ -40,6 +41,9 @@ HEALTH_VERSIONS = {
     "2025.1": dict(effective_from="2025-04-01", effective_to="2026-03-31", room=5000, icu=10000,
                    deductible=5000, copay=10, ped_months=36, notify_hours=48),
 }
+# Not seeded: ingested live through the Policy library to demonstrate PDF ingestion.
+DEMO_INGEST_VERSION = ("2026.1", dict(effective_from="2026-04-01", effective_to="2027-03-31", room=6000, icu=12000,
+                                      deductible=5000, copay=10, ped_months=36, notify_hours=48))
 SPECIFIED = ["cataract", "hernia", "joint replacement", "kidney stone", "sinusitis", "tonsillectomy", "varicose veins"]
 
 
@@ -482,6 +486,57 @@ def write_pdf(path: Path, lines: list[str]) -> None:
     path.write_bytes(bytes(out))
 
 
+def policy_pdf_pages(markdown: str, width: int = 92) -> list[list[str]]:
+    """Lay out policy wording as plain PDF pages: headings become numbered lines, body text is wrapped."""
+    import textwrap
+    pages: list[list[str]] = [[]]
+    for line in markdown.splitlines():
+        if line.startswith("<!-- page:"):
+            if int(line.split(":")[1].split("-")[0]) > 1:
+                pages.append([])
+            continue
+        text = line.lstrip("#").strip().replace("\u2014", "-")
+        if line.startswith("#") or not text:
+            pages[-1].append(text)
+        else:
+            pages[-1].extend(textwrap.wrap(text, width, break_on_hyphens=False))
+    return [p for p in pages if any(x.strip() for x in p)]
+
+
+def write_pdf_pages(path: Path, pages: list[list[str]]) -> None:
+    """Multi-page text PDF (Courier 9pt), one content stream per page, readable by pypdf."""
+    def esc(s: str) -> str:
+        return s.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)").encode("latin-1", "replace").decode("latin-1")
+    n = len(pages)
+    kids = " ".join(f"{3 + 2 * i} 0 R" for i in range(n))
+    objs = [b"<< /Type /Catalog /Pages 2 0 R >>", f"<< /Type /Pages /Kids [{kids}] /Count {n} >>".encode()]
+    font = 3 + 2 * n
+    for i, lines in enumerate(pages):
+        content = ["BT", "/F1 9 Tf", "11 TL", "40 800 Td"] + [f"({esc(line)}) Tj T*" for line in lines] + ["ET"]
+        stream = "\n".join(content).encode("latin-1")
+        objs.append(f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 {font} 0 R >> >> "
+                    f"/Contents {4 + 2 * i} 0 R >>".encode())
+        objs.append(b"<< /Length " + str(len(stream)).encode() + b" >>\nstream\n" + stream + b"\nendstream")
+    objs.append(b"<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>")
+    out, offsets = bytearray(b"%PDF-1.4\n"), []
+    for i, o in enumerate(objs, 1):
+        offsets.append(len(out))
+        out += f"{i} 0 obj\n".encode() + o + b"\nendobj\n"
+    xref = len(out)
+    out += f"xref\n0 {len(objs) + 1}\n0000000000 65535 f \n".encode()
+    out += b"".join(f"{o:010d} 00000 n \n".encode() for o in offsets)
+    out += f"trailer\n<< /Size {len(objs) + 1} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF\n".encode()
+    path.write_bytes(bytes(out))
+
+
+def write_ingest_demo() -> None:
+    v, p = DEMO_INGEST_VERSION
+    d = POL / "ingest_demo"
+    d.mkdir(parents=True, exist_ok=True)
+    write_pdf_pages(d / f"HLT-SHIELD_{v}.pdf", policy_pdf_pages(health_wording(v, p)))
+    (d / f"HLT-SHIELD_{v}.terms.json").write_text(json.dumps(health_terms(v, p), indent=2), encoding="utf-8")
+
+
 # ------------------------------------------------------------ portfolio ---
 PATTERNS = ["AMOUNT_ANOMALY", "TIMING_ANOMALY", "FREQUENCY_ANOMALY", "DUPLICATE_CLAIM", "DOCUMENT_INCONSISTENCY"]
 
@@ -542,6 +597,7 @@ def main() -> None:
     scen = write_claim_packets()
     write_demo_upload()
     write_evaluation_packets()
+    write_ingest_demo()
     (CLM / "scenarios.json").write_text(json.dumps(scen, indent=2), encoding="utf-8")
     portfolio()
     print(f"policies: {len(list(POL.glob('*.md')))}, claims: {len(scen)}, portfolio rows: 1000")

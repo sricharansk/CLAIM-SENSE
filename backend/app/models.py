@@ -51,6 +51,28 @@ class PolicyVersion(Base):
     clauses: Mapped[list["PolicyClause"]] = relationship(back_populates="version", order_by="PolicyClause.id")
 
 
+class PolicyIngestion(Base):
+    """One attempt to ingest a policy wording, with its processing states (UPLOADED → … → READY or FAILED)."""
+    __tablename__ = "policy_ingestions"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    filename: Mapped[str] = mapped_column(String(300))
+    file_type: Mapped[str] = mapped_column(String(10), default="")
+    sha256: Mapped[str] = mapped_column(String(64), index=True)
+    size_bytes: Mapped[int] = mapped_column(Integer, default=0)
+    status: Mapped[str] = mapped_column(String(20), default="UPLOADED")
+    stages: Mapped[list] = mapped_column(JSON, default=list)
+    product_code: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    version: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    policy_version_id: Mapped[int | None] = mapped_column(ForeignKey("policy_versions.id"), nullable=True)
+    pages: Mapped[int] = mapped_column(Integer, default=0)
+    clauses: Mapped[int] = mapped_column(Integer, default=0)
+    warnings: Mapped[list] = mapped_column(JSON, default=list)
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)
+    actor: Mapped[str] = mapped_column(String(60), default="system")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
 class PolicyClause(Base):
     __tablename__ = "policy_clauses"
     id: Mapped[int] = mapped_column(primary_key=True)

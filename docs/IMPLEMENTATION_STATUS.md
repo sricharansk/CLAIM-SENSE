@@ -28,6 +28,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | – | CI | `.github/workflows/ci.yml`: ruff, pytest, golden evaluation, pip-audit, npm audit, frontend build, Docker + PostgreSQL smoke test | All runs on PR #1 passed; PR #1 merged to `main` 2026-10-08 |
 | – | Golden evaluation (blueprint Prompt 17) | `app/evaluation.py`, `scripts/evaluate.py`, cases in `data/evaluation/` (12 claim cases covering all 10 required types, 21 assistant questions), report in `reports/evaluation.{json,md}`, `/evaluation` screen | 256 / 256 checks; CI fails on any failed check; `test_evaluation.py`; browser run, screenshot `13-evaluation.png` |
 | – | Sign-in and roles | `auth.py`, `/auth/login`, `/auth/me`; adjuster / supervisor / auditor; approval limit and escalation rules; sign-in screen and role-aware UI | `test_auth.py` (7 tests); browser run signs in and sees approval blocked over the limit |
+| – | Policy PDF ingestion (blueprint Prompt 05) | `services.ingest_policy_file`: upload → validation → SHA-256 checksum (duplicate refused) → page-preserving PDF extraction (pypdf) or Markdown → section/clause parsing (`rag/parser.parse_policy_pages`) → version metadata → persistence → indexing; states UPLOADED, VALIDATING, EXTRACTING, INDEXING, READY, FAILED recorded per attempt in `policy_ingestions`; instruction-like lines reported as warnings; `/policy-ingestions`; Policy library shows the stages and history | `test_policy_ingestion.py` (PDF of 6 pages → 21 clauses with page numbers, citations name the PDF, duplicate, scanned PDF, unreadable PDF, wrong type, supervisor-only); browser run on Docker ingests `data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf`, screenshot `15-policy-pdf-ingestion.png` |
 | – | Settlement clock | `sla.py`: due date from the `settlement_days` term (clause 6.3 health, 4.3 motor), counted from the last document; shown on claim page, claims list, review queue and dashboard | `test_letters_sla.py`; browser run |
 | – | Decision letters | `letters.py`, `GET /claims/{n}/letter`: settlement, repudiation (quotes the clause), document request, under review; deterministic, marked draft until a human decides | `test_letters_sla.py`; browser run generates the ₹64,080.00 settlement letter; screenshot `12-rejection-letter.png` |
 | – | CSV export | `GET /claims-export.csv`, Export CSV button on `/claims` | `test_letters_sla.py`; browser download |
@@ -38,7 +39,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 ## Validation results (this session)
 
 - `ruff check app tests`: clean.
-- `pytest`: 56 passed.
+- `pytest`: 60 passed.
 - `python scripts/evaluate.py`: 256 / 256 checks passed (retrieval hit@1 100%, MRR 1.00, all refusals correct). The first run found three assistant misses (ICU question cited the room-rent clause, a cataract question cited the 30-day waiting period, two off-topic prompts were answered); fixed in `rag/retriever.py` and `rag/service.py`.
 - `npm run build` (tsc + vite): passed.
 - `pip-audit -r backend/requirements.txt`: no known vulnerabilities. `npm audit`: 0 vulnerabilities.
@@ -52,7 +53,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 |---|---|
 | Repository audited; source-of-truth docs created | Done |
 | Backend runs; frontend runs; database migrates; demo data loads | Done (SQLite and PostgreSQL) |
-| Policy ingests; claim ingests; document extraction | Done |
+| Policy ingests (PDF and Markdown, with processing states); claim ingests; document extraction | Done |
 | Policy/version matching; hybrid RAG; citations resolve | Done |
 | Coverage; deterministic adjudication; risk/fraud; supervisor | Done |
 | Human review; audit; dashboard | Done |

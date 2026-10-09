@@ -30,12 +30,13 @@ from ..models import (
     DatasetSource,
     InsuredPolicy,
     Policy,
+    PolicyIngestion,
     PolicyVersion,
     User,
     WorkflowTask,
 )
 from ..rag import service as rag
-from ..services import ValidationProblem, add_document, ingest_policy
+from ..services import IngestionFailed, ValidationProblem, add_document, ingest_policy_file
 
 public = APIRouter(prefix="/api/v1")
 router = APIRouter(prefix="/api/v1", dependencies=[Depends(current_user)])
@@ -325,19 +326,36 @@ def list_policies(db: Session = Depends(get_db)):
                           for v in p.versions]} for p in db.query(Policy).order_by(Policy.product_code).all()]
 
 
+def _ingestion_view(r: PolicyIngestion) -> dict:
+    return {"id": r.id, "filename": r.filename, "file_type": r.file_type, "sha256": r.sha256, "size_bytes": r.size_bytes,
+            "status": r.status, "stages": r.stages, "product_code": r.product_code, "version": r.version, "pages": r.pages,
+            "clauses": r.clauses, "warnings": r.warnings, "error": r.error, "actor": r.actor, "created_at": r.created_at,
+            "finished_at": r.finished_at}
+
+
 @router.post("/policies", status_code=201)
 async def upload_policy(wording: UploadFile = File(...), terms: UploadFile = File(...), db: Session = Depends(get_db),
                         user: User = Depends(supervisor)):
+    """Ingest a policy wording (PDF, Markdown or text) with its structured terms (JSON)."""
     try:
-        md = (await wording.read()).decode("utf-8")
         t = json.loads((await terms.read()).decode("utf-8"))
-        v = ingest_policy(db, md, t, wording.filename or "policy.md", actor=user.username)
-    except (ValidationProblem, json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
-        db.rollback()
-        raise HTTPException(422, str(exc)) from exc
+        if not isinstance(t, dict):
+            raise ValueError("terms must be a JSON object")
+    except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
+        raise HTTPException(422, f"Structured terms are not valid JSON: {exc}") from exc
+    try:
+        rec = ingest_policy_file(db, wording.filename or "policy", await wording.read(), t, actor=user.username)
+    except IngestionFailed as exc:
+        db.commit()  # keep the FAILED ingestion record and its audit event
+        raise HTTPException(422, f"Ingestion #{exc.record.id} failed: {exc}") from exc
     db.commit()
     rag.rebuild_index(db)
-    return {"product_code": v.policy.product_code, "version": v.version, "clauses": len(v.clauses)}
+    return {"product_code": rec.product_code, "version": rec.version, "clauses": rec.clauses, "ingestion": _ingestion_view(rec)}
+
+
+@router.get("/policy-ingestions")
+def policy_ingestions(db: Session = Depends(get_db)):
+    return [_ingestion_view(r) for r in db.query(PolicyIngestion).order_by(PolicyIngestion.id.desc()).limit(50).all()]
 
 
 def _policy(db: Session, code: str) -> Policy:

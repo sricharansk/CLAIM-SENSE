@@ -43,6 +43,7 @@ const TONE: Record<string, string> = {
   REQUEST_INFO: "amber", INFO_REQUESTED: "amber", PENDING_REVIEW: "blue", ESCALATED: "purple", ESCALATE: "purple",
   COVERED: "green", NOT_COVERED: "red", UNCERTAIN: "amber", PASS: "green", FAIL: "red", MISSING: "amber",
   ON_TRACK: "green", DUE_SOON: "amber", OVERDUE: "red", MET: "green", BREACHED: "red", FINAL: "green", DRAFT: "amber",
+  READY: "green", UPLOADED: "gray", VALIDATING: "blue", EXTRACTING: "blue", INDEXING: "blue",
   SUCCEEDED: "green", FAILED: "red", NEEDS_ATTENTION: "red", DOCUMENTS_RECEIVED: "gray", SUBMITTED: "gray",
 };
 export function Badge({ value }: { value: string | null | undefined }) {

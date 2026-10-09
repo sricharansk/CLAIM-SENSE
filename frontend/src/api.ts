@@ -82,6 +82,9 @@ export type Evaluation = {
   questions: { id: string; kind: string; question: string; scope: string; mode: string; top_citation: string | null;
     expected_clause: string | null; rank: number | null; passed: boolean; checks: EvalCheck[] }[];
 };
+export type Ingestion = { id: number; filename: string; file_type: string; sha256: string; size_bytes: number; status: string;
+  stages: { status: string; at: string; detail: string }[]; product_code: string | null; version: string | null; pages: number;
+  clauses: number; warnings: string[]; error: string | null; actor: string; created_at: string; finished_at: string | null };
 export type Dataset = { name: string; publisher: string; year: string; url: string; purpose: string; status: string };
 export type Ready = { status: string; database: string; policy_index: string; llm: string; database_backend: string };
 
@@ -158,8 +161,9 @@ export const api = {
     const fd = new FormData();
     fd.append("wording", wording);
     fd.append("terms", terms);
-    return request<{ product_code: string; version: string; clauses: number }>("/policies", { method: "POST", body: fd });
+    return request<{ product_code: string; version: string; clauses: number; ingestion: Ingestion }>("/policies", { method: "POST", body: fd });
   },
+  ingestions: () => request<Ingestion[]>("/policy-ingestions"),
   insured: () => request<InsuredPolicy[]>("/insured-policies"),
   ask: (question: string, product_code?: string, version?: string) =>
     request<RagAnswer>("/rag/query", json("POST", { question, product_code: product_code || null, version: version || null })),

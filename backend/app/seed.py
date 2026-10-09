@@ -12,7 +12,7 @@ from .agents.supervisor import analyze_claim
 from .config import settings
 from .models import Claim, DatasetSource, InsuredPolicy, Policy, PolicyVersion
 from .rag import service as rag
-from .services import add_document, ingest_policy, load_terms
+from .services import add_document, ingest_policy_file, load_terms
 
 log = logging.getLogger("claimsense.seed")
 
@@ -25,7 +25,7 @@ def seed(db: Session, analyze: bool = True) -> dict:
         policy = db.query(Policy).filter_by(product_code=terms["product_code"]).first()
         if policy and db.query(PolicyVersion).filter_by(policy_id=policy.id, version=terms["version"]).first():
             continue
-        ingest_policy(db, md.read_text(encoding="utf-8"), terms, md.name, actor="seed")
+        ingest_policy_file(db, md.name, md.read_bytes(), terms, actor="seed")
         created["policy_versions"] += 1
     for p in json.loads((pol_dir / "insured_policies.json").read_text(encoding="utf-8")):
         if db.query(InsuredPolicy).filter_by(policy_number=p["policy_number"]).first():
