@@ -93,7 +93,7 @@ flowchart TD
 - The LLM is optional and never computes money or decides claims. Without `ANTHROPIC_API_KEY`, the assistant answers by quoting the wording it retrieved.
 - Agent failures stop the run safely and route the claim to `NEEDS_ATTENTION`. Re-running analysis supersedes the previous recommendation and task.
 
-More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/DECISIONS.md](docs/DECISIONS.md).
+More detail: [product requirements](docs/PRD.md), [architecture](docs/ARCHITECTURE.md), [database](docs/DATABASE.md), [decisions](docs/DECISIONS.md), [design system](docs/DESIGN_SYSTEM.md), [code style](docs/CODE_STYLE.md), [testing](docs/TESTING.md), [agents](docs/AGENTS.md) and [release readiness](docs/RELEASE_READINESS.md).
 
 ## Run it
 

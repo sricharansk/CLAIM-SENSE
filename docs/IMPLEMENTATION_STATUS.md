@@ -52,7 +52,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 
 | Item | State |
 |---|---|
-| Repository audited; source-of-truth docs created | Done |
+| Repository audited; source-of-truth docs created | Done (`PRD.md`, `DESIGN_SYSTEM.md`, `ARCHITECTURE.md`, `DATABASE.md`, `SECURITY.md`, `CODE_STYLE.md`, `TESTING.md`, `AGENTS.md`; release checklist in `RELEASE_READINESS.md`) |
 | Backend runs; frontend runs; database migrates; demo data loads | Done (SQLite and PostgreSQL) |
 | Policy ingests (PDF and Markdown, with processing states); claim ingests; document extraction | Done |
 | Policy/version matching; hybrid RAG; citations resolve | Done |
