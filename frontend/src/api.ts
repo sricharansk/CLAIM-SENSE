@@ -39,10 +39,13 @@ export type Analysis = {
   agents: { agent: string; status: string; summary: string; duration_ms: number; tool_calls: { tool: string; args: unknown; result: string; ms: number }[] }[];
   result: AnalysisResult | null;
 };
+export type FactView = { name: string; value: string; corrected: boolean; extracted_value: string | null; correctable: boolean;
+  source: { document: string | null; document_type: string; line: number | null; confidence: number; text: string } };
 export type ClaimDetail = Omit<ClaimSummary, "documents"> & {
   description: string;
   documents: { id: number; filename: string; doc_type: string; pages: number; status: string; sha256: string; uploaded_at: string }[];
-  facts: { id: number; document_id: number; name: string; value: string; confidence: number; line: number | null; source_text: string }[];
+  facts: { id: number; document_id: number | null; name: string; value: string; confidence: number; line: number | null; source_text: string }[];
+  fact_view: FactView[];
   analysis: Analysis | null;
   decisions: { id: number; source: string; decision: string; payable_amount: string | null; actor: string; notes: string; created_at: string }[];
   workflow_task: { id: number; queue: string; priority: string; status: string; assignee: string | null } | null;
@@ -163,6 +166,8 @@ export const api = {
   },
   document: (n: string, id: number) => request<{ filename: string; doc_type: string; text: string }>(`/claims/${n}/documents/${id}`),
   analyze: (n: string) => request<Analysis>(`/claims/${n}/analyze`, { method: "POST" }),
+  correctFact: (n: string, data: { name: string; value: string; reason: string }) =>
+    request<{ id: number; value: string; previous: string | null }>(`/claims/${n}/facts`, json("POST", data)),
   review: (n: string, data: { action: string; notes: string; payable_amount?: string }) =>
     request<{ status: string }>(`/claims/${n}/review`, json("POST", data)),
   reviews: () => request<ReviewTask[]>("/reviews"),
@@ -190,6 +195,6 @@ export const api = {
 export const inr = (v: string | number | null | undefined) =>
   v === null || v === undefined || v === "" ? "—" : `₹${Number(v).toLocaleString("en-IN", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}`;
 export const when = (s: string | null | undefined) => (s ? new Date(s).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) : "—");
-const ACRONYMS = /\b(siu|ai|icu|llm|pdf|rag)\b/g;
+const ACRONYMS = /\b(siu|ai|icu|llm|pdf|rag|ot)\b/g;
 export const words = (s: string | null | undefined) =>
   (s ? s.replace(/_/g, " ").toLowerCase().replace(ACRONYMS, (w) => w.toUpperCase()).replace(/^\w/, (c) => c.toUpperCase()) : "—");

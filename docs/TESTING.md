@@ -3,7 +3,7 @@
 ## Commands
 
 ```bash
-cd backend && ruff check app tests ../scripts && python -m pytest -q     # 69 tests
+cd backend && ruff check app tests ../scripts && python -m pytest -q     # 71 tests
 python3 scripts/evaluate.py                                             # golden evaluation, 256 checks
 python3 scripts/provenance.py --check                                   # registry, checksums, reproducible RAG manifest
 cd frontend && npm run build                                            # type check + build
@@ -25,6 +25,7 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | `test_evaluation.py` | 3 | Evaluation report served and complete; sign-in required; refusals |
 | `test_security_guards.py` | 4 | Sign-in throttle; injection scan; injected document flagged with amount unchanged; override and escalation rates |
 | `test_policy_ingestion.py` | 4 | PDF ingestion with pages and states; duplicate, scanned, unreadable and wrong-type failures; supervisor only; seeded records |
+| `test_fact_correction.py` | 2 | Correction used by the next analysis, audited, extracted value kept, latest wins; date, amount, reason, role and decided-claim validation |
 | `test_provenance.py` | 6 | Committed registry valid; validator rejects missing or wrong provenance and checksum drift; `/datasets`; every indexed chunk resolves; a chunk without an extraction run is kept out of the index; backfill |
 | `test_review_assignment.py` | 3 | Queue shows risk, age and assignee; take, release and supervisor reassignment; others cannot take or decide an assigned task; supervisor-queue and auditor limits; audit events |
 

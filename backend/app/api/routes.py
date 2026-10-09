@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 
 from .. import analytics, letters, llm, provenance, sla
 from ..agents import audit
+from ..agents.intake import CORRECTABLE, CORRECTION, SINGLE_VALUE, consolidate
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
 from ..auth import WRITE_ROLES, current_user, issue_token, supervisor, throttle, user_view, verify_password, writer
@@ -186,6 +187,67 @@ def _analysis(db: Session, c: Claim) -> dict | None:
             "result": run.result}
 
 
+def _fact_view(c: Claim, facts: list[ClaimFact]) -> list[dict]:
+    """The consolidated facts the next analysis will use, each with its source and the extracted value it replaced."""
+    doc = {d.id: d for d in c.documents}
+    values, sources, _, _ = consolidate(facts, {i: d.doc_type for i, d in doc.items()})
+    extracted, _, _, _ = consolidate([f for f in facts if f.document_id is not None], {i: d.doc_type for i, d in doc.items()})
+    out = []
+    for name in SINGLE_VALUE:
+        if name not in values:
+            continue
+        src = sources[name]
+        d = doc.get(src["document_id"])
+        out.append({"name": name, "value": values[name], "corrected": src["document_type"] == CORRECTION,
+                    "extracted_value": extracted.get(name), "correctable": name in CORRECTABLE,
+                    "source": {"document": d.filename if d else None, "document_type": src["document_type"],
+                               "line": src["line"], "confidence": src["confidence"], "text": src["text"]}})
+    return out
+
+
+class FactCorrectionIn(BaseModel):
+    name: str
+    value: str = Field(min_length=1, max_length=500)
+    reason: str = Field(default="", max_length=1000)
+
+
+@router.post("/claims/{claim_number}/facts", status_code=201)
+def correct_fact(claim_number: str, body: FactCorrectionIn, db: Session = Depends(get_db), user: User = Depends(writer)):
+    """Record a reviewer's correction of an extracted fact. The next analysis uses it; the extracted value is kept."""
+    c = _claim(db, claim_number)
+    if c.status in ("APPROVED", "REJECTED"):
+        raise HTTPException(409, f"Claim already {c.status.lower()}")
+    if body.name not in CORRECTABLE:
+        raise HTTPException(422, f"{body.name} cannot be corrected; correctable facts: {', '.join(CORRECTABLE)}")
+    if not body.reason.strip():
+        raise HTTPException(422, "Give a reason for the correction")
+    value = body.value.strip()
+    try:
+        if body.name.endswith("_date") or body.name == "licence_valid_till":
+            value = date.fromisoformat(value).isoformat()
+        elif body.name == "claimed_amount":
+            amount = Decimal(value.replace(",", ""))
+            if amount < 0 or not amount.is_finite():
+                raise ValueError
+            value = str(amount.quantize(Decimal("0.01")))
+    except (ValueError, ArithmeticError) as exc:
+        kind = "a date as YYYY-MM-DD" if body.name != "claimed_amount" else "a non-negative amount"
+        raise HTTPException(422, f"{words_label(body.name)} must be {kind}") from exc
+    facts = db.query(ClaimFact).filter_by(claim_id=c.id).all()
+    before = consolidate(facts, {d.id: d.doc_type for d in c.documents})[0].get(body.name)
+    f = ClaimFact(claim_id=c.id, document_id=None, name=body.name, value=value, confidence=1.0, source_line=None,
+                  source_text=f"Corrected by {user.display_name}: {body.reason.strip()}")
+    db.add(f)
+    audit.log(db, c.id, "FACT_CORRECTED", user.username,
+              {"fact": body.name, "from": before, "to": value, "reason": body.reason.strip()})
+    db.commit()
+    return {"id": f.id, "name": f.name, "value": f.value, "previous": before}
+
+
+def words_label(name: str) -> str:
+    return name.replace("_", " ").capitalize()
+
+
 @router.get("/claims/{claim_number}")
 def get_claim(claim_number: str, db: Session = Depends(get_db)):
     c = _claim(db, claim_number)
@@ -200,6 +262,7 @@ def get_claim(claim_number: str, db: Session = Depends(get_db)):
         **_claim_summary(c, ai, risk, _clock(db, c)), "description": c.description,
         "documents": [{"id": d.id, "filename": d.filename, "doc_type": d.doc_type, "pages": d.pages, "status": d.status,
                        "sha256": d.sha256, "uploaded_at": d.uploaded_at} for d in c.documents],
+        "fact_view": _fact_view(c, facts),
         "facts": [{"id": f.id, "document_id": f.document_id, "name": f.name, "value": f.value, "confidence": f.confidence,
                    "line": f.source_line, "source_text": f.source_text} for f in facts],
         "analysis": analysis,

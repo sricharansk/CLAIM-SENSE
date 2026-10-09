@@ -152,3 +152,6 @@ nav.tabs button { background: none; border: 0; border-bottom: 2px solid transpar
 nav.tabs button.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 600; }
 nav.tabs .count { margin-left: 6px; font-size: 0.72rem; background: var(--gray-bg); color: var(--gray); border-radius: 999px; padding: 1px 7px; }
 .notice.row.between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+.fact-edit { display: grid; gap: 8px; padding: 8px 0; }
+.fact-edit label { display: grid; gap: 4px; font-size: 0.82rem; color: var(--muted); }

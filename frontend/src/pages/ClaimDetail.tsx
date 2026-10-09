@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ApiError, AnalysisResult, ClaimDetail as Detail, Letter, api, inr, when, words } from "../api";
 import { useSession } from "../components/session";
@@ -109,23 +109,14 @@ export default function ClaimDetail() {
           </table>
           {doc && <div className="doc-view"><div className="row between"><strong>{doc.filename}</strong><button className="btn small" onClick={() => setDoc(null)}>Close</button></div><pre>{doc.text}</pre></div>}
         </Card>
-        {r && <div className="grid2">
-          <Card title="Extracted claim facts">
-            <table>
-              <thead><tr><th>Fact</th><th>Value</th><th>Source</th></tr></thead>
-              <tbody>{Object.entries(r.facts).filter(([k]) => k !== "distinct_names").map(([k, v]) => {
-                const f = c.facts.find((x) => x.name === k);
-                const d = f && c.documents.find((x) => x.id === f.document_id);
-                return <tr key={k}><td>{words(k)}</td><td>{String(v)}</td><td className="muted small">{d ? `${d.filename} line ${f!.line} · ${(f!.confidence * 100).toFixed(0)}%` : "claim header"}</td></tr>;
-              })}</tbody>
-            </table>
-          </Card>
-          <Card title="Line items">
+        {(c.fact_view.length > 0 || r) && <div className="grid2">
+          <Facts c={c} r={r} canEdit={!closed} onSaved={claim.reload} />
+          {r ? <Card title="Line items">
             <table>
               <thead><tr><th>Item</th><th>Category</th><th className="num">Amount</th></tr></thead>
               <tbody>{r.line_items.map((li, i) => <tr key={i}><td>{li.description}<div className="muted small">{li.source.document_type} line {li.source.line}</div></td><td><Badge value={li.category} /></td><td className="num">{inr(li.amount)}</td></tr>)}</tbody>
             </table>
-          </Card>
+          </Card> : <Card title="Line items"><p className="muted">Line items are read from the bill or estimate when the analysis runs.</p></Card>}
         </div>}
       </>}
 
@@ -280,5 +271,51 @@ function Cite({ c }: { c: { product_code: string; version: string; clause_ref: s
       <summary>{c.product_code} v{c.version} §{c.clause_ref} “{c.title}”, p.{c.page}</summary>
       <blockquote>{c.text}<footer className="muted small">{c.document}</footer></blockquote>
     </details>
+  );
+}
+
+
+function Facts({ c, r, canEdit, onSaved }: { c: Detail; r: AnalysisResult | null; canEdit: boolean; onSaved: () => void }) {
+  const [edit, setEdit] = useState<string | null>(null);
+  const [value, setValue] = useState("");
+  const [reason, setReason] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<ApiError | null>(null);
+  const open = (name: string, v: string) => { setEdit(name); setValue(v); setReason(""); setError(null); };
+  const save = async () => {
+    if (!edit) return;
+    setSaving(true); setError(null);
+    try { await api.correctFact(c.claim_number, { name: edit, value, reason }); setEdit(null); onSaved(); }
+    catch (e) { setError(e as ApiError); } finally { setSaving(false); }
+  };
+  const pending = r ? c.fact_view.filter((f) => f.corrected && String(r.facts[f.name] ?? "") !== f.value) : [];
+  return (
+    <Card title="Extracted claim facts">
+      <p className="muted small">Check these before running the analysis. A correction needs a reason, is audited, and keeps the extracted value.</p>
+      {pending.length > 0 && <div className="notice">Corrected since the last analysis: {pending.map((f) => words(f.name)).join(", ")}. Re-run the analysis to apply.</div>}
+      <table>
+        <thead><tr><th>Fact</th><th>Value</th><th>Source</th>{canEdit && <th></th>}</tr></thead>
+        <tbody>{c.fact_view.map((f) => (
+          <Fragment key={f.name}>
+            <tr>
+              <td>{words(f.name)}</td>
+              <td>{f.value}{f.corrected && <div className="small"><Badge value="CORRECTED" /> <span className="muted">extracted: {f.extracted_value ?? "none"}</span></div>}</td>
+              <td className="muted small">{f.corrected ? f.source.text : f.source.document ? `${f.source.document} line ${f.source.line} · ${(f.source.confidence * 100).toFixed(0)}%` : "claim header"}</td>
+              {canEdit && <td>{f.correctable && edit !== f.name && <button className="btn small" onClick={() => open(f.name, f.value)}>Correct</button>}</td>}
+            </tr>
+            {edit === f.name && <tr><td colSpan={canEdit ? 4 : 3}>
+              <div className="fact-edit">
+                <label>New value<input aria-label={`New ${words(f.name)}`} value={value} onChange={(e) => setValue(e.target.value)} /></label>
+                <label>Reason<input aria-label="Reason for correction" value={reason} placeholder="e.g. police report gives a different date" onChange={(e) => setReason(e.target.value)} /></label>
+                <div className="row"><button className="btn primary small" disabled={saving || !value.trim() || !reason.trim()} onClick={save}>Save correction</button>
+                  <button className="btn small" onClick={() => setEdit(null)}>Cancel</button></div>
+                <ErrorBox error={error} />
+              </div>
+            </td></tr>}
+          </Fragment>))}
+          {!c.fact_view.length && <tr><td colSpan={4} className="muted">No facts extracted yet.</td></tr>}
+        </tbody>
+      </table>
+    </Card>
   );
 }
