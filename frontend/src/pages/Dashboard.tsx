@@ -9,7 +9,7 @@ export default function Dashboard() {
   const claims = useLoad(() => api.claims());
   if (a.loading && !a.data) return <Loading />;
   if (!a.data) return <ErrorBox error={a.error} onRetry={a.reload} />;
-  const { totals, portfolio } = a.data;
+  const { totals, portfolio, human_vs_ai: h } = a.data;
   return (
     <>
       <header className="page-head">
@@ -27,11 +27,15 @@ export default function Dashboard() {
         <Kpi label="Claimed" value={inr(totals.claimed_amount)} />
         <Kpi label="AI-recommended payable" value={inr(totals.recommended_payable)} />
         <Kpi label="Avg. analysis time" value={totals.avg_analysis_ms !== null ? `${totals.avg_analysis_ms} ms` : "—"} />
-        <Kpi label="Human agreed with AI" value={`${a.data.human_vs_ai.agreed}/${a.data.human_vs_ai.decided}`} />
+        <Kpi label="Override rate (reviewer vs AI)" value={rate(h.override_rate, h.overridden, h.decided)} />
+        <Kpi label="Escalation rate" value={rate(h.escalation_rate, h.escalated, h.reviewed)} />
         <Kpi label="Settlement overdue / breached" value={totals.overdue} tone={totals.overdue ? "red" : undefined} />
       </div>
       <div className="grid3">
-        <Card title="AI recommendations"><Bars data={a.data.by_recommendation} /></Card>
+        <Card title="AI recommendations"><Bars data={a.data.by_recommendation} />
+          <h4>Reviewer actions</h4><Bars data={a.data.human_outcomes} />
+          {h.amount_overridden > 0 && <p className="muted small">{h.amount_overridden} approval{h.amount_overridden === 1 ? "" : "s"} at an amount other than the AI's.</p>}
+        </Card>
         <Card title="Risk levels"><Bars data={a.data.by_risk} /></Card>
         <Card title="Claim status"><Bars data={a.data.by_status} /><h4>Settlement clock</h4><Bars data={a.data.settlement} /></Card>
       </div>
@@ -68,6 +72,8 @@ export default function Dashboard() {
     </>
   );
 }
+
+const rate = (r: number | null, n: number, d: number) => (r === null ? "—" : `${Math.round(r * 100)}% (${n}/${d})`);
 
 function Kpi({ label, value, tone }: { label: string; value: string | number; tone?: string }) {
   return <div className={`kpi ${tone ?? ""}`}><span>{label}</span><strong>{value}</strong></div>;

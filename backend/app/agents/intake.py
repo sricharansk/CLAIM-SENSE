@@ -5,6 +5,7 @@ import json
 from datetime import date
 
 from ..models import ClaimFact, InsuredPolicy
+from ..safety import embedded_instructions
 from .base import AgentError, ClaimContext, ToolLog
 
 SINGLE_VALUE = ["policy_number", "claimant_name", "incident_date", "admission_date", "discharge_date", "diagnosis",
@@ -46,6 +47,12 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     if claim.claimed_amount is not None and "claimed_amount" not in ctx.facts:
         ctx.facts["claimed_amount"] = str(claim.claimed_amount)
     log.record("consolidate_facts", {"documents": len(claim.documents)}, f"{len(ctx.facts)} facts, {len(ctx.line_items)} line items", t)
+
+    t = time.perf_counter()
+    ctx.embedded_instructions = [{"document": d.filename, "document_type": d.doc_type, **hit}
+                                 for d in claim.documents for hit in embedded_instructions(d.text or "")]
+    log.record("scan_embedded_instructions", {"documents": len(claim.documents)},
+               f"{len(ctx.embedded_instructions)} suspicious lines (treated as data, never followed)", t)
 
     t = time.perf_counter()
     insured = ctx.db.query(InsuredPolicy).filter_by(policy_number=ctx.facts["policy_number"]).first()

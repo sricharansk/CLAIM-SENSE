@@ -7,7 +7,7 @@ import json
 from datetime import date
 from decimal import Decimal
 
-from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import func, text
@@ -17,7 +17,7 @@ from .. import analytics, letters, llm, sla
 from ..agents import audit
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
-from ..auth import current_user, issue_token, supervisor, user_view, verify_password, writer
+from ..auth import current_user, issue_token, supervisor, throttle, user_view, verify_password, writer
 from ..config import REPO_ROOT, settings
 from ..db import get_db
 from ..models import (
@@ -74,12 +74,21 @@ class LoginIn(BaseModel):
 
 
 @public.post("/auth/login")
-def login(body: LoginIn, db: Session = Depends(get_db)):
-    user = db.query(User).filter_by(username=body.username.strip().lower(), active=True).first()
+def login(body: LoginIn, request: Request, db: Session = Depends(get_db)):
+    username = body.username.strip().lower()
+    key = f"{request.client.host if request.client else '-'}|{username}"
+    wait = throttle.retry_after(key)
+    if wait:
+        audit.log(db, None, "LOGIN_THROTTLED", username[:60], {"retry_after_s": wait})
+        db.commit()
+        raise HTTPException(429, f"Too many failed sign-ins. Try again in {wait} seconds.", headers={"Retry-After": str(wait)})
+    user = db.query(User).filter_by(username=username, active=True).first()
     if user is None or not verify_password(body.password, user.password_hash):
-        audit.log(db, None, "LOGIN_FAILED", body.username[:60], {})
+        throttle.fail(key)
+        audit.log(db, None, "LOGIN_FAILED", username[:60], {})
         db.commit()
         raise HTTPException(401, "Wrong username or password")
+    throttle.reset(key)
     audit.log(db, None, "LOGIN", user.username, {"role": user.role})
     db.commit()
     return {"token": issue_token(user), "user": user_view(user)}

@@ -15,14 +15,14 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Area | What you can do | Where |
 |---|---|---|
 | Sign-in and roles | Adjuster (approves up to ₹2,00,000), Supervisor (no limit, decides escalations, ingests policies), Auditor (read-only); signed tokens; every action audited under the signed-in user | `/` |
-| Dashboard | Live claim counts, recommendations, risk mix, review progress, settlement clock, portfolio evaluation | `/` |
+| Dashboard | Live claim counts, recommendations, risk mix, override and escalation rates, reviewer actions, settlement clock, portfolio evaluation | `/` |
 | Claim intake | Create a claim, upload PDF or text documents, run the agent pipeline | `/claims/new` |
 | Document intelligence | Document classification, extracted facts with source file, line and confidence, itemised charges | claim page |
 | Policy versioning | Picks the wording version in force on the incident date (HLT-SHIELD 2024.1 vs 2025.1) | claim page |
 | Hybrid RAG | BM25 + character n-gram vectors fused with reciprocal rank fusion; clause, section and page citations; refuses when evidence is weak | `/assistant` |
 | Coverage | Policy period, initial and specified-disease waiting periods, exclusions, required documents, each citing its clause | claim page |
 | Adjudication | Decimal rules engine: non-payable items, per-day limits, depreciation, deductible, co-pay, sum-insured cap, shown as a waterfall | claim page |
-| Risk / fraud | Transparent weighted signals: amount ratio, early claim, frequency, duplicates, amount and name mismatches, missing documents | claim page |
+| Risk / fraud | Transparent weighted signals: amount ratio, early claim, frequency, duplicates, amount and name mismatches, missing documents, text in documents addressed to an AI | claim page |
 | Recommendation | Approve, partial approval, reject, request info or investigate, with reasons and an evidence package | claim page |
 | Human review | Approve (with amount override), reject, request info, investigate, escalate; notes required for adverse actions; approval limits enforced; escalated claims need a supervisor | claim page, `/reviews` |
 | Workflow | Routing to adjuster, investigation (SIU), pending-information and supervisor queues | `/reviews` |
@@ -142,7 +142,7 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 52 tests
+cd backend && ruff check app tests && python -m pytest -q    # 56 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
 cd frontend && npm run build                                 # type check + production build
 ```
