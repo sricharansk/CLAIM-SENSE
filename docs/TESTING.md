@@ -7,6 +7,7 @@ cd backend && ruff check app tests ../scripts && python -m pytest -q     # 71 te
 python3 scripts/evaluate.py                                             # golden evaluation, 256 checks
 python3 scripts/provenance.py --check                                   # registry, checksums, reproducible RAG manifest
 cd frontend && npm run build                                            # type check + build
+cd e2e && npx playwright test                                           # 10 browser tests (fresh stack)
 docker compose up --build -d && python3 scripts/smoke_test.py http://localhost:8080
 ```
 
@@ -54,4 +55,26 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
   - PDF policy ingestion;
   - take, release and reassign review tasks.
 
-  The scripts are not in the repository; their screenshots are in `docs/screenshots/`.
+  The screenshots are in `docs/screenshots/`.
+
+## Browser tests (`e2e/`)
+
+`e2e/tests/golden.spec.mjs` has 10 Playwright tests that drive the real UI against a running stack (`BASE_URL`, default `http://localhost:8080`):
+
+- golden claim to approval and letter, with the stage audit events;
+- approval-limit block;
+- cited rejection;
+- assistant answer and refusal;
+- evaluation scorecard;
+- take and release a review task;
+- fact correction and re-run;
+- data provenance;
+- dashboard rates;
+- phone layout.
+
+Any browser console error fails a test. They need a freshly seeded stack, because a second run files the golden claim again and the system flags it as a duplicate. CI runs them in the `docker-smoke` job before the smoke test.
+
+```bash
+docker compose down -v && docker compose up --build -d
+cd e2e && npm ci && npx playwright install chromium && npx playwright test
+```

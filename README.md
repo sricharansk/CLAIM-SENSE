@@ -96,7 +96,7 @@ flowchart TD
 - The LLM is optional and never computes money or decides claims. Without `ANTHROPIC_API_KEY`, the assistant answers by quoting the wording it retrieved.
 - Agent failures stop the run safely and route the claim to `NEEDS_ATTENTION`. Re-running analysis supersedes the previous recommendation and task.
 
-More detail: [product requirements](docs/PRD.md), [architecture](docs/ARCHITECTURE.md), [database](docs/DATABASE.md), [decisions](docs/DECISIONS.md), [design system](docs/DESIGN_SYSTEM.md), [code style](docs/CODE_STYLE.md), [testing](docs/TESTING.md), [agents](docs/AGENTS.md) and [release readiness](docs/RELEASE_READINESS.md).
+More detail: [product requirements](docs/PRD.md), [architecture](docs/ARCHITECTURE.md), [database](docs/DATABASE.md), [decisions](docs/DECISIONS.md), [design system](docs/DESIGN_SYSTEM.md), [code style](docs/CODE_STYLE.md), [testing](docs/TESTING.md), [agents](docs/AGENTS.md), [release readiness](docs/RELEASE_READINESS.md), [final validation report](docs/FINAL_VALIDATION_REPORT.md) and [release notes](RELEASE_NOTES.md).
 
 ## Run it
 
@@ -142,17 +142,20 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 3. Review the recommendation on the Overview tab, then the Coverage, Adjudication (₹78,000 billed, ₹64,080 payable), Risk and Policy & evidence tabs.
 4. Approve it on the Review tab. The claim, review queue, dashboard and audit trail all update.
 5. Press **Generate letter** for the settlement letter (₹64,080.00), or open `CLM-H-1002` for a repudiation letter citing clause 3.3.
-6. Sign in as `supervisor`, open **Policy library** and ingest `data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf` with its `.terms.json`: the 6-page PDF becomes 21 cited clauses of a new 2026.1 version, and the assistant can answer from it.
+6. Before analysing, the Documents tab lists the extracted facts; **Correct** one with a reason and re-run the analysis to use it.
+7. Sign in as `supervisor`, open **Policy library** and ingest `data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf` with its `.terms.json`: the 6-page PDF becomes 21 cited clauses of a new 2026.1 version, and the assistant can answer from it.
 
 ## Tests and checks
 
 ```bash
 cd backend && ruff check app tests && python -m pytest -q    # 71 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
+python3 scripts/provenance.py --check                        # source registry, checksums, RAG manifest
 cd frontend && npm run build                                 # type check + production build
+cd e2e && npm ci && npx playwright test                      # 10 browser tests against a fresh stack on :8080
 ```
 
-Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 256 / 256 checks), `pip-audit`, `npm audit` and a Docker + PostgreSQL smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
+Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 256 / 256 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Data and datasets
 
