@@ -45,6 +45,10 @@ def check(name: str, ok: bool, detail: str = "") -> None:
         sys.exit(1)
 
 
+ROOT_URL = BASE[: -len("/api/v1")]
+with urllib.request.urlopen(ROOT_URL + "/", timeout=60) as r:
+    page = r.read().decode("utf-8", "replace")
+check("frontend", r.status == 200 and "<title>Claim Sense</title>" in page and "/assets/" in page, f"{len(page)} bytes of HTML")
 health = call("GET", "/health")
 check("health", health["status"] == "ok", json.dumps(health))
 ready = call("GET", "/ready")
@@ -58,6 +62,11 @@ TOKEN = call("POST", "/auth/login", {"username": "supervisor", "password": PASSW
 check("sign in", bool(TOKEN))
 claims = call("GET", "/claims")
 check("seeded claims", len(claims) >= 8, f"{len(claims)} claims")
+ingestions = call("GET", "/policy-ingestions")
+check("policy wordings ingested", sum(i["status"] == "READY" for i in ingestions) >= 3,
+      ", ".join(f"{i['filename']}={i['status']}" for i in ingestions[:4]))
+evaluation = call("GET", "/evaluation")["summary"]
+check("golden evaluation report", evaluation["all_passed"], f"{evaluation['checks_passed']}/{evaluation['checks']} checks")
 c = call("POST", "/claims", {"policy_number": "CS-HLT-23-000089", "claim_type": "health",
                              "claimant_name": "Fatima Shaikh", "description": "smoke test"})
 n = c["claim_number"]
