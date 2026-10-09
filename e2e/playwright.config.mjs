@@ -1,6 +1,8 @@
 import { defineConfig } from "@playwright/test";
 
-// Run against a fresh stack: docker compose up -d && npm test. BASE_URL overrides the target;
+// Run against a freshly seeded stack: docker compose up -d && npm test. A second run on the same database files the
+// golden claim again, and the system rightly flags it as a duplicate, so reset with docker compose down -v first.
+// BASE_URL overrides the target;
 // PW_CHROMIUM points at a preinstalled Chromium instead of the one `npx playwright install` downloads.
 export default defineConfig({
   testDir: "tests",
