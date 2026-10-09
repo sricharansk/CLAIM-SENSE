@@ -30,7 +30,7 @@ Status on 2026-10-09: **ready to deploy, not yet deployed.** The application wor
 
 1. Merge the open pull request into `main`.
 2. On render.com, choose New → Blueprint, then pick `CLAIM-SENSE`. Render reads `render.yaml`, builds the Dockerfile, provisions PostgreSQL and generates `AUTH_SECRET`. Set `DEMO_PASSWORD` when prompted.
-3. Open the service URL and run `python3 scripts/smoke_test.py https://<service>.onrender.com <DEMO_PASSWORD>`.
+3. Open the service URL and run `python3 scripts/smoke_test.py https://<service>.onrender.com <DEMO_PASSWORD>`, or run the **Verify deployment** workflow with the URL.
 4. Only after that passes, record the URL and result in `IMPLEMENTATION_STATUS.md`.
 
 ## Known limits (enterprise gates, not MVP defects)

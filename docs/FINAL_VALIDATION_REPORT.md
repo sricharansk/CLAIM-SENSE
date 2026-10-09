@@ -71,4 +71,4 @@ cd e2e && npm ci && npx playwright install chromium && npx playwright test   # n
 python3 scripts/smoke_test.py http://localhost:8080
 ```
 
-After deploying: `python3 scripts/smoke_test.py https://<service> <DEMO_PASSWORD>`. Then `cd e2e && BASE_URL=https://<service> DEMO_PASSWORD=<…> npx playwright test`. Only then record the deployment as VERIFIED.
+After deploying: `python3 scripts/smoke_test.py https://<service> <DEMO_PASSWORD>`. Then `cd e2e && BASE_URL=https://<service> DEMO_PASSWORD=<…> npx playwright test`, or run the **Verify deployment** workflow with the URL. Only then record the deployment as VERIFIED.

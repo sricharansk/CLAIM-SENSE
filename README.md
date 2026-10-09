@@ -176,7 +176,7 @@ Everything is regenerated deterministically with `python data/synthetic/generate
 
   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sricharansk/CLAIM-SENSE)
 
-The cloud deployment has **not** been run yet. No cloud credentials were available while building. Once deployed, run `python3 scripts/smoke_test.py https://<service> <DEMO_PASSWORD>` before calling it live. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+The cloud deployment has **not** been run yet. No cloud credentials were available while building. Once deployed, run `python3 scripts/smoke_test.py https://<service> <DEMO_PASSWORD>` (or the **Verify deployment** workflow in GitHub Actions) before calling it live. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Repository layout
 

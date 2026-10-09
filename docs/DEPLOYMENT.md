@@ -24,6 +24,7 @@ Behind a TLS-inspecting proxy, pass its CA to the build: `docker build --secret 
 1. Render builds the default branch (`main`). Merge the open pull request first so `main` has every feature in this document; `main` already runs the golden path.
 2. Use the [Deploy to Render](https://render.com/deploy?repo=https://github.com/sricharansk/CLAIM-SENSE) link, or on render.com choose **New → Blueprint** and select this repository; `render.yaml` defines a free Docker web service and generates `AUTH_SECRET`. Enter a `DEMO_PASSWORD` when asked (or leave it to use the default).
 3. Wait for the health check on `/api/v1/health`, then run `python3 scripts/smoke_test.py https://<your-app>.onrender.com <DEMO_PASSWORD>`. For the browser suite as well: `cd e2e && BASE_URL=https://<your-app>.onrender.com DEMO_PASSWORD=<…> npx playwright test` (on a freshly started service).
+4. Or verify from GitHub instead of your machine: run the **Verify deployment** workflow (Actions tab) with the service URL. It waits for `/api/v1/ready`, runs the smoke test and, if ticked, the browser suite. Set the `DEMO_PASSWORD` repository secret first if you changed the password.
 
 The free plan uses SQLite that is re-seeded on each restart, which suits a demo but not real data.
 
