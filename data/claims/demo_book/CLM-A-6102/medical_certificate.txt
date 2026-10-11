@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE (TREATING DOCTOR)
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Rekha Nair
+Doctor: Dr. S. Synthetic, Orthopaedics (fictional)
+Nature of Injury: Traumatic amputation of the right index finger
+
+Clinical Notes:
+Finger amputated at the base; stump healed.

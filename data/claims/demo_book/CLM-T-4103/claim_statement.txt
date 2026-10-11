@@ -1,0 +1,11 @@
+STATEMENT OF LOSS — TRAVEL
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Frankfurt
+Patient/Insured Name: Smita Kulkarni
+
+Itemised Charges:
+Trip delay - airport hotel for one night                              11,500.00
+Trip delay - meals and local transport                                 3,000.00
+
+Total Amount                                                          14,500.00

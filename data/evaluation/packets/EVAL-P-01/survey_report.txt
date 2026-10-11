@@ -1,0 +1,10 @@
+SURVEY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Coastal Loss Assessors (fictional)
+Property Address: Flat 4B, Synthetic Residency, Bengaluru
+Value at Risk: INR 5,000,000.00
+Cause of Loss: Burglary
+
+Surveyor Findings:
+Window grill cut; locked safe forced open. Value at risk confirmed at INR 50,00,000.

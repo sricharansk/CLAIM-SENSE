@@ -31,10 +31,20 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
         fail = next(x for x in cov["findings"] if x["outcome"] == "FAIL")
         result = rules.not_admissible(items, claimed, (fail.get("citation") or {}).get("clause_ref"), fail["message"])
         args = {"mode": "not_admissible"}
-    elif terms["line_of_business"] == "health":
+    elif (model := terms.get("adjudication_model", terms["line_of_business"])) == "health":
         avail = _available_sum_insured(ctx)
         result = rules.adjudicate_health(items, claimed, terms, avail)
         args = {"mode": "health", "sum_insured_available": str(avail)}
+    elif model == "indemnity":
+        avail = _available_sum_insured(ctx)
+        var = ctx.facts.get("value_at_risk")
+        result = rules.adjudicate_indemnity(items, claimed, terms, avail, rules.money(var) if var else None,
+                                            Decimal(ctx.insured.sum_insured))
+        args = {"mode": "indemnity", "sum_insured_available": str(avail), "value_at_risk": var}
+    elif model == "benefit_schedule":
+        avail = _available_sum_insured(ctx)
+        result = rules.adjudicate_benefits(items, claimed, terms, avail, Decimal(ctx.insured.sum_insured))
+        args = {"mode": "benefit_schedule", "sum_insured": str(ctx.insured.sum_insured), "sum_insured_available": str(avail)}
     else:
         first_reg = ctx.facts.get("vehicle_first_registration")
         age = rules.months_between(date.fromisoformat(first_reg), ctx.facts["incident_date_parsed"]) if first_reg else 999

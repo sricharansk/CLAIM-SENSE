@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Hudson Medical Center (fictional)
+Bill Number: HB-4110
+Admission Date: 2026-08-29
+Discharge Date: 2026-09-02
+Patient/Insured Name: Hemant Joshi
+
+Itemised Charges:
+ICU Charges (4 days @ 1,20,000)                                      480,000.00
+Physician and Specialist Fees                                        160,000.00
+Pharmacy - Medicines and Drugs                                        70,000.00
+Medical evacuation - air ambulance to Mumbai                         240,000.00
+
+Total Amount                                                         950,000.00

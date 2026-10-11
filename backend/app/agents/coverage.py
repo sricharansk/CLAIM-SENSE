@@ -10,6 +10,9 @@ from ..rag import service as rag
 from .base import ClaimContext, ToolLog
 
 ACCIDENT_WORDS = ("accident", "accidental", "fall", "injury", "collision", "fracture")
+# free-text facts the waiting-period and exclusion checks read
+TEXT_FIELDS = ("diagnosis", "procedure", "narrative", "clinical_notes", "police_findings", "survey_findings",
+               "cause_of_loss", "cause_of_death", "injury")
 
 
 def _cite(ctx: ClaimContext, ref: str | None) -> dict | None:
@@ -23,7 +26,7 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     t = time.perf_counter()
     terms, f, ins = ctx.version.terms, ctx.facts, ctx.insured
     incident = f["incident_date_parsed"]
-    text = " ".join(str(f.get(k, "")) for k in ("diagnosis", "procedure", "narrative", "clinical_notes", "police_findings")).lower()
+    text = " ".join(str(f.get(k, "")) for k in TEXT_FIELDS).lower()
     accident = any(w in text for w in ACCIDENT_WORDS)
     findings: list[dict] = []
     status = "COVERED"
@@ -39,6 +42,13 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
             terms.get("coverage_clause"))
 
     days = (incident - ins.start_date).days
+    if status == "COVERED" and (acc := terms.get("accident_only")):
+        if accident:
+            add("ACCIDENTAL_CAUSE", "PASS", "The documents describe an accident.", acc["clause"])
+        else:
+            status = "NOT_COVERED"
+            add("NOT_ACCIDENTAL", "FAIL", "The documents do not describe an accident; the policy covers accidental injury only.",
+                acc["clause"])
     wp = terms.get("waiting_periods", {})
     if status == "COVERED" and "initial_days" in wp:
         w = wp["initial_days"]
@@ -60,6 +70,10 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     if status == "COVERED":
         for ex in terms.get("exclusions", []):
             kw = next((k for k in ex["keywords"] if k in text), None)
+            if kw and ex.get("within_months") and days // 30 >= ex["within_months"]:
+                add(ex["code"], "PASS", f"Documents mention '{kw}', but this exclusion applies only in the first "
+                    f"{ex['within_months']} months; cover has run about {days // 30} months.", ex["clause"])
+                continue
             if kw:
                 status = "NOT_COVERED"
                 add(ex["code"], "FAIL", f"Claim documents mention '{kw}', which falls under an exclusion.", ex["clause"])

@@ -1,0 +1,8 @@
+E-TICKET AND TRAVEL ITINERARY
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Smita Kulkarni
+Flight Number: LH-SYN-0761
+Destination: Frankfurt
+Trip Start Date: 2026-07-01
+Trip End Date: 2026-07-15

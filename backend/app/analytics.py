@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 from . import sla
 from .agents.risk import level, score_features
 from .config import settings
+from .lines import LINES as LINE_CODES
 from .models import AnalysisRun, Claim, ClaimDecision, PolicyVersion, WorkflowTask
 
 
@@ -22,7 +23,7 @@ def _latest_ai(db: Session) -> dict[int, ClaimDecision]:
     return out
 
 
-LINES = ("health", "motor")
+LINES = tuple(LINE_CODES)
 AGE_BUCKETS = ((2, "0-2 days"), (7, "3-7 days"), (14, "8-14 days"), (30, "15-30 days"), (None, "Over 30 days"))
 WEEKS = 8
 

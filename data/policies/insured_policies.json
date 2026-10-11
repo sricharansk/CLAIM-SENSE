@@ -382,5 +382,293 @@
     "start_date": "2025-08-20",
     "end_date": "2026-08-19",
     "sum_insured": 300000
+  },
+  {
+    "policy_number": "CS-TRV-26-002101",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Aditi Rao",
+    "start_date": "2026-06-02",
+    "end_date": "2026-06-20",
+    "sum_insured": 1500000
+  },
+  {
+    "policy_number": "CS-TRV-26-002118",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Rakesh Menon",
+    "start_date": "2026-06-10",
+    "end_date": "2026-06-24",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-TRV-26-002125",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Smita Kulkarni",
+    "start_date": "2026-07-01",
+    "end_date": "2026-07-15",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-TRV-26-002132",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Faizal Ahmed",
+    "start_date": "2026-07-05",
+    "end_date": "2026-07-25",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-TRV-26-002149",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Nandini Iyer",
+    "start_date": "2026-07-20",
+    "end_date": "2026-08-05",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-TRV-26-002156",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Vivek Chandra",
+    "start_date": "2026-08-01",
+    "end_date": "2026-08-12",
+    "sum_insured": 1500000
+  },
+  {
+    "policy_number": "CS-TRV-26-002163",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Meera Pillai",
+    "start_date": "2026-08-08",
+    "end_date": "2026-08-30",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-TRV-26-002170",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Arun Bhatia",
+    "start_date": "2026-08-15",
+    "end_date": "2026-08-28",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-TRV-26-002187",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Sonia Dsouza",
+    "start_date": "2026-08-20",
+    "end_date": "2026-09-02",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-TRV-26-002194",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Hemant Joshi",
+    "start_date": "2026-08-22",
+    "end_date": "2026-09-05",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-HOM-26-003101",
+    "product_code": "HOME-SHIELD",
+    "holder_name": "Ramesh Iyengar",
+    "start_date": "2026-04-10",
+    "end_date": "2027-04-09",
+    "sum_insured": 2500000
+  },
+  {
+    "policy_number": "CS-HOM-26-003118",
+    "product_code": "HOME-SHIELD",
+    "holder_name": "Shalini Ghosh",
+    "start_date": "2026-04-15",
+    "end_date": "2027-04-14",
+    "sum_insured": 1500000
+  },
+  {
+    "policy_number": "CS-HOM-26-003125",
+    "product_code": "HOME-SHIELD",
+    "holder_name": "Thomas Mathew",
+    "start_date": "2026-04-01",
+    "end_date": "2027-03-31",
+    "sum_insured": 4000000
+  },
+  {
+    "policy_number": "CS-HOM-26-003132",
+    "product_code": "HOME-SHIELD",
+    "holder_name": "Padma Raghavan",
+    "start_date": "2026-05-01",
+    "end_date": "2027-04-30",
+    "sum_insured": 2000000
+  },
+  {
+    "policy_number": "CS-HOM-26-003149",
+    "product_code": "HOME-SHIELD",
+    "holder_name": "Yusuf Pathan",
+    "start_date": "2026-04-20",
+    "end_date": "2027-04-19",
+    "sum_insured": 1800000
+  },
+  {
+    "policy_number": "CS-HOM-26-003156",
+    "product_code": "HOME-SHIELD",
+    "holder_name": "Kamala Devi",
+    "start_date": "2026-06-01",
+    "end_date": "2027-05-31",
+    "sum_insured": 2200000
+  },
+  {
+    "policy_number": "CS-HOM-26-003163",
+    "product_code": "HOME-SHIELD",
+    "holder_name": "Rajat Kapoor",
+    "start_date": "2026-08-01",
+    "end_date": "2027-07-31",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-HOM-26-003170",
+    "product_code": "HOME-SHIELD",
+    "holder_name": "Gita Sharma",
+    "start_date": "2026-04-05",
+    "end_date": "2027-04-04",
+    "sum_insured": 1200000
+  },
+  {
+    "policy_number": "CS-HOM-26-003187",
+    "product_code": "HOME-SHIELD",
+    "holder_name": "Naveen Reddy",
+    "start_date": "2026-04-25",
+    "end_date": "2027-04-24",
+    "sum_insured": 3000000
+  },
+  {
+    "policy_number": "CS-HOM-26-003194",
+    "product_code": "HOME-SHIELD",
+    "holder_name": "Ananya Sen",
+    "start_date": "2026-04-01",
+    "end_date": "2026-06-30",
+    "sum_insured": 1500000
+  },
+  {
+    "policy_number": "CS-PAC-26-004101",
+    "product_code": "PA-SECURE",
+    "holder_name": "Sunil Shetty",
+    "start_date": "2026-04-01",
+    "end_date": "2027-03-31",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-PAC-26-004118",
+    "product_code": "PA-SECURE",
+    "holder_name": "Rekha Nair",
+    "start_date": "2026-04-12",
+    "end_date": "2027-04-11",
+    "sum_insured": 500000
+  },
+  {
+    "policy_number": "CS-PAC-26-004125",
+    "product_code": "PA-SECURE",
+    "holder_name": "Mahesh Babu Kondapalli",
+    "start_date": "2026-04-20",
+    "end_date": "2027-04-19",
+    "sum_insured": 1500000
+  },
+  {
+    "policy_number": "CS-PAC-26-004132",
+    "product_code": "PA-SECURE",
+    "holder_name": "Zoya Mirza",
+    "start_date": "2026-05-01",
+    "end_date": "2027-04-30",
+    "sum_insured": 500000
+  },
+  {
+    "policy_number": "CS-PAC-26-004149",
+    "product_code": "PA-SECURE",
+    "holder_name": "Bharat Solanki",
+    "start_date": "2026-04-08",
+    "end_date": "2027-04-07",
+    "sum_insured": 700000
+  },
+  {
+    "policy_number": "CS-PAC-26-004156",
+    "product_code": "PA-SECURE",
+    "holder_name": "Lata Mangeshkar Joshi",
+    "start_date": "2026-05-15",
+    "end_date": "2027-05-14",
+    "sum_insured": 800000
+  },
+  {
+    "policy_number": "CS-PAC-26-004163",
+    "product_code": "PA-SECURE",
+    "holder_name": "Irfan Sheikh",
+    "start_date": "2026-04-18",
+    "end_date": "2027-04-17",
+    "sum_insured": 600000
+  },
+  {
+    "policy_number": "CS-PAC-26-004170",
+    "product_code": "PA-SECURE",
+    "holder_name": "Pallavi Deshmukh",
+    "start_date": "2026-07-20",
+    "end_date": "2027-07-19",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-LIF-20-005101",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Venkatesh Subramanian",
+    "start_date": "2020-03-01",
+    "end_date": "2045-02-28",
+    "sum_insured": 5000000
+  },
+  {
+    "policy_number": "CS-LIF-25-005118",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Rupa Banerjee",
+    "start_date": "2025-03-15",
+    "end_date": "2050-03-14",
+    "sum_insured": 3000000
+  },
+  {
+    "policy_number": "CS-LIF-25-005125",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Kunal Malhotra",
+    "start_date": "2025-11-01",
+    "end_date": "2055-10-31",
+    "sum_insured": 2500000
+  },
+  {
+    "policy_number": "CS-LIF-22-005132",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Dinesh Agarwal",
+    "start_date": "2022-02-10",
+    "end_date": "2042-02-09",
+    "sum_insured": 2000000
+  },
+  {
+    "policy_number": "CS-LIF-21-005149",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Asha Verghese",
+    "start_date": "2021-06-01",
+    "end_date": "2041-05-31",
+    "sum_insured": 4000000
+  },
+  {
+    "policy_number": "CS-LIF-16-005156",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Prabhakar Rao",
+    "start_date": "2016-01-15",
+    "end_date": "2026-01-14",
+    "sum_insured": 1500000
+  },
+  {
+    "policy_number": "CS-LIF-19-005163",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Mohammed Rafiq",
+    "start_date": "2019-09-01",
+    "end_date": "2049-08-31",
+    "sum_insured": 2500000
+  },
+  {
+    "policy_number": "CS-LIF-26-005170",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Harsha Vardhan",
+    "start_date": "2026-01-10",
+    "end_date": "2056-01-09",
+    "sum_insured": 1000000
   }
 ]

@@ -947,5 +947,859 @@
     "scenario": "High risk: claim form asks for 1,65,000 against a 1,20,000 estimate, 66 days into cover",
     "age_days": 37,
     "history": []
+  },
+  {
+    "claim_number": "CLM-T-4101",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-26-002101",
+    "claimant_name": "Aditi Rao",
+    "incident_date": "2026-06-08",
+    "description": "Severe abdominal pain on the fourth day of the trip; admitted in Singapore and operated for appendicitis.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt",
+      "passport_copy.txt",
+      "travel_ticket.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Emergency surgery abroad: registration charges not payable and the medical deductible applies",
+    "age_days": 60,
+    "history": [
+      {
+        "action": "ESCALATE",
+        "after_days": 2,
+        "actor": "adjuster",
+        "notes": "Payable is above my approval limit.",
+        "payable_delta": null
+      },
+      {
+        "action": "APPROVE",
+        "after_days": 5,
+        "actor": "supervisor",
+        "notes": "Emergency admission confirmed with the hospital.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-T-4102",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-26-002118",
+    "claimant_name": "Rakesh Menon",
+    "incident_date": "2026-06-10",
+    "description": "Checked bag did not arrive in Dubai and the airline later declared it lost.",
+    "documents": [
+      "airline_report.txt",
+      "claim_form.txt",
+      "claim_statement.txt",
+      "passport_copy.txt",
+      "travel_ticket.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Lost baggage: 10% depreciation, the INR 15,000 per-item limit and the INR 50,000 trip limit",
+    "age_days": 55,
+    "history": [
+      {
+        "action": "APPROVE",
+        "after_days": 7,
+        "actor": "adjuster",
+        "notes": "Airline PIR and trace closure on file.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-T-4103",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-26-002125",
+    "claimant_name": "Smita Kulkarni",
+    "incident_date": "2026-07-14",
+    "description": "Return flight from Frankfurt delayed by 16 hours; stayed overnight at an airport hotel.",
+    "documents": [
+      "airline_report.txt",
+      "claim_form.txt",
+      "claim_statement.txt",
+      "passport_copy.txt",
+      "travel_ticket.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Trip delay above the INR 10,000 limit",
+    "age_days": 45,
+    "history": [
+      {
+        "action": "APPROVE",
+        "after_days": 3,
+        "actor": "adjuster",
+        "notes": "",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-T-4104",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-26-002132",
+    "claimant_name": "Faizal Ahmed",
+    "incident_date": "2026-07-06",
+    "description": "Trip cut short after the insured's father was hospitalised in Chennai; prepaid bookings could not be refunded.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "passport_copy.txt",
+      "travel_ticket.txt"
+    ],
+    "expected_recommendation": "APPROVE",
+    "scenario": "Trip cancellation within the INR 1,00,000 limit: paid in full",
+    "age_days": 50,
+    "history": [
+      {
+        "action": "APPROVE",
+        "after_days": 6,
+        "actor": "adjuster",
+        "notes": "Hospital certificate for the father on file.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-T-4105",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-26-002149",
+    "claimant_name": "Nandini Iyer",
+    "incident_date": "2026-07-26",
+    "description": "Ear injury while scuba diving on a reef dive in Bali; treated at a local clinic.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt",
+      "passport_copy.txt",
+      "travel_ticket.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Scuba diving is a hazardous activity excluded under clause 3.3",
+    "age_days": 38,
+    "history": [
+      {
+        "action": "REJECT",
+        "after_days": 4,
+        "actor": "adjuster",
+        "notes": "Dive centre record confirms a recreational scuba dive; exclusion 3.3 applies.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-T-4106",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-26-002156",
+    "claimant_name": "Vivek Chandra",
+    "incident_date": "2026-08-05",
+    "description": "Chest pain while sightseeing in London; admitted for observation and angiography.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt",
+      "passport_copy.txt",
+      "travel_ticket.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Known heart patient: pre-existing condition excluded under clause 3.2",
+    "age_days": 32,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-T-4107",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-26-002163",
+    "claimant_name": "Meera Pillai",
+    "incident_date": "2026-08-18",
+    "description": "Passport stolen from a hotel room in Rome; emergency certificate issued by the embassy.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "passport_copy.txt",
+      "travel_ticket.txt"
+    ],
+    "expected_recommendation": "APPROVE",
+    "scenario": "Loss of passport within the INR 15,000 limit",
+    "age_days": 20,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-T-4108",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-26-002170",
+    "claimant_name": "Arun Bhatia",
+    "incident_date": "2026-08-22",
+    "description": "Fell on a wet hotel staircase in Bangkok and fractured the wrist.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt",
+      "travel_ticket.txt"
+    ],
+    "expected_recommendation": "REQUEST_INFO",
+    "scenario": "Passport copy not submitted, so the trip dates cannot be confirmed",
+    "age_days": 12,
+    "history": [
+      {
+        "action": "REQUEST_INFO",
+        "after_days": 2,
+        "actor": "adjuster",
+        "notes": "Asked for the passport copy with entry and exit stamps.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-T-4109",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-26-002187",
+    "claimant_name": "Sonia Dsouza",
+    "incident_date": "2026-09-06",
+    "description": "Fever and vomiting after returning home; treated as an outpatient.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt",
+      "passport_copy.txt",
+      "travel_ticket.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Illness began after the trip ended on 2026-09-02, outside the period of cover",
+    "age_days": 22,
+    "history": [
+      {
+        "action": "REJECT",
+        "after_days": 3,
+        "actor": "adjuster",
+        "notes": "Treatment was in India after the trip; outside the policy period.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-T-4110",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-26-002194",
+    "claimant_name": "Hemant Joshi",
+    "incident_date": "2026-08-29",
+    "description": "Collapsed in New York; ICU care and an air ambulance back to Mumbai.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt",
+      "passport_copy.txt",
+      "travel_ticket.txt"
+    ],
+    "expected_recommendation": "INVESTIGATE",
+    "scenario": "High risk: 95% of the trip sum insured and a claim form that does not match the bills",
+    "age_days": 8,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-P-5101",
+    "claim_type": "home",
+    "policy_number": "CS-HOM-26-003101",
+    "claimant_name": "Ramesh Iyengar",
+    "incident_date": "2026-08-02",
+    "description": "Fire in the kitchen from an overheated cooking gas cylinder damaged the kitchen and dining area.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "survey_report.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Kitchen fire: depreciation on contents and the deductible",
+    "age_days": 58,
+    "history": [
+      {
+        "action": "ESCALATE",
+        "after_days": 4,
+        "actor": "adjuster",
+        "notes": "Payable is above my approval limit.",
+        "payable_delta": null
+      },
+      {
+        "action": "APPROVE",
+        "after_days": 9,
+        "actor": "supervisor",
+        "notes": "Survey report supports the assessed loss.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-P-5102",
+    "claim_type": "home",
+    "policy_number": "CS-HOM-26-003118",
+    "claimant_name": "Shalini Ghosh",
+    "incident_date": "2026-07-19",
+    "description": "House broken into while the family was at a wedding for the evening; television, laptop and jewellery taken.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "police_report.txt",
+      "survey_report.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Burglary: jewellery above the INR 1,00,000 limit and depreciation on electronics",
+    "age_days": 47,
+    "history": [
+      {
+        "action": "ESCALATE",
+        "after_days": 3,
+        "actor": "adjuster",
+        "notes": "Above my approval limit.",
+        "payable_delta": null
+      },
+      {
+        "action": "APPROVE",
+        "after_days": 8,
+        "actor": "supervisor",
+        "notes": "FIR and bills verified.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-P-5103",
+    "claim_type": "home",
+    "policy_number": "CS-HOM-26-003125",
+    "claimant_name": "Thomas Mathew",
+    "incident_date": "2026-08-30",
+    "description": "Flood water entered the ground floor after two days of heavy rain; the family moved out for repairs.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "survey_report.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Flood: under-insured by a third, so the average clause applies, with debris and rent sub-limits",
+    "age_days": 25,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-P-5104",
+    "claim_type": "home",
+    "policy_number": "CS-HOM-26-003132",
+    "claimant_name": "Padma Raghavan",
+    "incident_date": "2026-07-28",
+    "description": "Damp patches and peeling plaster in two bedrooms; the bathroom pipe had been leaking for months.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "survey_report.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Gradual seepage is excluded under clause 3.2",
+    "age_days": 40,
+    "history": [
+      {
+        "action": "REJECT",
+        "after_days": 5,
+        "actor": "adjuster",
+        "notes": "Surveyor confirms gradual seepage; exclusion 3.2.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-P-5105",
+    "claim_type": "home",
+    "policy_number": "CS-HOM-26-003149",
+    "claimant_name": "Yusuf Pathan",
+    "incident_date": "2026-06-25",
+    "description": "Burglary discovered on returning from a two-month stay abroad.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "police_report.txt",
+      "survey_report.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "House unoccupied for more than 30 days: excluded under clause 3.3",
+    "age_days": 52,
+    "history": [
+      {
+        "action": "REJECT",
+        "after_days": 6,
+        "actor": "adjuster",
+        "notes": "House unoccupied for about 60 days; clause 3.3.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-P-5106",
+    "claim_type": "home",
+    "policy_number": "CS-HOM-26-003156",
+    "claimant_name": "Kamala Devi",
+    "incident_date": "2026-09-14",
+    "description": "Storm blew off part of the roof sheets and damaged the terrace water tank.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt"
+    ],
+    "expected_recommendation": "REQUEST_INFO",
+    "scenario": "Survey report not yet received",
+    "age_days": 9,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-P-5107",
+    "claim_type": "home",
+    "policy_number": "CS-HOM-26-003163",
+    "claimant_name": "Rajat Kapoor",
+    "incident_date": "2026-08-18",
+    "description": "Fire spread from a neighbouring shop and gutted the house.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "survey_report.txt"
+    ],
+    "expected_recommendation": "INVESTIGATE",
+    "scenario": "High risk: 93% of the sum insured, 17 days after cover began",
+    "age_days": 30,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-P-5108",
+    "claim_type": "home",
+    "policy_number": "CS-HOM-26-003170",
+    "claimant_name": "Gita Sharma",
+    "incident_date": "2026-08-25",
+    "description": "Lightning strike caused a power surge that burnt out the television and the router.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "survey_report.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Lightning surge: electronics depreciation and the deductible",
+    "age_days": 19,
+    "history": [
+      {
+        "action": "APPROVE",
+        "after_days": 4,
+        "actor": "adjuster",
+        "notes": "",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-P-5109",
+    "claim_type": "home",
+    "policy_number": "CS-HOM-26-003187",
+    "claimant_name": "Naveen Reddy",
+    "incident_date": "2026-09-20",
+    "description": "Water pipe burst in the loft flooded the bedroom; wardrobe clothes and the mattress ruined.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "survey_report.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Sudden pipe burst: clothing and furniture depreciation and the deductible",
+    "age_days": 6,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-P-5110",
+    "claim_type": "home",
+    "policy_number": "CS-HOM-26-003194",
+    "claimant_name": "Ananya Sen",
+    "incident_date": "2026-07-12",
+    "description": "Short circuit fire in the living room.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "survey_report.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Fire on 2026-07-12, after the policy expired on 2026-06-30",
+    "age_days": 44,
+    "history": [
+      {
+        "action": "REJECT",
+        "after_days": 3,
+        "actor": "adjuster",
+        "notes": "Policy expired on 2026-06-30 and was not renewed.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-A-6101",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-26-004101",
+    "claimant_name": "Sunil Shetty",
+    "incident_date": "2026-07-30",
+    "description": "Slipped on a wet staircase at the office and fractured the right ankle.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Weekly benefit limited to INR 10,000 a week; medical expenses paid in full",
+    "age_days": 54,
+    "history": [
+      {
+        "action": "APPROVE",
+        "after_days": 6,
+        "actor": "adjuster",
+        "notes": "Leave certificate from the employer on file.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-A-6102",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-26-004118",
+    "claimant_name": "Rekha Nair",
+    "incident_date": "2026-07-08",
+    "description": "Right index finger crushed in a press machine accident at the workshop.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Index finger is 10% of the sum insured under the disablement table",
+    "age_days": 46,
+    "history": [
+      {
+        "action": "APPROVE",
+        "after_days": 7,
+        "actor": "adjuster",
+        "notes": "Disability certificate confirms the loss of the index finger.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-A-6103",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-26-004125",
+    "claimant_name": "Mahesh Babu Kondapalli",
+    "incident_date": "2026-08-12",
+    "description": "Killed in a road accident when a truck hit the insured's motorcycle on the highway.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt",
+      "police_report.txt"
+    ],
+    "expected_recommendation": "APPROVE",
+    "scenario": "Accidental death: 100% of the capital sum insured to the nominee",
+    "age_days": 36,
+    "history": [
+      {
+        "action": "ESCALATE",
+        "after_days": 2,
+        "actor": "adjuster",
+        "notes": "Above my approval limit; death claim for supervisor.",
+        "payable_delta": null
+      },
+      {
+        "action": "APPROVE",
+        "after_days": 6,
+        "actor": "supervisor",
+        "notes": "FIR and post-mortem report on file.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-A-6104",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-26-004132",
+    "claimant_name": "Zoya Mirza",
+    "incident_date": "2026-08-20",
+    "description": "Hospitalised with dengue fever and unable to work for three weeks.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Dengue is an illness, not an accident (clause 1.3)",
+    "age_days": 28,
+    "history": [
+      {
+        "action": "REJECT",
+        "after_days": 3,
+        "actor": "adjuster",
+        "notes": "Illness, not an accidental injury.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-A-6105",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-26-004149",
+    "claimant_name": "Bharat Solanki",
+    "incident_date": "2026-08-03",
+    "description": "Injured when the insured's car hit a divider late at night.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt",
+      "police_report.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Driving under the influence of alcohol: excluded under clause 3.2",
+    "age_days": 42,
+    "history": [
+      {
+        "action": "REJECT",
+        "after_days": 5,
+        "actor": "adjuster",
+        "notes": "Police report and blood test show the insured was drunk.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-A-6106",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-26-004156",
+    "claimant_name": "Lata Mangeshkar Joshi",
+    "incident_date": "2026-06-24",
+    "description": "Left foot crushed under a falling steel beam at a construction site; amputated below the ankle.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "APPROVE",
+    "scenario": "Loss of one foot is 50% of the sum insured",
+    "age_days": 64,
+    "history": [
+      {
+        "action": "ESCALATE",
+        "after_days": 3,
+        "actor": "adjuster",
+        "notes": "Above my approval limit.",
+        "payable_delta": null
+      },
+      {
+        "action": "APPROVE",
+        "after_days": 10,
+        "actor": "supervisor",
+        "notes": "Medical board certificate confirms the loss of one foot.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-A-6107",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-26-004163",
+    "claimant_name": "Irfan Sheikh",
+    "incident_date": "2026-09-12",
+    "description": "Fell from a ladder while repairing the roof and fractured the left wrist.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt"
+    ],
+    "expected_recommendation": "REQUEST_INFO",
+    "scenario": "Doctor's certificate not submitted",
+    "age_days": 11,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-A-6108",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-26-004170",
+    "claimant_name": "Pallavi Deshmukh",
+    "incident_date": "2026-09-04",
+    "description": "Spinal cord injury in a fall from a balcony; paralysed below the waist.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "INVESTIGATE",
+    "scenario": "High risk: full sum insured claimed 46 days after cover began",
+    "age_days": 15,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-L-7101",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-20-005101",
+    "claimant_name": "Lalitha Venkatesh",
+    "incident_date": "2026-07-21",
+    "description": "The life assured died of a heart attack at home.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "APPROVE",
+    "scenario": "Death six years into the policy: sum assured paid in full",
+    "age_days": 56,
+    "history": [
+      {
+        "action": "ESCALATE",
+        "after_days": 2,
+        "actor": "adjuster",
+        "notes": "Death claim above my approval limit.",
+        "payable_delta": null
+      },
+      {
+        "action": "APPROVE",
+        "after_days": 9,
+        "actor": "supervisor",
+        "notes": "All documents in order; outside the section 45 period.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-L-7102",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-25-005118",
+    "claimant_name": "Sourav Banerjee",
+    "incident_date": "2026-08-28",
+    "description": "The life assured died of advanced stomach cancer.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "INVESTIGATE",
+    "scenario": "Death 17 months into the policy: inside the section 45 period, so it is investigated",
+    "age_days": 30,
+    "history": [
+      {
+        "action": "INVESTIGATE",
+        "after_days": 3,
+        "actor": "adjuster",
+        "notes": "Records suggest symptoms before the proposal; checking for non-disclosure.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-L-7103",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-25-005125",
+    "claimant_name": "Neha Malhotra",
+    "incident_date": "2026-07-02",
+    "description": "The life assured was found dead at home.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Suicide eight months after commencement: excluded under clause 3.1",
+    "age_days": 40,
+    "history": [
+      {
+        "action": "REJECT",
+        "after_days": 5,
+        "actor": "adjuster",
+        "notes": "Suicide within 12 months; premium refund handled by servicing.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-L-7104",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-22-005132",
+    "claimant_name": "Sarita Agarwal",
+    "incident_date": "2026-09-10",
+    "description": "The life assured died after a long illness.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "APPROVE",
+    "scenario": "Suicide 55 months after commencement: the 12-month exclusion no longer applies",
+    "age_days": 14,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-L-7105",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-21-005149",
+    "claimant_name": "Joseph Verghese",
+    "incident_date": "2026-09-18",
+    "description": "The life assured died in hospital after a stroke.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "REQUEST_INFO",
+    "scenario": "Death certificate not submitted",
+    "age_days": 7,
+    "history": []
+  },
+  {
+    "claim_number": "CLM-L-7106",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-16-005156",
+    "claimant_name": "Kamala Rao",
+    "incident_date": "2026-05-20",
+    "description": "The life assured died of kidney failure.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Death on 2026-05-20, after the ten-year term ended on 2026-01-14",
+    "age_days": 48,
+    "history": [
+      {
+        "action": "REJECT",
+        "after_days": 4,
+        "actor": "adjuster",
+        "notes": "Term policy matured without value on 2026-01-14.",
+        "payable_delta": null
+      }
+    ]
+  },
+  {
+    "claim_number": "CLM-L-7107",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-19-005163",
+    "claimant_name": "Shabana Rafiq",
+    "incident_date": "2026-09-03",
+    "description": "The life assured died in a road accident while travelling by bus.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "APPROVE",
+    "scenario": "Accidental death seven years into the policy: sum assured paid in full",
+    "age_days": 19,
+    "history": [
+      {
+        "action": "ESCALATE",
+        "after_days": 2,
+        "actor": "adjuster",
+        "notes": "Death claim above my approval limit.",
+        "payable_delta": null
+      }
+    ]
   }
 ]

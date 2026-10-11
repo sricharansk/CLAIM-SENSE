@@ -21,6 +21,7 @@ from ..agents.supervisor import analyze_claim
 from ..auth import WRITE_ROLES, current_user, issue_token, supervisor, throttle, user_view, verify_password, writer
 from ..config import DEFAULT_DEMO_PASSWORD, REPO_ROOT, settings
 from ..db import get_db
+from ..lines import LINE_PATTERN, LINES
 from ..models import (
     AgentRun,
     AnalysisRun,
@@ -109,7 +110,7 @@ def me(user: User = Depends(current_user)):
 # ------------------------------------------------------------------ claims
 class ClaimIn(BaseModel):
     policy_number: str = Field(min_length=3, max_length=40)
-    claim_type: str = Field(pattern="^(health|motor)$")
+    claim_type: str = Field(pattern=LINE_PATTERN)
     claimant_name: str = Field(min_length=2, max_length=200)
     incident_date: date | None = None
     claimed_amount: Decimal | None = Field(default=None, ge=0)
@@ -133,10 +134,14 @@ def _claim_summary(c: Claim, ai: ClaimDecision | None, risk: str | None, clock: 
 
 @router.post("/claims", status_code=201)
 def create_claim(body: ClaimIn, db: Session = Depends(get_db), user: User = Depends(writer)):
-    if db.query(InsuredPolicy).filter_by(policy_number=body.policy_number).first() is None:
+    insured = db.query(InsuredPolicy).filter_by(policy_number=body.policy_number).first()
+    if insured is None:
         raise HTTPException(422, f"Policy number {body.policy_number} is not in the policy register")
+    if insured.policy.line_of_business != body.claim_type:
+        raise HTTPException(422, f"Policy {body.policy_number} is a {LINES[insured.policy.line_of_business][1].lower()} "
+                                 f"policy, not {LINES[body.claim_type][1].lower()}")
     n = (db.query(func.count(Claim.id)).scalar() or 0) + 1
-    prefix = "CLM-H" if body.claim_type == "health" else "CLM-M"
+    prefix = LINES[body.claim_type][0]
     number = f"{prefix}-{3000 + n}"
     while db.query(Claim).filter_by(claim_number=number).first():
         n += 1
@@ -574,7 +579,7 @@ def demo_packet_file(name: str):
 
 
 @router.get("/analytics")
-def get_analytics(line: str | None = Query(None, pattern="^(health|motor)$"), days: int | None = Query(None, ge=1, le=3650),
+def get_analytics(line: str | None = Query(None, pattern=LINE_PATTERN), days: int | None = Query(None, ge=1, le=3650),
                   db: Session = Depends(get_db)):
     return analytics.dashboard(db, line, days)
 

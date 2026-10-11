@@ -17,6 +17,13 @@ DOC_TYPES = [
     ("discharge_summary", ["discharge summary"]),
     ("hospital_bill", ["hospital bill", "final bill", "inpatient bill"]),
     ("repair_estimate", ["repair estimate", "workshop estimate"]),
+    ("claim_statement", ["claim statement", "statement of loss", "benefit claim"]),
+    ("survey_report", ["survey report", "surveyor"]),
+    ("death_certificate", ["death certificate"]),
+    ("medical_certificate", ["medical attendant", "medical certificate", "disability certificate"]),
+    ("passport_copy", ["passport copy"]),
+    ("travel_ticket", ["e-ticket", "boarding pass", "travel itinerary"]),
+    ("airline_report", ["property irregularity report", "delay certificate"]),
     ("driving_licence", ["driving licence", "driving license"]),
     ("police_report", ["police", "fir number", "accident report"]),
 ]
@@ -30,13 +37,39 @@ FIELD_MAP = {
     "vehicle make and model": "vehicle_model", "date of first registration": "vehicle_first_registration",
     "engine capacity cc": "engine_cc", "fir number": "fir_number", "licence number": "licence_number",
     "valid till": "licence_valid_till", "workshop": "workshop", "bill number": "bill_number",
-    "estimate number": "estimate_number",
+    "estimate number": "estimate_number", "trip start date": "trip_start", "trip end date": "trip_end",
+    "destination": "destination", "flight number": "flight_number", "property address": "property_address",
+    "value at risk": "value_at_risk", "cause of loss": "cause_of_loss", "date of death": "date_of_death",
+    "cause of death": "cause_of_death", "deceased name": "deceased_name", "nominee name": "nominee_name",
+    "nature of injury": "injury",
 }
-NARRATIVE_HEADERS = {"description of loss:": "narrative", "clinical notes:": "clinical_notes", "findings:": "police_findings"}
+AMOUNT_FIELDS = ("claimed_amount", "value_at_risk")
+NARRATIVE_HEADERS = {"description of loss:": "narrative", "clinical notes:": "clinical_notes", "findings:": "police_findings",
+                     "surveyor findings:": "survey_findings"}
 FIELD_RE = re.compile(r"^\s*([A-Za-z/ ]{3,40}?)\s*:\s*(.+?)\s*$")
 ITEM_RE = re.compile(r"^\s*(.+?)\s{2,}((?:\d{1,3}(?:,\d{2,3})+|\d+)\.\d{2})\s*$")
 
 CATEGORY_RULES = [
+    # scheduled benefits (personal accident, life) and travel / home losses; distinctive phrases, checked first
+    ("accidental_death", ["accidental death"]),
+    ("death_benefit", ["death benefit"]),
+    ("ptd", ["permanent total disablement"]),
+    ("ppd", ["permanent partial disablement"]),
+    ("ttd", ["temporary total disablement"]),
+    ("medical_expenses", ["accident medical expenses"]),
+    ("baggage", ["baggage"]),
+    ("trip_delay", ["trip delay", "flight delay"]),
+    ("trip_cancellation", ["trip cancellation"]),
+    ("passport_loss", ["passport replacement"]),
+    ("emergency_evacuation", ["medical evacuation", "air ambulance"]),
+    ("jewellery", ["jewellery"]),
+    ("contents_electronics", ["(electronics)"]),
+    ("contents_furniture", ["(furniture)"]),
+    ("contents_appliance", ["(appliance)"]),
+    ("contents_clothing", ["(clothing)"]),
+    ("building_repair", ["(building)"]),
+    ("debris_removal", ["debris removal"]),
+    ("alt_accommodation", ["alternative accommodation"]),
     ("consumables", ["consumable", "gloves", "mask", "admission kit", "toiletr"]),
     ("non_medical", ["registration charge", "file charge", "attendant", "food"]),
     ("icu", ["icu", "intensive care"]),
@@ -120,7 +153,7 @@ def extract_facts(text: str) -> list[Fact]:
             label = m.group(1).strip().lower()
             if label in FIELD_MAP:
                 value = m.group(2).strip()
-                if FIELD_MAP[label] == "claimed_amount":
+                if FIELD_MAP[label] in AMOUNT_FIELDS:
                     value = f"{parse_amount(value):.2f}"
                 facts.append(Fact(FIELD_MAP[label], value, 0.98, i + 1, raw.strip()))
         i += 1

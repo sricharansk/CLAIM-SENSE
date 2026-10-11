@@ -1,0 +1,9 @@
+MEDICAL ATTENDANT'S CERTIFICATE
+SYNTHETIC DEMO DOCUMENT
+
+Deceased Name: Prabhakar Rao
+Cause of Death: End-stage renal disease
+Doctor: Dr. R. Synthetic, General Medicine (fictional)
+
+Clinical Notes:
+On dialysis for one year.

@@ -1,0 +1,10 @@
+SURVEY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Coastal Loss Assessors (fictional)
+Property Address: 9 Synthetic Colony, Pune
+Value at Risk: INR 1,100,000.00
+Cause of Loss: Lightning
+
+Surveyor Findings:
+Surge damage confirmed by the service centre report.

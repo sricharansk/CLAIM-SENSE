@@ -11,7 +11,8 @@ Outputs (deterministic, seed=2025):
   data/policies/insured_policies.json           customer policy contracts
   data/claims/<CLAIM>/*.txt|pdf                 claim document packets for the golden scenarios
   data/claims/scenarios.json                    claim headers + expected outcome
-  data/claims/demo_book/<CLAIM>/*.txt, demo_book.json  a larger demo book of business (42 claims, seeded)
+  data/claims/demo_book/<CLAIM>/*.txt, demo_book.json  a larger demo book of business (77 claims, seeded),
+                                                 including travel, home, personal accident and life (more_lines.py)
   data/evaluation/packets/<CASE>/*.txt          extra packets used only by scripts/evaluate.py (never seeded)
   data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf  a new wording version as a multi-page PDF, for live ingestion
   data/synthetic/claims_portfolio.csv           1,000 claims with injected fraud patterns
@@ -25,6 +26,8 @@ import json
 import random
 from datetime import date, timedelta
 from pathlib import Path
+
+import more_lines
 
 ROOT = Path(__file__).resolve().parents[2]
 POL = ROOT / "data" / "policies"
@@ -793,12 +796,14 @@ def demo_book() -> list[dict]:
 def write_demo_book() -> list[dict]:
     root = CLM / "demo_book"
     out = []
-    for c in demo_book():
+    for c in demo_book() + more_lines.demo_claims():
         d = root / c["claim_number"]
         d.mkdir(parents=True, exist_ok=True)
         c.setdefault("form_amount", sum(a for _, a in c["items"]))
         files = {"claim_form.txt": claim_form(c)}
-        if c["claim_type"] == "health":
+        if "files" in c:  # travel, home, personal accident and life packets come ready-made
+            files = c["files"]
+        elif c["claim_type"] == "health":
             if not c.get("skip_bill"):
                 files["hospital_bill.txt"] = bill("FINAL HOSPITAL BILL", c, c["items"],
                                                   {"Hospital": c["hospital"], "Bill Number": f"HB-{c['claim_number'][-4:]}",
@@ -866,6 +871,11 @@ def write_evaluation_packets() -> None:
                                                    "Admission Date": c["admit"], "Discharge Date": c["disch"]}), encoding="utf-8")
         (d / "discharge_summary.txt").write_text(discharge(c, c["admit"], c["disch"], c["diagnosis"], c["procedure"], c["notes"]),
                                                  encoding="utf-8")
+    for c in more_lines.eval_claims():
+        d = EVAL / c["claim_number"]
+        d.mkdir(parents=True, exist_ok=True)
+        for name, body in c["files"].items():
+            (d / name).write_text(body, encoding="utf-8")
 
 
 def write_pdf(path: Path, lines: list[str]) -> None:
@@ -994,9 +1004,12 @@ def main() -> None:
         (POL / f"HLT-SHIELD_{v}.terms.json").write_text(json.dumps(health_terms(v, p), indent=2), encoding="utf-8")
     (POL / "MTR-SECURE_2025.1.md").write_text(motor_wording(), encoding="utf-8")
     (POL / "MTR-SECURE_2025.1.terms.json").write_text(json.dumps(motor_terms(), indent=2), encoding="utf-8")
+    for code, wording, terms in more_lines.PRODUCTS:
+        (POL / f"{code}_{more_lines.VERSION}.md").write_text(wording(), encoding="utf-8")
+        (POL / f"{code}_{more_lines.VERSION}.terms.json").write_text(json.dumps(terms(), indent=2), encoding="utf-8")
     (POL / "insured_policies.json").write_text(json.dumps([
         dict(policy_number=a, product_code=b, holder_name=c, start_date=d, end_date=e, sum_insured=f)
-        for a, b, c, d, e, f in INSURED + DEMO_INSURED], indent=2), encoding="utf-8")
+        for a, b, c, d, e, f in INSURED + DEMO_INSURED + more_lines.INSURED], indent=2), encoding="utf-8")
     scen = write_claim_packets()
     book = write_demo_book()
     (CLM / "demo_book.json").write_text(json.dumps(book, indent=2), encoding="utf-8")

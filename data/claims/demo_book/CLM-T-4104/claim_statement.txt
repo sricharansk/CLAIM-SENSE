@@ -1,0 +1,11 @@
+STATEMENT OF LOSS — TRAVEL
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Paris
+Patient/Insured Name: Faizal Ahmed
+
+Itemised Charges:
+Trip cancellation - non-refundable hotel booking                      42,000.00
+Trip cancellation - change fee on return flight                       18,000.00
+
+Total Amount                                                          60,000.00

@@ -1,0 +1,9 @@
+PROPERTY IRREGULARITY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Aditi Rao
+Flight Number: SQ-SYN-0502
+Report Number: PIR-T-01
+
+Findings:
+Checked bag not delivered; trace closed after 21 days and the bag declared lost by the airline.

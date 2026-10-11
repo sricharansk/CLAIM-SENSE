@@ -11,7 +11,11 @@ from .base import AgentError, ClaimContext, ToolLog
 SINGLE_VALUE = ["policy_number", "claimant_name", "incident_date", "admission_date", "discharge_date", "diagnosis",
                 "procedure", "claimed_amount", "hospital", "vehicle_registration", "vehicle_first_registration",
                 "engine_cc", "fir_number", "narrative", "clinical_notes", "police_findings", "document_total",
-                "patient_name", "licence_holder", "licence_valid_till"]
+                "patient_name", "licence_holder", "licence_valid_till", "trip_start", "trip_end", "destination",
+                "flight_number", "property_address", "value_at_risk", "cause_of_loss", "date_of_death", "cause_of_death",
+                "deceased_name", "nominee_name", "injury", "survey_findings"]
+# documents whose itemised lines are the amounts claimed
+ITEM_SOURCES = ("hospital_bill", "repair_estimate", "claim_statement")
 
 
 # Reviewers may correct these before (re-)running the analysis; bill totals and line items stay as extracted.
@@ -36,12 +40,12 @@ def consolidate(facts: list[ClaimFact], doc_type: dict[int, str]) -> tuple[dict,
                "line": f.source_line, "text": f.source_text, "confidence": f.confidence}
         if f.name == "line_item":
             # bills/estimates are the source of truth for line items
-            if doc_type.get(f.document_id) in ("hospital_bill", "repair_estimate"):
+            if doc_type.get(f.document_id) in ITEM_SOURCES:
                 items.append({**json.loads(f.value), "source": src})
             continue
         if f.name in ("claimant_name", "patient_name", "licence_holder"):
             names.setdefault(f.value.strip().lower(), set()).add(doc_type.get(f.document_id))
-        if f.name == "document_total" and doc_type.get(f.document_id) not in ("hospital_bill", "repair_estimate"):
+        if f.name == "document_total" and doc_type.get(f.document_id) not in ITEM_SOURCES:
             continue
         if f.name in SINGLE_VALUE and f.name not in values:
             values[f.name] = f.value

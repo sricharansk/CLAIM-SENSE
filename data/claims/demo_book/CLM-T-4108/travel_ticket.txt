@@ -1,0 +1,8 @@
+E-TICKET AND TRAVEL ITINERARY
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Arun Bhatia
+Flight Number: TG-SYN-0316
+Destination: Bangkok
+Trip Start Date: 2026-08-15
+Trip End Date: 2026-08-28

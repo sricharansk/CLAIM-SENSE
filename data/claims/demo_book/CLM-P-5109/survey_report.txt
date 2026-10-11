@@ -1,0 +1,10 @@
+SURVEY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Coastal Loss Assessors (fictional)
+Property Address: Tower C, Synthetic Heights, Hyderabad
+Value at Risk: INR 2,800,000.00
+Cause of Loss: Inundation
+
+Surveyor Findings:
+Sudden burst of the loft supply pipe; no sign of earlier leakage.

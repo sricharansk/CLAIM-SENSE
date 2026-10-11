@@ -29,7 +29,7 @@
         "data/policies/insured_policies.json"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "3b22b5dbce80dea936bcd808ec2250f8a497a26a8cfd825c8c192af3da3f0327"
+      "checksum_sha256": "5db277ff3730b24b21585acd047f7a882ebd78b903748bf272327b73e83557fd"
     },
     {
       "id": "synthetic-policy-pdf-demo",
@@ -75,7 +75,7 @@
         "data/claims"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "8e52f56dd85b0419f5baf94865ef1e6094e933da5cba54df0403ba2faa4f214a"
+      "checksum_sha256": "0525db0491cef046fdcd7e736e5678b869291e4feafa9051d324c4411c25d874"
     },
     {
       "id": "synthetic-claims-portfolio",
@@ -120,7 +120,7 @@
         "data/evaluation"
       ],
       "transformation_script": "data/synthetic/generate.py (packets); golden_cases.json and rag_questions.json written by hand",
-      "checksum_sha256": "2dde897ba923867ff0558c8e53e4e62117c1b93a399bd1233e4ddf1fff4fb632"
+      "checksum_sha256": "52af3464b9e2c9d0aa0d517e5ad40d6ca1bedcbd8a0983aee289299096baa3bf"
     },
     {
       "id": "irdai-mc-health-2024",

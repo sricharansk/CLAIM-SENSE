@@ -1,0 +1,9 @@
+MEDICAL ATTENDANT'S CERTIFICATE
+SYNTHETIC DEMO DOCUMENT
+
+Deceased Name: Venkatesh Subramanian
+Cause of Death: Acute myocardial infarction
+Doctor: Dr. R. Synthetic, General Medicine (fictional)
+
+Clinical Notes:
+Known hypertensive for eight years; collapsed at home and was declared dead on arrival.

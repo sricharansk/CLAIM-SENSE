@@ -1,0 +1,10 @@
+SURVEY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Coastal Loss Assessors (fictional)
+Property Address: Flat 4B, Synthetic Residency, Bengaluru
+Value at Risk: INR 2,400,000.00
+Cause of Loss: Fire
+
+Surveyor Findings:
+Fire started at the gas stove; kitchen walls and false ceiling charred. Loss assessed at the replacement and repair costs claimed.

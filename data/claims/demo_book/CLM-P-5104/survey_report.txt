@@ -1,0 +1,10 @@
+SURVEY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Coastal Loss Assessors (fictional)
+Property Address: Flat 4B, Synthetic Residency, Bengaluru
+Value at Risk: INR 2,500,000.00
+Cause of Loss: Seepage
+
+Surveyor Findings:
+Long-standing seepage from a concealed bathroom pipe; gradual deterioration, not a sudden event.

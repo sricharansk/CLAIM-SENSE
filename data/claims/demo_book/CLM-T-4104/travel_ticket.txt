@@ -1,0 +1,8 @@
+E-TICKET AND TRAVEL ITINERARY
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Faizal Ahmed
+Flight Number: AF-SYN-0218
+Destination: Paris
+Trip Start Date: 2026-07-05
+Trip End Date: 2026-07-25

@@ -24,8 +24,8 @@ def test_demo_claim_reaches_its_designed_outcome(client, s):
 
 
 def test_book_covers_both_lines_and_every_outcome():
-    assert {s["claim_type"] for s in BOOK} == {"health", "motor"}
-    assert {s["expected_recommendation"] for s in BOOK} == {"PARTIAL_APPROVAL", "RECOMMEND_REJECT", "REQUEST_INFO", "INVESTIGATE"}
+    assert {s["claim_type"] for s in BOOK} == {"health", "motor", "travel", "home", "personal_accident", "life"}
+    assert {s["expected_recommendation"] for s in BOOK} == {"PARTIAL_APPROVAL", "RECOMMEND_REJECT", "REQUEST_INFO", "INVESTIGATE", "APPROVE"}
     assert len({s["policy_number"] for s in BOOK}) >= 40
 
 
@@ -73,7 +73,7 @@ def test_dashboard_filters_and_panels(client):
     assert codes["SPECIFIED_DISEASE_WAITING"] == "3.3" and "REQUIRED_DOCUMENTS" in codes
     assert whole["human_vs_ai"]["overridden"] >= 1 and whole["human_vs_ai"]["escalated"] >= 2
     assert whole["totals"]["avg_days_to_decision"] > 0
-    assert client.get("/api/v1/analytics?line=travel").status_code == 422
+    assert client.get("/api/v1/analytics?line=marine").status_code == 422
 
 
 def test_claims_list_drill_down_filters(client):

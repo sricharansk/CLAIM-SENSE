@@ -1,0 +1,8 @@
+E-TICKET AND TRAVEL ITINERARY
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Rakesh Menon
+Flight Number: EK-SYN-0511
+Destination: Dubai
+Trip Start Date: 2026-06-10
+Trip End Date: 2026-06-24

@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE (TREATING DOCTOR)
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Sunil Shetty
+Doctor: Dr. S. Synthetic, Orthopaedics (fictional)
+Nature of Injury: Fracture of the right ankle after a fall
+
+Clinical Notes:
+Plaster cast and screws; unable to work for six weeks.

@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Bangkok Hospital (fictional)
+Bill Number: HB-4108
+Admission Date: 2026-08-22
+Discharge Date: 2026-08-23
+Patient/Insured Name: Arun Bhatia
+
+Itemised Charges:
+Room Charges - Ward (1 day @ 14,000)                                  14,000.00
+Orthopaedic Surgeon Fees                                              26,000.00
+X-Ray and Diagnostics                                                  6,500.00
+Pharmacy - Medicines and Drugs                                         3,500.00
+
+Total Amount                                                          50,000.00

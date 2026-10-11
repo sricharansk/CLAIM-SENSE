@@ -25,7 +25,7 @@ def score_features(f: dict) -> tuple[int, list[dict]]:
         sig("HIGH_AMOUNT_RATIO", f"Claimed amount is {ratio:.0%} of the sum insured.")
     elif ratio >= 0.5:
         sig("ELEVATED_AMOUNT_RATIO", f"Claimed amount is {ratio:.0%} of the sum insured.")
-    if f.get("days_since_start") is not None and f["days_since_start"] < 90:
+    if f.get("days_since_start") is not None and f["days_since_start"] < f.get("early_claim_days", 90):
         sig("EARLY_CLAIM", f"Loss occurred {f['days_since_start']} days after policy start.")
     if f.get("prior_claims", 0) >= 2:
         sig("FREQUENT_CLAIMS", f"{f['prior_claims']} other claims on this policy in the last 12 months.")
@@ -60,6 +60,7 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     features = {
         "amount_ratio": float(claimed / Decimal(ctx.insured.sum_insured)) if ctx.insured.sum_insured else 0,
         "days_since_start": ctx.coverage["days_since_commencement"],
+        "early_claim_days": ctx.version.terms.get("early_claim_days", 90),
         "prior_claims": len(prior),
         "duplicate_of": dup.claim_number if dup else None,
         "amount_gap": float(abs(claimed - gross) / gross) if gross else 0,

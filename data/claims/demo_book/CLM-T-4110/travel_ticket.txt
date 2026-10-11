@@ -1,0 +1,8 @@
+E-TICKET AND TRAVEL ITINERARY
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Hemant Joshi
+Flight Number: AI-SYN-0101
+Destination: New York
+Trip Start Date: 2026-08-22
+Trip End Date: 2026-09-05

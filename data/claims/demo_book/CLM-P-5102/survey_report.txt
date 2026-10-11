@@ -1,0 +1,10 @@
+SURVEY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Coastal Loss Assessors (fictional)
+Property Address: 12 Synthetic Lane, Kolkata
+Value at Risk: INR 1,400,000.00
+Cause of Loss: Burglary
+
+Surveyor Findings:
+Main door lock broken; locked safe forced open. Police visited the same night.

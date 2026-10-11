@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Hudson Medical Center (fictional)
+Patient Name: Hemant Joshi
+Admission Date: 2026-08-29
+Discharge Date: 2026-09-02
+Diagnosis: Acute pancreatitis
+Procedure: ICU management
+
+Clinical Notes:
+Stabilised and evacuated on day 4.
