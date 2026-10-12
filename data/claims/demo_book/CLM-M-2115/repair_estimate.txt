@@ -1,0 +1,15 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2115
+Vehicle Registration: GJ-01-SY-7012
+Patient/Insured Name: Sameer Joshi
+
+Itemised Charges:
+Right Front Door Panel (metal) - repair                         12,000.00
+Right Rear Door Panel (metal) - repair                          11,000.00
+Painting Material                                                6,000.00
+Denting and Fitting Labour                                       5,000.00
+
+Total Amount                                                    34,000.00

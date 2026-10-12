@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Community Hospital (fictional)
+Patient Name: Geeta Pillai
+Admission Date: 2025-01-18
+Discharge Date: 2025-01-22
+Diagnosis: Right lower lobe pneumonia
+Procedure: Medical management with IV antibiotics
+
+Clinical Notes:
+Recovered and discharged in stable condition.

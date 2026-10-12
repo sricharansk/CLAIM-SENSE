@@ -1,5 +1,14 @@
 # Release notes
 
+## Unreleased (PR #3)
+
+- **Six lines of business.** Travel, home, personal accident and life join health and motor, each with a synthetic wording, structured terms, rules and settlement clause. Travel and home pay the assessed loss after depreciation, per-item and category limits, the average clause and the deductible; personal accident and life pay the benefit schedule.
+- **85 demo claims** (8 golden + 77 demo book) on the dashboard, with a line filter for each of the six lines and a sample packet per line on the New claim screen.
+- **Evaluation:** 16 hand-worked claim cases and 30 policy questions, 365 / 365 checks.
+- **Data:** a 10,000-claim synthetic portfolio over six lines with seven injected patterns, and an industry benchmark from the CAS Loss Reserving Database (Schedule P), aggregates only.
+- **Docs and tooling:** the seven blueprint documents that were missing (UX flows, API, environment, error handling, observability, roadmap, changelog), a VS Code setup and a *Run it in VS Code* guide.
+- **Checks:** 222 backend tests, 13 browser tests against Docker + PostgreSQL, the smoke test, provenance check and frontend build pass locally.
+
 ## Claim Sense 1.0.0 (MVP) — 2026-10-09
 
 **Claim Sense: RAG-Based Insurance Claims Adjudication & Policy Knowledge Assistant.** AI recommends, deterministic rules calculate, and people decide. All data is synthetic.

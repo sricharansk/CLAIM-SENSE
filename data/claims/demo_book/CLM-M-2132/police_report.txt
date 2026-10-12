@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-2132
+Date of Accident: 2025-10-25
+Vehicle Registration: WB-02-SY-3815
+
+Findings:
+Collision confirmed. No injuries reported.

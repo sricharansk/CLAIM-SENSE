@@ -1,0 +1,15 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Kuta Island Clinic (fictional)
+Bill Number: HB-4105
+Admission Date: 2026-07-26
+Discharge Date: 2026-07-27
+Patient/Insured Name: Nandini Iyer
+
+Itemised Charges:
+Room Charges - Clinic (1 day @ 18,000)                                18,000.00
+Consultant Physician Fees                                             12,000.00
+Pharmacy - Medicines and Drugs                                         4,500.00
+
+Total Amount                                                          34,500.00

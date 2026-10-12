@@ -1,0 +1,15 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Home Town Clinic (fictional)
+Bill Number: HB-4109
+Admission Date: 2026-09-06
+Discharge Date: 2026-09-06
+Patient/Insured Name: Sonia Dsouza
+
+Itemised Charges:
+Consultant Physician Fees                                              3,500.00
+Laboratory Tests - Blood Panel                                         4,800.00
+Pharmacy - Medicines and Drugs                                         2,200.00
+
+Total Amount                                                          10,500.00

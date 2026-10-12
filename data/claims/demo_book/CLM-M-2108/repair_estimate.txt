@@ -1,0 +1,15 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2108
+Vehicle Registration: TS-08-SY-4419
+Patient/Insured Name: Kiran Kumar
+
+Itemised Charges:
+Front Bumper (plastic) - replace                                12,500.00
+Front Fender (metal) - replace                                  15,000.00
+Painting Material                                                5,500.00
+Denting and Fitting Labour                                       5,000.00
+
+Total Amount                                                    38,000.00

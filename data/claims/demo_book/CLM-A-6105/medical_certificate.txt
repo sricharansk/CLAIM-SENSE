@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE (TREATING DOCTOR)
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Bharat Solanki
+Doctor: Dr. S. Synthetic, Orthopaedics (fictional)
+Nature of Injury: Fracture of both forearm bones in a road accident
+
+Clinical Notes:
+Blood alcohol well above the legal limit on admission.

@@ -1,0 +1,10 @@
+SURVEY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Coastal Loss Assessors (fictional)
+Property Address: 44 Synthetic Road, Ahmedabad
+Value at Risk: INR 1,600,000.00
+Cause of Loss: Burglary
+
+Surveyor Findings:
+Neighbours confirm the house was unoccupied for about 60 days before the break-in.

@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Bangkok Hospital (fictional)
+Patient Name: Arun Bhatia
+Admission Date: 2026-08-22
+Discharge Date: 2026-08-23
+Diagnosis: Fracture of the left distal radius after a fall
+Procedure: Closed reduction and cast
+
+Clinical Notes:
+Cast for six weeks; review in India.

@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE (TREATING DOCTOR)
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Lata Mangeshkar Joshi
+Doctor: Dr. S. Synthetic, Orthopaedics (fictional)
+Nature of Injury: Traumatic amputation of the left foot
+
+Clinical Notes:
+Below-ankle amputation; using a prosthesis.

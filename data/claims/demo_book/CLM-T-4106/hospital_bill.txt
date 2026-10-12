@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Thames Heart Centre (fictional)
+Bill Number: HB-4106
+Admission Date: 2026-08-05
+Discharge Date: 2026-08-08
+Patient/Insured Name: Vivek Chandra
+
+Itemised Charges:
+ICU Charges (2 days @ 95,000)                                        190,000.00
+Cardiologist Fees                                                    120,000.00
+Cath Lab Charges                                                     180,000.00
+Pharmacy - Medicines and Drugs                                        35,000.00
+
+Total Amount                                                         525,000.00

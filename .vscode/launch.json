@@ -1,0 +1,62 @@
+{
+  // Run and Debug (Ctrl+Shift+D). "Claim Sense: full stack" starts the API and the UI together.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend: FastAPI (uvicorn, reload)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["app.main:app", "--reload", "--port", "8000"],
+      "cwd": "${workspaceFolder}/backend",
+      "envFile": "${workspaceFolder}/.env",
+      "env": { "CLAIMSENSE_SEED": "true", "DATABASE_URL": "sqlite:///./claimsense.db" },
+      "jinja": true,
+      "justMyCode": true
+    },
+    {
+      "name": "Frontend: Vite dev server",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/frontend"
+    },
+    {
+      "name": "Open the app in Chrome (debug the UI)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/frontend/src"
+    },
+    {
+      "name": "Backend: pytest",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-q"],
+      "cwd": "${workspaceFolder}/backend",
+      "justMyCode": false
+    },
+    {
+      "name": "Golden evaluation (reports/evaluation.md)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/evaluate.py",
+      "cwd": "${workspaceFolder}/backend"
+    },
+    {
+      "name": "Fetch the CAS Schedule P benchmark",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/fetch_public_data.py",
+      "cwd": "${workspaceFolder}"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Claim Sense: full stack",
+      "configurations": ["Backend: FastAPI (uvicorn, reload)", "Frontend: Vite dev server"],
+      "stopAll": true
+    }
+  ]
+}

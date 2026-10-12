@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1142
+Admission Date: 2025-09-30
+Discharge Date: 2025-10-03
+Patient/Insured Name: Ajay Chauhan
+
+Itemised Charges:
+Room Rent - Twin Sharing (3 days @ 5,000)                       15,000.00
+Surgeon Fees                                                    45,000.00
+Operation Theatre Charges                                       18,000.00
+Pharmacy - Medicines and Drugs                                  16,000.00
+Laboratory Tests and Ultrasound                                 14,000.00
+
+Total Amount                                                   108,000.00

@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Patient Name: Rahul Saxena
+Admission Date: 2025-11-12
+Discharge Date: 2025-11-14
+Diagnosis: Acute gastroenteritis with dehydration
+Procedure: Medical management with IV fluids
+
+Clinical Notes:
+Recovered and discharged in stable condition.

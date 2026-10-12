@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Clearsight Eye Institute (fictional)
+Bill Number: HB-1121
+Admission Date: 2025-12-09
+Discharge Date: 2025-12-09
+Patient/Insured Name: Sunita Reddy
+
+Itemised Charges:
+Room Rent - Day Care (1 day @ 3,000)                             3,000.00
+Surgeon Fees - Phacoemulsification                              30,000.00
+Intraocular Lens and Medicines                                  22,000.00
+Diagnostic Tests - Biometry                                      2,500.00
+
+Total Amount                                                    57,500.00

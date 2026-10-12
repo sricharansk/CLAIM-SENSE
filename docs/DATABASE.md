@@ -1,6 +1,6 @@
 # Data model — Claim Sense
 
-SQLAlchemy 2 models in `backend/app/models.py`. SQLite by default (tests and local runs); PostgreSQL in Docker and the deployment. Tables are created at startup (`Base.metadata.create_all`), and the seeder is idempotent. Money is `Numeric(14,2)` and handled as `Decimal`.
+SQLAlchemy 2 models in `backend/app/models.py`. SQLite by default (tests and local runs); PostgreSQL in Docker and the deployment. Tables are created at startup (`Base.metadata.create_all`), and the seeder is idempotent. The seeder files the 8 golden claims and the 42 demo-book claims (`data/claims/demo_book.json`) through the real pipeline, replays each demo claim's reviewer history through the review service with notes prefixed `[Seeded demo history]`, then backdates its claim, documents, runs, decisions, tasks and audit events so the dashboard has eight weeks of activity. Money is `Numeric(14,2)` and handled as `Decimal`.
 
 | Table | Purpose | Key columns |
 |---|---|---|

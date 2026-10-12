@@ -5,9 +5,14 @@ export type Letter = { claim_number: string; kind: string; status: "FINAL" | "DR
   to: { name: string; policy_number: string; holder: string }; from: string; subject: string; paragraphs: string[];
   references: { clause_ref: string; title: string; page: number; text: string; policy: string }[];
   signed_by: string | null; based_on: string };
+// Lines of business, in the order the API's backend/app/lines.py registers them.
+export const LINES = [["health", "Health"], ["motor", "Motor"], ["travel", "Travel"], ["home", "Home"],
+  ["personal_accident", "Personal accident"], ["life", "Life"]] as const;
+export type Line = (typeof LINES)[number][0];
+export const lineLabel = (l: string) => LINES.find(([k]) => k === l)?.[1] ?? words(l);
 export type ClaimSummary = {
   settlement: Settlement;
-  claim_number: string; policy_number: string; claim_type: "health" | "motor"; claimant_name: string;
+  claim_number: string; policy_number: string; claim_type: Line; claimant_name: string;
   incident_date: string | null; claimed_amount: string | null; status: string; created_at: string; updated_at: string;
   recommendation: string | null; recommended_payable: string | null; risk_level: string | null; documents: number;
 };
@@ -56,23 +61,44 @@ export type PolicyVersionInfo = { id: number; version: string; effective_from: s
 export type Policy = { product_code: string; name: string; line_of_business: string; insurer: string; synthetic: boolean; versions: PolicyVersionInfo[] };
 export type PolicyVersionFull = { id: number; version: string; effective_from: string; effective_to: string; terms: Record<string, unknown>;
   clauses: { id: number; clause_ref: string; title: string; section: string; page: number; text: string }[] };
-export type InsuredPolicy = { policy_number: string; product_code: string; holder_name: string; start_date: string; end_date: string; sum_insured: string };
+export type InsuredPolicy = { policy_number: string; product_code: string; line_of_business: Line; holder_name: string; start_date: string; end_date: string; sum_insured: string };
 export type RagAnswer = { question: string; grounded: boolean; mode: string; answer: string; citations: Citation[] };
 export type ReviewTask = { settlement: Settlement; task_id: number; queue: string; priority: string; claim_number: string; claimant_name: string; claim_type: string;
   claimed_amount: string | null; status: string; recommendation: string | null; recommended_payable: string | null; created_at: string;
   age_hours: number; assignee: string | null; risk_level: string | null };
 export type Reviewer = { username: string; display_name: string; role: string };
 export type Analytics = {
+  filters: { line: Line | null; days: number | null };
   settlement: Record<string, number>;
-  totals: { overdue: number; claims: number; pending_review: number; high_risk: number; decided: number; claimed_amount: string; recommended_payable: string; avg_analysis_ms: number | null };
+  totals: { overdue: number; claims: number; pending_review: number; high_risk: number; decided: number; claimed_amount: string;
+    recommended_payable: string; approved_amount: string; avg_analysis_ms: number | null; avg_days_to_decision: number | null };
   by_status: Record<string, number>; by_recommendation: Record<string, number>; by_risk: Record<string, number>;
-  by_line: Record<string, number>; queues: Record<string, number>;
+  by_line: Record<string, number>; queues: Record<string, number>; workload: Record<string, number>;
+  by_line_amounts: Record<string, { claims: number; claimed: string; ai_payable: string; approved: string }>;
+  ageing: Record<string, number>;
+  trend: { week: string; filed: number; decided: number; claimed: string; approved: string }[];
+  top_reasons: { code: string; count: number; clause_ref: string | null }[];
+  risk_signals: Record<string, number>;
+  attention: { claim_number: string; claimant_name: string; claim_type: string; status: string; claimed_amount: string | null;
+    age_days: number; reasons: string[] }[];
   human_vs_ai: { decided: number; agreed: number; overridden: number; amount_overridden: number; override_rate: number | null;
     reviewed: number; escalated: number; escalation_rate: number | null };
   human_outcomes: Record<string, number>;
-  portfolio: null | { claims: number; by_risk: Record<string, number>; by_line: Record<string, number>; injected_anomalies: number;
-    flagged: number; precision: number; recall: number; confusion: Record<string, number>; median_claim: number; note: string };
+  portfolio: PortfolioEval | null; portfolio_full: PortfolioEval | null;
 };
+export type Benchmark = {
+  dataset_id: string; note: string; rows_read: number; definitions: Record<string, string>;
+  source: { name: string; publisher: string; url: string; retrieved_from: string; file: string; file_sha256: string;
+    retrieval_date: string; units: string; transformation_script: string };
+  lines: Record<string, { label: string; companies: number; net_earned_premium: number; incurred_at_10_years: number;
+    loss_ratio: number | null; paid_development: { lag_years: number; percent_paid: number }[];
+    accident_years: { accident_year: number; net_earned_premium: number; incurred_at_10_years: number; loss_ratio: number | null }[] }>;
+  registry: { valid: boolean; license: string; checksum_sha256: string | null } | null;
+};
+export type PortfolioEval = { name: string; claims: number; by_risk: Record<string, number>; by_line: Record<string, number>;
+  injected_anomalies: number; flagged: number; precision: number; recall: number; confusion: Record<string, number>;
+  lines: Record<string, { claims: number; precision: number | null; recall: number | null }>;
+  patterns: Record<string, { injected: number; recall: number | null }>; median_claim: number; note: string };
 export type EvalCheck = { dimension: string; check: string; expected: unknown; actual: unknown; passed: boolean };
 export type Evaluation = {
   suite: string; generated_at: string; rules_version: string; risk_version: string; llm: string; data: string; duration_s: number;
@@ -100,6 +126,9 @@ export type Manifest = { manifest_version: string; indexed_chunks: number; rejec
   chunks: { chunk_id: string; document: string; source_file: string; page: number; section: string; clause_ref: string; title: string;
     extraction_run: number; text_sha256: string }[];
   rejected: { clause_id: number; product_code: string; version: string; clause_ref: string; missing: string[] }[] };
+export type DemoPacket = { policy_number: string; claim_type: string; claimant_name: string; description: string;
+  files: { name: string; size: number }[] };
+export type ClaimFilters = Partial<Record<"q" | "status" | "claim_type" | "risk" | "recommendation" | "settlement" | "days", string>>;
 export type Ready = { status: string; database: string; policy_index: string; llm: string; database_backend: string };
 
 export type User = { username: string; display_name: string; role: "ADJUSTER" | "SUPERVISOR" | "AUDITOR";
@@ -145,8 +174,17 @@ export const api = {
   login: (username: string, password: string) => request<{ token: string; user: User }>("/auth/login", json("POST", { username, password })),
   me: () => request<User>("/auth/me"),
   ready: () => request<Ready>("/ready"),
-  analytics: () => request<Analytics>("/analytics"),
-  claims: (q = "", status = "") => request<ClaimSummary[]>(`/claims?${new URLSearchParams({ ...(q && { q }), ...(status && { status }) })}`),
+  demoInfo: () => request<{ default_password: boolean }>("/auth/demo-info"),
+  analytics: (f: { line?: string; days?: string } = {}) =>
+    request<Analytics>(`/analytics?${new URLSearchParams(Object.entries(f).filter(([, v]) => v) as [string, string][])}`),
+  claims: (f: ClaimFilters = {}) =>
+    request<ClaimSummary[]>(`/claims?${new URLSearchParams(Object.entries(f).filter(([, v]) => v) as [string, string][])}`),
+  demoPacket: (line = "health") => request<DemoPacket>(`/demo-packet?line=${line}`),
+  demoFile: async (name: string, line = "health") => {
+    const res = await fetch(`/api/v1/demo-packet/${encodeURIComponent(name)}?line=${line}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    if (!res.ok) throw new ApiError(`Could not load ${name} (${res.status})`, res.status);
+    return new File([await res.blob()], name, { type: "text/plain" });
+  },
   claim: (n: string) => request<ClaimDetail>(`/claims/${n}`),
   createClaim: (data: { policy_number: string; claim_type: string; claimant_name: string; description: string; incident_date?: string; claimed_amount?: string }) =>
     request<ClaimSummary>("/claims", json("POST", data)),
@@ -189,11 +227,15 @@ export const api = {
   audit: (claim_number?: string) => request<AuditEvent[]>(`/audit${claim_number ? `?claim_number=${claim_number}` : ""}`),
   datasets: () => request<Registry>("/datasets"),
   manifest: () => request<Manifest>("/knowledge-base/manifest"),
+  benchmark: () => request<Benchmark>("/benchmarks/industry"),
   evaluation: () => request<Evaluation>("/evaluation"),
 };
 
 export const inr = (v: string | number | null | undefined) =>
   v === null || v === undefined || v === "" ? "—" : `₹${Number(v).toLocaleString("en-IN", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}`;
+// Whole rupees for summary tiles and totals; claim-level amounts keep their paise with inr().
+export const inrWhole = (v: string | number | null | undefined) =>
+  v === null || v === undefined || v === "" ? "—" : `₹${Math.round(Number(v)).toLocaleString("en-IN")}`;
 export const when = (s: string | null | undefined) => (s ? new Date(s).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) : "—");
 const ACRONYMS = /\b(siu|ai|icu|llm|pdf|rag|ot)\b/g;
 export const words = (s: string | null | undefined) =>

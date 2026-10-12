@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE (TREATING DOCTOR)
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Mahesh Babu Kondapalli
+Doctor: Dr. S. Synthetic, Orthopaedics (fictional)
+Nature of Injury: Fatal head injury in a road traffic accident
+
+Clinical Notes:
+Declared dead on arrival at the trauma centre.

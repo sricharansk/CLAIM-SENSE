@@ -1,0 +1,12 @@
+STATEMENT OF LOSS — TRAVEL
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Singapore
+Patient/Insured Name: Aditi Rao
+
+Itemised Charges:
+Checked baggage - suitcase and clothes                                40,000.00
+Checked baggage - tablet                                              12,000.00
+Trip delay - hotel and meals                                          12,500.00
+
+Total Amount                                                          64,500.00

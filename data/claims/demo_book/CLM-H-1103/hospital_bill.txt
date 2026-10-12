@@ -1,0 +1,19 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Bill Number: HB-1103
+Admission Date: 2026-01-08
+Discharge Date: 2026-01-13
+Patient/Insured Name: Rohan Kapoor
+
+Itemised Charges:
+ICU Charges (2 days @ 14,000)                                   28,000.00
+Room Rent - Single Private (3 days @ 8,000)                     24,000.00
+Cardiologist and Procedure Fees                                 95,000.00
+Cath Lab Charges                                                60,000.00
+Drug-eluting Stent                                              75,000.00
+Pharmacy - Medicines and Drugs                                  22,000.00
+Laboratory Tests and Echocardiography                           14,000.00
+
+Total Amount                                                   318,000.00

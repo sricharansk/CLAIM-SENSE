@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-2111
+Date of Accident: 2025-11-30
+Vehicle Registration: DL-08-SY-9031
+
+Findings:
+Driver examined at the spot. Breath analyser test positive; driver was under the influence of alcohol.

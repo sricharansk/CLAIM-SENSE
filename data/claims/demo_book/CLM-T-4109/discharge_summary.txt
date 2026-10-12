@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Home Town Clinic (fictional)
+Patient Name: Sonia Dsouza
+Admission Date: 2026-09-06
+Discharge Date: 2026-09-06
+Diagnosis: Acute gastroenteritis
+Procedure: Outpatient treatment
+
+Clinical Notes:
+Symptoms began on 2026-09-05.

@@ -1,0 +1,89 @@
+{
+  // Terminal > Run Task... Each task runs in its own terminal. Windows variants use the venv's Scripts folder.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1. Set up backend (venv + packages)",
+      "type": "shell",
+      "command": "python3 -m venv .venv && .venv/bin/python -m pip install -r requirements-dev.txt",
+      "windows": { "command": "py -3 -m venv .venv; .venv\\Scripts\\python -m pip install -r requirements-dev.txt" },
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "problemMatcher": []
+    },
+    {
+      "label": "2. Set up frontend (npm install)",
+      "type": "shell",
+      "command": "npm install",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": []
+    },
+    {
+      "label": "3. Run backend (http://localhost:8000)",
+      "type": "shell",
+      "command": ".venv/bin/python -m uvicorn app.main:app --reload --port 8000",
+      "windows": { "command": ".venv\\Scripts\\python -m uvicorn app.main:app --reload --port 8000" },
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "4. Run frontend (http://localhost:5173)",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Run backend + frontend",
+      "dependsOn": ["3. Run backend (http://localhost:8000)", "4. Run frontend (http://localhost:5173)"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: ruff + pytest",
+      "type": "shell",
+      "command": ".venv/bin/python -m ruff check app tests && .venv/bin/python -m pytest -q",
+      "windows": { "command": ".venv\\Scripts\\python -m ruff check app tests; if ($?) { .venv\\Scripts\\python -m pytest -q }" },
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: golden evaluation",
+      "type": "shell",
+      "command": ".venv/bin/python ../scripts/evaluate.py",
+      "windows": { "command": ".venv\\Scripts\\python ..\\scripts\\evaluate.py" },
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: provenance check",
+      "type": "shell",
+      "command": ".venv/bin/python ../scripts/provenance.py --check",
+      "windows": { "command": ".venv\\Scripts\\python ..\\scripts\\provenance.py --check" },
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build: frontend",
+      "type": "shell",
+      "command": "npm run build",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "Docker: build and start (http://localhost:8080)",
+      "type": "shell",
+      "command": "docker compose up --build -d",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: smoke test",
+      "type": "shell",
+      "command": "python3 scripts/smoke_test.py http://localhost:8080",
+      "windows": { "command": "py -3 scripts\\smoke_test.py http://localhost:8080" },
+      "problemMatcher": []
+    }
+  ]
+}

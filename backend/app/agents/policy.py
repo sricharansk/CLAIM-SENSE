@@ -18,7 +18,8 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     if match is None:
         raise AgentError(f"No {ctx.insured.policy.product_code} wording version is in force on {incident}.")
     ctx.version = match
-    query = " ".join(str(ctx.facts.get(k, "")) for k in ("diagnosis", "procedure", "narrative", "police_findings"))
+    query = " ".join(str(ctx.facts.get(k, "")) for k in ("diagnosis", "procedure", "narrative", "police_findings",
+                                                          "survey_findings", "cause_of_death", "injury"))
     t = time.perf_counter()
     ctx.retrieved = rag.retrieve(ctx.db, query, {match.id}, k=5)
     log.record("hybrid_rag_retrieve", {"query": query[:160], "version_id": match.id},

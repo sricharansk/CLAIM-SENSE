@@ -1,0 +1,16 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2132
+Vehicle Registration: WB-02-SY-3815
+Patient/Insured Name: Ishaan Bose
+
+Itemised Charges:
+Left Front Door Panel (metal) - replace                         36,000.00
+Left Rear Door Panel (metal) - replace                          34,000.00
+Centre Pillar Panel (metal) - repair                            22,000.00
+Painting Material                                               12,000.00
+Denting and Fitting Labour                                      16,000.00
+
+Total Amount                                                   120,000.00

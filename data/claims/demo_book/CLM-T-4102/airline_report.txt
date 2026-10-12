@@ -1,0 +1,9 @@
+PROPERTY IRREGULARITY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Rakesh Menon
+Flight Number: EK-SYN-0511
+Report Number: PIR-4102
+
+Findings:
+Checked bag not delivered; trace closed after 21 days and the bag declared lost by the airline.

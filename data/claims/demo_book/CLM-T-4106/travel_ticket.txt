@@ -1,0 +1,8 @@
+E-TICKET AND TRAVEL ITINERARY
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Vivek Chandra
+Flight Number: BA-SYN-0118
+Destination: London
+Trip Start Date: 2026-08-01
+Trip End Date: 2026-08-12

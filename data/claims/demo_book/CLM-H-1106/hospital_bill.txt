@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1106
+Admission Date: 2025-09-22
+Discharge Date: 2025-09-24
+Patient/Insured Name: Deepa Menon
+
+Itemised Charges:
+Room Rent - Twin Sharing (2 days @ 5,000)                       10,000.00
+Surgeon Fees                                                    38,000.00
+Operation Theatre Charges                                       15,000.00
+Mesh and Medicines                                              14,000.00
+Laboratory Tests                                                 3,500.00
+
+Total Amount                                                    80,500.00

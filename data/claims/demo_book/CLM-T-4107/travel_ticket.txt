@@ -1,0 +1,8 @@
+E-TICKET AND TRAVEL ITINERARY
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Meera Pillai
+Flight Number: AZ-SYN-0769
+Destination: Rome
+Trip Start Date: 2026-08-08
+Trip End Date: 2026-08-30

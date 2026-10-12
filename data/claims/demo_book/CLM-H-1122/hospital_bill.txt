@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Riverside Urology Centre (fictional)
+Bill Number: HB-1122
+Admission Date: 2025-10-16
+Discharge Date: 2025-10-18
+Patient/Insured Name: Manoj Tiwari
+
+Itemised Charges:
+Room Rent - Twin Sharing (2 days @ 4,800)                        9,600.00
+Urologist Fees                                                  36,000.00
+Operation Theatre Charges                                       15,000.00
+Pharmacy - Medicines and Drugs                                   7,000.00
+Diagnostic Tests - CT KUB                                        6,200.00
+
+Total Amount                                                    73,800.00

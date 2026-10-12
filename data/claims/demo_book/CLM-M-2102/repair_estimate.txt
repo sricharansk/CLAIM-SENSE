@@ -1,0 +1,17 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2102
+Vehicle Registration: KA-51-SY-7714
+Patient/Insured Name: Rajiv Menon
+
+Itemised Charges:
+Front Bumper (plastic) - replace                                18,000.00
+Bonnet (metal) - replace                                        42,000.00
+Headlamp Assembly (plastic)                                     16,000.00
+Radiator Grille (plastic)                                        6,500.00
+Painting Material                                                9,000.00
+Denting and Fitting Labour                                      12,000.00
+
+Total Amount                                                   103,500.00

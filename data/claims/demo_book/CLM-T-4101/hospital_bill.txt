@@ -1,0 +1,18 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Marina Bay General Hospital (fictional)
+Bill Number: HB-4101
+Admission Date: 2026-06-08
+Discharge Date: 2026-06-10
+Patient/Insured Name: Aditi Rao
+
+Itemised Charges:
+Room Charges - Semi Private (2 days @ 38,000)                         76,000.00
+Surgeon and Anaesthetist Fees                                        145,000.00
+Operation Theatre Charges                                             62,000.00
+Pharmacy - Medicines and Drugs                                        21,000.00
+Laboratory Tests and CT Abdomen                                       28,000.00
+Registration Charges                                                   4,000.00
+
+Total Amount                                                         336,000.00

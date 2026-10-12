@@ -1,0 +1,15 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2112
+Vehicle Registration: KA-02-SY-6258
+Patient/Insured Name: Sneha Iyer
+
+Itemised Charges:
+Front Bumper (plastic) - replace                                 9,500.00
+Front Fender (metal) - repair                                    7,000.00
+Painting Material                                                4,000.00
+Denting and Fitting Labour                                       3,500.00
+
+Total Amount                                                    24,000.00

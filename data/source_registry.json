@@ -4,14 +4,14 @@
   "sources": [
     {
       "id": "synthetic-policy-corpus",
-      "name": "Synthetic policy wordings and structured terms (HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1)",
+      "name": "Synthetic policy wordings and structured terms (HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, TRV-GLOBE, HOME-SHIELD, PA-SECURE and LIFE-TERM 2026.1)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_policies",
       "claim_level": false,
       "url": "data/synthetic/generate.py",
-      "publication_date": "2026-10-08",
-      "retrieval_date": "2026-10-08",
+      "publication_date": "2026-10-09",
+      "retrieval_date": "2026-10-09",
       "data_period": "Policy years 2024-2026",
       "license": "Synthetic; generated in this repository; no third-party terms",
       "intended_use": [
@@ -26,10 +26,18 @@
         "data/policies/HLT-SHIELD_2025.1.terms.json",
         "data/policies/MTR-SECURE_2025.1.md",
         "data/policies/MTR-SECURE_2025.1.terms.json",
+        "data/policies/TRV-GLOBE_2026.1.md",
+        "data/policies/TRV-GLOBE_2026.1.terms.json",
+        "data/policies/HOME-SHIELD_2026.1.md",
+        "data/policies/HOME-SHIELD_2026.1.terms.json",
+        "data/policies/PA-SECURE_2026.1.md",
+        "data/policies/PA-SECURE_2026.1.terms.json",
+        "data/policies/LIFE-TERM_2026.1.md",
+        "data/policies/LIFE-TERM_2026.1.terms.json",
         "data/policies/insured_policies.json"
       ],
-      "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "7e829eade7f773598085ef0485cd834a7c838b5af0c7592174c0b5dadc7866ab"
+      "transformation_script": "data/synthetic/generate.py (with data/synthetic/more_lines.py)",
+      "checksum_sha256": "9c9f5728ab627f509e91fa595ea013419c5eba06c2c6bdf798e5fdc6f58b5aaf"
     },
     {
       "id": "synthetic-policy-pdf-demo",
@@ -56,14 +64,14 @@
     },
     {
       "id": "synthetic-golden-claims",
-      "name": "Synthetic golden claim packets (8 scenarios and the demo upload)",
+      "name": "Synthetic claim packets (8 golden scenarios, a 42-claim demo book with review history, and the demo upload)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_claims",
       "claim_level": true,
       "url": "data/claims/scenarios.json",
-      "publication_date": "2026-10-08",
-      "retrieval_date": "2026-10-08",
+      "publication_date": "2026-10-09",
+      "retrieval_date": "2026-10-09",
       "data_period": "Synthetic incidents 2023-2026",
       "license": "Synthetic; generated in this repository; no third-party terms",
       "intended_use": [
@@ -75,11 +83,11 @@
         "data/claims"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "cdc377be178a613bbf214da6ff169d19e51746146e252b2f1de3646c1adbefb2"
+      "checksum_sha256": "35d516a370811a15e7ecdff3f672b26ef42b9b2ce7315dfe4d98aeae646a054e"
     },
     {
       "id": "synthetic-claims-portfolio",
-      "name": "Synthetic claims portfolio (1,000 claims with injected anomaly labels)",
+      "name": "Synthetic claims portfolios with injected anomaly labels (1,000 health and motor claims; 10,000 claims across six lines)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_claims",
@@ -95,10 +103,11 @@
       ],
       "status": "IN_USE",
       "paths": [
-        "data/synthetic/claims_portfolio.csv"
+        "data/synthetic/claims_portfolio.csv",
+        "data/synthetic/claims_portfolio_full.csv"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "32bc6b3f568e2042a2a2f0ba4654f279f11e9088a669891db82c4c1d7a1b440b"
+      "checksum_sha256": "1b08b494f2d5a9ca88d3e7ceeb8ef53a528b7191aeb164f371c794333b18bd90"
     },
     {
       "id": "golden-evaluation-set",
@@ -120,7 +129,31 @@
         "data/evaluation"
       ],
       "transformation_script": "data/synthetic/generate.py (packets); golden_cases.json and rag_questions.json written by hand",
-      "checksum_sha256": "2dde897ba923867ff0558c8e53e4e62117c1b93a399bd1233e4ddf1fff4fb632"
+      "checksum_sha256": "00862029315fdcda0d22c8a0131a4d2aaa6733007ef9522c41f6ea104904d0d0"
+    },
+    {
+      "id": "cas-schedule-p-1998-2007",
+      "name": "CAS Loss Reserving Database: NAIC Schedule P triangles, accident years 1998-2007 (six lines)",
+      "publisher": "Casualty Actuarial Society; compiled for the CAS by S&P Global Market Intelligence",
+      "source_type": "benchmark",
+      "data_type": "aggregate",
+      "claim_level": "aggregate",
+      "url": "https://www.casact.org/publications-research/research/research-resources/loss-reserving-data-pulled-naic-schedule-p",
+      "publication_date": "2025-12",
+      "retrieval_date": "2026-10-11",
+      "data_period": "Accident years 1998-2007, 10 development years",
+      "version": "clrd2025.csv as redistributed in chainladder 0.10.1 (PyPI sdist, SHA-256 pinned in the script)",
+      "license": "No licence is stated on the CAS page; the data is published for research and the CAS asks users to acknowledge that they accessed the files from the CAS web page as compiled for the CAS by S&P Global Market Intelligence. Retrieved through the chainladder package (MPL-2.0). Only industry aggregates are committed, not company rows.",
+      "intended_use": [
+        "analytics",
+        "benchmark"
+      ],
+      "status": "IN_USE",
+      "paths": [
+        "data/public/cas_schedule_p/benchmark.json"
+      ],
+      "transformation_script": "scripts/fetch_public_data.py",
+      "checksum_sha256": "ad0b904b682c102da459bdd66a2eb9506c706d17989a1f0dc722421798787581"
     },
     {
       "id": "irdai-mc-health-2024",

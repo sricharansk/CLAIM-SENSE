@@ -1,0 +1,10 @@
+SURVEY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Coastal Loss Assessors (fictional)
+Property Address: 21 Synthetic Street, Kochi
+Value at Risk: INR 1,500,000.00
+Cause of Loss: Fire
+
+Surveyor Findings:
+Short circuit at the television socket.

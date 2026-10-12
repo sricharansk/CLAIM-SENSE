@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Kuta Island Clinic (fictional)
+Patient Name: Nandini Iyer
+Admission Date: 2026-07-26
+Discharge Date: 2026-07-27
+Diagnosis: Barotrauma of the right ear after scuba diving
+Procedure: Medical management
+
+Clinical Notes:
+Advised no diving or flying for 72 hours.

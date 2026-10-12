@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Ayesha Khan
+Admission Date: 2025-12-21
+Discharge Date: 2025-12-23
+Diagnosis: Anterior cruciate ligament tear, right knee (sports injury)
+Procedure: Arthroscopic ligament reconstruction
+
+Clinical Notes:
+Recovered and discharged in stable condition.

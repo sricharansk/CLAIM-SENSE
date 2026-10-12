@@ -1,0 +1,9 @@
+FLIGHT DELAY CERTIFICATE
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Smita Kulkarni
+Flight Number: LH-SYN-0761
+Scheduled Departure: 2026-07-14
+
+Findings:
+Flight delayed 16 hours owing to an aircraft technical fault. Passengers were not accommodated by the airline.

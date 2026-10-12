@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Silverline Day Surgery Centre (fictional)
+Patient Name: Nikhil Arora
+Admission Date: 2025-11-04
+Discharge Date: 2025-11-05
+Diagnosis: Localised adiposity
+Procedure: Liposuction (cosmetic)
+
+Clinical Notes:
+Recovered and discharged in stable condition.

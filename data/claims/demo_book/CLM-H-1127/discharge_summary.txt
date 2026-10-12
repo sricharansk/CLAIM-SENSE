@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Patient Name: Prakash Yadav
+Admission Date: 2025-12-28
+Discharge Date: 2026-01-02
+Diagnosis: Acute pancreatitis related to alcohol intake
+Procedure: Medical management
+
+Clinical Notes:
+Recovered and discharged in stable condition.

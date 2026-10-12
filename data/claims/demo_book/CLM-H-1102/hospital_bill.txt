@@ -1,0 +1,18 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1102
+Admission Date: 2025-11-20
+Discharge Date: 2025-11-23
+Patient/Insured Name: Lakshmi Venkatesh
+
+Itemised Charges:
+Room Rent - Single Private (3 days @ 7,000)                     21,000.00
+Surgeon Fees                                                    42,000.00
+Operation Theatre Charges                                       16,000.00
+Pharmacy - Medicines and Drugs                                   9,800.00
+Laboratory Tests and Ultrasound                                  6,500.00
+Consumables - Surgical Kit                                       2,900.00
+
+Total Amount                                                    98,200.00

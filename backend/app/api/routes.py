@@ -4,11 +4,12 @@ from __future__ import annotations
 import csv
 import io
 import json
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
-from fastapi.responses import StreamingResponse
+from fastapi.responses import PlainTextResponse, StreamingResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import func, text
 from sqlalchemy.orm import Session
@@ -19,8 +20,9 @@ from ..agents.intake import CORRECTABLE, CORRECTION, SINGLE_VALUE, consolidate
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
 from ..auth import WRITE_ROLES, current_user, issue_token, supervisor, throttle, user_view, verify_password, writer
-from ..config import REPO_ROOT, settings
+from ..config import DEFAULT_DEMO_PASSWORD, REPO_ROOT, settings
 from ..db import get_db
+from ..lines import LINE_PATTERN, LINES
 from ..models import (
     AgentRun,
     AnalysisRun,
@@ -74,6 +76,12 @@ class LoginIn(BaseModel):
     password: str = Field(min_length=1, max_length=200)
 
 
+@public.get("/auth/demo-info")
+def demo_info():
+    """Whether the documented default demo password is in use, so the sign-in screen knows if it may fill it in."""
+    return {"default_password": settings.demo_password == DEFAULT_DEMO_PASSWORD}
+
+
 @public.post("/auth/login")
 def login(body: LoginIn, request: Request, db: Session = Depends(get_db)):
     username = body.username.strip().lower()
@@ -103,7 +111,7 @@ def me(user: User = Depends(current_user)):
 # ------------------------------------------------------------------ claims
 class ClaimIn(BaseModel):
     policy_number: str = Field(min_length=3, max_length=40)
-    claim_type: str = Field(pattern="^(health|motor)$")
+    claim_type: str = Field(pattern=LINE_PATTERN)
     claimant_name: str = Field(min_length=2, max_length=200)
     incident_date: date | None = None
     claimed_amount: Decimal | None = Field(default=None, ge=0)
@@ -127,10 +135,14 @@ def _claim_summary(c: Claim, ai: ClaimDecision | None, risk: str | None, clock: 
 
 @router.post("/claims", status_code=201)
 def create_claim(body: ClaimIn, db: Session = Depends(get_db), user: User = Depends(writer)):
-    if db.query(InsuredPolicy).filter_by(policy_number=body.policy_number).first() is None:
+    insured = db.query(InsuredPolicy).filter_by(policy_number=body.policy_number).first()
+    if insured is None:
         raise HTTPException(422, f"Policy number {body.policy_number} is not in the policy register")
+    if insured.policy.line_of_business != body.claim_type:
+        raise HTTPException(422, f"Policy {body.policy_number} is a {LINES[insured.policy.line_of_business][1].lower()} "
+                                 f"policy, not {LINES[body.claim_type][1].lower()}")
     n = (db.query(func.count(Claim.id)).scalar() or 0) + 1
-    prefix = "CLM-H" if body.claim_type == "health" else "CLM-M"
+    prefix = LINES[body.claim_type][0]
     number = f"{prefix}-{3000 + n}"
     while db.query(Claim).filter_by(claim_number=number).first():
         n += 1
@@ -144,19 +156,33 @@ def create_claim(body: ClaimIn, db: Session = Depends(get_db), user: User = Depe
 
 
 @router.get("/claims")
-def list_claims(status: str | None = None, q: str | None = None, db: Session = Depends(get_db)):
+def list_claims(status: str | None = None, q: str | None = None, db: Session = Depends(get_db),
+                claim_type: str | None = None, risk: str | None = None, recommendation: str | None = None,
+                settlement: str | None = None, days: int | None = None):
+    """Claims, newest first. Every filter is optional; dashboard drill-downs link here with them."""
     query = db.query(Claim)
     if status:
-        query = query.filter(Claim.status == status)
+        query = query.filter(Claim.status.in_(status.split(",")))
+    if claim_type:
+        query = query.filter(Claim.claim_type == claim_type)
+    if days:
+        query = query.filter(Claim.created_at >= datetime.now(timezone.utc) - timedelta(days=days))
     if q:
         like = f"%{q}%"
         query = query.filter((Claim.claim_number.ilike(like)) | (Claim.claimant_name.ilike(like)) | (Claim.policy_number.ilike(like)))
     claims = query.order_by(Claim.id.desc()).all()
     ai = {d.claim_id: d for d in db.query(ClaimDecision).filter_by(source="AI").order_by(ClaimDecision.id).all()}
-    risk = {}
+    levels = {}
     for r in db.query(AnalysisRun).filter_by(status="SUCCEEDED").order_by(AnalysisRun.id).all():
-        risk[r.claim_id] = r.result["risk"]["level"] if r.result else None
-    return [_claim_summary(c, ai.get(c.id), risk.get(c.id), _clock(db, c)) for c in claims]
+        levels[r.claim_id] = r.result["risk"]["level"] if r.result else None
+    rows = [_claim_summary(c, ai.get(c.id), levels.get(c.id), _clock(db, c)) for c in claims]
+    if risk:
+        rows = [r for r in rows if r["risk_level"] == risk]
+    if recommendation:
+        rows = [r for r in rows if r["recommendation"] == recommendation]
+    if settlement:
+        rows = [r for r in rows if r["settlement"] and r["settlement"]["state"] in settlement.split(",")]
+    return rows
 
 
 EXPORT_FIELDS = ["claim_number", "claim_type", "policy_number", "claimant_name", "incident_date", "claimed_amount",
@@ -489,8 +515,9 @@ def policy_versions(product_code: str, db: Session = Depends(get_db)):
 
 @router.get("/insured-policies")
 def insured_policies(db: Session = Depends(get_db)):
-    return [{"policy_number": p.policy_number, "product_code": p.policy.product_code, "holder_name": p.holder_name,
-             "start_date": p.start_date, "end_date": p.end_date, "sum_insured": _money(p.sum_insured)}
+    return [{"policy_number": p.policy_number, "product_code": p.policy.product_code,
+             "line_of_business": p.policy.line_of_business, "holder_name": p.holder_name, "start_date": p.start_date,
+             "end_date": p.end_date, "sum_insured": _money(p.sum_insured)}
             for p in db.query(InsuredPolicy).order_by(InsuredPolicy.policy_number).all()]
 
 
@@ -529,9 +556,43 @@ def audit_log(claim_number: str | None = None, limit: int = Query(100, le=500), 
              "details": e.details, "correlation_id": e.correlation_id, "created_at": e.created_at} for e in events]
 
 
+def _demo_packet_dir():
+    return settings.data_dir / "claims" / "demo_upload"
+
+
+@router.get("/demo-packet")
+def demo_packet(line: str | None = Query(None, pattern=LINE_PATTERN)):
+    """A synthetic sample packet (not seeded), so a deployed demo can create a claim without local files.
+    Health uses the golden sample; the other lines with a packet use their evaluation packet."""
+    folder = _demo_packet_folder(line)
+    files = sorted(folder.glob("*.txt"))
+    lines = (folder / "claim_form.txt").read_text(encoding="utf-8").splitlines()
+    form = {k.strip(): v.strip() for k, _, v in (ln.partition(":") for ln in lines) if v.strip()}
+    loss = lines[lines.index("Description of Loss:") + 1] if "Description of Loss:" in lines else ""
+    return {"policy_number": form.get("Policy Number"), "claim_type": line or form.get("Claim Type", "").lower(),
+            "claimant_name": form.get("Claimant Name"), "description": loss,
+            "files": [{"name": f.name, "size": f.stat().st_size} for f in files]}
+
+
+def _demo_packet_folder(line: str | None) -> Path:
+    folder = _demo_packet_dir() if line in (None, "health") else _demo_packet_dir() / line
+    if not (folder / "claim_form.txt").is_file():
+        raise HTTPException(404, f"No sample packet for {line}")
+    return folder
+
+
+@router.get("/demo-packet/{name}")
+def demo_packet_file(name: str, line: str | None = Query(None, pattern=LINE_PATTERN)):
+    allowed = {f.name: f for f in _demo_packet_folder(line).glob("*.txt")}
+    if name not in allowed:
+        raise HTTPException(404, "No such sample document")
+    return PlainTextResponse(allowed[name].read_text(encoding="utf-8"))
+
+
 @router.get("/analytics")
-def get_analytics(db: Session = Depends(get_db)):
-    return analytics.dashboard(db)
+def get_analytics(line: str | None = Query(None, pattern=LINE_PATTERN), days: int | None = Query(None, ge=1, le=3650),
+                  db: Session = Depends(get_db)):
+    return analytics.dashboard(db, line, days)
 
 
 @router.get("/evaluation")
@@ -547,6 +608,18 @@ def evaluation_report():
 def datasets():
     """The source registry, validated now: required provenance fields and, for in-use sources, file checksums."""
     return provenance.load_registry()
+
+
+@router.get("/benchmarks/industry")
+def industry_benchmark():
+    """Industry loss ratios and paid development by line from the CAS Schedule P database (aggregates written by
+    scripts/fetch_public_data.py), with the registry entry that records where they came from."""
+    path = settings.data_dir / "public" / "cas_schedule_p" / "benchmark.json"
+    if not path.is_file():
+        raise HTTPException(404, "Industry benchmark not generated; run scripts/fetch_public_data.py")
+    registry = provenance.load_registry()
+    entry = next((s for s in registry["sources"] if s["id"] == "cas-schedule-p-1998-2007"), None)
+    return {**json.loads(path.read_text(encoding="utf-8")), "registry": entry}
 
 
 @router.get("/knowledge-base/manifest")

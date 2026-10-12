@@ -1,0 +1,15 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2114
+Vehicle Registration: UK-07-SY-3390
+Patient/Insured Name: Nisha Agarwal
+
+Itemised Charges:
+Bonnet (metal) - replace                                        46,000.00
+Front Windshield Glass                                          24,000.00
+Front Bumper (plastic) - replace                                19,000.00
+Denting and Fitting Labour                                      15,000.00
+
+Total Amount                                                   104,000.00

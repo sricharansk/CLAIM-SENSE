@@ -1,0 +1,8 @@
+E-TICKET AND TRAVEL ITINERARY
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Aditi Rao
+Flight Number: SQ-SYN-0502
+Destination: Singapore
+Trip Start Date: 2026-06-02
+Trip End Date: 2026-06-20

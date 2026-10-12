@@ -1,0 +1,10 @@
+SURVEY REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Coastal Loss Assessors (fictional)
+Property Address: Plot 7, Synthetic Nagar, Chennai
+Value at Risk: INR 6,000,000.00
+Cause of Loss: Flood
+
+Surveyor Findings:
+Water level reached 1.2 metres inside the house. The surveyor values the house and contents at INR 60,00,000 against a sum insured of INR 40,00,000.

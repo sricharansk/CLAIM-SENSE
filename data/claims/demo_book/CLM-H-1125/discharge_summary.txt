@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Motherhood Care Hospital (fictional)
+Patient Name: Shreya Kulkarni
+Admission Date: 2025-08-25
+Discharge Date: 2025-08-29
+Diagnosis: Full-term pregnancy
+Procedure: Lower segment caesarean section
+
+Clinical Notes:
+Recovered and discharged in stable condition.

@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-2104
+Date of Accident: 2025-11-08
+Vehicle Registration: TN-09-SY-2048
+
+Findings:
+Collision confirmed. No injuries reported.

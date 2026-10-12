@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Marina Bay General Hospital (fictional)
+Patient Name: Aditi Rao
+Admission Date: 2026-06-08
+Discharge Date: 2026-06-10
+Diagnosis: Acute appendicitis
+Procedure: Laparoscopic appendicectomy
+
+Clinical Notes:
+Uneventful recovery; fit to fly after 5 days.

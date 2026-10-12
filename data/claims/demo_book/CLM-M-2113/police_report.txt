@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-2113
+Date of Accident: 2025-09-07
+Vehicle Registration: MH-02-SY-1184
+
+Findings:
+No collision. Vehicle towed from the highway after the engine failed.

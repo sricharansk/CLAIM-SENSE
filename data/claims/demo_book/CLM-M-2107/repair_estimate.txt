@@ -1,0 +1,16 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2107
+Vehicle Registration: KA-05-SY-1736
+Patient/Insured Name: Divya Hegde
+
+Itemised Charges:
+Rear Bumper (plastic) - replace                                 11,000.00
+Tail Lamp Assembly (plastic) x2                                  9,800.00
+Boot Lid Panel (metal) - repair                                  7,000.00
+Painting Material                                                5,200.00
+Denting and Fitting Labour                                       4,500.00
+
+Total Amount                                                    37,500.00

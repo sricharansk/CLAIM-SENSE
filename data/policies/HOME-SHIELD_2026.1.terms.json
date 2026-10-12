@@ -1,0 +1,107 @@
+{
+  "product_code": "HOME-SHIELD",
+  "product_name": "ClaimSense Home Shield",
+  "line_of_business": "home",
+  "adjudication_model": "indemnity",
+  "insurer": "Synthetic Assurance Co. Ltd. (fictional)",
+  "version": "2026.1",
+  "effective_from": "2026-04-01",
+  "effective_to": "2027-03-31",
+  "covered_categories": {
+    "categories": [
+      "building_repair",
+      "contents_electronics",
+      "contents_appliance",
+      "contents_furniture",
+      "contents_clothing",
+      "jewellery",
+      "debris_removal",
+      "alt_accommodation"
+    ],
+    "clause": "2.1"
+  },
+  "depreciation": {
+    "clause": "2.2",
+    "flat_percent": {
+      "contents_electronics": 15,
+      "contents_appliance": 10,
+      "contents_furniture": 10,
+      "contents_clothing": 25
+    }
+  },
+  "category_caps": {
+    "jewellery": {
+      "amount": 100000,
+      "clause": "2.3"
+    },
+    "debris_removal": {
+      "amount": 50000,
+      "clause": "2.4"
+    },
+    "alt_accommodation": {
+      "amount": 75000,
+      "clause": "2.5"
+    }
+  },
+  "average": {
+    "clause": "1.3"
+  },
+  "deductible": {
+    "amount": 10000,
+    "clause": "3.1"
+  },
+  "max_liability_clause": "1.2",
+  "exclusions": [
+    {
+      "code": "EXCL_WEAR_TEAR",
+      "clause": "3.2",
+      "keywords": [
+        "wear and tear",
+        "gradual",
+        "seepage",
+        "termite",
+        "rusting",
+        "poor maintenance"
+      ]
+    },
+    {
+      "code": "EXCL_UNOCCUPIED",
+      "clause": "3.3",
+      "keywords": [
+        "unoccupied",
+        "locked up for"
+      ]
+    },
+    {
+      "code": "EXCL_WAR",
+      "clause": "3.4",
+      "keywords": [
+        "act of war",
+        "invasion",
+        "civil war",
+        "nuclear"
+      ]
+    },
+    {
+      "code": "EXCL_WILFUL",
+      "clause": "3.5",
+      "keywords": [
+        "deliberately",
+        "wilful"
+      ]
+    }
+  ],
+  "required_documents": {
+    "documents": [
+      "claim_form",
+      "claim_statement",
+      "survey_report"
+    ],
+    "clause": "4.2"
+  },
+  "settlement_days": {
+    "value": 30,
+    "clause": "4.3"
+  },
+  "coverage_clause": "2.1"
+}

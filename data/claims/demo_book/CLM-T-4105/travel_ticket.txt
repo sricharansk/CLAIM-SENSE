@@ -1,0 +1,8 @@
+E-TICKET AND TRAVEL ITINERARY
+SYNTHETIC DEMO DOCUMENT
+
+Passenger: Nandini Iyer
+Flight Number: GA-SYN-0881
+Destination: Bali
+Trip Start Date: 2026-07-20
+Trip End Date: 2026-08-05

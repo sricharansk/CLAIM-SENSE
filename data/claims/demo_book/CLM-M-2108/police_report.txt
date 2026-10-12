@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-2108
+Date of Accident: 2026-02-14
+Vehicle Registration: TS-08-SY-4419
+
+Findings:
+Collision confirmed. No injuries reported.

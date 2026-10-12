@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE (TREATING DOCTOR)
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Zoya Mirza
+Doctor: Dr. S. Synthetic, Orthopaedics (fictional)
+Nature of Injury: Dengue fever with low platelets
+
+Clinical Notes:
+Viral fever; treated with IV fluids.

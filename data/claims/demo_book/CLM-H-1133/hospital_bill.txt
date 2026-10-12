@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeview Multispeciality Hospital (fictional)
+Bill Number: HB-1133
+Admission Date: 2026-03-03
+Discharge Date: 2026-03-05
+Patient/Insured Name: Mohan Das
+
+Itemised Charges:
+Room Rent - Twin Sharing (2 days @ 4,500)                        9,000.00
+Consultant Physician Fees                                        5,000.00
+Pharmacy - Medicines and Drugs                                   4,600.00
+Laboratory Tests and Chest X-Ray                                 3,400.00
+
+Total Amount                                                    22,000.00

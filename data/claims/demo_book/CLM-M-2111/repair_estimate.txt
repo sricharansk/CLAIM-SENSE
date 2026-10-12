@@ -1,0 +1,15 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Highway Motors Service Centre (fictional)
+Estimate Number: RE-2111
+Vehicle Registration: DL-08-SY-9031
+Patient/Insured Name: Varun Malhotra
+
+Itemised Charges:
+Front Bumper (plastic) - replace                                16,000.00
+Bonnet (metal) - replace                                        34,000.00
+Headlamp Assembly (plastic)                                     12,000.00
+Denting and Fitting Labour                                      10,000.00
+
+Total Amount                                                    72,000.00

@@ -10,3 +10,21 @@ backend/static/
 backend/storage/
 *.log
 *.tsbuildinfo
+.env.*
+!.env.example
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+credentials.json
+service-account.json
+data/raw/
+data/private/
+data/company/
+.idea/
+# VS Code: share the project's run, debug, task and extension files; keep personal settings out.
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json

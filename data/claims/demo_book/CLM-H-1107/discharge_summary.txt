@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Patient Name: Vikram Singh
+Admission Date: 2025-09-28
+Discharge Date: 2025-10-01
+Diagnosis: Fracture shaft of left tibia following road traffic accident
+Procedure: Intramedullary nailing of tibia
+
+Clinical Notes:
+Recovered and discharged in stable condition.

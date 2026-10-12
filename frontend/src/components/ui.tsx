@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { ApiError, words } from "../api";
 
 export function useLoad<T>(fn: () => Promise<T>, deps: unknown[] = []) {
@@ -61,18 +62,43 @@ export function Card({ title, children, actions }: { title?: ReactNode; children
   );
 }
 
-export function Bars({ data, total }: { data: Record<string, number>; total?: number }) {
+/** Horizontal bars. With `link`, each row opens the matching list (dashboard drill-down). */
+export function Bars({ data, total, link, keepOrder, plain }: { data: Record<string, number>; total?: number;
+  link?: (key: string) => string; keepOrder?: boolean; plain?: boolean }) {
   const sum = total ?? Object.values(data).reduce((a, b) => a + b, 0);
-  const entries = Object.entries(data).sort((a, b) => b[1] - a[1]);
-  if (!entries.length) return <p className="muted">No data yet.</p>;
+  const entries = keepOrder ? Object.entries(data) : Object.entries(data).sort((a, b) => b[1] - a[1]);
+  if (!entries.length || !sum) return <p className="muted">No data for this selection.</p>;
   return (
     <div className="bars">
-      {entries.map(([k, v]) => (
-        <div key={k} className="bar-row">
-          <span className="bar-label"><Badge value={k} /></span>
-          <span className="bar-track"><span className="bar-fill" style={{ width: `${(v / Math.max(sum, 1)) * 100}%` }} /></span>
-          <span className="bar-value">{v}</span>
-        </div>
+      {entries.map(([k, v]) => {
+        const body = (
+          <>
+            <span className="bar-label">{plain ? <span className="small">{k}</span> : <Badge value={k} />}</span>
+            <span className="bar-track"><span className="bar-fill" style={{ width: `${(v / Math.max(sum, 1)) * 100}%` }} /></span>
+            <span className="bar-value">{v}</span>
+          </>
+        );
+        return link && v > 0
+          ? <Link key={k} className="bar-row link-row" to={link(k)} title={`Show these ${v} claims`}>{body}</Link>
+          : <div key={k} className="bar-row">{body}</div>;
+      })}
+    </div>
+  );
+}
+
+export function Kpi({ label, value, tone, to, hint }: { label: string; value: string | number; tone?: string; to?: string; hint?: string }) {
+  const body = <><span>{label}</span><strong>{value}</strong>{hint && <small className="muted">{hint}</small>}</>;
+  return to ? <Link className={`kpi link-kpi ${tone ?? ""}`} to={to} title="Show these claims">{body}</Link>
+    : <div className={`kpi ${tone ?? ""}`}>{body}</div>;
+}
+
+/** A row of mutually exclusive choices (filters). */
+export function Segmented({ label, options, value, onChange }: { label: string; options: [string, string][]; value: string;
+  onChange: (v: string) => void }) {
+  return (
+    <div className="segmented" role="group" aria-label={label}>
+      {options.map(([v, text]) => (
+        <button key={v} type="button" className={v === value ? "active" : ""} aria-pressed={v === value} onClick={() => onChange(v)}>{text}</button>
       ))}
     </div>
   );
