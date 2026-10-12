@@ -1,0 +1,750 @@
+{
+ "dataset_id": "cas-schedule-p-1998-2007",
+ "source": {
+  "name": "CAS Loss Reserving Database (NAIC Schedule P), accident years 1998-2007",
+  "publisher": "Casualty Actuarial Society; compiled for the CAS by S&P Global Market Intelligence",
+  "url": "https://www.casact.org/publications-research/research/research-resources/loss-reserving-data-pulled-naic-schedule-p",
+  "retrieved_from": "https://files.pythonhosted.org/packages/source/c/chainladder/chainladder-0.10.1.tar.gz",
+  "archive_sha256": "5346c942dcaa9cd4b5118c0fcb2db298de615eb066cde7a31f18b439c0e1fc15",
+  "file": "clrd2025.csv",
+  "file_sha256": "045f10559ec9ed2bb0b4e5f74f9d611e20723ce51c7192a30b0dabcb75111456",
+  "retrieval_date": "2026-10-11",
+  "units": "USD thousands",
+  "transformation_script": "scripts/fetch_public_data.py"
+ },
+ "definitions": {
+  "loss_ratio": "incurred losses (case + bulk reserves + paid) at development year 10 / net earned premium",
+  "paid_development": "industry cumulative paid at each development year as a percentage of paid at year 10, all accident years pooled",
+  "companies": "distinct NAIC group or company codes reporting the line"
+ },
+ "rows_read": 71650,
+ "lines": {
+  "ppauto": {
+   "label": "Private passenger auto liability",
+   "companies": 143,
+   "net_earned_premium": 220220619,
+   "incurred_at_10_years": 158719861,
+   "loss_ratio": 0.721,
+   "paid_development": [
+    {
+     "lag_years": 1,
+     "percent_paid": 43.7
+    },
+    {
+     "lag_years": 2,
+     "percent_paid": 72.3
+    },
+    {
+     "lag_years": 3,
+     "percent_paid": 85.0
+    },
+    {
+     "lag_years": 4,
+     "percent_paid": 92.3
+    },
+    {
+     "lag_years": 5,
+     "percent_paid": 96.3
+    },
+    {
+     "lag_years": 6,
+     "percent_paid": 98.1
+    },
+    {
+     "lag_years": 7,
+     "percent_paid": 99.1
+    },
+    {
+     "lag_years": 8,
+     "percent_paid": 99.6
+    },
+    {
+     "lag_years": 9,
+     "percent_paid": 99.8
+    },
+    {
+     "lag_years": 10,
+     "percent_paid": 100.0
+    }
+   ],
+   "accident_years": [
+    {
+     "accident_year": 1998,
+     "net_earned_premium": 19561708,
+     "incurred_at_10_years": 13565704,
+     "paid_at_10_years": 13508863,
+     "loss_ratio": 0.693
+    },
+    {
+     "accident_year": 1999,
+     "net_earned_premium": 18560465,
+     "incurred_at_10_years": 14105901,
+     "paid_at_10_years": 14040019,
+     "loss_ratio": 0.76
+    },
+    {
+     "accident_year": 2000,
+     "net_earned_premium": 18311892,
+     "incurred_at_10_years": 14970616,
+     "paid_at_10_years": 14897770,
+     "loss_ratio": 0.818
+    },
+    {
+     "accident_year": 2001,
+     "net_earned_premium": 19486841,
+     "incurred_at_10_years": 16069756,
+     "paid_at_10_years": 15994771,
+     "loss_ratio": 0.825
+    },
+    {
+     "accident_year": 2002,
+     "net_earned_premium": 21904981,
+     "incurred_at_10_years": 17153465,
+     "paid_at_10_years": 17054366,
+     "loss_ratio": 0.783
+    },
+    {
+     "accident_year": 2003,
+     "net_earned_premium": 24246940,
+     "incurred_at_10_years": 16680275,
+     "paid_at_10_years": 16582490,
+     "loss_ratio": 0.688
+    },
+    {
+     "accident_year": 2004,
+     "net_earned_premium": 24832868,
+     "incurred_at_10_years": 16323116,
+     "paid_at_10_years": 16203576,
+     "loss_ratio": 0.657
+    },
+    {
+     "accident_year": 2005,
+     "net_earned_premium": 24499800,
+     "incurred_at_10_years": 16280584,
+     "paid_at_10_years": 16187575,
+     "loss_ratio": 0.665
+    },
+    {
+     "accident_year": 2006,
+     "net_earned_premium": 24672901,
+     "incurred_at_10_years": 16482853,
+     "paid_at_10_years": 16315642,
+     "loss_ratio": 0.668
+    },
+    {
+     "accident_year": 2007,
+     "net_earned_premium": 24142223,
+     "incurred_at_10_years": 17087591,
+     "paid_at_10_years": 16961362,
+     "loss_ratio": 0.708
+    }
+   ]
+  },
+  "comauto": {
+   "label": "Commercial auto liability",
+   "companies": 157,
+   "net_earned_premium": 18039056,
+   "incurred_at_10_years": 11655520,
+   "loss_ratio": 0.646,
+   "paid_development": [
+    {
+     "lag_years": 1,
+     "percent_paid": 25.5
+    },
+    {
+     "lag_years": 2,
+     "percent_paid": 49.8
+    },
+    {
+     "lag_years": 3,
+     "percent_paid": 69.3
+    },
+    {
+     "lag_years": 4,
+     "percent_paid": 83.7
+    },
+    {
+     "lag_years": 5,
+     "percent_paid": 92.3
+    },
+    {
+     "lag_years": 6,
+     "percent_paid": 96.3
+    },
+    {
+     "lag_years": 7,
+     "percent_paid": 98.2
+    },
+    {
+     "lag_years": 8,
+     "percent_paid": 99.2
+    },
+    {
+     "lag_years": 9,
+     "percent_paid": 99.7
+    },
+    {
+     "lag_years": 10,
+     "percent_paid": 100.0
+    }
+   ],
+   "accident_years": [
+    {
+     "accident_year": 1998,
+     "net_earned_premium": 1234486,
+     "incurred_at_10_years": 931471,
+     "paid_at_10_years": 927164,
+     "loss_ratio": 0.755
+    },
+    {
+     "accident_year": 1999,
+     "net_earned_premium": 1265139,
+     "incurred_at_10_years": 999366,
+     "paid_at_10_years": 996280,
+     "loss_ratio": 0.79
+    },
+    {
+     "accident_year": 2000,
+     "net_earned_premium": 1316861,
+     "incurred_at_10_years": 1001566,
+     "paid_at_10_years": 997055,
+     "loss_ratio": 0.761
+    },
+    {
+     "accident_year": 2001,
+     "net_earned_premium": 1393353,
+     "incurred_at_10_years": 981402,
+     "paid_at_10_years": 975107,
+     "loss_ratio": 0.704
+    },
+    {
+     "accident_year": 2002,
+     "net_earned_premium": 1684740,
+     "incurred_at_10_years": 1074788,
+     "paid_at_10_years": 1068031,
+     "loss_ratio": 0.638
+    },
+    {
+     "accident_year": 2003,
+     "net_earned_premium": 2038614,
+     "incurred_at_10_years": 1292491,
+     "paid_at_10_years": 1283662,
+     "loss_ratio": 0.634
+    },
+    {
+     "accident_year": 2004,
+     "net_earned_premium": 2301959,
+     "incurred_at_10_years": 1330691,
+     "paid_at_10_years": 1323647,
+     "loss_ratio": 0.578
+    },
+    {
+     "accident_year": 2005,
+     "net_earned_premium": 2332961,
+     "incurred_at_10_years": 1399807,
+     "paid_at_10_years": 1387156,
+     "loss_ratio": 0.6
+    },
+    {
+     "accident_year": 2006,
+     "net_earned_premium": 2299987,
+     "incurred_at_10_years": 1338568,
+     "paid_at_10_years": 1329052,
+     "loss_ratio": 0.582
+    },
+    {
+     "accident_year": 2007,
+     "net_earned_premium": 2170956,
+     "incurred_at_10_years": 1305370,
+     "paid_at_10_years": 1296918,
+     "loss_ratio": 0.601
+    }
+   ]
+  },
+  "wkcomp": {
+   "label": "Workers' compensation",
+   "companies": 132,
+   "net_earned_premium": 30546756,
+   "incurred_at_10_years": 20320326,
+   "loss_ratio": 0.665,
+   "paid_development": [
+    {
+     "lag_years": 1,
+     "percent_paid": 25.9
+    },
+    {
+     "lag_years": 2,
+     "percent_paid": 55.6
+    },
+    {
+     "lag_years": 3,
+     "percent_paid": 71.8
+    },
+    {
+     "lag_years": 4,
+     "percent_paid": 81.8
+    },
+    {
+     "lag_years": 5,
+     "percent_paid": 87.8
+    },
+    {
+     "lag_years": 6,
+     "percent_paid": 91.9
+    },
+    {
+     "lag_years": 7,
+     "percent_paid": 94.7
+    },
+    {
+     "lag_years": 8,
+     "percent_paid": 97.0
+    },
+    {
+     "lag_years": 9,
+     "percent_paid": 98.7
+    },
+    {
+     "lag_years": 10,
+     "percent_paid": 100.0
+    }
+   ],
+   "accident_years": [
+    {
+     "accident_year": 1998,
+     "net_earned_premium": 1994184,
+     "incurred_at_10_years": 1454217,
+     "paid_at_10_years": 1293098,
+     "loss_ratio": 0.729
+    },
+    {
+     "accident_year": 1999,
+     "net_earned_premium": 2057159,
+     "incurred_at_10_years": 1703548,
+     "paid_at_10_years": 1455376,
+     "loss_ratio": 0.828
+    },
+    {
+     "accident_year": 2000,
+     "net_earned_premium": 2283922,
+     "incurred_at_10_years": 1816661,
+     "paid_at_10_years": 1605496,
+     "loss_ratio": 0.795
+    },
+    {
+     "accident_year": 2001,
+     "net_earned_premium": 1496230,
+     "incurred_at_10_years": 1977064,
+     "paid_at_10_years": 1629028,
+     "loss_ratio": 1.321
+    },
+    {
+     "accident_year": 2002,
+     "net_earned_premium": 2840926,
+     "incurred_at_10_years": 2025334,
+     "paid_at_10_years": 1784759,
+     "loss_ratio": 0.713
+    },
+    {
+     "accident_year": 2003,
+     "net_earned_premium": 3407382,
+     "incurred_at_10_years": 2127618,
+     "paid_at_10_years": 1845859,
+     "loss_ratio": 0.624
+    },
+    {
+     "accident_year": 2004,
+     "net_earned_premium": 4030521,
+     "incurred_at_10_years": 2252852,
+     "paid_at_10_years": 1952204,
+     "loss_ratio": 0.559
+    },
+    {
+     "accident_year": 2005,
+     "net_earned_premium": 4452202,
+     "incurred_at_10_years": 2345393,
+     "paid_at_10_years": 2017811,
+     "loss_ratio": 0.527
+    },
+    {
+     "accident_year": 2006,
+     "net_earned_premium": 4443868,
+     "incurred_at_10_years": 2431828,
+     "paid_at_10_years": 2087439,
+     "loss_ratio": 0.547
+    },
+    {
+     "accident_year": 2007,
+     "net_earned_premium": 3540362,
+     "incurred_at_10_years": 2185811,
+     "paid_at_10_years": 1952550,
+     "loss_ratio": 0.617
+    }
+   ]
+  },
+  "medmal": {
+   "label": "Medical malpractice (occurrence)",
+   "companies": 34,
+   "net_earned_premium": 5549844,
+   "incurred_at_10_years": 4983258,
+   "loss_ratio": 0.898,
+   "paid_development": [
+    {
+     "lag_years": 1,
+     "percent_paid": 1.5
+    },
+    {
+     "lag_years": 2,
+     "percent_paid": 9.9
+    },
+    {
+     "lag_years": 3,
+     "percent_paid": 24.4
+    },
+    {
+     "lag_years": 4,
+     "percent_paid": 42.0
+    },
+    {
+     "lag_years": 5,
+     "percent_paid": 58.6
+    },
+    {
+     "lag_years": 6,
+     "percent_paid": 75.0
+    },
+    {
+     "lag_years": 7,
+     "percent_paid": 84.8
+    },
+    {
+     "lag_years": 8,
+     "percent_paid": 90.5
+    },
+    {
+     "lag_years": 9,
+     "percent_paid": 96.5
+    },
+    {
+     "lag_years": 10,
+     "percent_paid": 100.0
+    }
+   ],
+   "accident_years": [
+    {
+     "accident_year": 1998,
+     "net_earned_premium": 489856,
+     "incurred_at_10_years": 518101,
+     "paid_at_10_years": 504967,
+     "loss_ratio": 1.058
+    },
+    {
+     "accident_year": 1999,
+     "net_earned_premium": 366989,
+     "incurred_at_10_years": 390679,
+     "paid_at_10_years": 379223,
+     "loss_ratio": 1.065
+    },
+    {
+     "accident_year": 2000,
+     "net_earned_premium": 397870,
+     "incurred_at_10_years": 444416,
+     "paid_at_10_years": 422544,
+     "loss_ratio": 1.117
+    },
+    {
+     "accident_year": 2001,
+     "net_earned_premium": 429942,
+     "incurred_at_10_years": 484932,
+     "paid_at_10_years": 455889,
+     "loss_ratio": 1.128
+    },
+    {
+     "accident_year": 2002,
+     "net_earned_premium": 553430,
+     "incurred_at_10_years": 578218,
+     "paid_at_10_years": 539086,
+     "loss_ratio": 1.045
+    },
+    {
+     "accident_year": 2003,
+     "net_earned_premium": 635928,
+     "incurred_at_10_years": 509575,
+     "paid_at_10_years": 471727,
+     "loss_ratio": 0.801
+    },
+    {
+     "accident_year": 2004,
+     "net_earned_premium": 638501,
+     "incurred_at_10_years": 488109,
+     "paid_at_10_years": 433065,
+     "loss_ratio": 0.764
+    },
+    {
+     "accident_year": 2005,
+     "net_earned_premium": 741261,
+     "incurred_at_10_years": 589677,
+     "paid_at_10_years": 541354,
+     "loss_ratio": 0.796
+    },
+    {
+     "accident_year": 2006,
+     "net_earned_premium": 771161,
+     "incurred_at_10_years": 563240,
+     "paid_at_10_years": 527209,
+     "loss_ratio": 0.73
+    },
+    {
+     "accident_year": 2007,
+     "net_earned_premium": 524906,
+     "incurred_at_10_years": 416311,
+     "paid_at_10_years": 379087,
+     "loss_ratio": 0.793
+    }
+   ]
+  },
+  "othliab": {
+   "label": "Other liability (occurrence)",
+   "companies": 236,
+   "net_earned_premium": 14918871,
+   "incurred_at_10_years": 9291465,
+   "loss_ratio": 0.623,
+   "paid_development": [
+    {
+     "lag_years": 1,
+     "percent_paid": 8.5
+    },
+    {
+     "lag_years": 2,
+     "percent_paid": 28.5
+    },
+    {
+     "lag_years": 3,
+     "percent_paid": 51.7
+    },
+    {
+     "lag_years": 4,
+     "percent_paid": 69.1
+    },
+    {
+     "lag_years": 5,
+     "percent_paid": 80.6
+    },
+    {
+     "lag_years": 6,
+     "percent_paid": 88.4
+    },
+    {
+     "lag_years": 7,
+     "percent_paid": 93.7
+    },
+    {
+     "lag_years": 8,
+     "percent_paid": 96.8
+    },
+    {
+     "lag_years": 9,
+     "percent_paid": 98.6
+    },
+    {
+     "lag_years": 10,
+     "percent_paid": 100.0
+    }
+   ],
+   "accident_years": [
+    {
+     "accident_year": 1998,
+     "net_earned_premium": 997258,
+     "incurred_at_10_years": 656385,
+     "paid_at_10_years": 631556,
+     "loss_ratio": 0.658
+    },
+    {
+     "accident_year": 1999,
+     "net_earned_premium": 1088547,
+     "incurred_at_10_years": 692533,
+     "paid_at_10_years": 629765,
+     "loss_ratio": 0.636
+    },
+    {
+     "accident_year": 2000,
+     "net_earned_premium": 1055867,
+     "incurred_at_10_years": 765361,
+     "paid_at_10_years": 733473,
+     "loss_ratio": 0.725
+    },
+    {
+     "accident_year": 2001,
+     "net_earned_premium": 1159012,
+     "incurred_at_10_years": 885009,
+     "paid_at_10_years": 848891,
+     "loss_ratio": 0.764
+    },
+    {
+     "accident_year": 2002,
+     "net_earned_premium": 1422394,
+     "incurred_at_10_years": 1110462,
+     "paid_at_10_years": 1024021,
+     "loss_ratio": 0.781
+    },
+    {
+     "accident_year": 2003,
+     "net_earned_premium": 1540294,
+     "incurred_at_10_years": 949042,
+     "paid_at_10_years": 897888,
+     "loss_ratio": 0.616
+    },
+    {
+     "accident_year": 2004,
+     "net_earned_premium": 1731045,
+     "incurred_at_10_years": 968981,
+     "paid_at_10_years": 908938,
+     "loss_ratio": 0.56
+    },
+    {
+     "accident_year": 2005,
+     "net_earned_premium": 1847131,
+     "incurred_at_10_years": 1012335,
+     "paid_at_10_years": 965251,
+     "loss_ratio": 0.548
+    },
+    {
+     "accident_year": 2006,
+     "net_earned_premium": 2010526,
+     "incurred_at_10_years": 1072113,
+     "paid_at_10_years": 989443,
+     "loss_ratio": 0.533
+    },
+    {
+     "accident_year": 2007,
+     "net_earned_premium": 2066797,
+     "incurred_at_10_years": 1179244,
+     "paid_at_10_years": 1100483,
+     "loss_ratio": 0.571
+    }
+   ]
+  },
+  "prodliab": {
+   "label": "Products liability (occurrence)",
+   "companies": 70,
+   "net_earned_premium": 3071936,
+   "incurred_at_10_years": 1885233,
+   "loss_ratio": 0.614,
+   "paid_development": [
+    {
+     "lag_years": 1,
+     "percent_paid": 5.2
+    },
+    {
+     "lag_years": 2,
+     "percent_paid": 18.8
+    },
+    {
+     "lag_years": 3,
+     "percent_paid": 40.7
+    },
+    {
+     "lag_years": 4,
+     "percent_paid": 58.5
+    },
+    {
+     "lag_years": 5,
+     "percent_paid": 74.5
+    },
+    {
+     "lag_years": 6,
+     "percent_paid": 83.1
+    },
+    {
+     "lag_years": 7,
+     "percent_paid": 90.8
+    },
+    {
+     "lag_years": 8,
+     "percent_paid": 95.0
+    },
+    {
+     "lag_years": 9,
+     "percent_paid": 97.8
+    },
+    {
+     "lag_years": 10,
+     "percent_paid": 100.0
+    }
+   ],
+   "accident_years": [
+    {
+     "accident_year": 1998,
+     "net_earned_premium": 270933,
+     "incurred_at_10_years": 255296,
+     "paid_at_10_years": 211860,
+     "loss_ratio": 0.942
+    },
+    {
+     "accident_year": 1999,
+     "net_earned_premium": 285871,
+     "incurred_at_10_years": 328758,
+     "paid_at_10_years": 256743,
+     "loss_ratio": 1.15
+    },
+    {
+     "accident_year": 2000,
+     "net_earned_premium": 259868,
+     "incurred_at_10_years": 225455,
+     "paid_at_10_years": 186501,
+     "loss_ratio": 0.868
+    },
+    {
+     "accident_year": 2001,
+     "net_earned_premium": 259106,
+     "incurred_at_10_years": 173443,
+     "paid_at_10_years": 132588,
+     "loss_ratio": 0.669
+    },
+    {
+     "accident_year": 2002,
+     "net_earned_premium": 282724,
+     "incurred_at_10_years": 162557,
+     "paid_at_10_years": 111441,
+     "loss_ratio": 0.575
+    },
+    {
+     "accident_year": 2003,
+     "net_earned_premium": 320511,
+     "incurred_at_10_years": 169575,
+     "paid_at_10_years": 122758,
+     "loss_ratio": 0.529
+    },
+    {
+     "accident_year": 2004,
+     "net_earned_premium": 391564,
+     "incurred_at_10_years": 171276,
+     "paid_at_10_years": 126248,
+     "loss_ratio": 0.437
+    },
+    {
+     "accident_year": 2005,
+     "net_earned_premium": 421310,
+     "incurred_at_10_years": 171523,
+     "paid_at_10_years": 122847,
+     "loss_ratio": 0.407
+    },
+    {
+     "accident_year": 2006,
+     "net_earned_premium": 421849,
+     "incurred_at_10_years": 173799,
+     "paid_at_10_years": 145433,
+     "loss_ratio": 0.412
+    },
+    {
+     "accident_year": 2007,
+     "net_earned_premium": 158200,
+     "incurred_at_10_years": 53551,
+     "paid_at_10_years": 51223,
+     "loss_ratio": 0.339
+    }
+   ]
+  }
+ },
+ "note": "US commercial and personal lines industry data, used as an external benchmark for how claims develop. It is not used in any claim decision and the synthetic Claim Sense book is not calibrated to it."
+}

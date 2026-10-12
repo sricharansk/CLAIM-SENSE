@@ -3,11 +3,11 @@
 ## Commands
 
 ```bash
-cd backend && ruff check app tests ../scripts && python -m pytest -q     # 71 tests
-python3 scripts/evaluate.py                                             # golden evaluation, 256 checks
+cd backend && ruff check app tests ../scripts && python -m pytest -q     # 222 tests
+python3 scripts/evaluate.py                                             # golden evaluation, 365 checks
 python3 scripts/provenance.py --check                                   # registry, checksums, reproducible RAG manifest
 cd frontend && npm run build                                            # type check + build
-cd e2e && npx playwright test                                           # 10 browser tests (fresh stack)
+cd e2e && npx playwright test                                           # 13 browser tests (fresh stack)
 docker compose up --build -d && python3 scripts/smoke_test.py http://localhost:8080
 ```
 
@@ -28,15 +28,16 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | `test_policy_ingestion.py` | 4 | PDF ingestion with pages and states; duplicate, scanned, unreadable and wrong-type failures; supervisor only; seeded records |
 | `test_fact_correction.py` | 2 | Correction used by the next analysis, audited, extracted value kept, latest wins; date, amount, reason, role and decided-claim validation |
 | `test_provenance.py` | 6 | Committed registry valid; validator rejects missing or wrong provenance and checksum drift; `/datasets`; every indexed chunk resolves; a chunk without an extraction run is kept out of the index; backfill |
-| `test_demo_book.py` | 74 | Each of the 42 demo-book claims reaches its designed recommendation; replayed reviewer history (status, labelled notes, display-name actors, review rules, backdated timestamps, audit events); dashboard line and period filters and panels; claims-list drill-down filters; sample packet endpoints |
+| `test_demo_book.py` | 133 | Each of the 77 demo-book claims (all six lines) reaches its designed recommendation; replayed reviewer history (status, labelled notes, display-name actors, review rules, backdated timestamps, audit events); dashboard line and period filters and panels; claims-list drill-down filters; sample packet endpoints |
+| `test_more_lines.py` | 18 | Travel, home, personal accident and life rules worked by hand (depreciation, per-item and category limits, average clause on the full sum insured, benefit schedule rows); claim type must match the policy's line; each line's sample packet through the pipeline; industry benchmark endpoint; 10,000-claim portfolio |
 | `test_review_assignment.py` | 3 | Queue shows risk, age and assignee; take, release and supervisor reassignment; others cannot take or decide an assigned task; supervisor-queue and auditor limits; audit events |
 
 Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is always off.
 
 ## Golden evaluation (`scripts/evaluate.py`)
 
-- **Claim cases:** 12, covering all ten blueprint case types: clearly covered, excluded, partial, insufficient evidence, high risk, deductible, sub-limit, maximum coverage, duplicate, and ambiguous policy version.
-- **Policy questions:** 21, split into covered, excluded, ambiguous and unsupported.
+- **Claim cases:** 16, covering all ten blueprint case types: clearly covered, excluded, partial, insufficient evidence, high risk, deductible, sub-limit, maximum coverage, duplicate, and ambiguous policy version. C13 to C16 are travel (baggage depreciation, per-item and trip-delay limits), home (jewellery limit and the average clause), personal accident (benefit schedule pays above the amount claimed) and life (suicide exclusion in the first 12 months).
+- **Policy questions:** 30, split into covered, excluded, ambiguous and unsupported; Q22 to Q30 ask about the travel, home, personal accident and life wordings.
 - **Expected values:** worked out by hand in `data/evaluation/golden_cases.json`.
 - **Scoring:** results are scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow. The report is written to `reports/evaluation.{json,md}` and shown at `/evaluation`. CI fails on any failed check.
 
@@ -60,7 +61,7 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
 
 ## Browser tests (`e2e/`)
 
-`e2e/tests/golden.spec.mjs` has 11 Playwright tests that drive the real UI against a running stack (`BASE_URL`, default `http://localhost:8080`):
+`e2e/tests/golden.spec.mjs` has 13 Playwright tests that drive the real UI against a running stack (`BASE_URL`, default `http://localhost:8080`):
 
 - golden claim to approval and letter, with the stage audit events;
 - approval-limit block;
@@ -72,7 +73,9 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
 - data provenance;
 - dashboard rates;
 - dashboard filters and tiles drilling down to the matching claims, and the guide's links;
-- phone layout (dashboard, claims, claim, review queue, guide).
+- the travel sample packet run through the pipeline (₹35,800 with the baggage and trip-delay limits);
+- the industry benchmark and the 10,000-claim portfolio on screen;
+- phone layout (dashboard, claims, two claims, review queue, guide, new claim, data sources).
 
 Any browser console error fails a test. They need a freshly seeded stack, because a second run files the golden claim again and the system flags it as a duplicate. CI runs them in the `docker-smoke` job before the smoke test.
 

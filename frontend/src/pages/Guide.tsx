@@ -38,6 +38,12 @@ const SCENARIOS: [string, string][] = [
   ["CLM-H-1107", "Accident 18 days into cover: exempt from the initial waiting period"],
   ["CLM-M-2112", "Rejected: driving licence expired before the accident (clause 3.2)"],
   ["CLM-M-2132", "Open past its settlement date (shows as overdue)"],
+  ["CLM-T-4102", "Travel: lost baggage with 10% depreciation, the ₹15,000 per-item limit and the ₹50,000 trip limit"],
+  ["CLM-P-5103", "Home: flood in an under-insured home, so the average clause scales the loss down (clause 1.3)"],
+  ["CLM-A-6103", "Personal accident: accidental death, 100% of the capital sum insured to the nominee"],
+  ["CLM-L-7103", "Life: suicide eight months after commencement, excluded under clause 3.1"],
+  ["CLM-L-7104", "Life: suicide 55 months after commencement; the 12-month exclusion no longer applies"],
+  ["CLM-L-7102", "Life: death 17 months in, inside the three-year section 45 window, so it is investigated"],
 ];
 
 export default function Guide() {
@@ -85,7 +91,7 @@ export default function Guide() {
           <ul className="plain">
             <li>Amounts come from a deterministic rules engine; the AI never calculates money or makes the final decision.</li>
             <li>Every recommendation needs a human decision. Rejections, escalations and investigation referrals need a note, and decisions above the adjuster's limit go to a supervisor.</li>
-            <li>The 50 seeded claims include 42 demo-book claims whose earlier reviewer decisions are replayed as history; their notes start with “[Seeded demo history]”.</li>
+            <li>The 85 seeded claims cover six lines (health, motor, travel, home, personal accident and life) and include 77 demo-book claims whose earlier reviewer decisions are replayed as history; their notes start with “[Seeded demo history]”.</li>
             <li>On the free Render plan the database is re-seeded each time the service restarts, so your changes do not persist, and the first page can take a minute while a sleeping service starts.</li>
             <li>To try policy ingestion, sign in as the supervisor and upload the PDF wording and terms from <a href={`${REPO}/tree/main/data/policies/ingest_demo`} target="_blank" rel="noreferrer">data/policies/ingest_demo</a> in the Policy library.</li>
             <li>More synthetic claim packets for upload are in <a href={`${REPO}/tree/main/data/claims`} target="_blank" rel="noreferrer">data/claims</a>.</li>

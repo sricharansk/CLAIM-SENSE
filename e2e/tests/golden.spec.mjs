@@ -27,7 +27,7 @@ test.describe.configure({ mode: "serial" });
 test("golden path: create, upload, analyse, approve and write the letter", async ({ page }) => {
   await signIn(page, "Adjuster");
   await page.goto("/claims/new");
-  await page.locator("select").first().selectOption("CS-HLT-23-000089");
+  await page.getByLabel("Policy number").selectOption("CS-HLT-23-000089");
   await page.locator("textarea").fill("Kidney stone treatment, uploaded through the browser test.");
   await page.locator("input[type=file]").setInputFiles(["claim_form.txt", "hospital_bill.txt", "discharge_summary.txt"].map((f) => DEMO + f));
   await page.getByRole("button", { name: "Create, upload and analyse" }).click();
@@ -136,7 +136,7 @@ test("dashboard filters and tiles drill down to the matching claims", async ({ p
   const rows = page.locator("table.clickable tbody tr");
   await expect(rows.first()).toBeVisible();
   for (const row of await rows.all()) {
-    await expect(row.locator("td").nth(1)).toHaveText("motor");
+    await expect(row.locator("td").nth(1)).toHaveText("Motor");
     await expect(row).toContainText("High");
   }
   await page.getByRole("button", { name: "Clear all filters" }).click();
@@ -144,6 +144,28 @@ test("dashboard filters and tiles drill down to the matching claims", async ({ p
   await page.goto("/guide");
   await page.getByRole("link", { name: "Open CLM-H-1001" }).click();
   await expect(page).toHaveURL(/\/claims\/CLM-H-1001$/);
+});
+
+test("travel sample packet: baggage limits and the trip-delay cap", async ({ page }) => {
+  await signIn(page, "Supervisor");
+  await page.goto("/claims/new");
+  await page.getByLabel("Sample packet line").selectOption("travel");
+  await page.getByRole("button", { name: "Use the sample packet" }).click();
+  await expect(page.getByLabel("Claim type")).toHaveValue("travel");
+  await page.getByRole("button", { name: "Create, upload and analyse" }).click();
+  await expect(page.getByText("AI recommendation · requires human review")).toBeVisible({ timeout: 30_000 });
+  await expect(page.locator(".amounts .pay strong")).toHaveText("₹35,800");
+  await page.getByRole("tab", { name: /^Adjudication/ }).click();
+  for (const rule of ["R15_DEPRECIATION", "R20_ITEM_LIMIT", "R22_CATEGORY_LIMIT"]) await expect(page.getByText(rule).first()).toBeVisible();
+});
+
+test("industry benchmark and the six-line portfolio are shown", async ({ page }) => {
+  await signIn(page, "Supervisor");
+  await page.getByRole("group", { name: "Portfolio" }).getByRole("button", { name: /10,000 claims/ }).click();
+  await expect(page.locator(".kpi", { hasText: "Portfolio claims" })).toContainText("10,000");
+  await page.goto("/datasets");
+  await expect(page.getByText("Industry benchmark: CAS Schedule P")).toBeVisible();
+  await expect(page.getByText("Private passenger auto liability")).toBeVisible();
 });
 
 test("phone layout: navigation behind a menu, no sideways scrolling", async ({ page }) => {
@@ -154,7 +176,7 @@ test("phone layout: navigation behind a menu, no sideways scrolling", async ({ p
   await page.getByRole("link", { name: "Review queue" }).click();
   await expect(page.getByText("Open tasks")).toBeVisible();
   await expect(page.locator("#main-nav")).toBeHidden();
-  for (const path of ["/", "/claims", "/claims/CLM-H-1001", "/reviews", "/guide"]) {
+  for (const path of ["/", "/claims", "/claims/CLM-H-1001", "/claims/CLM-P-5103", "/reviews", "/guide", "/claims/new", "/datasets"]) {
     await page.goto(path);
     await page.waitForLoadState("networkidle");
     const [scroll, client] = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);

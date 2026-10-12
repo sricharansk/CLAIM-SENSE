@@ -1,93 +1,101 @@
 {
   "suite": "Claim Sense golden evaluation",
-  "generated_at": "2026-10-11T23:13:55+00:00",
+  "generated_at": "2026-10-12T04:10:18+00:00",
   "rules_version": "adjudication-rules/1.0.0",
   "risk_version": "risk-rules/1.0.0",
   "llm": "off (extractive answers)",
   "data": "synthetic only",
   "summary": {
-    "claim_cases": 12,
-    "claim_cases_passed": 12,
-    "questions": 21,
-    "questions_passed": 21,
-    "checks": 256,
-    "checks_passed": 256,
+    "claim_cases": 16,
+    "claim_cases_passed": 16,
+    "questions": 30,
+    "questions_passed": 30,
+    "checks": 365,
+    "checks_passed": 365,
     "retrieval_hit_at_1": 1.0,
     "retrieval_hit_at_3": 1.0,
     "mean_reciprocal_rank": 1.0,
     "refusal_accuracy": 1.0,
     "required_categories_covered": true,
-    "avg_claim_case_ms": 154,
+    "avg_claim_case_ms": 208,
     "all_passed": true
   },
   "dimensions": {
     "retrieval": {
       "label": "Retrieval correctness",
-      "passed": 39,
-      "total": 39,
+      "passed": 60,
+      "total": 60,
       "score": 1.0
     },
     "citation": {
       "label": "Citation correctness",
-      "passed": 39,
-      "total": 39,
+      "passed": 58,
+      "total": 58,
       "score": 1.0
     },
     "groundedness": {
       "label": "Groundedness",
-      "passed": 69,
-      "total": 69,
+      "passed": 100,
+      "total": 100,
       "score": 1.0
     },
     "coverage": {
       "label": "Coverage state",
-      "passed": 21,
-      "total": 21,
+      "passed": 29,
+      "total": 29,
       "score": 1.0
     },
     "adjudication": {
       "label": "Adjudication amount",
-      "passed": 37,
-      "total": 37,
+      "passed": 51,
+      "total": 51,
       "score": 1.0
     },
     "risk": {
       "label": "Risk classification",
-      "passed": 15,
-      "total": 15,
+      "passed": 19,
+      "total": 19,
       "score": 1.0
     },
     "workflow": {
       "label": "Workflow outcome",
-      "passed": 36,
-      "total": 36,
+      "passed": 48,
+      "total": 48,
       "score": 1.0
     }
   },
   "categories": {
     "clearly_covered": [
-      "C01"
+      "C01",
+      "C15"
     ],
     "excluded": [
       "C02",
-      "C03"
+      "C03",
+      "C16"
     ],
     "partial_coverage": [
       "C04",
-      "C05"
+      "C05",
+      "C13",
+      "C14"
     ],
     "insufficient_evidence": [
       "C06"
     ],
     "high_risk": [
-      "C07"
+      "C07",
+      "C16"
     ],
     "deductible": [
-      "C01"
+      "C01",
+      "C14"
     ],
     "sub_limit": [
       "C04",
-      "C08"
+      "C08",
+      "C13",
+      "C14"
     ],
     "max_coverage": [
       "C09"
@@ -224,7 +232,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 204
+      "duration_ms": 223
     },
     {
       "id": "C02",
@@ -332,7 +340,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 139
+      "duration_ms": 190
     },
     {
       "id": "C03",
@@ -439,7 +447,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 138
+      "duration_ms": 188
     },
     {
       "id": "C04",
@@ -556,7 +564,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 130
+      "duration_ms": 166
     },
     {
       "id": "C05",
@@ -658,7 +666,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 134
+      "duration_ms": 153
     },
     {
       "id": "C06",
@@ -750,7 +758,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 128
+      "duration_ms": 166
     },
     {
       "id": "C07",
@@ -860,7 +868,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 132
+      "duration_ms": 158
     },
     {
       "id": "C08",
@@ -970,7 +978,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 130
+      "duration_ms": 154
     },
     {
       "id": "C09",
@@ -1097,7 +1105,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 208
+      "duration_ms": 234
     },
     {
       "id": "C10",
@@ -1189,7 +1197,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 114
+      "duration_ms": 164
     },
     {
       "id": "C11",
@@ -1291,7 +1299,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 185
+      "duration_ms": 267
     },
     {
       "id": "C12",
@@ -1393,7 +1401,441 @@
           "passed": true
         }
       ],
-      "duration_ms": 203
+      "duration_ms": 210
+    },
+    {
+      "id": "C13",
+      "title": "Travel: lost checked bag and a 14-hour flight delay; depreciation, the per-item limit and the trip-delay cap apply",
+      "categories": [
+        "partial_coverage",
+        "sub_limit"
+      ],
+      "claim_number": "CLM-T-3090",
+      "source": "new packet",
+      "packet": "EVAL-T-01",
+      "expected": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "35800.00"
+      },
+      "actual": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "35800.00",
+        "risk_level": "LOW",
+        "policy_version": "2026.1"
+      },
+      "working": "64,500 claimed. Suitcase 40,000 less 10% (2.3) = 36,000, above the 15,000 per-item limit (2.3): -21,000. Tablet 12,000 less 10% = 10,800. Depreciation 4,000 + 1,200 = 5,200. Trip delay 12,500 capped at 10,000 (2.4): -2,500. The 5,000 deductible (3.1) applies to medical expenses only. 64,500 - 5,200 - 21,000 - 2,500 = 35,800.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2026.1",
+          "actual": "2026.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "COVERED",
+          "actual": "COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "35800.00",
+          "actual": "35800.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R15_DEPRECIATION",
+          "expected": "-5200.00",
+          "actual": "-5200.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R20_ITEM_LIMIT",
+          "expected": "-21000.00",
+          "actual": "-21000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R22_CATEGORY_LIMIT",
+          "expected": "-2500.00",
+          "actual": "-2500.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R30_DEDUCTIBLE",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "PARTIAL_APPROVAL",
+          "actual": "PARTIAL_APPROVAL",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 224
+    },
+    {
+      "id": "C14",
+      "title": "Home: burglary of a television and jewellery from an under-insured home; the average clause halves the loss",
+      "categories": [
+        "partial_coverage",
+        "sub_limit",
+        "deductible"
+      ],
+      "claim_number": "CLM-P-3091",
+      "source": "new packet",
+      "packet": "EVAL-P-01",
+      "expected": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "74000.00"
+      },
+      "actual": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "74000.00",
+        "risk_level": "LOW",
+        "policy_version": "2026.1"
+      },
+      "working": "2,30,000 claimed. Television 80,000 less 15% (2.2) = 68,000. Jewellery 1,50,000 capped at 1,00,000 (2.3): -50,000. Assessed 1,68,000. Sum insured 25 lakh against 50 lakh at risk, so the average clause (1.3) pays 25/50: -84,000. Deductible 10,000 (3.1): 74,000.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2026.1",
+          "actual": "2026.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "COVERED",
+          "actual": "COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "74000.00",
+          "actual": "74000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R15_DEPRECIATION",
+          "expected": "-12000.00",
+          "actual": "-12000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R22_CATEGORY_LIMIT",
+          "expected": "-50000.00",
+          "actual": "-50000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R45_AVERAGE",
+          "expected": "-84000.00",
+          "actual": "-84000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R30_DEDUCTIBLE",
+          "expected": "-10000.00",
+          "actual": "-10000.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "PARTIAL_APPROVAL",
+          "actual": "PARTIAL_APPROVAL",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 220
+    },
+    {
+      "id": "C15",
+      "title": "Personal accident: loss of a thumb; the benefit schedule pays more than was claimed for the disablement",
+      "categories": [
+        "clearly_covered",
+        "maximum_coverage"
+      ],
+      "claim_number": "CLM-A-3092",
+      "source": "new packet",
+      "packet": "EVAL-A-01",
+      "expected": {
+        "recommendation": "APPROVE",
+        "payable_amount": "190000.00"
+      },
+      "actual": {
+        "recommendation": "APPROVE",
+        "payable_amount": "190000.00",
+        "risk_level": "LOW",
+        "policy_version": "2026.1"
+      },
+      "working": "Capital sum insured 5 lakh. Thumb 25% (2.3) = 1,25,000 against 1,00,000 claimed: +25,000. Temporary total disablement 3 weeks x min(1% = 5,000, 10,000) (2.4) = 15,000 against 18,000: -3,000. Medical expenses limited to 10% = 50,000 (2.5) against 60,000: -10,000. Net +12,000; payable 1,90,000 on 1,78,000 claimed.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2026.1",
+          "actual": "2026.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "COVERED",
+          "actual": "COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "190000.00",
+          "actual": "190000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R25_BENEFIT_SCHEDULE",
+          "expected": "12000.00",
+          "actual": "12000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R30_DEDUCTIBLE",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "APPROVE",
+          "actual": "APPROVE",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 303
+    },
+    {
+      "id": "C16",
+      "title": "Life: death by suicide seven months after risk commenced; excluded in the first 12 months",
+      "categories": [
+        "excluded",
+        "high_risk"
+      ],
+      "claim_number": "CLM-L-3093",
+      "source": "new packet",
+      "packet": "EVAL-L-01",
+      "expected": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00"
+      },
+      "actual": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00",
+        "risk_level": "HIGH",
+        "policy_version": "2026.1"
+      },
+      "working": "Death about seven months after risk commenced; clause 3.1 excludes suicide within 12 months, so nothing is payable. Risk: a claim inside the three-year section 45 window (3.2) +20 and the full sum assured claimed +30 = 50, HIGH.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2026.1",
+          "actual": "2026.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "NOT_COVERED",
+          "actual": "NOT_COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": "EXCL_SUICIDE",
+          "actual": "EXCL_SUICIDE",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "failing check cites clause",
+          "expected": "3.1",
+          "actual": "3.1",
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "HIGH",
+          "actual": "HIGH",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "RECOMMEND_REJECT",
+          "actual": "RECOMMEND_REJECT",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 313
     }
   ],
   "questions": [
@@ -2556,7 +2998,580 @@
           "passed": true
         }
       ]
+    },
+    {
+      "id": "Q22",
+      "kind": "covered",
+      "question": "What is the limit for any one item of lost checked baggage?",
+      "scope": "TRV-GLOBE 2026.1",
+      "mode": "extractive",
+      "top_citation": "2.3",
+      "expected_clause": "2.3",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "2.3",
+          "actual": [
+            "2.3"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "2.3",
+          "actual": "2.3",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "15,000",
+          "actual": "Permanent loss of checked baggage while in the custody of the airline is covered up to INR 50,000 per trip and INR 15,000 for any one item. [TRV-GLOBE v2026.1 \u00a7",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "kind": "covered",
+      "question": "How long must a flight be delayed before trip delay expenses are paid?",
+      "scope": "TRV-GLOBE 2026.1",
+      "mode": "extractive",
+      "top_citation": "2.4",
+      "expected_clause": "2.4",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "2.4",
+          "actual": [
+            "2.4"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "2.4",
+          "actual": "2.4",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "12 hours",
+          "actual": "When a scheduled flight is delayed by more than 12 hours, reasonable expenses for meals and accommodation are reimbursed up to INR 10,000 per trip. [TRV-GLOBE v",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "kind": "excluded",
+      "question": "Is a scuba diving injury covered on my trip?",
+      "scope": "TRV-GLOBE 2026.1",
+      "mode": "extractive",
+      "top_citation": "3.3",
+      "expected_clause": "3.3",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "3.3",
+          "actual": [
+            "3.3",
+            "2.1"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "3.3",
+          "actual": "3.3",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "kind": "covered",
+      "question": "What happens if my home is under-insured at the time of loss?",
+      "scope": "HOME-SHIELD 2026.1",
+      "mode": "extractive",
+      "top_citation": "1.3",
+      "expected_clause": "1.3",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "1.3",
+          "actual": [
+            "1.3",
+            "2.5"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "1.3",
+          "actual": "1.3",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "rateable proportion",
+          "actual": "If at the time of loss the value at risk of the property exceeds the sum insured, the insured is considered to be their own insurer for the difference and bears",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "kind": "covered",
+      "question": "How much jewellery is covered?",
+      "scope": "HOME-SHIELD 2026.1",
+      "mode": "extractive",
+      "top_citation": "2.3",
+      "expected_clause": "2.3",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "2.3",
+          "actual": [
+            "2.3"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "2.3",
+          "actual": "2.3",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "1,00,000",
+          "actual": "Jewellery and valuables kept in a locked safe are covered up to INR 1,00,000 in all for the policy period. [HOME-SHIELD v2026.1 \u00a72.3, p.2]",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "kind": "covered",
+      "question": "What percentage is paid for the loss of an index finger?",
+      "scope": "PA-SECURE 2026.1",
+      "mode": "extractive",
+      "top_citation": "2.3",
+      "expected_clause": "2.3",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "2.3",
+          "actual": [
+            "2.3"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "2.3",
+          "actual": "2.3",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "10%",
+          "actual": "loss of an index finger, 10%; [PA-SECURE v2026.1 \u00a72.3, p.2] For permanent partial disablement the following percentages of the capital sum insured are paid: los",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "kind": "covered",
+      "question": "How much is paid each week for temporary total disablement?",
+      "scope": "PA-SECURE 2026.1",
+      "mode": "extractive",
+      "top_citation": "2.4",
+      "expected_clause": "2.4",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "2.4",
+          "actual": [
+            "2.4",
+            "2.2",
+            "2.3"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "2.4",
+          "actual": "2.4",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "10,000",
+          "actual": "If injury prevents the insured from working at all, 1% of the capital sum insured is paid for each week of disablement, up to INR 10,000 a week and for at most ",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "kind": "excluded",
+      "question": "Is death by suicide in the first year covered?",
+      "scope": "LIFE-TERM 2026.1",
+      "mode": "extractive",
+      "top_citation": "3.1",
+      "expected_clause": "3.1",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "3.1",
+          "actual": [
+            "3.1"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "3.1",
+          "actual": "3.1",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "12 months",
+          "actual": "If the life assured dies by suicide within 12 months of the date of commencement of risk, the death benefit is not payable. [LIFE-TERM v2026.1 \u00a73.1, p.3] The no",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "kind": "covered",
+      "question": "Can the insurer question the policy after three years?",
+      "scope": "LIFE-TERM 2026.1",
+      "mode": "extractive",
+      "top_citation": "3.2",
+      "expected_clause": "3.2",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "3.2",
+          "actual": [
+            "3.2"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "3.2",
+          "actual": "3.2",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "section 45",
+          "actual": "In line with section 45 of the Insurance Act, 1938, the policy cannot be called in question on any ground after three years from the date of the policy. [LIFE-T",
+          "passed": true
+        }
+      ]
     }
   ],
-  "duration_s": 2.23
+  "duration_s": 3.88
 }

@@ -4,13 +4,13 @@
 
 > AI recommends. Evidence supports. Rules calculate. Humans decide. Workflows execute. Audit trails record.
 
-Claim Sense takes a health or motor claim from intake to a human decision. It reads the claim documents, matches the policy wording that was in force on the incident date, retrieves the relevant clauses with page and clause citations, checks coverage and exclusions, calculates the payable amount with deterministic rules, raises risk and fraud signals, and hands an evidence-backed recommendation to a human reviewer. Every step is recorded in an audit trail.
+Claim Sense takes a claim in any of six lines of business (health, motor, travel, home, personal accident and life) from intake to a human decision. It reads the claim documents, matches the policy wording that was in force on the incident date, retrieves the relevant clauses with page and clause citations, checks coverage and exclusions, calculates the payable amount with deterministic rules, raises risk and fraud signals, and hands an evidence-backed recommendation to a human reviewer. Every step is recorded in an audit trail.
 
 All policies, people and claims in this repository are **synthetic**. See [Data](#data-and-datasets).
 
-![Dashboard](docs/screenshots/20-dashboard-interactive.png)
+![Dashboard](docs/screenshots/21-dashboard-six-lines.png)
 
-New to the app? Read [docs/USER_GUIDE.md](docs/USER_GUIDE.md), or open **How to use** in the app.
+New to the app? Read [docs/USER_GUIDE.md](docs/USER_GUIDE.md), or open **How to use** in the app. To run it on your own machine, follow [Run it in VS Code](#run-it-in-vs-code).
 
 ## What works today
 
@@ -19,12 +19,13 @@ New to the app? Read [docs/USER_GUIDE.md](docs/USER_GUIDE.md), or open **How to 
 | Sign-in and roles | Adjuster (approves up to ₹2,00,000), Supervisor (no limit, decides escalations, ingests policies), Auditor (read-only); signed tokens; every action audited under the signed-in user | `/` |
 | Dashboard | Filter by line of business and period; every tile and bar opens the matching claims; weekly filed-vs-decided trend, needs-attention list, open-claim ageing, decline reasons with clauses, workload by assignee, amounts by line, override and escalation rates, settlement clock, portfolio evaluation | `/` |
 | Claims list | Filters for status, line, recommendation, risk, settlement state and period kept in the address; removable filter tags; sortable columns | `/claims` |
-| Claim intake | Create a claim, upload PDF or text documents, run the agent pipeline | `/claims/new` |
+| Claim intake | Create a claim, upload PDF or text documents, run the agent pipeline; a synthetic sample packet for health, travel, home, personal accident or life fills the form in one click | `/claims/new` |
 | Document intelligence | Document classification, extracted facts with source file, line and confidence, itemised charges; reviewers correct a fact with a reason before (re-)running the analysis, the extracted value is kept and the correction audited | claim page |
+| Lines of business | Health, motor, travel, home, personal accident and life, each with its own synthetic wording, structured terms, rules, required documents and settlement clause; a claim's type must match its policy's line | everywhere |
 | Policy versioning | Picks the wording version in force on the incident date (HLT-SHIELD 2024.1 vs 2025.1) | claim page |
 | Hybrid RAG | BM25 + character n-gram vectors fused with reciprocal rank fusion; clause, section and page citations; refuses when evidence is weak | `/assistant` |
 | Coverage | Policy period, initial and specified-disease waiting periods, exclusions, required documents, each citing its clause | claim page |
-| Adjudication | Decimal rules engine: non-payable items, per-day limits, depreciation, deductible, co-pay, sum-insured cap, shown as a waterfall | claim page |
+| Adjudication | Decimal rules engine shown as a waterfall. Health: non-payable items, per-day limits, deductible, co-pay. Motor: depreciation by part and vehicle age. Travel and home: covered categories, depreciation, per-item and category limits, the average clause for under-insurance, deductible. Personal accident and life: the benefit schedule (percentage of sum insured, disablement table, weekly benefit, capped reimbursement). Every step cites its clause; all lines end at the sum-insured cap | claim page |
 | Risk / fraud | Transparent weighted signals: amount ratio, early claim, frequency, duplicates, amount and name mismatches, missing documents, text in documents addressed to an AI | claim page |
 | Recommendation | Approve, partial approval, reject, request info or investigate, with reasons and an evidence package | claim page |
 | Human review | Approve (with amount override), reject, request info, investigate, escalate; notes required for adverse actions; approval limits enforced; escalated claims need a supervisor | claim page, `/reviews` |
@@ -32,10 +33,10 @@ New to the app? Read [docs/USER_GUIDE.md](docs/USER_GUIDE.md), or open **How to 
 | Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
 | Decision letters | Settlement, repudiation (quotes the clause relied on), document-request and under-review letters built from data, no LLM; printable; marked draft until a human decides | claim page |
 | Export | Download the claim register as CSV with decision, payable amount, risk and settlement status | `/claims` |
-| Golden evaluation | 12 hand-worked claim cases (all 10 required types) and 21 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
+| Golden evaluation | 16 hand-worked claim cases (all 10 required types, across five lines) and 30 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
 | Policy library | Browse clauses by version, view structured terms, ingest new wordings as PDF or Markdown with checksum, page-preserving extraction and visible processing states (Uploaded → Validating → Extracting → Indexing → Ready / Failed) | `/policies` |
-| Provenance | Source registry with publisher, dates, licence, intended use and SHA-256 checked on every request; RAG manifest tracing every indexed chunk to file, version, page, clause and extraction run; chunks without provenance are kept out of the index | `/datasets`, [docs/DATA_PROVENANCE.md](docs/DATA_PROVENANCE.md) |
+| Provenance | Source registry with publisher, dates, licence, intended use and SHA-256 checked on every request; RAG manifest tracing every indexed chunk to file, version, page, clause and extraction run; chunks without provenance are kept out of the index; industry benchmark from the CAS Schedule P loss database | `/datasets`, [docs/DATA_PROVENANCE.md](docs/DATA_PROVENANCE.md) |
 
 ## Real results from the golden scenarios
 
@@ -63,7 +64,36 @@ CLM-H-1001 waterfall, as the app shows it:
 | R40_COPAY | Co-payment 10% | −₹9,370 | ₹84,330 | §5.2 |
 | R50_MAX_LIABILITY | Within sum insured ₹5,00,000 | — | **₹84,330** | §5.3 |
 
-**Synthetic portfolio check.** The same risk rules scored a 1,000-claim synthetic portfolio with 64 injected anomalies: precision 84.1%, recall 82.8% (TP 53, FP 10, FN 11, TN 926). This only shows the rules recover patterns we injected ourselves; it says nothing about real-world fraud detection.
+### Results for the new lines
+
+These are the four new golden evaluation cases ([data/evaluation/golden_cases.json](data/evaluation/golden_cases.json)); the expected amounts were worked out by hand from the wording and the running system matches every one ([reports/evaluation.md](reports/evaluation.md), 365 / 365 checks). The same packets are the New claim screen's sample packets.
+
+| Case | Line | Scenario | Claimed | Payable | Recommendation |
+|---|---|---|---:|---:|---|
+| C13 | Travel | Lost bag and a 14-hour flight delay: 10% depreciation, ₹15,000 per-item limit (§2.3), trip-delay cap (§2.4) | ₹64,500 | ₹35,800 | Partial approval |
+| C14 | Home | Burglary; jewellery capped at ₹1,00,000 (§2.3); insured for 25 lakh against 50 lakh at risk, so the average clause (§1.3) pays half | ₹2,30,000 | ₹74,000 | Partial approval |
+| C15 | Personal accident | Loss of a thumb: the schedule pays 25% of the sum insured (§2.3), more than was claimed | ₹1,78,000 | ₹1,90,000 | Approve |
+| C16 | Life | Suicide seven months after commencement, inside the 12-month exclusion (§3.1) | ₹10,00,000 | ₹0 | Reject (high risk) |
+
+| | |
+|---|---|
+| ![Home claim, average clause](docs/screenshots/24-home-average-clause.png) | ![Personal accident benefit schedule](docs/screenshots/27-pa-benefit-schedule.png) |
+| ![Life claim, suicide exclusion](docs/screenshots/25-life-suicide-exclusion.png) | ![Sample packet for each line](docs/screenshots/26-new-claim-sample-packets.png) |
+
+**Synthetic portfolio check.** The same risk rules scored two synthetic portfolios with injected anomalies. This only shows how well the rules recover patterns we injected ourselves; it says nothing about real-world fraud detection.
+
+| Portfolio | Claims | Injected anomalies | Precision | Recall |
+|---|---:|---:|---:|---:|
+| Demo (health and motor) | 1,000 | 64 | 84.1% | 82.8% |
+| Full (six lines, seven patterns, blueprint Part 10) | 10,000 | 773 | 36.3% | 60.0% |
+
+On the full portfolio, amount, document and duplicate anomalies are caught every time. Narrative inconsistencies and shared contact details (37%) have no live rule yet, and the amount-ratio rule flags every life claim because a death claim is always for the full sum assured (life precision 7%). Those are the rules' known gaps, listed in the [roadmap](docs/ROADMAP.md).
+
+![Portfolio evaluation by line and pattern](docs/screenshots/28-portfolio-six-lines.png)
+
+**Industry benchmark.** The Data sources screen shows US industry loss ratios and paid-development patterns for six lines from the CAS Loss Reserving Database (NAIC Schedule P, 1998-2007), as a reference for how claims develop. It is not used in any decision.
+
+![CAS Schedule P benchmark](docs/screenshots/29-industry-benchmark.png)
 
 | | |
 |---|---|
@@ -99,9 +129,58 @@ flowchart TD
 - The LLM is optional and never computes money or decides claims. Without `ANTHROPIC_API_KEY`, the assistant answers by quoting the wording it retrieved.
 - Agent failures stop the run safely and route the claim to `NEEDS_ATTENTION`. Re-running analysis supersedes the previous recommendation and task.
 
-More detail: [product requirements](docs/PRD.md), [architecture](docs/ARCHITECTURE.md), [database](docs/DATABASE.md), [decisions](docs/DECISIONS.md), [design system](docs/DESIGN_SYSTEM.md), [code style](docs/CODE_STYLE.md), [testing](docs/TESTING.md), [agents](docs/AGENTS.md), [release readiness](docs/RELEASE_READINESS.md), [final validation report](docs/FINAL_VALIDATION_REPORT.md) and [release notes](RELEASE_NOTES.md).
+More detail: [product requirements](docs/PRD.md), [UX flows](docs/UX_FLOWS.md), [API](docs/API.md), [environment](docs/ENVIRONMENT.md), [error handling](docs/ERROR_HANDLING.md), [observability](docs/OBSERVABILITY.md), [roadmap](docs/ROADMAP.md), [changelog](docs/CHANGELOG.md), [architecture](docs/ARCHITECTURE.md), [database](docs/DATABASE.md), [decisions](docs/DECISIONS.md), [design system](docs/DESIGN_SYSTEM.md), [code style](docs/CODE_STYLE.md), [testing](docs/TESTING.md), [agents](docs/AGENTS.md), [release readiness](docs/RELEASE_READINESS.md), [final validation report](docs/FINAL_VALIDATION_REPORT.md) and [release notes](RELEASE_NOTES.md).
 
-## Run it
+## Run it in VS Code
+
+The repository ships a shared VS Code setup in [`.vscode/`](.vscode): recommended extensions, Run and Debug configurations and numbered tasks. It works on Windows, macOS and Linux.
+
+![VS Code: Run and Debug with the backend running](docs/screenshots/30-vscode-run-and-debug.png)
+
+**1. Install the tools.** [VS Code](https://code.visualstudio.com/), [Git](https://git-scm.com/), [Python 3.11 or newer](https://www.python.org/downloads/) and [Node.js 20 or newer](https://nodejs.org/). Docker Desktop is optional.
+
+**2. Get the code and open it.**
+
+```bash
+git clone https://github.com/sricharansk/CLAIM-SENSE.git
+cd CLAIM-SENSE
+code .
+```
+
+When VS Code asks, install the recommended extensions (Python, Python Debugger, Ruff, Docker, Playwright, Markdown Mermaid). They are listed in [`.vscode/extensions.json`](.vscode/extensions.json).
+
+**3. Create your local settings.** Copy `.env.example` to `.env` (on Windows: `copy .env.example .env`). The defaults work as they are: SQLite, the synthetic demo data and the demo password `claimsense-demo`. `.env` is ignored by git; never commit it. Add `ANTHROPIC_API_KEY` only if you want LLM-worded assistant answers; amounts never come from the LLM.
+
+**4. Install the dependencies.** Open **Terminal → Run Task…** and run, in order:
+
+| Task | What it does |
+|---|---|
+| `1. Set up backend (venv + packages)` | Creates `backend/.venv` and installs `backend/requirements-dev.txt` |
+| `2. Set up frontend (npm install)` | Installs the React app's packages in `frontend/` |
+
+Then press `Ctrl+Shift+P` → **Python: Select Interpreter** and pick `backend/.venv`.
+
+![VS Code tasks](docs/screenshots/31-vscode-tasks.png)
+
+**5. Run the app.** Open **Run and Debug** (`Ctrl+Shift+D`), choose **Claim Sense: full stack** and press F5. It starts:
+
+- the API on http://localhost:8000 (FastAPI with reload; the first start creates `backend/claimsense.db` and seeds 7 policy wordings and 85 claims, which takes a few seconds), with the interactive API docs at http://localhost:8000/docs;
+- the UI on http://localhost:5173 (Vite), which forwards `/api` to the API.
+
+Open http://localhost:5173 and sign in as `supervisor` with password `claimsense-demo` (or `adjuster` or `auditor`). Breakpoints in `backend/app` stop the API; **Open the app in Chrome (debug the UI)** debugs the React code. Without the debugger, run the task `Run backend + frontend` instead.
+
+**6. See the results on the dashboard.**
+
+1. The **Dashboard** opens on all 85 claims. Use **Line of business** (Health, Motor, Travel, Home, Personal accident, Life) and **Filed in** to filter; click any tile or bar to open the matching claims.
+2. Open **New claim**, pick a line next to **Use the sample packet**, press it and then **Create, upload and analyse**. The claim page shows the recommendation, the clauses relied on and the payable amount; compare it with [the results table above](#results-for-the-new-lines).
+3. On the claim's **Review** tab, approve or reject it with a note; the dashboard's counts, rates and charts update straight away.
+4. Scroll to the **Synthetic portfolio** card and switch to **10,000 claims (six lines)**; open **Data sources** for the CAS benchmark and the provenance checks; open **Evaluation** for the 365-check scorecard.
+
+**7. Run the checks.** Tasks `Test: ruff + pytest` (222 tests), `Test: golden evaluation`, `Test: provenance check` and `Build: frontend`; with the Python extension the Testing panel also lists every pytest test. With Docker Desktop running, `Docker: build and start (http://localhost:8080)` and then `Docker: smoke test` run the production image with PostgreSQL.
+
+**If something goes wrong.** Port 8000 or 5173 busy: stop the other program, or change the port in `.vscode/launch.json` and `frontend/vite.config.ts`. PowerShell refuses to run scripts: the tasks call `.venv\Scripts\python` directly, so no activation is needed. To start again from a clean demo database, stop the API and delete `backend/claimsense.db`.
+
+## Run it from a terminal
 
 ### Docker (app + PostgreSQL)
 
@@ -151,24 +230,25 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 145 tests
+cd backend && ruff check app tests && python -m pytest -q    # 222 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
 python3 scripts/provenance.py --check                        # source registry, checksums, RAG manifest
 cd frontend && npm run build                                 # type check + production build
-cd e2e && npm ci && npx playwright test                      # 11 browser tests against a fresh stack on :8080
+cd e2e && npm ci && npx playwright test                      # 13 browser tests against a fresh stack on :8080
 ```
 
-Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 256 / 256 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
+Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 365 / 365 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Data and datasets
 
 | Data | Status |
 |---|---|
-| Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, each with structured terms that cite clauses | In use |
+| Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, TRV-GLOBE, HOME-SHIELD, PA-SECURE and LIFE-TERM 2026.1, each with structured terms that cite clauses | In use |
 | Eight synthetic golden claim packets (claim forms, bills, estimates, discharge summaries, police reports; one as PDF) | In use |
-| 42-claim synthetic demo book over 41 more policies, with designed outcomes and replayed reviewer history ([data/claims/demo_book.json](data/claims/demo_book.json)) | In use for the demo database and dashboard |
-| 1,000-claim synthetic portfolio with labelled injected anomaly patterns | In use for analytics and rule evaluation |
-| IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with publication date, URL, licence status and intended use; not downloaded in this build |
+| 77-claim synthetic demo book across all six lines (42 health and motor, 35 travel, home, personal accident and life), with designed outcomes and replayed reviewer history ([data/claims/demo_book.json](data/claims/demo_book.json)) | In use for the demo database and dashboard (85 claims with the golden scenarios) |
+| Synthetic portfolios with labelled injected anomaly patterns: 1,000 health and motor claims, and 10,000 claims across six lines with all seven blueprint patterns | In use for analytics and rule evaluation |
+| CAS Loss Reserving Database (NAIC Schedule P, 1998-2007, six US lines): industry aggregates only, fetched and checksummed by [scripts/fetch_public_data.py](scripts/fetch_public_data.py) | In use as an analytics benchmark; not used in decisions |
+| IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with publication date, URL, licence status and intended use; not downloaded (their hosts are not reachable from the build environment and most licences still need review) |
 
 Everything is regenerated deterministically with `python data/synthetic/generate.py`; then `python scripts/provenance.py --write` re-stamps the checksums in [data/source_registry.json](data/source_registry.json). The wording borrows common Indian retail-insurance concepts but is not any insurer's product and not regulatory text. Never commit real customer data or confidential policy documents.
 
@@ -197,12 +277,13 @@ docs/            blueprint, status, architecture, decisions, deployment, validat
 e2e/             Playwright browser tests (run against a running stack)
 reports/         golden evaluation report and RAG ingestion manifest
 references/      supporting planning documents
-scripts/         smoke_test.py, evaluate.py, provenance.py
+scripts/         smoke_test.py, evaluate.py, provenance.py, fetch_public_data.py
+.vscode/         shared VS Code extensions, Run and Debug configurations and tasks
 ```
 
 ## Roadmap
 
-Single sign-on (Azure AD / OIDC) and user management, OCR for scanned images, embedding retriever as a third ranker, ingestion of the registered IRDAI circulars into the RAG corpus, ML fraud model on the Figshare dataset, property and travel lines, background job queue, Azure AI Search, Key Vault and Application Insights. Status and next actions: [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
+Single sign-on (Azure AD / OIDC) and user management, OCR for scanned images, embedding retriever as a third ranker, ingestion of the registered IRDAI circulars into the RAG corpus, ML fraud model on the Figshare dataset, rules for narrative and shared-attribute anomalies and a life-specific amount signal, background job queue, Azure AI Search, Key Vault and Application Insights. See [docs/ROADMAP.md](docs/ROADMAP.md). Status and next actions: [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
 
 ## Disclaimer
 

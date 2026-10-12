@@ -208,3 +208,5 @@ ul.plain { margin: 0; padding-left: 18px; display: flex; flex-direction: column;
   .grid2.wide-left { grid-template-columns: 1fr; }
   .bar-row { grid-template-columns: minmax(0, 120px) minmax(0, 1fr) 36px; }
 }
+.spark { display: inline-flex; align-items: flex-end; gap: 2px; height: 30px; }
+.spark i { display: block; width: 6px; background: var(--brand); border-radius: 2px 2px 0 0; }

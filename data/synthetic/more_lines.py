@@ -826,7 +826,7 @@ def eval_claims() -> list[dict]:
                "Thumb lost in a kitchen accident with a food processor blade.",
                [("Permanent partial disablement - loss of left thumb", 100000), ("Temporary total disablement - 3 weeks", 18000),
                 ("Accident medical expenses - surgery", 60000)],
-               "PARTIAL_APPROVAL", "evaluation", 10, "Traumatic amputation of the left thumb", "Thumb amputated at the base."))
+               "APPROVE", "evaluation", 10, "Traumatic amputation of the left thumb", "Thumb amputated at the base."))
     E.append(L("EVAL-L-01", "CS-LIF-26-005170", "2026-08-15", "Kavya Vardhan",
                "The life assured died by suicide.", "Suicide",
                "Inquest concluded suicide.", "RECOMMEND_REJECT", "evaluation", 10))

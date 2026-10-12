@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { ClaimFilters, ClaimSummary, api, inr, words } from "../api";
+import { ClaimFilters, ClaimSummary, LINES, api, inr, lineLabel, words } from "../api";
 import { useSession } from "../components/session";
 import { Badge, Card, Due, ErrorBox, Loading, useLoad } from "../components/ui";
 
 const OPTIONS: Record<string, [string, string[]]> = {
   status: ["All statuses", ["PENDING_REVIEW", "ESCALATED", "APPROVED", "REJECTED", "INFO_REQUESTED", "UNDER_INVESTIGATION", "DOCUMENTS_RECEIVED", "SUBMITTED", "NEEDS_ATTENTION"]],
-  claim_type: ["All lines", ["health", "motor"]],
+  claim_type: ["All lines", LINES.map(([k]) => k)],
   recommendation: ["All recommendations", ["PARTIAL_APPROVAL", "APPROVE", "RECOMMEND_REJECT", "REQUEST_INFO", "INVESTIGATE"]],
   risk: ["All risk levels", ["HIGH", "MEDIUM", "LOW"]],
   settlement: ["All settlement states", ["ON_TRACK", "DUE_SOON", "OVERDUE", "MET", "BREACHED"]],
@@ -90,7 +90,7 @@ export default function Claims() {
               {rows.map((c) => (
                 <tr key={c.claim_number} onClick={() => nav(`/claims/${c.claim_number}`)}>
                   <td className="nowrap"><Link to={`/claims/${c.claim_number}`} onClick={(e) => e.stopPropagation()}>{c.claim_number}</Link></td>
-                  <td>{c.claim_type}</td><td>{c.claimant_name}</td><td className="mono nowrap">{c.policy_number}</td>
+                  <td>{lineLabel(c.claim_type)}</td><td>{c.claimant_name}</td><td className="mono nowrap">{c.policy_number}</td>
                   <td className="nowrap">{c.incident_date ?? "—"}</td><td className="num">{inr(c.claimed_amount)}</td><td className="num">{inr(c.recommended_payable)}</td>
                   <td><Badge value={c.recommendation} /></td><td><Badge value={c.risk_level} /></td><td><Badge value={c.status} /></td><td><Due s={c.settlement} /></td>
                 </tr>

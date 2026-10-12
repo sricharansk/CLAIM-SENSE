@@ -15,7 +15,8 @@ Outputs (deterministic, seed=2025):
                                                  including travel, home, personal accident and life (more_lines.py)
   data/evaluation/packets/<CASE>/*.txt          extra packets used only by scripts/evaluate.py (never seeded)
   data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf  a new wording version as a multi-page PDF, for live ingestion
-  data/synthetic/claims_portfolio.csv           1,000 claims with injected fraud patterns
+  data/synthetic/claims_portfolio.csv           1,000 claims with injected fraud patterns (health and motor)
+  data/synthetic/claims_portfolio_full.csv      10,000 claims across all six lines with all seven injected patterns
 
 Run: python data/synthetic/generate.py
 """
@@ -872,10 +873,11 @@ def write_evaluation_packets() -> None:
         (d / "discharge_summary.txt").write_text(discharge(c, c["admit"], c["disch"], c["diagnosis"], c["procedure"], c["notes"]),
                                                  encoding="utf-8")
     for c in more_lines.eval_claims():
-        d = EVAL / c["claim_number"]
-        d.mkdir(parents=True, exist_ok=True)
-        for name, body in c["files"].items():
-            (d / name).write_text(body, encoding="utf-8")
+        # The same packets double as the New claim screen's sample packet for each new line (GET /demo-packet?line=).
+        for d in (EVAL / c["claim_number"], ROOT / "data" / "claims" / "demo_upload" / c["claim_type"]):
+            d.mkdir(parents=True, exist_ok=True)
+            for name, body in c["files"].items():
+                (d / name).write_text(body, encoding="utf-8")
 
 
 def write_pdf(path: Path, lines: list[str]) -> None:
@@ -996,6 +998,72 @@ def portfolio(n: int = 1000, fraud_rate: float = 0.08) -> None:
         w.writerows(rows)
 
 
+# Six-line portfolio (blueprint Part 10.2 full generation and 10.3 injection). Sum insured choices, lognormal
+# claim size (mu, sigma) and the early-claim window each line's risk rules use (terms "early_claim_days").
+FULL_LINES = {
+    "health": dict(weight=0.30, si=[300000, 500000, 1000000], mu=10.6, sigma=0.6, start_days=(45, 330), early=90),
+    "motor": dict(weight=0.25, si=[350000, 500000, 800000], mu=10.2, sigma=0.6, start_days=(45, 330), early=90),
+    "travel": dict(weight=0.15, si=[500000, 1000000, 2500000], mu=9.8, sigma=0.7, start_days=(1, 45), early=0),
+    "home": dict(weight=0.12, si=[1000000, 2500000, 5000000], mu=11.0, sigma=0.8, start_days=(45, 330), early=90),
+    "personal_accident": dict(weight=0.10, si=[500000, 1000000, 2500000], mu=10.8, sigma=0.7, start_days=(45, 330), early=90),
+    "life": dict(weight=0.08, si=[2500000, 5000000, 10000000], mu=None, sigma=None, start_days=(1100, 5000), early=1095),
+}
+FULL_PATTERNS = PATTERNS + ["NARRATIVE_INCONSISTENCY", "SHARED_ATTRIBUTE"]
+
+
+def portfolio_full(n: int = 10000, fraud_rate: float = 0.08) -> None:
+    """A larger synthetic portfolio over all six lines, same schema plus the line's early-claim window, a narrative
+    check and a shared-attribute count (other claims sharing a phone number or bank account).
+
+    The injection rate is a demo parameter, not an estimate of real-world fraud prevalence. Life claims are for the
+    full sum assured, as death benefits are.
+    """
+    rng = random.Random(2026)
+    names, weights = list(FULL_LINES), [v["weight"] for v in FULL_LINES.values()]
+    rows = []
+    for i in range(1, n + 1):
+        line = rng.choices(names, weights)[0]
+        cfg = FULL_LINES[line]
+        si = rng.choice(cfg["si"])
+        incident = date(2025, 4, 1) + timedelta(days=rng.randint(0, 540))
+        start = incident - timedelta(days=rng.randint(*cfg["start_days"]))
+        amount = si if line == "life" else round(min(si * 0.9, rng.lognormvariate(cfg["mu"], cfg["sigma"])), -2)
+        prior = 0 if line == "life" else rng.choices([0, 1, 2], [0.8, 0.15, 0.05])[0]
+        bill_total, dup, narrative_ok, shared = amount, 0, 1, 0
+        injected: list[str] = []
+        if rng.random() < fraud_rate:
+            options = [p for p in FULL_PATTERNS if not (line == "life" and p in ("AMOUNT_ANOMALY", "FREQUENCY_ANOMALY"))
+                       and not (line == "travel" and p == "TIMING_ANOMALY")]
+            injected = rng.sample(options, rng.choice([1, 1, 2]))
+            if "AMOUNT_ANOMALY" in injected:
+                amount = round(si * rng.uniform(0.82, 0.99), -2)
+                bill_total = amount
+            if "TIMING_ANOMALY" in injected:
+                start = incident - timedelta(days=rng.randint(max(1, cfg["early"] // 4), max(2, cfg["early"] - 5)))
+            if "FREQUENCY_ANOMALY" in injected:
+                prior = rng.randint(3, 5)
+            if "DUPLICATE_CLAIM" in injected:
+                dup = 1
+            if "DOCUMENT_INCONSISTENCY" in injected:
+                bill_total = round(amount * rng.uniform(0.7, 0.9), -2)
+            if "NARRATIVE_INCONSISTENCY" in injected:
+                narrative_ok = 0
+            if "SHARED_ATTRIBUTE" in injected:
+                shared = rng.randint(2, 6)
+        rows.append({
+            "claim_id": f"SYN-F-{i:06d}", "line_of_business": line, "sum_insured": si,
+            "policy_start": start.isoformat(), "incident_date": incident.isoformat(),
+            "days_since_policy_start": (incident - start).days, "early_claim_days": cfg["early"],
+            "claimed_amount": int(amount), "document_total": int(bill_total), "prior_claims_12m": prior,
+            "duplicate_match": dup, "narrative_matches_documents": narrative_ok, "shared_attribute_claims": shared,
+            "fraud_label": 1 if injected else 0, "injected_patterns": "|".join(injected),
+        })
+    with (SYN / "claims_portfolio_full.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(rows)
+
+
 def main() -> None:
     POL.mkdir(parents=True, exist_ok=True)
     CLM.mkdir(parents=True, exist_ok=True)
@@ -1018,7 +1086,9 @@ def main() -> None:
     write_ingest_demo()
     (CLM / "scenarios.json").write_text(json.dumps(scen, indent=2), encoding="utf-8")
     portfolio()
-    print(f"policies: {len(list(POL.glob('*.md')))}, claims: {len(scen)} golden + {len(book)} demo book, portfolio rows: 1000")
+    portfolio_full()
+    print(f"policies: {len(list(POL.glob('*.md')))}, claims: {len(scen)} golden + {len(book)} demo book, "
+          "portfolio rows: 1,000 + 10,000 (six lines)")
 
 
 if __name__ == "__main__":

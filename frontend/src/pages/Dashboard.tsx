@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Analytics, api, inr, words } from "../api";
+import { Analytics, LINES, api, inr, inrWhole, lineLabel, words } from "../api";
 import { useSession } from "../components/session";
 import { Badge, Bars, Card, Due, ErrorBox, Kpi, Loading, Segmented, useLoad } from "../components/ui";
 
-const LINES: [string, string][] = [["", "All lines"], ["health", "Health"], ["motor", "Motor"]];
+const LINE_OPTIONS: [string, string][] = [["", "All lines"], ...LINES.map(([k, v]): [string, string] => [k, v])];
 const PERIODS: [string, string][] = [["", "All time"], ["7", "Last 7 days"], ["30", "Last 30 days"], ["90", "Last 90 days"]];
 const OPEN = "PENDING_REVIEW,ESCALATED";
 const INTRO_KEY = "claimsense.intro-dismissed";
@@ -48,7 +48,7 @@ export default function Dashboard() {
         </div>
       )}
       <div className="toolbar">
-        <Segmented label="Line of business" options={LINES} value={line} onChange={(v) => set("line", v)} />
+        <Segmented label="Line of business" options={LINE_OPTIONS} value={line} onChange={(v) => set("line", v)} />
         <Segmented label="Filed in" options={PERIODS} value={days} onChange={(v) => set("days", v)} />
         {a.data && <span className="muted small">{a.data.totals.claims} claims{line ? ` · ${line}` : ""}{days ? ` · filed in the last ${days} days` : ""}</span>}
       </div>
@@ -62,7 +62,7 @@ export default function Dashboard() {
             {(recent.data ?? []).slice(0, 8).map((c) => (
               <tr key={c.claim_number} onClick={() => nav(`/claims/${c.claim_number}`)}>
                 <td className="nowrap"><Link to={`/claims/${c.claim_number}`}>{c.claim_number}</Link></td>
-                <td>{c.claim_type}</td><td>{c.claimant_name}</td><td className="num">{inr(c.claimed_amount)}</td><td className="num">{inr(c.recommended_payable)}</td>
+                <td>{lineLabel(c.claim_type)}</td><td>{c.claimant_name}</td><td className="num">{inr(c.claimed_amount)}</td><td className="num">{inr(c.recommended_payable)}</td>
                 <td><Badge value={c.recommendation} /></td><td><Badge value={c.risk_level} /></td><td><Badge value={c.status} /></td><td><Due s={c.settlement} /></td>
               </tr>
             ))}
@@ -70,7 +70,7 @@ export default function Dashboard() {
           </tbody>
         </table>
       </Card>
-      <Portfolio p={a.data?.portfolio ?? null} />
+      <Portfolio demo={a.data?.portfolio ?? null} full={a.data?.portfolio_full ?? null} />
     </>
   );
 }
@@ -86,9 +86,9 @@ function Body({ a, claimsLink }: { a: Analytics; claimsLink: (extra: Record<stri
         <Kpi label="Settlement overdue / breached" value={totals.overdue} tone={totals.overdue ? "red" : undefined}
           to={claimsLink({ settlement: "OVERDUE,BREACHED" })} />
         <Kpi label="Decided by reviewers" value={totals.decided} to={claimsLink({ status: "APPROVED,REJECTED" })} />
-        <Kpi label="Claimed" value={inr(totals.claimed_amount)} />
-        <Kpi label="AI-recommended payable" value={inr(totals.recommended_payable)} />
-        <Kpi label="Approved by reviewers" value={inr(totals.approved_amount)} tone="green" />
+        <Kpi label="Claimed" value={inrWhole(totals.claimed_amount)} />
+        <Kpi label="AI-recommended payable" value={inrWhole(totals.recommended_payable)} />
+        <Kpi label="Approved by reviewers" value={inrWhole(totals.approved_amount)} tone="green" />
         <Kpi label="Avg. days to decision" value={totals.avg_days_to_decision ?? "—"} />
         <Kpi label="Avg. analysis time" value={totals.avg_analysis_ms !== null ? `${totals.avg_analysis_ms} ms` : "—"} />
         <Kpi label="Override rate (reviewer vs AI)" value={rate(h.override_rate, h.overridden, h.decided)} />
@@ -104,7 +104,7 @@ function Body({ a, claimsLink }: { a: Analytics; claimsLink: (extra: Record<stri
               {a.attention.map((r) => (
                 <li key={r.claim_number}>
                   <Link to={`/claims/${r.claim_number}`}><strong>{r.claim_number}</strong></Link>
-                  <span className="muted small"> {r.claimant_name} · {r.claim_type} · {inr(r.claimed_amount)} · filed {r.age_days}d ago</span>
+                  <span className="muted small"> {r.claimant_name} · {lineLabel(r.claim_type)} · {inr(r.claimed_amount)} · filed {r.age_days}d ago</span>
                   <div className="chips">{r.reasons.map((x) => <span key={x} className={`tag ${x.startsWith("High") || x.includes("overdue") ? "red" : "amber"}`}>{x}</span>)}</div>
                 </li>
               ))}
@@ -150,8 +150,8 @@ function Body({ a, claimsLink }: { a: Analytics; claimsLink: (extra: Record<stri
           <thead><tr><th>Line</th><th className="num">Claims</th><th className="num">Claimed</th><th className="num">AI-recommended payable</th><th className="num">Approved by reviewers</th></tr></thead>
           <tbody>
             {Object.entries(a.by_line_amounts).filter(([, v]) => v.claims > 0).map(([k, v]) => (
-              <tr key={k}><td><Link to={`/claims?claim_type=${k}`}>{words(k)}</Link></td><td className="num">{v.claims}</td>
-                <td className="num">{inr(v.claimed)}</td><td className="num">{inr(v.ai_payable)}</td><td className="num">{inr(v.approved)}</td></tr>
+              <tr key={k}><td><Link to={`/claims?claim_type=${k}`}>{lineLabel(k)}</Link></td><td className="num">{v.claims}</td>
+                <td className="num">{inrWhole(v.claimed)}</td><td className="num">{inrWhole(v.ai_payable)}</td><td className="num">{inrWhole(v.approved)}</td></tr>
             ))}
           </tbody>
         </table>
@@ -189,19 +189,34 @@ function Trend({ weeks }: { weeks: Analytics["trend"] }) {
   );
 }
 
-function Portfolio({ p }: { p: Analytics["portfolio"] }) {
+function Portfolio({ demo, full }: { demo: Analytics["portfolio"]; full: Analytics["portfolio_full"] }) {
+  const [which, setWhich] = useState(full ? "full" : "demo");
+  const p = which === "full" ? full : demo;
   return (
     <Card title="Synthetic portfolio: risk rules vs injected anomalies">
+      <Segmented label="Portfolio" options={[["demo", "1,000 claims (health, motor)"], ["full", "10,000 claims (six lines)"]]}
+        value={which} onChange={setWhich} />
       {p ? (
         <>
           <div className="kpis small">
-            <Kpi label="Portfolio claims" value={p.claims} />
+            <Kpi label="Portfolio claims" value={p.claims.toLocaleString("en-IN")} />
             <Kpi label="Injected anomalies" value={p.injected_anomalies} />
             <Kpi label="Precision" value={`${(p.precision * 100).toFixed(1)}%`} />
             <Kpi label="Recall" value={`${(p.recall * 100).toFixed(1)}%`} />
           </div>
           <Bars data={p.by_risk} />
-          <p className="muted small">{p.note} Confusion: TP {p.confusion.tp}, FP {p.confusion.fp}, FN {p.confusion.fn}, TN {p.confusion.tn}.</p>
+          <div className="grid2">
+            <table className="checks"><thead><tr><th>Injected pattern</th><th className="num">Claims</th><th className="num">Flagged</th></tr></thead>
+              <tbody>{Object.entries(p.patterns ?? {}).map(([k, v]) => (
+                <tr key={k}><td>{words(k)}</td><td className="num">{v.injected}</td><td className="num">{v.recall === null ? "—" : `${Math.round(v.recall * 100)}%`}</td></tr>))}</tbody></table>
+            <table className="checks"><thead><tr><th>Line</th><th className="num">Claims</th><th className="num">Precision</th><th className="num">Recall</th></tr></thead>
+              <tbody>{Object.entries(p.lines ?? {}).map(([k, v]) => (
+                <tr key={k}><td>{lineLabel(k)}</td><td className="num">{v.claims.toLocaleString("en-IN")}</td>
+                  <td className="num">{v.precision === null ? "—" : `${Math.round(v.precision * 100)}%`}</td>
+                  <td className="num">{v.recall === null ? "—" : `${Math.round(v.recall * 100)}%`}</td></tr>))}</tbody></table>
+          </div>
+          <p className="muted small">{p.note} Confusion: TP {p.confusion.tp}, FP {p.confusion.fp}, FN {p.confusion.fn}, TN {p.confusion.tn}.
+            {which === "full" && " Narrative and shared-attribute patterns have no live rule yet, and every life claim is for the full sum assured, so the amount-ratio rule flags them all: these are the rules' known gaps."}</p>
         </>
       ) : <p className="muted">Portfolio file not found.</p>}
     </Card>

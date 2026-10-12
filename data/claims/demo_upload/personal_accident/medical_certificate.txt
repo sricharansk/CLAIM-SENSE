@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE (TREATING DOCTOR)
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Rekha Nair
+Doctor: Dr. S. Synthetic, Orthopaedics (fictional)
+Nature of Injury: Traumatic amputation of the left thumb
+
+Clinical Notes:
+Thumb amputated at the base.

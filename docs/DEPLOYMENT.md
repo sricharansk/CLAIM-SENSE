@@ -1,6 +1,6 @@
 # Deployment
 
-Status: **not deployed yet.** No cloud credentials were available while building. Do not claim a deployment until `scripts/smoke_test.py <url>` passes against it.
+Status: the owner deployed `main` to Render at https://claim-sense.onrender.com; its readiness check passes. The signed-in smoke test there is pending the `DEMO_PASSWORD` repository secret (see *Verify deployment* below and `docs/IMPLEMENTATION_STATUS.md`). Do not call a deployment verified until `scripts/smoke_test.py <url>` passes against it.
 
 ## Local Docker
 

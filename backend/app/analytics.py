@@ -107,7 +107,8 @@ def dashboard(db: Session, line: str | None = None, days: int | None = None, tod
                         "reviewed": len(reviewed), "escalated": len(escalated),
                         "escalation_rate": round(len(escalated) / len(reviewed), 3) if reviewed else None},
         "human_outcomes": dict(Counter(h.decision for h in last_human.values())),
-        "portfolio": portfolio_evaluation(),
+        "portfolio": portfolio_evaluation("demo"),
+        "portfolio_full": portfolio_evaluation("full"),
     }
 
 
@@ -182,42 +183,63 @@ def _agrees(ai: str, human: str) -> bool:
             "REQUEST_INFO": "REQUEST_INFO", "INVESTIGATE": "INVESTIGATE"}.get(ai) == human
 
 
-@lru_cache(maxsize=1)
-def portfolio_evaluation() -> dict | None:
-    """Score the 1,000-claim synthetic portfolio with the live risk rules and compare to injected labels.
+PORTFOLIOS = {"demo": "claims_portfolio.csv", "full": "claims_portfolio_full.csv"}
+
+
+@lru_cache(maxsize=2)
+def portfolio_evaluation(name: str = "demo") -> dict | None:
+    """Score a synthetic portfolio (1,000 health and motor claims, or 10,000 across all six lines) with the live risk
+    rules and compare to the injected labels, overall, per line and per injected pattern.
 
     This measures how well the transparent rules recover patterns we injected ourselves; it is not a
     claim about real-world fraud detection performance.
     """
-    path = settings.data_dir / "synthetic" / "claims_portfolio.csv"
+    path = settings.data_dir / "synthetic" / PORTFOLIOS[name]
     if not path.exists():
         return None
     tp = fp = fn = tn = 0
     levels: Counter = Counter()
     by_line: Counter = Counter()
+    line_flags: dict[str, Counter] = {}
+    patterns: dict[str, Counter] = {}
     amounts: list[float] = []
     for row in csv.DictReader(path.open(encoding="utf-8")):
         claimed, total = float(row["claimed_amount"]), float(row["document_total"])
         score, _ = score_features({
             "amount_ratio": claimed / float(row["sum_insured"]), "days_since_start": int(row["days_since_policy_start"]),
+            "early_claim_days": int(row.get("early_claim_days") or 90),
             "prior_claims": int(row["prior_claims_12m"]),
             "duplicate_of": "match" if row["duplicate_match"] == "1" else None,
             "amount_gap": abs(claimed - total) / total if total else 0,
         })
         lv = level(score)
+        line = row["line_of_business"]
         levels[lv] += 1
-        by_line[row["line_of_business"]] += 1
+        by_line[line] += 1
         amounts.append(claimed)
         flagged, label = lv != "LOW", row["fraud_label"] == "1"
         tp += flagged and label
         fp += flagged and not label
         fn += (not flagged) and label
         tn += (not flagged) and (not label)
+        lc = line_flags.setdefault(line, Counter())
+        lc["tp"] += flagged and label
+        lc["fp"] += flagged and not label
+        lc["fn"] += (not flagged) and label
+        for pat in filter(None, row["injected_patterns"].split("|")):
+            pc = patterns.setdefault(pat, Counter())
+            pc["injected"] += 1
+            pc["flagged"] += flagged
     precision = tp / (tp + fp) if tp + fp else 0
     recall = tp / (tp + fn) if tp + fn else 0
-    return {"claims": sum(levels.values()), "by_risk": dict(levels), "by_line": dict(by_line),
+    ratio = lambda a, b: round(a / b, 3) if b else None  # noqa: E731
+    return {"name": name, "claims": sum(levels.values()), "by_risk": dict(levels), "by_line": dict(by_line),
             "injected_anomalies": tp + fn, "flagged": tp + fp,
             "precision": round(precision, 3), "recall": round(recall, 3),
             "confusion": {"tp": tp, "fp": fp, "fn": fn, "tn": tn},
+            "lines": {k: {"claims": by_line[k], "precision": ratio(c["tp"], c["tp"] + c["fp"]),
+                          "recall": ratio(c["tp"], c["tp"] + c["fn"])} for k, c in sorted(line_flags.items())},
+            "patterns": {k: {"injected": c["injected"], "recall": ratio(c["flagged"], c["injected"])}
+                         for k, c in sorted(patterns.items())},
             "median_claim": sorted(amounts)[len(amounts) // 2],
             "note": "Synthetic portfolio with injected patterns; measures rule recall of injected patterns only."}

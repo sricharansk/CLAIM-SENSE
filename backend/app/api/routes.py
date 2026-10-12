@@ -6,6 +6,7 @@ import io
 import json
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
 from fastapi.responses import PlainTextResponse, StreamingResponse
@@ -514,8 +515,9 @@ def policy_versions(product_code: str, db: Session = Depends(get_db)):
 
 @router.get("/insured-policies")
 def insured_policies(db: Session = Depends(get_db)):
-    return [{"policy_number": p.policy_number, "product_code": p.policy.product_code, "holder_name": p.holder_name,
-             "start_date": p.start_date, "end_date": p.end_date, "sum_insured": _money(p.sum_insured)}
+    return [{"policy_number": p.policy_number, "product_code": p.policy.product_code,
+             "line_of_business": p.policy.line_of_business, "holder_name": p.holder_name, "start_date": p.start_date,
+             "end_date": p.end_date, "sum_insured": _money(p.sum_insured)}
             for p in db.query(InsuredPolicy).order_by(InsuredPolicy.policy_number).all()]
 
 
@@ -559,20 +561,29 @@ def _demo_packet_dir():
 
 
 @router.get("/demo-packet")
-def demo_packet():
-    """The synthetic sample packet (not seeded), so a deployed demo can create a claim without local files."""
-    files = sorted(_demo_packet_dir().glob("*.txt"))
-    lines = (_demo_packet_dir() / "claim_form.txt").read_text(encoding="utf-8").splitlines()
+def demo_packet(line: str | None = Query(None, pattern=LINE_PATTERN)):
+    """A synthetic sample packet (not seeded), so a deployed demo can create a claim without local files.
+    Health uses the golden sample; the other lines with a packet use their evaluation packet."""
+    folder = _demo_packet_folder(line)
+    files = sorted(folder.glob("*.txt"))
+    lines = (folder / "claim_form.txt").read_text(encoding="utf-8").splitlines()
     form = {k.strip(): v.strip() for k, _, v in (ln.partition(":") for ln in lines) if v.strip()}
     loss = lines[lines.index("Description of Loss:") + 1] if "Description of Loss:" in lines else ""
-    return {"policy_number": form.get("Policy Number"), "claim_type": form.get("Claim Type", "").lower(),
+    return {"policy_number": form.get("Policy Number"), "claim_type": line or form.get("Claim Type", "").lower(),
             "claimant_name": form.get("Claimant Name"), "description": loss,
             "files": [{"name": f.name, "size": f.stat().st_size} for f in files]}
 
 
+def _demo_packet_folder(line: str | None) -> Path:
+    folder = _demo_packet_dir() if line in (None, "health") else _demo_packet_dir() / line
+    if not (folder / "claim_form.txt").is_file():
+        raise HTTPException(404, f"No sample packet for {line}")
+    return folder
+
+
 @router.get("/demo-packet/{name}")
-def demo_packet_file(name: str):
-    allowed = {f.name: f for f in _demo_packet_dir().glob("*.txt")}
+def demo_packet_file(name: str, line: str | None = Query(None, pattern=LINE_PATTERN)):
+    allowed = {f.name: f for f in _demo_packet_folder(line).glob("*.txt")}
     if name not in allowed:
         raise HTTPException(404, "No such sample document")
     return PlainTextResponse(allowed[name].read_text(encoding="utf-8"))
@@ -597,6 +608,18 @@ def evaluation_report():
 def datasets():
     """The source registry, validated now: required provenance fields and, for in-use sources, file checksums."""
     return provenance.load_registry()
+
+
+@router.get("/benchmarks/industry")
+def industry_benchmark():
+    """Industry loss ratios and paid development by line from the CAS Schedule P database (aggregates written by
+    scripts/fetch_public_data.py), with the registry entry that records where they came from."""
+    path = settings.data_dir / "public" / "cas_schedule_p" / "benchmark.json"
+    if not path.is_file():
+        raise HTTPException(404, "Industry benchmark not generated; run scripts/fetch_public_data.py")
+    registry = provenance.load_registry()
+    entry = next((s for s in registry["sources"] if s["id"] == "cas-schedule-p-1998-2007"), None)
+    return {**json.loads(path.read_text(encoding="utf-8")), "registry": entry}
 
 
 @router.get("/knowledge-base/manifest")

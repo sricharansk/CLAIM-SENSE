@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ApiError, AnalysisResult, ClaimDetail as Detail, Letter, api, inr, when, words } from "../api";
+import { ApiError, AnalysisResult, ClaimDetail as Detail, Letter, api, inr, lineLabel, when, words } from "../api";
 import { useSession } from "../components/session";
 import { Badge, Card, Due, ErrorBox, Loading, useLoad } from "../components/ui";
 
@@ -42,7 +42,7 @@ export default function ClaimDetail() {
         <div>
           <Link to="/claims" className="muted">← Claims</Link>
           <h1>{c.claim_number} <Badge value={c.status} /></h1>
-          <p className="muted">{words(c.claim_type)} claim · {c.claimant_name} · policy <span className="mono">{c.policy_number}</span> · incident {c.incident_date ?? "unknown"} · claimed {inr(c.claimed_amount)}</p>
+          <p className="muted">{lineLabel(c.claim_type)} claim · {c.claimant_name} · policy <span className="mono">{c.policy_number}</span> · incident {c.incident_date ?? "unknown"} · claimed {inr(c.claimed_amount)}</p>
           <p className="small">Settlement: <Due s={c.settlement} /> <span className="muted">due {c.settlement.due_date} ({c.settlement.days} days from last document{c.settlement.clause ? `, clause ${c.settlement.clause}` : ""})</span></p>
         </div>
         <div className="row">

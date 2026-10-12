@@ -24,8 +24,18 @@ The checksum of a source spanning several files or folders is a SHA-256 over eac
 
 | Status | Sources | What it means |
 |---|---|---|
-| IN_USE | 5 synthetic sources: policy corpus, PDF ingestion demo, golden claim packets and the 42-claim demo book, claims portfolio, evaluation set | Generated or written in this repository; checksums verified on every request |
+| IN_USE | 5 synthetic sources: policy corpus (seven wordings over six lines), PDF ingestion demo, golden claim packets with the 77-claim demo book and the per-line sample packets, claims portfolios (1,000 and 10,000 claims), evaluation set | Generated or written in this repository; checksums verified on every request |
+| IN_USE | 1 public benchmark: CAS Loss Reserving Database (NAIC Schedule P, accident years 1998-2007) | Downloaded by `scripts/fetch_public_data.py`; only industry aggregates are committed (`data/public/cas_schedule_p/benchmark.json`) |
 | REGISTERED | 9 public sources: three IRDAI master circulars, IRDAI handbook 2024-25, APRA NCPD, CMS TiC PUF PY2026, Figshare and two Zenodo benchmarks | Dates and URLs come from the blueprint's verified register. They are not downloaded in this build, and most licences are still `CHECK_SOURCE` |
+
+### CAS Schedule P benchmark
+
+`scripts/fetch_public_data.py` follows the blueprint Part 9 pipeline: download, SHA-256 check, parse, schema check, aggregate, quality report.
+
+- **Source:** the Casualty Actuarial Society's Loss Reserving Database, compiled for the CAS by S&P Global Market Intelligence from US NAIC Schedule P: six lines (private passenger auto, commercial auto, workers' compensation, medical malpractice, other liability, products liability), accident years 1998-2007, ten development years, USD thousands.
+- **Retrieval:** the CAS web site is not reachable from this build environment, so the script reads the same file (`clrd2025.csv`, 71,650 rows) from the `chainladder` 0.10.1 source distribution on PyPI (MPL-2.0), pinned by SHA-256. Only that one CSV is read; nothing is executed or extracted to disk.
+- **Licence:** the CAS page states no licence. It publishes the data for research and asks users to acknowledge that they accessed the files from the CAS web page as compiled for the CAS by S&P Global Market Intelligence. The repository commits only aggregates, not company rows.
+- **Output:** per line, the number of reporting companies, net earned premium, the loss ratio at ten years and the industry paid-development pattern. It is shown on the Data sources screen and served at `GET /api/v1/benchmarks/industry`. It is not used in any claim decision.
 
 No public dataset is described as live 2026 claim-level data. APRA NCPD is a 2026 publication of data through December 2024.
 
@@ -47,6 +57,7 @@ The retrieval index only accepts a chunk whose source file, page, section, claus
 
 ```bash
 python data/synthetic/generate.py          # if regenerating synthetic data
+python scripts/fetch_public_data.py        # if refreshing the CAS benchmark
 python scripts/provenance.py --write       # re-stamp checksums and rewrite the manifest
 python scripts/evaluate.py                 # re-run the golden evaluation
 ```
