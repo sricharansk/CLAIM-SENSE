@@ -59,7 +59,8 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
                 and c.id < ctx.claim.id), None)
     features = {
         "amount_ratio": float(claimed / Decimal(ctx.insured.sum_insured)) if ctx.insured.sum_insured else 0,
-        "days_since_start": ctx.coverage["days_since_commencement"],
+        # a single-trip policy starts at departure, so an early loss says nothing about the claim
+        "days_since_start": None if ctx.version.terms.get("trip_based") else ctx.coverage["days_since_commencement"],
         "prior_claims": len(prior),
         "duplicate_of": dup.claim_number if dup else None,
         "amount_gap": float(abs(claimed - gross) / gross) if gross else 0,

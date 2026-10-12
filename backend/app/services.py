@@ -193,7 +193,7 @@ def add_document(db: Session, claim: Claim, filename: str, data: bytes, actor: s
                         pages=pages, doc_type=docai.classify(text, safe), status="EXTRACTED")
     db.add(doc)
     db.flush()
-    facts = docai.extract_facts(text)
+    facts = docai.extract_facts(text, claim.claim_type)
     for f in facts:
         db.add(ClaimFact(claim_id=claim.id, document_id=doc.id, name=f.name, value=f.value, confidence=f.confidence,
                          source_line=f.line, source_text=f.source))

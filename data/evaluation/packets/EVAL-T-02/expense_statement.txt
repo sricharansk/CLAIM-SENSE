@@ -1,0 +1,12 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Bangkok
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Kavya Reddy
+
+Itemised Charges:
+Clinic Consultation and X-Ray                                    9,500.00
+Pharmacy and Medicines                                           2,500.00
+
+Total Amount                                                    12,000.00

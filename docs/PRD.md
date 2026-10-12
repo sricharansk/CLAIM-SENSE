@@ -42,7 +42,7 @@ A human decides, within role-based limits. Every step is audited.
 
 ## In scope (MVP)
 
-Health and motor lines on synthetic data. The MVP covers:
+Health, motor, property (home) and travel lines on synthetic data. The MVP covers:
 - policy ingestion from PDF or Markdown;
 - hybrid RAG with citations;
 - coverage checks and deterministic adjudication;
@@ -59,7 +59,7 @@ Health and motor lines on synthetic data. The MVP covers:
 - SSO.
 - OCR for scanned documents.
 - ML fraud models.
-- Property and travel lines.
+- Commercial property, liability and marine lines.
 - Legal or compliance certification.
 
 See `IMPLEMENTATION_STATUS.md` for the roadmap.

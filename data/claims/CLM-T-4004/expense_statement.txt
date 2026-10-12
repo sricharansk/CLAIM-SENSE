@@ -1,0 +1,13 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Dubai
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Sana Qureshi
+
+Itemised Charges:
+Checked Suitcase                                                12,000.00
+Clothing                                                        22,000.00
+Shoes and Accessories                                            9,000.00
+
+Total Amount                                                    43,000.00

@@ -3,11 +3,11 @@
 ## Commands
 
 ```bash
-cd backend && ruff check app tests ../scripts && python -m pytest -q     # 71 tests
-python3 scripts/evaluate.py                                             # golden evaluation, 256 checks
+cd backend && ruff check app tests ../scripts && python -m pytest -q     # 89 tests
+python3 scripts/evaluate.py                                             # golden evaluation, 405 checks
 python3 scripts/provenance.py --check                                   # registry, checksums, reproducible RAG manifest
 cd frontend && npm run build                                            # type check + build
-cd e2e && npx playwright test                                           # 10 browser tests (fresh stack)
+cd e2e && npx playwright test                                           # 11 browser tests (fresh stack)
 docker compose up --build -d && python3 scripts/smoke_test.py http://localhost:8080
 ```
 
@@ -20,7 +20,7 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | `test_adjudication.py` | 7 | Hand-calculated waterfalls, rounding, caps, depreciation bands |
 | `test_rag.py` | 5 | Clause parser keeps page/section/clause; hybrid ranking; cited answers; synonyms; refusal |
 | `test_extraction.py` | 4 | Field and line-item extraction from text and PDF |
-| `test_golden_path.py` | 19 | All eight seeded scenarios; version matching; rejection citation; duplicates; create → upload → analyse → review; safe failure; validation; headers and error shape |
+| `test_golden_path.py` | 26 | All 15 seeded scenarios across the four lines; version matching; rejection citation; duplicates; create → upload → analyse → review; safe failure; validation; headers and error shape |
 | `test_auth.py` | 7 | Sign-in, roles, approval limit, escalation, read-only auditor |
 | `test_letters_sla.py` | 7 | Settlement-clock states; letter content per decision type; CSV export |
 | `test_evaluation.py` | 3 | Evaluation report served and complete; sign-in required; refusals |
@@ -28,20 +28,21 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | `test_policy_ingestion.py` | 4 | PDF ingestion with pages and states; duplicate, scanned, unreadable and wrong-type failures; supervisor only; seeded records |
 | `test_fact_correction.py` | 2 | Correction used by the next analysis, audited, extracted value kept, latest wins; date, amount, reason, role and decided-claim validation |
 | `test_provenance.py` | 6 | Committed registry valid; validator rejects missing or wrong provenance and checksum drift; `/datasets`; every indexed chunk resolves; a chunk without an extraction run is kept out of the index; backfill |
+| `test_property_travel.py` | 11 | Property average clause (hand calculation) and tolerance; valuables; travel per-item and benefit limits; medical without sub-limit; per-line item categories; value at risk extracted; burglary without a police report; travel claim outside the trip; claim-type validation; value-at-risk correction validated and used |
 | `test_review_assignment.py` | 3 | Queue shows risk, age and assignee; take, release and supervisor reassignment; others cannot take or decide an assigned task; supervisor-queue and auditor limits; audit events |
 
 Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is always off.
 
 ## Golden evaluation (`scripts/evaluate.py`)
 
-- **Claim cases:** 12, covering all ten blueprint case types: clearly covered, excluded, partial, insufficient evidence, high risk, deductible, sub-limit, maximum coverage, duplicate, and ambiguous policy version.
-- **Policy questions:** 21, split into covered, excluded, ambiguous and unsupported.
+- **Claim cases:** 22 across health, motor, property and travel, covering all ten blueprint case types: clearly covered, excluded, partial, insufficient evidence, high risk, deductible, sub-limit, maximum coverage, duplicate, and ambiguous policy version.
+- **Policy questions:** 26, split into covered, excluded, ambiguous and unsupported.
 - **Expected values:** worked out by hand in `data/evaluation/golden_cases.json`.
 - **Scoring:** results are scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow. The report is written to `reports/evaluation.{json,md}` and shown at `/evaluation`. CI fails on any failed check.
 
 ## End-to-end
 
-- **`scripts/smoke_test.py <url> [password]`:** checks the frontend, health and readiness, sign-in enforcement, seeded data, policy ingestion records, the evaluation report, the source registry and the RAG manifest. It then runs the golden claim: create, upload, analyse, coverage, adjudication (₹64,080), citations, human review, audit, assistant answer and refusal.
+- **`scripts/smoke_test.py <url> [password]`:** checks the frontend, health and readiness, sign-in enforcement, seeded data, policy ingestion records, the evaluation report, the source registry and the RAG manifest. It then runs the golden claim: create, upload, analyse, coverage, adjudication (₹64,080), citations, human review, audit, assistant answer and refusal. It also files a property claim (₹3,47,500 payable) and a travel claim (₹95,000 payable).
 - **Browser runs (Playwright, Chromium) against the Docker image:**
   - sign in;
   - create a claim, upload, analyse;
@@ -59,7 +60,7 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
 
 ## Browser tests (`e2e/`)
 
-`e2e/tests/golden.spec.mjs` has 10 Playwright tests that drive the real UI against a running stack (`BASE_URL`, default `http://localhost:8080`):
+`e2e/tests/golden.spec.mjs` has 11 Playwright tests that drive the real UI against a running stack (`BASE_URL`, default `http://localhost:8080`):
 
 - golden claim to approval and letter, with the stage audit events;
 - approval-limit block;
@@ -70,7 +71,8 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
 - fact correction and re-run;
 - data provenance;
 - dashboard rates;
-- phone layout.
+- phone layout;
+- a property and a travel claim filed from the New Claim screen, with their payable amounts and limit steps.
 
 Any browser console error fails a test. They need a freshly seeded stack, because a second run files the golden claim again and the system flags it as a duplicate. CI runs them in the `docker-smoke` job before the smoke test.
 

@@ -11,8 +11,12 @@ from .base import AgentError, ClaimContext, ToolLog
 SINGLE_VALUE = ["policy_number", "claimant_name", "incident_date", "admission_date", "discharge_date", "diagnosis",
                 "procedure", "claimed_amount", "hospital", "vehicle_registration", "vehicle_first_registration",
                 "engine_cc", "fir_number", "narrative", "clinical_notes", "police_findings", "document_total",
-                "patient_name", "licence_holder", "licence_valid_till"]
+                "patient_name", "licence_holder", "licence_valid_till", "value_at_risk", "survey_findings", "report_remarks",
+                "destination", "departure_date", "return_date"]
 
+
+# documents whose itemised lines are the source of truth for the amount
+ITEMISED = ("hospital_bill", "repair_estimate", "loss_assessment", "expense_statement")
 
 # Reviewers may correct these before (re-)running the analysis; bill totals and line items stay as extracted.
 CORRECTABLE = [n for n in SINGLE_VALUE if n != "document_total"]
@@ -36,12 +40,12 @@ def consolidate(facts: list[ClaimFact], doc_type: dict[int, str]) -> tuple[dict,
                "line": f.source_line, "text": f.source_text, "confidence": f.confidence}
         if f.name == "line_item":
             # bills/estimates are the source of truth for line items
-            if doc_type.get(f.document_id) in ("hospital_bill", "repair_estimate"):
+            if doc_type.get(f.document_id) in ITEMISED:
                 items.append({**json.loads(f.value), "source": src})
             continue
         if f.name in ("claimant_name", "patient_name", "licence_holder"):
             names.setdefault(f.value.strip().lower(), set()).add(doc_type.get(f.document_id))
-        if f.name == "document_total" and doc_type.get(f.document_id) not in ("hospital_bill", "repair_estimate"):
+        if f.name == "document_total" and doc_type.get(f.document_id) not in ITEMISED:
             continue
         if f.name in SINGLE_VALUE and f.name not in values:
             values[f.name] = f.value

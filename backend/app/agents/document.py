@@ -18,6 +18,11 @@ DOC_TYPES = [
     ("hospital_bill", ["hospital bill", "final bill", "inpatient bill"]),
     ("repair_estimate", ["repair estimate", "workshop estimate"]),
     ("driving_licence", ["driving licence", "driving license"]),
+    ("loss_assessment", ["loss assessment"]),
+    ("expense_statement", ["expense statement"]),
+    ("medical_report", ["medical report"]),
+    ("property_irregularity_report", ["property irregularity"]),
+    ("travel_proof", ["proof of travel", "boarding pass"]),
     ("police_report", ["police", "fir number", "accident report"]),
 ]
 
@@ -30,9 +35,12 @@ FIELD_MAP = {
     "vehicle make and model": "vehicle_model", "date of first registration": "vehicle_first_registration",
     "engine capacity cc": "engine_cc", "fir number": "fir_number", "licence number": "licence_number",
     "valid till": "licence_valid_till", "workshop": "workshop", "bill number": "bill_number",
-    "estimate number": "estimate_number",
+    "estimate number": "estimate_number", "value of property at risk": "value_at_risk",
+    "destination": "destination", "departure date": "departure_date", "return date": "return_date",
 }
-NARRATIVE_HEADERS = {"description of loss:": "narrative", "clinical notes:": "clinical_notes", "findings:": "police_findings"}
+AMOUNT_FIELDS = {"claimed_amount", "value_at_risk"}
+NARRATIVE_HEADERS = {"description of loss:": "narrative", "clinical notes:": "clinical_notes", "findings:": "police_findings",
+                     "surveyor observations:": "survey_findings", "remarks:": "report_remarks"}
 FIELD_RE = re.compile(r"^\s*([A-Za-z/ ]{3,40}?)\s*:\s*(.+?)\s*$")
 ITEM_RE = re.compile(r"^\s*(.+?)\s{2,}((?:\d{1,3}(?:,\d{2,3})+|\d+)\.\d{2})\s*$")
 
@@ -53,6 +61,24 @@ CATEGORY_RULES = [
     ("parts_fibre", ["fibre", "fiber"]),
     ("parts_metal", ["metal", "panel", "bonnet", "door", "fender", "boot lid"]),
 ]
+# Lines added after health and motor get their own vocabulary, so a word like "laptop" or "room" means the right thing.
+LINE_CATEGORY_RULES = {
+    "property": [
+        ("valuables", ["jewellery", "jewelry", "gold", "cash", "bullion"]),
+        ("contents_electronics", ["television", "laptop", "refrigerator", "washing machine", "air conditioner",
+                                  "microwave", "electronic"]),
+        ("contents_furniture", ["sofa", "furniture", "wardrobe", "cabinet", "bed ", "mattress", "curtain", "carpet"]),
+        ("building_repair", ["plaster", "roof", "wall", "ceiling", "flooring", "masonry", "plumbing", "wiring",
+                             "debris", "repaint", "civil", "kitchen platform", "door", "lock"]),
+    ],
+    "travel": [
+        ("personal_comfort", ["toiletr", "telephone", "laundry", "personal comfort"]),
+        ("trip_cancellation", ["airfare", "flight", "hotel", "tour package", "non-refundable"]),
+        ("baggage_item", ["suitcase", "baggage", "clothing", "laptop", "camera", "shoes", "accessories"]),
+        ("medical_treatment", ["hospital", "emergency", "physician", "surgeon", "treatment", "room", "ambulance",
+                               "pharmacy", "medicine", "x-ray", "scan", "laboratory", "diagnostic"]),
+    ],
+}
 
 
 @dataclass
@@ -80,9 +106,9 @@ def classify(text: str, filename: str = "") -> str:
     return "other"
 
 
-def categorize(description: str) -> tuple[str, float]:
+def categorize(description: str, line: str | None = None) -> tuple[str, float]:
     d = description.lower() + " "
-    for cat, keys in CATEGORY_RULES:
+    for cat, keys in LINE_CATEGORY_RULES.get(line or "", CATEGORY_RULES):
         if any(k in d for k in keys):
             return cat, 0.9
     return "other", 0.6
@@ -92,7 +118,7 @@ def parse_amount(s: str) -> float:
     return float(s.replace(",", "").replace("INR", "").strip())
 
 
-def extract_facts(text: str) -> list[Fact]:
+def extract_facts(text: str, line: str | None = None) -> list[Fact]:
     facts: list[Fact] = []
     lines = text.splitlines()
     i = 0
@@ -113,14 +139,14 @@ def extract_facts(text: str) -> list[Fact]:
             if desc.lower().startswith("total"):
                 facts.append(Fact("document_total", f"{amt:.2f}", 0.98, i + 1, raw.strip()))
             else:
-                cat, conf = categorize(desc)
+                cat, conf = categorize(desc, line)
                 facts.append(Fact("line_item", json.dumps({"description": desc, "amount": amt, "category": cat}),
                                   conf, i + 1, raw.strip()))
         elif m := FIELD_RE.match(raw):
             label = m.group(1).strip().lower()
             if label in FIELD_MAP:
                 value = m.group(2).strip()
-                if FIELD_MAP[label] == "claimed_amount":
+                if FIELD_MAP[label] in AMOUNT_FIELDS:
                     value = f"{parse_amount(value):.2f}"
                 facts.append(Fact(FIELD_MAP[label], value, 0.98, i + 1, raw.strip()))
         i += 1

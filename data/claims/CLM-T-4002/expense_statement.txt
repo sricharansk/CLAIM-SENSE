@@ -1,0 +1,15 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: London
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Neha Kapoor
+
+Itemised Charges:
+Checked Suitcase (hard shell)                                   18,000.00
+Laptop Computer                                                 85,000.00
+Clothing                                                        24,000.00
+Camera with Lens                                                40,000.00
+Shoes and Accessories                                           14,000.00
+
+Total Amount                                                   181,000.00

@@ -1,0 +1,17 @@
+SURVEYOR'S LOSS ASSESSMENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Deccan Loss Surveyors (fictional)
+Survey Reference: SV-P-01
+Incident Date: 2025-07-14
+Patient/Insured Name: Lakshmi Menon
+
+Itemised Charges:
+Roof Sheet Replacement                                          46,000.00
+Ceiling Plaster Repair                                          19,000.00
+Debris Removal                                                   6,000.00
+
+Total Amount                                                    71,000.00
+
+Surveyor Observations:
+Storm damage is confirmed by the weather bulletin for the date of loss. Repairs are reasonable.

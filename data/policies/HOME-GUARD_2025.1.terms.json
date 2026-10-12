@@ -1,0 +1,92 @@
+{
+  "product_code": "HOME-GUARD",
+  "product_name": "ClaimSense Home Guard",
+  "line_of_business": "property",
+  "insurer": "Synthetic Assurance Co. Ltd. (fictional)",
+  "version": "2025.1",
+  "effective_from": "2024-04-01",
+  "effective_to": "2026-03-31",
+  "deductible": {
+    "amount": 10000,
+    "clause": "4.1"
+  },
+  "depreciation": {
+    "clause": "2.2",
+    "flat_percent": {
+      "contents_electronics": 20,
+      "contents_furniture": 10
+    }
+  },
+  "underinsurance": {
+    "clause": "2.3",
+    "tolerance_percent": 15
+  },
+  "max_liability_clause": "1.2",
+  "exclusions": [
+    {
+      "code": "EXCL_GRADUAL_DETERIORATION",
+      "clause": "3.1",
+      "keywords": [
+        "gradual deterioration",
+        "wear and tear",
+        "seepage",
+        "dampness",
+        "termite",
+        "vermin"
+      ]
+    },
+    {
+      "code": "EXCL_WILFUL_ACT",
+      "clause": "3.2",
+      "keywords": [
+        "wilful",
+        "intentional",
+        "deliberately set"
+      ]
+    },
+    {
+      "code": "EXCL_UNOCCUPIED",
+      "clause": "3.3",
+      "keywords": [
+        "unoccupied",
+        "lying vacant"
+      ]
+    },
+    {
+      "code": "EXCL_WAR_NUCLEAR",
+      "clause": "3.4",
+      "keywords": [
+        "act of war",
+        "invasion",
+        "nuclear",
+        "radioactive"
+      ]
+    }
+  ],
+  "non_payable_categories": {
+    "valuables": "3.5"
+  },
+  "required_documents": {
+    "documents": [
+      "claim_form",
+      "loss_assessment"
+    ],
+    "clause": "5.2"
+  },
+  "conditional_documents": [
+    {
+      "document": "police_report",
+      "keywords": [
+        "burglary",
+        "housebreaking",
+        "theft",
+        "stolen"
+      ]
+    }
+  ],
+  "settlement_days": {
+    "value": 30,
+    "clause": "5.3"
+  },
+  "coverage_clause": "2.1"
+}

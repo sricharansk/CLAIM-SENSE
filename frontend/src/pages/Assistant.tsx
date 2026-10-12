@@ -3,7 +3,8 @@ import { ApiError, RagAnswer, api } from "../api";
 import { Badge, Card, ErrorBox, useLoad } from "../components/ui";
 
 const EXAMPLES = ["Is cataract surgery covered in the first year?", "What is the room rent limit per day?",
-  "How much depreciation applies to plastic parts?", "Is drunk driving covered?", "What documents are needed for a hospital claim?"];
+  "How much depreciation applies to plastic parts?", "Is drunk driving covered?", "What documents are needed for a hospital claim?",
+  "Is stolen jewellery covered under the home policy?", "What is the limit for lost checked baggage?"];
 
 export default function Assistant() {
   const policies = useLoad(api.policies);

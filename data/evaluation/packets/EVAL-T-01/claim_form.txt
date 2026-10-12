@@ -1,0 +1,17 @@
+CLAIM FORM — Synthetic Assurance Co. Ltd. (fictional)
+SYNTHETIC DEMO DOCUMENT
+
+Claim Type: Travel
+Policy Number: CS-TRV-25-004588
+Claimant Name: Kavya Reddy
+Incident Date: 2025-12-20
+Destination: Tokyo
+Departure Date: 2025-12-20
+Return Date: 2026-01-03
+Claimed Amount: INR 180,000.00
+
+Description of Loss:
+The departure flight to Tokyo was cancelled after the airport was closed by the authorities for a cyclone; the trip could not be taken.
+
+I declare that the information given is true and complete.
+Signed: Kavya Reddy

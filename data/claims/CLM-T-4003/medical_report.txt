@@ -1,0 +1,12 @@
+MEDICAL REPORT FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Bernese Oberland Clinic (fictional)
+Patient Name: Aditya Joshi
+Admission Date: 2025-08-17
+Discharge Date: 2025-08-19
+Diagnosis: Fracture of left ankle
+Procedure: Closed reduction and casting
+
+Clinical Notes:
+Injury sustained during a tandem paragliding flight.

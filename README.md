@@ -4,7 +4,7 @@
 
 > AI recommends. Evidence supports. Rules calculate. Humans decide. Workflows execute. Audit trails record.
 
-Claim Sense takes a health or motor claim from intake to a human decision. It reads the claim documents, matches the policy wording that was in force on the incident date, retrieves the relevant clauses with page and clause citations, checks coverage and exclusions, calculates the payable amount with deterministic rules, raises risk and fraud signals, and hands an evidence-backed recommendation to a human reviewer. Every step is recorded in an audit trail.
+Claim Sense takes a health, motor, property (home) or travel claim from intake to a human decision. It reads the claim documents, matches the policy wording that was in force on the incident date, retrieves the relevant clauses with page and clause citations, checks coverage and exclusions, calculates the payable amount with deterministic rules, raises risk and fraud signals, and hands an evidence-backed recommendation to a human reviewer. Every step is recorded in an audit trail.
 
 All policies, people and claims in this repository are **synthetic**. See [Data](#data-and-datasets).
 
@@ -18,25 +18,26 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Dashboard | Live claim counts, recommendations, risk mix, override and escalation rates, reviewer actions, settlement clock, portfolio evaluation | `/` |
 | Claim intake | Create a claim, upload PDF or text documents, run the agent pipeline | `/claims/new` |
 | Document intelligence | Document classification, extracted facts with source file, line and confidence, itemised charges; reviewers correct a fact with a reason before (re-)running the analysis, the extracted value is kept and the correction audited | claim page |
+| Lines of business | Health (HLT-SHIELD), motor (MTR-SECURE), property / home (HOME-GUARD) and overseas travel (TRV-GLOBE), each with its own synthetic wording, structured terms and rules | `/policies` |
 | Policy versioning | Picks the wording version in force on the incident date (HLT-SHIELD 2024.1 vs 2025.1) | claim page |
 | Hybrid RAG | BM25 + character n-gram vectors fused with reciprocal rank fusion; clause, section and page citations; refuses when evidence is weak | `/assistant` |
-| Coverage | Policy period, initial and specified-disease waiting periods, exclusions, required documents, each citing its clause | claim page |
-| Adjudication | Decimal rules engine: non-payable items, per-day limits, depreciation, deductible, co-pay, sum-insured cap, shown as a waterfall | claim page |
+| Coverage | Policy period, trip period (travel), initial and specified-disease waiting periods, exclusions, required documents including those that depend on the loss (police report for burglary, airline report for lost baggage, medical report for treatment abroad), each citing its clause | claim page |
+| Adjudication | Decimal rules engine: non-payable items, per-day limits, depreciation (motor parts, home contents), average clause for underinsured homes, per-item and per-benefit travel limits, deductible or excess, co-pay, sum-insured cap, shown as a waterfall | claim page |
 | Risk / fraud | Transparent weighted signals: amount ratio, early claim, frequency, duplicates, amount and name mismatches, missing documents, text in documents addressed to an AI | claim page |
 | Recommendation | Approve, partial approval, reject, request info or investigate, with reasons and an evidence package | claim page |
 | Human review | Approve (with amount override), reject, request info, investigate, escalate; notes required for adverse actions; approval limits enforced; escalated claims need a supervisor | claim page, `/reviews` |
 | Workflow | Routing to adjuster, investigation (SIU), pending-information and supervisor queues; queue shows status, risk, age and assignee; adjusters take and release tasks, supervisors reassign | `/reviews` |
-| Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
+| Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor / 5.3 property and travel); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
 | Decision letters | Settlement, repudiation (quotes the clause relied on), document-request and under-review letters built from data, no LLM; printable; marked draft until a human decides | claim page |
 | Export | Download the claim register as CSV with decision, payable amount, risk and settlement status | `/claims` |
-| Golden evaluation | 12 hand-worked claim cases (all 10 required types) and 21 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
+| Golden evaluation | 22 hand-worked claim cases across all four lines (all 10 required types) and 26 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
 | Policy library | Browse clauses by version, view structured terms, ingest new wordings as PDF or Markdown with checksum, page-preserving extraction and visible processing states (Uploaded → Validating → Extracting → Indexing → Ready / Failed) | `/policies` |
 | Provenance | Source registry with publisher, dates, licence, intended use and SHA-256 checked on every request; RAG manifest tracing every indexed chunk to file, version, page, clause and extraction run; chunks without provenance are kept out of the index | `/datasets`, [docs/DATA_PROVENANCE.md](docs/DATA_PROVENANCE.md) |
 
 ## Real results from the golden scenarios
 
-These are the outputs the running system produces for the eight seeded claims (no hand-edited numbers; `backend/tests/test_golden_path.py` asserts them).
+These are the outputs the running system produces for the 15 seeded claims (no hand-edited numbers; `backend/tests/test_golden_path.py` asserts the recommendations and `reports/evaluation.md` the amounts). [reports/claims_results.md](reports/claims_results.md) has all 23 claim packets in the repository, totals by line and where the money went; regenerate it with `python3 scripts/claims_report.py`.
 
 | Claim | Scenario | Wording | Claimed | Payable | Coverage | Risk | Recommendation |
 |---|---|---|---:|---:|---|---|---|
@@ -48,6 +49,13 @@ These are the outputs the running system produces for the eight seeded claims (n
 | CLM-H-1006 | Resubmission of CLM-H-1001 | HLT-SHIELD v2025.1 | ₹1,06,600 | ₹84,330 | Covered | High (50) | Investigate |
 | CLM-M-2001 | Rear-end collision, 34-month-old car | MTR-SECURE v2025.1 | ₹73,500 | ₹55,350 | Covered | Low | Partial approval |
 | CLM-M-2002 | Breath analyser positive | MTR-SECURE v2025.1 | ₹65,500 | ₹0 | Not covered (§3.1) | Low | Reject |
+| CLM-P-3001 | Kitchen fire; home worth ₹30 lakh insured for ₹25 lakh | HOME-GUARD v2025.1 | ₹4,50,000 | ₹3,47,500 | Covered | Low | Partial approval |
+| CLM-P-3002 | Burglary: laptop, TV and unscheduled gold jewellery | HOME-GUARD v2025.1 | ₹3,05,000 | ₹1,25,600 | Covered | Low | Partial approval |
+| CLM-P-3003 | Seepage and gradual deterioration | HOME-GUARD v2025.1 | ₹83,000 | ₹0 | Not covered (§3.1) | Low | Reject |
+| CLM-T-4001 | Emergency appendicectomy in Singapore | TRV-GLOBE v2025.1 | ₹4,42,500 | ₹4,34,000 | Covered | Low | Partial approval |
+| CLM-T-4002 | Lost checked baggage above per-item and per-trip limits | TRV-GLOBE v2025.1 | ₹1,81,000 | ₹95,000 | Covered | Low | Partial approval |
+| CLM-T-4003 | Paragliding injury in Switzerland | TRV-GLOBE v2025.1 | ₹2,01,000 | ₹0 | Not covered (§3.2) | Low | Reject |
+| CLM-T-4004 | Lost baggage, no airline irregularity report | TRV-GLOBE v2025.1 | ₹43,000 | ₹38,000 | Covered | Low (10) | Request info |
 
 CLM-H-1001 waterfall, as the app shows it:
 
@@ -70,6 +78,7 @@ CLM-H-1001 waterfall, as the app shows it:
 | ![Repudiation letter](docs/screenshots/12-rejection-letter.png) | ![Golden evaluation](docs/screenshots/13-evaluation.png) |
 | ![Policy PDF ingestion](docs/screenshots/15-policy-pdf-ingestion.png) | ![Claim evidence tab](docs/screenshots/16-claim-evidence.png) |
 | ![Data provenance](docs/screenshots/17-data-provenance.png) | ![Fact correction](docs/screenshots/18-fact-correction.png) |
+| ![Home claim with average clause](docs/screenshots/20-property-claim-adjudication.png) | ![Travel baggage limits](docs/screenshots/21-travel-claim-adjudication.png) |
 
 On a phone the navigation collapses into a menu: [screenshot](docs/screenshots/19-mobile-dashboard.png).
 
@@ -148,21 +157,22 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 71 tests
+cd backend && ruff check app tests && python -m pytest -q    # 89 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
+python3 scripts/claims_report.py                             # every claim packet -> reports/claims_results.md
 python3 scripts/provenance.py --check                        # source registry, checksums, RAG manifest
 cd frontend && npm run build                                 # type check + production build
-cd e2e && npm ci && npx playwright test                      # 10 browser tests against a fresh stack on :8080
+cd e2e && npm ci && npx playwright test                      # 11 browser tests against a fresh stack on :8080
 ```
 
-Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all eight golden scenarios, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 256 / 256 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
+Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all 15 golden scenarios, the property and travel rules (average clause, per-item and benefit limits, trip period, loss-dependent documents), settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 405 / 405 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Data and datasets
 
 | Data | Status |
 |---|---|
-| Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, each with structured terms that cite clauses | In use |
-| Eight synthetic golden claim packets (claim forms, bills, estimates, discharge summaries, police reports; one as PDF) | In use |
+| Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, HOME-GUARD 2025.1, TRV-GLOBE 2025.1, each with structured terms that cite clauses | In use |
+| 15 synthetic golden claim packets across the four lines (claim forms, bills, estimates, discharge summaries, police reports, surveyor loss assessments, travel expense statements, airline irregularity reports; one as PDF) | In use |
 | 1,000-claim synthetic portfolio with labelled injected anomaly patterns | In use for analytics and rule evaluation |
 | IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with publication date, URL, licence status and intended use; not downloaded in this build |
 
@@ -191,14 +201,14 @@ frontend/src/    React + TypeScript UI (pages/, components/, api.ts)
 data/            synthetic policies, claim packets, portfolio, source registry, generator
 docs/            blueprint, status, architecture, decisions, deployment, validation report, screenshots
 e2e/             Playwright browser tests (run against a running stack)
-reports/         golden evaluation report and RAG ingestion manifest
+reports/         golden evaluation, results on every claim packet, RAG ingestion manifest
 references/      supporting planning documents
-scripts/         smoke_test.py, evaluate.py, provenance.py
+scripts/         smoke_test.py, evaluate.py, claims_report.py, provenance.py
 ```
 
 ## Roadmap
 
-Single sign-on (Azure AD / OIDC) and user management, OCR for scanned images, embedding retriever as a third ranker, ingestion of the registered IRDAI circulars into the RAG corpus, ML fraud model on the Figshare dataset, property and travel lines, background job queue, Azure AI Search, Key Vault and Application Insights. Status and next actions: [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
+Single sign-on (Azure AD / OIDC) and user management, OCR for scanned images, embedding retriever as a third ranker, ingestion of the registered IRDAI circulars into the RAG corpus, ML fraud model on the Figshare dataset, more property perils and travel benefits (third-party liability, trip delay), background job queue, Azure AI Search, Key Vault and Application Insights. Status and next actions: [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
 
 ## Disclaimer
 

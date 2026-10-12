@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 
 from .. import analytics, letters, llm, provenance, sla
 from ..agents import audit
+from ..agents.document import AMOUNT_FIELDS
 from ..agents.intake import CORRECTABLE, CORRECTION, SINGLE_VALUE, consolidate
 from ..agents.review import ACTIONS, apply_review
 from ..agents.supervisor import analyze_claim
@@ -103,11 +104,14 @@ def me(user: User = Depends(current_user)):
 # ------------------------------------------------------------------ claims
 class ClaimIn(BaseModel):
     policy_number: str = Field(min_length=3, max_length=40)
-    claim_type: str = Field(pattern="^(health|motor)$")
+    claim_type: str = Field(pattern="^(health|motor|property|travel)$")
     claimant_name: str = Field(min_length=2, max_length=200)
     incident_date: date | None = None
     claimed_amount: Decimal | None = Field(default=None, ge=0)
     description: str = Field(default="", max_length=4000)
+
+
+CLAIM_PREFIX = {"health": "CLM-H", "motor": "CLM-M", "property": "CLM-P", "travel": "CLM-T"}
 
 
 def _clock(db: Session, c: Claim) -> dict:
@@ -130,7 +134,7 @@ def create_claim(body: ClaimIn, db: Session = Depends(get_db), user: User = Depe
     if db.query(InsuredPolicy).filter_by(policy_number=body.policy_number).first() is None:
         raise HTTPException(422, f"Policy number {body.policy_number} is not in the policy register")
     n = (db.query(func.count(Claim.id)).scalar() or 0) + 1
-    prefix = "CLM-H" if body.claim_type == "health" else "CLM-M"
+    prefix = CLAIM_PREFIX[body.claim_type]
     number = f"{prefix}-{3000 + n}"
     while db.query(Claim).filter_by(claim_number=number).first():
         n += 1
@@ -225,13 +229,13 @@ def correct_fact(claim_number: str, body: FactCorrectionIn, db: Session = Depend
     try:
         if body.name.endswith("_date") or body.name == "licence_valid_till":
             value = date.fromisoformat(value).isoformat()
-        elif body.name == "claimed_amount":
+        elif body.name in AMOUNT_FIELDS:
             amount = Decimal(value.replace(",", ""))
             if amount < 0 or not amount.is_finite():
                 raise ValueError
             value = str(amount.quantize(Decimal("0.01")))
     except (ValueError, ArithmeticError) as exc:
-        kind = "a date as YYYY-MM-DD" if body.name != "claimed_amount" else "a non-negative amount"
+        kind = "a non-negative amount" if body.name in AMOUNT_FIELDS else "a date as YYYY-MM-DD"
         raise HTTPException(422, f"{words_label(body.name)} must be {kind}") from exc
     facts = db.query(ClaimFact).filter_by(claim_id=c.id).all()
     before = consolidate(facts, {d.id: d.doc_type for d in c.documents})[0].get(body.name)

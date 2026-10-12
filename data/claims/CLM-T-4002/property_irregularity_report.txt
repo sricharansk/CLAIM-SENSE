@@ -1,0 +1,8 @@
+PROPERTY IRREGULARITY REPORT (AIRLINE)
+SYNTHETIC DEMO DOCUMENT
+
+PIR Reference: LHRSY12345
+Name: Neha Kapoor
+
+Remarks:
+Bag tag traced to the transfer point. Declared permanently lost on 2025-10-26.

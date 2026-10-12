@@ -1,0 +1,21 @@
+SURVEYOR'S LOSS ASSESSMENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Deccan Loss Surveyors (fictional)
+Survey Reference: SV-3001
+Incident Date: 2025-08-21
+Patient/Insured Name: Anita Desai
+
+Itemised Charges:
+Kitchen Wall and Ceiling Plaster Repair                        145,000.00
+Kitchen Platform Rebuild (granite and masonry)                  98,000.00
+Electrical Wiring Replacement                                   42,000.00
+Refrigerator (double door)                                      58,000.00
+Microwave Oven                                                  14,000.00
+Sofa Set and Curtains                                           66,000.00
+Debris Removal and Repainting                                   27,000.00
+
+Total Amount                                                   450,000.00
+
+Surveyor Observations:
+Fire originated at the refrigerator power point. Cause is accidental. Rebuilding cost of the house and contents as new is assessed at INR 30 lakh against a sum insured of INR 25 lakh.

@@ -1,0 +1,13 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Interlaken, Switzerland
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Aditya Joshi
+
+Itemised Charges:
+Emergency Treatment and Casting                                 95,000.00
+Hospital Room Charges (2 days)                                  84,000.00
+X-Ray and Diagnostic Imaging                                    22,000.00
+
+Total Amount                                                   201,000.00

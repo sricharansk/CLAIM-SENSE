@@ -4,7 +4,7 @@
   "sources": [
     {
       "id": "synthetic-policy-corpus",
-      "name": "Synthetic policy wordings and structured terms (HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1)",
+      "name": "Synthetic policy wordings and structured terms (HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, HOME-GUARD 2025.1, TRV-GLOBE 2025.1)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_policies",
@@ -26,10 +26,14 @@
         "data/policies/HLT-SHIELD_2025.1.terms.json",
         "data/policies/MTR-SECURE_2025.1.md",
         "data/policies/MTR-SECURE_2025.1.terms.json",
+        "data/policies/HOME-GUARD_2025.1.md",
+        "data/policies/HOME-GUARD_2025.1.terms.json",
+        "data/policies/TRV-GLOBE_2025.1.md",
+        "data/policies/TRV-GLOBE_2025.1.terms.json",
         "data/policies/insured_policies.json"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "7e829eade7f773598085ef0485cd834a7c838b5af0c7592174c0b5dadc7866ab"
+      "checksum_sha256": "4b0e38a28c88ab0bb9d8dfa44abe3bb1bc924d3e2e5ebcda2d05b4368f999c52"
     },
     {
       "id": "synthetic-policy-pdf-demo",
@@ -56,7 +60,7 @@
     },
     {
       "id": "synthetic-golden-claims",
-      "name": "Synthetic golden claim packets (8 scenarios and the demo upload)",
+      "name": "Synthetic golden claim packets (15 scenarios across health, motor, property and travel, and the demo upload)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_claims",
@@ -75,7 +79,7 @@
         "data/claims"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "cdc377be178a613bbf214da6ff169d19e51746146e252b2f1de3646c1adbefb2"
+      "checksum_sha256": "0f235a5efbcde327fa7de31bc66a8b8e95c1b74201a786d7b48323dceccac56b"
     },
     {
       "id": "synthetic-claims-portfolio",
@@ -102,7 +106,7 @@
     },
     {
       "id": "golden-evaluation-set",
-      "name": "Golden evaluation set (12 claim cases, 21 policy questions, 4 fresh packets)",
+      "name": "Golden evaluation set (22 claim cases, 26 policy questions, 7 fresh packets)",
       "publisher": "Claim Sense (hand-worked expectations; generated packets)",
       "source_type": "synthetic",
       "data_type": "evaluation",
@@ -120,7 +124,7 @@
         "data/evaluation"
       ],
       "transformation_script": "data/synthetic/generate.py (packets); golden_cases.json and rag_questions.json written by hand",
-      "checksum_sha256": "2dde897ba923867ff0558c8e53e4e62117c1b93a399bd1233e4ddf1fff4fb632"
+      "checksum_sha256": "9b8164112346f2d46a70d66f2dca70c3b9305e5029b5ddedf82934ff9dcadd08"
     },
     {
       "id": "irdai-mc-health-2024",

@@ -245,6 +245,194 @@ def motor_terms() -> dict:
     }
 
 
+
+# -------------------------------------------------------------- property ---
+def property_wording() -> str:
+    return f"""# ClaimSense Home Guard — Householder's Package Policy Wording (Version 2025.1)
+
+<!-- page: 1 -->
+## 1. Preamble and Definitions
+
+### 1.1 Insurer and Policy
+This policy is issued by {INSURER}. Product code HOME-GUARD, wording version 2025.1, effective for policies incepting from 2024-04-01 to 2026-03-31. {NOTICE}
+
+### 1.2 Sum Insured
+The sum insured is the amount stated in the schedule for the building and its contents together. The insurer's liability in any one claim shall not exceed the sum insured.
+
+### 1.3 Value at Risk
+Value at risk means the full cost of rebuilding the building and of replacing the contents as new at the time of loss, as declared in the claim form and verified by the surveyor.
+
+<!-- page: 2 -->
+## 2. Coverage
+
+### 2.1 Insured Perils
+The insurer will indemnify sudden and accidental physical loss of or damage to the insured building and contents caused by fire, lightning, explosion, storm, cyclone, flood, inundation, earthquake, bursting or overflowing of water tanks and pipes, and burglary or housebreaking involving forcible entry.
+
+### 2.2 Depreciation on Contents
+Contents are indemnified at replacement cost less depreciation: 20% on electronic and electrical appliances and 10% on furniture and furnishings. Repairs to the building are payable without depreciation.
+
+### 2.3 Underinsurance (Average Clause)
+If the value at risk at the time of loss exceeds the sum insured by more than 15%, the insured shall be considered their own insurer for the difference, and the assessed loss shall be reduced in the proportion that the sum insured bears to the value at risk.
+
+<!-- page: 3 -->
+## 3. Exclusions
+
+### 3.1 Gradual Deterioration
+Loss or damage caused by wear and tear, gradual deterioration, seepage, dampness, leakage over a period of time, termites or vermin is not payable.
+
+### 3.2 Wilful Act
+Loss or damage caused by a wilful, intentional or fraudulent act of the insured or a member of the household is not payable.
+
+### 3.3 Unoccupied Premises
+Loss or damage occurring while the premises have been unoccupied for more than 60 consecutive days is not payable unless the insurer has agreed in writing.
+
+### 3.4 War and Nuclear Risks
+Loss or damage caused by an act of war, invasion, nuclear reaction or radioactive contamination is not payable.
+
+### 3.5 Valuables Not Covered
+Jewellery, gold, bullion, cash, cheques and documents are not covered unless specifically listed in the schedule with a separate sum insured.
+
+<!-- page: 4 -->
+## 4. Cost Sharing
+
+### 4.1 Excess
+An excess of INR 10,000 applies to each claim and is borne by the insured.
+
+<!-- page: 5 -->
+## 5. Claims Procedure
+
+### 5.1 Claim Intimation
+The insured must notify the insurer within 7 days of the loss. Burglary, theft and malicious damage must also be reported to the police immediately.
+
+### 5.2 Documents Required
+A claim must include the claim form and the surveyor's loss assessment with an itemised breakup of the loss. A police report (FIR) is also required for burglary, housebreaking, theft or malicious damage.
+
+### 5.3 Claim Settlement
+The insurer will settle or reject the claim within 30 days of receiving the surveyor's final report and all necessary documents.
+"""
+
+
+def property_terms() -> dict:
+    return {
+        "product_code": "HOME-GUARD", "product_name": "ClaimSense Home Guard", "line_of_business": "property",
+        "insurer": INSURER, "version": "2025.1", "effective_from": "2024-04-01", "effective_to": "2026-03-31",
+        "deductible": {"amount": 10000, "clause": "4.1"},
+        "depreciation": {"clause": "2.2", "flat_percent": {"contents_electronics": 20, "contents_furniture": 10}},
+        "underinsurance": {"clause": "2.3", "tolerance_percent": 15},
+        "max_liability_clause": "1.2",
+        "exclusions": [
+            {"code": "EXCL_GRADUAL_DETERIORATION", "clause": "3.1",
+             "keywords": ["gradual deterioration", "wear and tear", "seepage", "dampness", "termite", "vermin"]},
+            {"code": "EXCL_WILFUL_ACT", "clause": "3.2", "keywords": ["wilful", "intentional", "deliberately set"]},
+            {"code": "EXCL_UNOCCUPIED", "clause": "3.3", "keywords": ["unoccupied", "lying vacant"]},
+            {"code": "EXCL_WAR_NUCLEAR", "clause": "3.4", "keywords": ["act of war", "invasion", "nuclear", "radioactive"]},
+        ],
+        "non_payable_categories": {"valuables": "3.5"},
+        "required_documents": {"documents": ["claim_form", "loss_assessment"], "clause": "5.2"},
+        "conditional_documents": [{"document": "police_report", "keywords": ["burglary", "housebreaking", "theft", "stolen"]}],
+        "settlement_days": {"value": 30, "clause": "5.3"},
+        "coverage_clause": "2.1",
+    }
+
+
+# ---------------------------------------------------------------- travel ---
+def travel_wording() -> str:
+    return f"""# ClaimSense Travel Globe — Overseas Travel Insurance Policy Wording (Version 2025.1)
+
+<!-- page: 1 -->
+## 1. Preamble and Definitions
+
+### 1.1 Insurer and Policy
+This policy is issued by {INSURER}. Product code TRV-GLOBE, wording version 2025.1, effective for policies incepting from 2025-04-01 to 2026-03-31. {NOTICE}
+
+### 1.2 Sum Insured
+The sum insured is the amount stated in the schedule. The insurer's liability for all claims arising from one trip shall not exceed the sum insured.
+
+### 1.3 Period of Cover
+Cover for a trip operates from the departure date to the return date stated in the schedule or claim form. An event before the departure date or after the return date is not covered.
+
+### 1.4 Currency
+Claims are assessed and paid in Indian rupees. Expenses incurred in a foreign currency are converted at the reference rate on the date of loss, as shown in the expense statement.
+
+<!-- page: 2 -->
+## 2. Benefits
+
+### 2.1 Emergency Medical Expenses
+The insurer will pay reasonable and customary charges for emergency medical treatment of a sudden illness or accidental injury during the trip, including hospital room, physician and surgeon fees, medicines, diagnostic tests and emergency ambulance.
+
+### 2.2 Trip Cancellation and Interruption
+The insurer will reimburse non-refundable airfare, hotel and tour package costs when the trip is cancelled or cut short because of serious illness, injury or death of the insured or an immediate family member, a natural disaster, or closure of an airport by the authorities, up to INR 1,50,000 per trip.
+
+### 2.3 Checked Baggage Loss
+The insurer will pay for checked baggage permanently lost by the airline up to INR 1,00,000 per trip, subject to a maximum of INR 25,000 for any one item, pair or set. A property irregularity report from the airline is required.
+
+### 2.4 Non-payable Items
+Personal comfort items such as toiletries, telephone calls and laundry during treatment are not payable.
+
+<!-- page: 3 -->
+## 3. Exclusions
+
+### 3.1 Pre-existing Conditions
+Treatment of a pre-existing condition, or of any condition for which the insured was under treatment before departure, is not covered.
+
+### 3.2 Hazardous Sports
+Injury sustained while taking part in paragliding, skydiving, bungee jumping, scuba diving, mountaineering or motor racing is not covered.
+
+### 3.3 Alcohol and Drugs
+Any claim arising while the insured is under the influence of alcohol or drugs not prescribed by a doctor is not covered.
+
+### 3.4 Travel Against Medical Advice
+Any claim arising from a trip undertaken against medical advice or for the purpose of obtaining medical treatment is not covered.
+
+<!-- page: 4 -->
+## 4. Cost Sharing
+
+### 4.1 Deductible
+A deductible of INR 5,000 applies to each claim and is borne by the insured.
+
+<!-- page: 5 -->
+## 5. Claims Procedure
+
+### 5.1 Claim Intimation
+The insured must notify the assistance service within 48 hours of a hospital admission and the insurer within 30 days of returning to India.
+
+### 5.2 Documents Required
+A claim must include the claim form, an itemised expense statement with invoices, and proof of travel such as boarding passes or passport stamps. A medical report from the treating doctor is required for medical claims, and a property irregularity report from the airline for baggage claims.
+
+### 5.3 Claim Settlement
+The insurer will settle or reject the claim within 30 days of receiving all necessary documents.
+"""
+
+
+def travel_terms() -> dict:
+    return {
+        "product_code": "TRV-GLOBE", "product_name": "ClaimSense Travel Globe", "line_of_business": "travel",
+        "insurer": INSURER, "version": "2025.1", "effective_from": "2025-04-01", "effective_to": "2026-03-31",
+        "trip_based": True, "trip_period_clause": "1.3",
+        "deductible": {"amount": 5000, "clause": "4.1"},
+        "benefit_limits": {
+            "trip_cancellation": {"amount": 150000, "clause": "2.2", "categories": ["trip_cancellation"]},
+            "checked_baggage": {"amount": 100000, "per_item": 25000, "clause": "2.3", "categories": ["baggage_item"]},
+        },
+        "max_liability_clause": "1.2",
+        "exclusions": [
+            {"code": "EXCL_PRE_EXISTING", "clause": "3.1", "keywords": ["pre-existing", "under treatment before departure"]},
+            {"code": "EXCL_HAZARDOUS_SPORTS", "clause": "3.2",
+             "keywords": ["paragliding", "skydiving", "bungee", "scuba", "mountaineering", "motor racing"]},
+            {"code": "EXCL_ALCOHOL", "clause": "3.3", "keywords": ["alcohol", "intoxicated", "drunk"]},
+            {"code": "EXCL_AGAINST_ADVICE", "clause": "3.4", "keywords": ["against medical advice", "travelled for treatment"]},
+        ],
+        "non_payable_categories": {"personal_comfort": "2.4"},
+        "required_documents": {"documents": ["claim_form", "expense_statement", "travel_proof"], "clause": "5.2"},
+        "conditional_documents": [
+            {"document": "medical_report", "keywords": ["hospital", "admitted", "surgery", "operated"]},
+            {"document": "property_irregularity_report", "keywords": ["baggage", "suitcase"]},
+        ],
+        "settlement_days": {"value": 30, "clause": "5.3"},
+        "coverage_clause": "2.1",
+    }
+
+
 INSURED = [
     # policy_number, product, holder, start, end, sum insured
     ("CS-HLT-24-000117", "HLT-SHIELD", "Ravi Kumar", "2024-06-01", "2026-05-31", 500000),
@@ -254,6 +442,14 @@ INSURED = [
     ("CS-HLT-24-000233", "HLT-SHIELD", "Suresh Nair", "2024-01-20", "2026-01-19", 300000),
     ("CS-MTR-25-001204", "MTR-SECURE", "Priya Sharma", "2025-04-15", "2026-04-14", 650000),
     ("CS-MTR-25-001377", "MTR-SECURE", "Karthik Rao", "2025-06-01", "2026-05-31", 480000),
+    ("CS-HOM-25-003101", "HOME-GUARD", "Anita Desai", "2025-01-10", "2026-01-09", 2500000),
+    ("CS-HOM-24-003145", "HOME-GUARD", "Vikram Singh", "2024-11-01", "2025-10-31", 1200000),
+    ("CS-HOM-24-002877", "HOME-GUARD", "Lakshmi Menon", "2024-07-01", "2026-06-30", 1800000),
+    ("CS-TRV-25-004410", "TRV-GLOBE", "Rahul Verma", "2025-09-01", "2025-09-20", 4000000),
+    ("CS-TRV-25-004468", "TRV-GLOBE", "Neha Kapoor", "2025-04-01", "2026-03-31", 4000000),
+    ("CS-TRV-25-004502", "TRV-GLOBE", "Aditya Joshi", "2025-08-10", "2025-08-24", 4000000),
+    ("CS-TRV-25-004533", "TRV-GLOBE", "Sana Qureshi", "2025-11-02", "2025-11-12", 4000000),
+    ("CS-TRV-25-004588", "TRV-GLOBE", "Kavya Reddy", "2025-06-01", "2026-05-31", 4000000),
 ]
 
 
@@ -297,6 +493,60 @@ def licence(c: dict) -> str:
     return "\n".join(["DRIVING LICENCE (COPY)", "SYNTHETIC DEMO DOCUMENT", "",
                       f"Name: {c['claimant']}", "Licence Number: KA01-2016-00SYN" + str(c['claim_number'][-2:]),
                       "Valid Till: 2036-03-31", "Class: LMV"]) + "\n"
+
+
+def loss_assessment(c: dict) -> str:
+    body = bill("SURVEYOR'S LOSS ASSESSMENT REPORT", c, c["items"],
+                {"Surveyor": "Deccan Loss Surveyors (fictional)", "Survey Reference": f"SV-{c['claim_number'][-4:]}",
+                 "Incident Date": c["incident_date"]})
+    return body + "\nSurveyor Observations:\n" + c["survey"] + "\n"
+
+
+def property_police_report(c: dict) -> str:
+    return "\n".join(["POLICE REPORT (FIR COPY)", "SYNTHETIC DEMO DOCUMENT", "", f"FIR Number: {c['fir']}",
+                      f"Incident Date: {c['incident_date']}", "", "Findings:", c["police"]]) + "\n"
+
+
+def expense_statement(c: dict) -> str:
+    return bill("CLAIM EXPENSE STATEMENT", c, c["items"],
+                {"Destination": c["form_extra"]["Destination"],
+                 "Currency": "Amounts in INR, converted at the reference rate on the date of loss"})
+
+
+def medical_report(c: dict) -> str:
+    m = c["medical"]
+    return "\n".join(["MEDICAL REPORT FROM TREATING DOCTOR", "SYNTHETIC DEMO DOCUMENT", "", f"Hospital: {m['hospital']}",
+                      f"Patient Name: {c['claimant']}", f"Admission Date: {m['admit']}", f"Discharge Date: {m['disch']}",
+                      f"Diagnosis: {m['diagnosis']}", f"Procedure: {m['procedure']}", "", "Clinical Notes:", m["notes"]]) + "\n"
+
+
+def irregularity_report(c: dict) -> str:
+    return "\n".join(["PROPERTY IRREGULARITY REPORT (AIRLINE)", "SYNTHETIC DEMO DOCUMENT", "",
+                      f"PIR Reference: {c['pir_ref']}", f"Name: {c['claimant']}", "", "Remarks:", c["pir"]]) + "\n"
+
+
+def travel_proof(c: dict) -> str:
+    f = c["form_extra"]
+    return "\n".join(["PROOF OF TRAVEL - BOARDING PASSES AND PASSPORT STAMPS", "SYNTHETIC DEMO DOCUMENT", "",
+                      f"Name: {c['claimant']}", f"Destination: {f['Destination']}", f"Departure Date: {f['Departure Date']}",
+                      f"Return Date: {f['Return Date']}"]) + "\n"
+
+
+def line_documents(c: dict) -> dict[str, str]:
+    """Documents for the property and travel lines; health and motor packets are built in write_claim_packets."""
+    files = {"claim_form.txt": claim_form(c)}
+    if c["claim_type"] == "property":
+        files["loss_assessment.txt"] = loss_assessment(c)
+        if c.get("police"):
+            files["police_report.txt"] = property_police_report(c)
+    else:
+        files["expense_statement.txt"] = expense_statement(c)
+        files["travel_proof.txt"] = travel_proof(c)
+        if c.get("medical"):
+            files["medical_report.txt"] = medical_report(c)
+        if c.get("pir"):
+            files["property_irregularity_report.txt"] = irregularity_report(c)
+    return files
 
 
 def golden_claims() -> list[dict]:
@@ -365,6 +615,67 @@ def golden_claims() -> list[dict]:
                   items=[("Front Bumper (plastic) - replace", 14500), ("Bonnet (metal) - replace", 31000),
                          ("Headlamp Assembly (plastic)", 11000), ("Denting and Fitting Labour", 9000)],
                   expected="RECOMMEND_REJECT", story="Driving under the influence exclusion (clause 3.1)"))
+    S.append(dict(claim_number="CLM-P-3001", claim_type="property", policy_number="CS-HOM-25-003101", claimant="Anita Desai",
+                  incident_date="2025-08-21",
+                  form_extra={"Property Address": "14 Lake View Road, Pune (fictional)", "Value of Property at Risk": "INR 3,000,000.00"},
+                  narrative="A fire started in the kitchen after an electrical short circuit; the kitchen, part of the living room and several appliances were damaged.",
+                  items=[("Kitchen Wall and Ceiling Plaster Repair", 145000), ("Kitchen Platform Rebuild (granite and masonry)", 98000),
+                         ("Electrical Wiring Replacement", 42000), ("Refrigerator (double door)", 58000), ("Microwave Oven", 14000),
+                         ("Sofa Set and Curtains", 66000), ("Debris Removal and Repainting", 27000)],
+                  survey="Fire originated at the refrigerator power point. Cause is accidental. Rebuilding cost of the house and contents as new is assessed at INR 30 lakh against a sum insured of INR 25 lakh.",
+                  expected="PARTIAL_APPROVAL", story="Fire loss with contents depreciation and the average clause for underinsurance (2.3)"))
+    S.append(dict(claim_number="CLM-P-3002", claim_type="property", policy_number="CS-HOM-24-003145", claimant="Vikram Singh",
+                  incident_date="2025-06-14", fir="FIR-SYN-0614-31",
+                  form_extra={"Property Address": "7 Palm Grove, Jaipur (fictional)", "Value of Property at Risk": "INR 1,100,000.00"},
+                  narrative="The house was broken into while the family was away for the weekend; the rear door lock was forced and electronics and jewellery were stolen.",
+                  items=[("Laptop Computer", 85000), ("LED Television 55 inch", 62000), ("Gold Jewellery (unscheduled)", 140000),
+                         ("Rear Door Lock and Frame Repair", 18000)],
+                  survey="Forced entry through the rear door is confirmed. Stolen items are supported by purchase invoices.",
+                  police="Forced entry through the rear door confirmed. Case registered for housebreaking and theft.",
+                  expected="PARTIAL_APPROVAL", story="Burglary: unscheduled jewellery not covered (3.5), depreciation on electronics, excess"))
+    S.append(dict(claim_number="CLM-P-3003", claim_type="property", policy_number="CS-HOM-24-002877", claimant="Lakshmi Menon",
+                  incident_date="2025-09-30",
+                  form_extra={"Property Address": "22 Temple Street, Kochi (fictional)", "Value of Property at Risk": "INR 1,600,000.00"},
+                  narrative="Damp patches and peeling plaster were noticed on the bedroom wall and ceiling after the monsoon.",
+                  items=[("Bedroom Wall Plaster and Repaint", 38000), ("Ceiling Repair", 24000), ("Wardrobe Panel Replacement", 21000)],
+                  survey="Damage is due to long-term seepage through the terrace slab and gradual deterioration of the waterproofing. No sudden bursting of pipes or tanks was found.",
+                  expected="RECOMMEND_REJECT", story="Seepage and gradual deterioration exclusion (3.1)"))
+    S.append(dict(claim_number="CLM-T-4001", claim_type="travel", policy_number="CS-TRV-25-004410", claimant="Rahul Verma",
+                  incident_date="2025-09-09",
+                  form_extra={"Destination": "Singapore", "Departure Date": "2025-09-01", "Return Date": "2025-09-20"},
+                  narrative="Severe abdominal pain during a business trip; admitted through emergency and operated for acute appendicitis.",
+                  items=[("Emergency Room Assessment", 28000), ("Hospital Room Charges (3 days)", 126000),
+                         ("Surgeon and Anaesthetist Fees", 210000), ("Pharmacy and Medicines", 34000),
+                         ("Laboratory and CT Scan", 41000), ("Telephone and Toiletries", 3500)],
+                  medical=dict(hospital="Marina Bay General Hospital (fictional)", admit="2025-09-09", disch="2025-09-12",
+                               diagnosis="Acute appendicitis", procedure="Laparoscopic appendicectomy",
+                               notes="No history of abdominal complaints before travel. Fit to fly on 2025-09-15."),
+                  expected="PARTIAL_APPROVAL", story="Emergency surgery abroad: personal comfort items not payable (2.4), deductible"))
+    S.append(dict(claim_number="CLM-T-4002", claim_type="travel", policy_number="CS-TRV-25-004468", claimant="Neha Kapoor",
+                  incident_date="2025-10-05",
+                  form_extra={"Destination": "London", "Departure Date": "2025-10-05", "Return Date": "2025-10-19"},
+                  narrative="Checked suitcase did not arrive at London Heathrow and was declared lost by the airline after 21 days.",
+                  items=[("Checked Suitcase (hard shell)", 18000), ("Laptop Computer", 85000), ("Clothing", 24000),
+                         ("Camera with Lens", 40000), ("Shoes and Accessories", 14000)],
+                  pir_ref="LHRSY12345",
+                  pir="Bag tag traced to the transfer point. Declared permanently lost on 2025-10-26.",
+                  expected="PARTIAL_APPROVAL", story="Lost baggage: per-item limit and per-trip baggage limit (2.3)"))
+    S.append(dict(claim_number="CLM-T-4003", claim_type="travel", policy_number="CS-TRV-25-004502", claimant="Aditya Joshi",
+                  incident_date="2025-08-17",
+                  form_extra={"Destination": "Interlaken, Switzerland", "Departure Date": "2025-08-10", "Return Date": "2025-08-24"},
+                  narrative="Injured in a paragliding accident near Interlaken; fractured left ankle and treated in hospital.",
+                  items=[("Emergency Treatment and Casting", 95000), ("Hospital Room Charges (2 days)", 84000),
+                         ("X-Ray and Diagnostic Imaging", 22000)],
+                  medical=dict(hospital="Bernese Oberland Clinic (fictional)", admit="2025-08-17", disch="2025-08-19",
+                               diagnosis="Fracture of left ankle", procedure="Closed reduction and casting",
+                               notes="Injury sustained during a tandem paragliding flight."),
+                  expected="RECOMMEND_REJECT", story="Hazardous sports exclusion (3.2)"))
+    S.append(dict(claim_number="CLM-T-4004", claim_type="travel", policy_number="CS-TRV-25-004533", claimant="Sana Qureshi",
+                  incident_date="2025-11-02",
+                  form_extra={"Destination": "Dubai", "Departure Date": "2025-11-02", "Return Date": "2025-11-12"},
+                  narrative="Checked baggage was lost on arrival at Dubai; the airline has not traced it.",
+                  items=[("Checked Suitcase", 12000), ("Clothing", 22000), ("Shoes and Accessories", 9000)],
+                  expected="REQUEST_INFO", story="Baggage claim without the airline's property irregularity report (5.2)"))
     return S
 
 
@@ -377,7 +688,9 @@ def write_claim_packets() -> list[dict]:
         c.setdefault("form_amount", total)
         files = {}
         files["claim_form.txt"] = claim_form(c)
-        if c["claim_type"] == "health":
+        if c["claim_type"] in ("property", "travel"):
+            files.update(line_documents(c))
+        elif c["claim_type"] == "health":
             files["hospital_bill.txt"] = bill("FINAL HOSPITAL BILL", c, c["items"],
                                               {"Hospital": c["hospital"], "Bill Number": f"HB-{c['claim_number'][-4:]}",
                                                "Admission Date": c["admit"], "Discharge Date": c["disch"]})
@@ -449,6 +762,22 @@ def evaluation_claims() -> list[dict]:
                       narrative="High-grade fever with body ache; admitted for viral fever with low platelets.",
                       items=viral, admit=day, disch=disch, diagnosis="Viral fever with thrombocytopenia",
                       procedure="Medical management", notes="Platelets recovered. Discharged."))
+    E.append(dict(claim_number="EVAL-P-01", claim_type="property", policy_number="CS-HOM-24-002877", claimant="Lakshmi Menon",
+                  incident_date="2025-07-14",
+                  form_extra={"Property Address": "22 Temple Street, Kochi (fictional)", "Value of Property at Risk": "INR 1,600,000.00"},
+                  narrative="A storm with high winds blew off part of the roof and damaged the ceiling of the living room.",
+                  items=[("Roof Sheet Replacement", 46000), ("Ceiling Plaster Repair", 19000), ("Debris Removal", 6000)],
+                  survey="Storm damage is confirmed by the weather bulletin for the date of loss. Repairs are reasonable."))
+    E.append(dict(claim_number="EVAL-T-01", claim_type="travel", policy_number="CS-TRV-25-004588", claimant="Kavya Reddy",
+                  incident_date="2025-12-20",
+                  form_extra={"Destination": "Tokyo", "Departure Date": "2025-12-20", "Return Date": "2026-01-03"},
+                  narrative="The departure flight to Tokyo was cancelled after the airport was closed by the authorities for a cyclone; the trip could not be taken.",
+                  items=[("Non-refundable Airfare", 112000), ("Hotel Booking (non-refundable)", 68000)]))
+    E.append(dict(claim_number="EVAL-T-02", claim_type="travel", policy_number="CS-TRV-25-004588", claimant="Kavya Reddy",
+                  incident_date="2026-02-12",
+                  form_extra={"Destination": "Bangkok", "Departure Date": "2026-02-02", "Return Date": "2026-02-09"},
+                  narrative="Treated at a clinic for a sprained knee three days after the trip ended, during an extended personal stay in Bangkok.",
+                  items=[("Clinic Consultation and X-Ray", 9500), ("Pharmacy and Medicines", 2500)]))
     return E
 
 
@@ -457,6 +786,10 @@ def write_evaluation_packets() -> None:
         d = EVAL / c["claim_number"]
         d.mkdir(parents=True, exist_ok=True)
         c["form_amount"] = sum(a for _, a in c["items"])
+        if c["claim_type"] in ("property", "travel"):
+            for name, body in line_documents(c).items():
+                (d / name).write_text(body, encoding="utf-8")
+            continue
         (d / "claim_form.txt").write_text(claim_form(c), encoding="utf-8")
         (d / "hospital_bill.txt").write_text(bill("FINAL HOSPITAL BILL", c, c["items"],
                                                   {"Hospital": c["hospital"], "Bill Number": f"HB-{c['claim_number'][-4:]}",
@@ -591,6 +924,10 @@ def main() -> None:
         (POL / f"HLT-SHIELD_{v}.terms.json").write_text(json.dumps(health_terms(v, p), indent=2), encoding="utf-8")
     (POL / "MTR-SECURE_2025.1.md").write_text(motor_wording(), encoding="utf-8")
     (POL / "MTR-SECURE_2025.1.terms.json").write_text(json.dumps(motor_terms(), indent=2), encoding="utf-8")
+    (POL / "HOME-GUARD_2025.1.md").write_text(property_wording(), encoding="utf-8")
+    (POL / "HOME-GUARD_2025.1.terms.json").write_text(json.dumps(property_terms(), indent=2), encoding="utf-8")
+    (POL / "TRV-GLOBE_2025.1.md").write_text(travel_wording(), encoding="utf-8")
+    (POL / "TRV-GLOBE_2025.1.terms.json").write_text(json.dumps(travel_terms(), indent=2), encoding="utf-8")
     (POL / "insured_policies.json").write_text(json.dumps([
         dict(policy_number=a, product_code=b, holder_name=c, start_date=d, end_date=e, sum_insured=f)
         for a, b, c, d, e, f in INSURED], indent=2), encoding="utf-8")

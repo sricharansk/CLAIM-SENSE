@@ -53,7 +53,8 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
             ev.append({"kind": "retrieved_clause", "used_for": "RAG_CONTEXT", "finding": "Retrieved as relevant to the diagnosis/loss", **h})
             seen.add(h["clause_id"])
     for name, src in ctx.fact_sources.items():
-        if name in ("diagnosis", "procedure", "incident_date", "claimed_amount", "police_findings", "vehicle_first_registration"):
+        if name in ("diagnosis", "procedure", "incident_date", "claimed_amount", "police_findings", "vehicle_first_registration",
+                    "value_at_risk", "survey_findings", "report_remarks", "departure_date", "return_date"):
             ev.append({"kind": "claim_fact", "used_for": name, "finding": f"{name} = {ctx.facts[name]}", **src})
     ctx.evidence = ev
     decision, reasons = recommend(ctx.coverage, ctx.risk, ctx.adjudication)
