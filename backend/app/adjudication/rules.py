@@ -48,6 +48,7 @@ class Adjudication:
     deductible: Decimal = ZERO
     copay: Decimal = ZERO
     depreciation: Decimal = ZERO
+    underinsurance: Decimal = ZERO
     payable: Decimal = ZERO
     steps: list[Step] = field(default_factory=list)
     rules_version: str = settings.rules_version
@@ -55,7 +56,8 @@ class Adjudication:
     def as_dict(self) -> dict:
         return {"claimed_amount": str(self.claimed_amount), "gross_billed": str(self.gross_billed),
                 "non_covered": str(self.non_covered), "deductible": str(self.deductible), "copay": str(self.copay),
-                "depreciation": str(self.depreciation), "payable_amount": str(self.payable),
+                "depreciation": str(self.depreciation), "underinsurance": str(self.underinsurance),
+                "payable_amount": str(self.payable),
                 "rules_version": self.rules_version, "waterfall": [s.as_dict() for s in self.steps]}
 
 
@@ -158,6 +160,89 @@ def adjudicate_motor(items: list[LineItem], claimed: Decimal, terms: dict, idv: 
     r.deductible = ded
     _cap(w, r, idv, terms.get("max_liability_clause"), "Insured declared value (IDV)")
     r.depreciation = money(r.depreciation)
+    r.payable = max(w.total, ZERO)
+    return r
+
+
+def _non_payable(w: _Waterfall, r: Adjudication, items: list[LineItem], terms: dict) -> list[LineItem]:
+    """R10: drop items in categories the wording does not pay for; returns the items still payable."""
+    non_payable = terms.get("non_payable_categories", {})
+    kept = []
+    for it in items:
+        if it.category in non_payable:
+            w.apply("R10_NON_PAYABLE", f"Non-payable item: {it.description}", -it.amount, non_payable[it.category],
+                    f"category '{it.category}' is not payable")
+            r.non_covered += it.amount
+        else:
+            kept.append(it)
+    return kept
+
+
+def adjudicate_property(items: list[LineItem], claimed: Decimal, terms: dict, sum_insured: Decimal,
+                        value_at_risk: Decimal | None) -> Adjudication:
+    """Householder claim: non-payable items, depreciation on contents, average clause for underinsurance,
+    excess, then the sum insured cap."""
+    r, w = _start(items, claimed)
+    dep = terms.get("depreciation", {})
+    for it in _non_payable(w, r, items, terms):
+        pct = dep.get("flat_percent", {}).get(it.category)
+        if pct:
+            cut = money(it.amount * Decimal(pct) / Decimal(100))
+            w.apply("R15_DEPRECIATION", f"Depreciation {pct}% on {it.description}", -cut, dep["clause"],
+                    f"category '{it.category}'")
+            r.depreciation += cut
+    avg = terms.get("underinsurance")
+    si = money(sum_insured)
+    if avg and value_at_risk:
+        var = money(value_at_risk)
+        threshold = money(si * (Decimal(100) + Decimal(str(avg["tolerance_percent"]))) / Decimal(100))
+        if var > threshold:
+            assessed = w.total
+            cut = money(assessed - assessed * si / var)
+            w.apply("R25_UNDERINSURANCE", "Average clause: property underinsured", -cut, avg["clause"],
+                    f"sum insured {si} / value at risk {var} applied to {assessed}")
+            r.underinsurance = cut
+        else:
+            r.steps.append(Step("R25_UNDERINSURANCE", "Adequately insured", ZERO, w.total, avg["clause"],
+                                f"value at risk {var} within {avg['tolerance_percent']}% of sum insured {si}"))
+    d = terms["deductible"]
+    ded = min(money(d["amount"]), max(w.total, ZERO))
+    w.apply("R30_DEDUCTIBLE", "Excess", -ded, d["clause"], f"{ded} per claim")
+    r.deductible = ded
+    _cap(w, r, si, terms.get("max_liability_clause"), "Sum insured")
+    r.non_covered, r.depreciation = money(r.non_covered), money(r.depreciation)
+    r.payable = max(w.total, ZERO)
+    return r
+
+
+def adjudicate_travel(items: list[LineItem], claimed: Decimal, terms: dict, sum_insured: Decimal) -> Adjudication:
+    """Overseas travel claim: non-payable items, per-item and per-benefit limits, deductible, sum insured cap."""
+    r, w = _start(items, claimed)
+    kept = _non_payable(w, r, items, terms)
+    for name, b in terms.get("benefit_limits", {}).items():
+        group = [it for it in kept if it.category in b["categories"]]
+        if not group:
+            continue
+        allowed_total = ZERO
+        per_item = money(b["per_item"]) if b.get("per_item") else None
+        for it in group:
+            allowed = min(it.amount, per_item) if per_item is not None else it.amount
+            if allowed < it.amount:
+                w.apply("R20_ITEM_LIMIT", f"{it.description} above per-item limit", allowed - it.amount, b["clause"],
+                        f"{name.replace('_', ' ')} per-item limit {per_item}")
+                r.non_covered += it.amount - allowed
+            allowed_total += allowed
+        limit = money(b["amount"])
+        if allowed_total > limit:
+            w.apply("R20_BENEFIT_LIMIT", f"{name.replace('_', ' ').title()} above benefit limit", limit - allowed_total,
+                    b["clause"], f"{money(allowed_total)} claimed under the benefit, limit {limit}")
+            r.non_covered += allowed_total - limit
+    d = terms["deductible"]
+    ded = min(money(d["amount"]), max(w.total, ZERO))
+    w.apply("R30_DEDUCTIBLE", "Deductible", -ded, d["clause"], f"{ded} per claim")
+    r.deductible = ded
+    _cap(w, r, sum_insured, terms.get("max_liability_clause"), "Sum insured")
+    r.non_covered = money(r.non_covered)
     r.payable = max(w.total, ZERO)
     return r
 

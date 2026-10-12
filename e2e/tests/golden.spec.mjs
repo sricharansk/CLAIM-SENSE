@@ -142,3 +142,23 @@ test("phone layout: navigation behind a menu, no sideways scrolling", async ({ p
     expect(scroll, `${path} scrolls sideways`).toBeLessThanOrEqual(client);
   }
 });
+
+test("property and travel claims are filed and assessed through the UI", async ({ page }) => {
+  const packets = fileURLToPath(new URL("../../data/claims/", import.meta.url));
+  await signIn(page, "Adjuster");
+  for (const [policy, line, folder, files, payable, rule] of [
+    ["CS-HOM-25-003101", "property", "CLM-P-3001", ["claim_form.txt", "loss_assessment.txt"], "₹3,47,500", "Average clause: property underinsured"],
+    ["CS-TRV-25-004468", "travel", "CLM-T-4002", ["claim_form.txt", "expense_statement.txt", "property_irregularity_report.txt", "travel_proof.txt"],
+      "₹95,000", "Laptop Computer above per-item limit"],
+  ]) {
+    await page.goto("/claims/new");
+    await page.locator("select").first().selectOption(policy);
+    await expect(page.locator("select").nth(1)).toHaveValue(line);
+    await page.locator("input[type=file]").setInputFiles(files.map((f) => `${packets}${folder}/${f}`));
+    await page.getByRole("button", { name: "Create, upload and analyse" }).click();
+    await expect(page.getByText("AI recommendation · requires human review")).toBeVisible({ timeout: 30_000 });
+    await expect(page.locator(".amounts .pay strong")).toHaveText(payable);
+    await page.getByRole("tab", { name: /^Adjudication/ }).click();
+    await expect(page.getByText(rule)).toBeVisible();
+  }
+});

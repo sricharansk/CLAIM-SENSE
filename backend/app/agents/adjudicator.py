@@ -35,6 +35,14 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
         avail = _available_sum_insured(ctx)
         result = rules.adjudicate_health(items, claimed, terms, avail)
         args = {"mode": "health", "sum_insured_available": str(avail)}
+    elif terms["line_of_business"] == "property":
+        var = ctx.facts.get("value_at_risk")
+        var = rules.money(var) if var else None
+        result = rules.adjudicate_property(items, claimed, terms, Decimal(ctx.insured.sum_insured), var)
+        args = {"mode": "property", "sum_insured": str(ctx.insured.sum_insured), "value_at_risk": str(var) if var else None}
+    elif terms["line_of_business"] == "travel":
+        result = rules.adjudicate_travel(items, claimed, terms, Decimal(ctx.insured.sum_insured))
+        args = {"mode": "travel", "sum_insured": str(ctx.insured.sum_insured)}
     else:
         first_reg = ctx.facts.get("vehicle_first_registration")
         age = rules.months_between(date.fromisoformat(first_reg), ctx.facts["incident_date_parsed"]) if first_reg else 999

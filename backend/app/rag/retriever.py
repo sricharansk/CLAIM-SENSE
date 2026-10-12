@@ -25,7 +25,7 @@ SYNONYMS = {
     "baby": "maternity childbirth", "plastic surgery": "cosmetic", "first year": "waiting period months",
     "car": "vehicle", "bike": "vehicle", "crash": "collision accident", "stolen": "theft",
     "hospital room": "room rent", "documents": "documents required", "paperwork": "documents required",
-    "icu": "intensive care unit",
+    "icu": "intensive care unit", "underinsured": "underinsurance average value at risk",
 }
 
 

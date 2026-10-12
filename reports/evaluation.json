@@ -1,93 +1,106 @@
 {
   "suite": "Claim Sense golden evaluation",
-  "generated_at": "2026-10-09T00:55:18+00:00",
+  "generated_at": "2026-10-12T07:17:11+00:00",
   "rules_version": "adjudication-rules/1.0.0",
   "risk_version": "risk-rules/1.0.0",
   "llm": "off (extractive answers)",
   "data": "synthetic only",
   "summary": {
-    "claim_cases": 12,
-    "claim_cases_passed": 12,
-    "questions": 21,
-    "questions_passed": 21,
-    "checks": 256,
-    "checks_passed": 256,
+    "claim_cases": 22,
+    "claim_cases_passed": 22,
+    "questions": 26,
+    "questions_passed": 26,
+    "checks": 405,
+    "checks_passed": 405,
     "retrieval_hit_at_1": 1.0,
     "retrieval_hit_at_3": 1.0,
     "mean_reciprocal_rank": 1.0,
     "refusal_accuracy": 1.0,
     "required_categories_covered": true,
-    "avg_claim_case_ms": 58,
+    "avg_claim_case_ms": 88,
     "all_passed": true
   },
   "dimensions": {
     "retrieval": {
       "label": "Retrieval correctness",
-      "passed": 39,
-      "total": 39,
+      "passed": 59,
+      "total": 59,
       "score": 1.0
     },
     "citation": {
       "label": "Citation correctness",
-      "passed": 39,
-      "total": 39,
+      "passed": 52,
+      "total": 52,
       "score": 1.0
     },
     "groundedness": {
       "label": "Groundedness",
-      "passed": 69,
-      "total": 69,
+      "passed": 94,
+      "total": 94,
       "score": 1.0
     },
     "coverage": {
       "label": "Coverage state",
-      "passed": 21,
-      "total": 21,
+      "passed": 41,
+      "total": 41,
       "score": 1.0
     },
     "adjudication": {
       "label": "Adjudication amount",
-      "passed": 37,
-      "total": 37,
+      "passed": 68,
+      "total": 68,
       "score": 1.0
     },
     "risk": {
       "label": "Risk classification",
-      "passed": 15,
-      "total": 15,
+      "passed": 25,
+      "total": 25,
       "score": 1.0
     },
     "workflow": {
       "label": "Workflow outcome",
-      "passed": 36,
-      "total": 36,
+      "passed": 66,
+      "total": 66,
       "score": 1.0
     }
   },
   "categories": {
     "clearly_covered": [
-      "C01"
+      "C01",
+      "C20"
     ],
     "excluded": [
       "C02",
-      "C03"
+      "C03",
+      "C15",
+      "C18",
+      "C22"
     ],
     "partial_coverage": [
       "C04",
-      "C05"
+      "C05",
+      "C13",
+      "C14",
+      "C16",
+      "C17"
     ],
     "insufficient_evidence": [
-      "C06"
+      "C06",
+      "C19"
     ],
     "high_risk": [
       "C07"
     ],
     "deductible": [
-      "C01"
+      "C01",
+      "C16",
+      "C20"
     ],
     "sub_limit": [
       "C04",
-      "C08"
+      "C08",
+      "C17",
+      "C21"
     ],
     "max_coverage": [
       "C09"
@@ -109,7 +122,7 @@
         "clearly_covered",
         "deductible"
       ],
-      "claim_number": "CLM-H-3009",
+      "claim_number": "CLM-H-3016",
       "source": "new packet",
       "packet": "EVAL-H-01",
       "expected": {
@@ -224,7 +237,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 111
+      "duration_ms": 144
     },
     {
       "id": "C02",
@@ -332,7 +345,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 41
+      "duration_ms": 73
     },
     {
       "id": "C03",
@@ -439,7 +452,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 42
+      "duration_ms": 66
     },
     {
       "id": "C04",
@@ -556,7 +569,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 37
+      "duration_ms": 62
     },
     {
       "id": "C05",
@@ -658,7 +671,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 36
+      "duration_ms": 52
     },
     {
       "id": "C06",
@@ -750,7 +763,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 36
+      "duration_ms": 56
     },
     {
       "id": "C07",
@@ -860,7 +873,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 37
+      "duration_ms": 69
     },
     {
       "id": "C08",
@@ -970,7 +983,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 34
+      "duration_ms": 59
     },
     {
       "id": "C09",
@@ -978,7 +991,7 @@
       "categories": [
         "max_coverage"
       ],
-      "claim_number": "CLM-H-3010",
+      "claim_number": "CLM-H-3017",
       "source": "new packet",
       "packet": "EVAL-H-02",
       "expected": {
@@ -1097,7 +1110,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 96
+      "duration_ms": 107
     },
     {
       "id": "C10",
@@ -1189,7 +1202,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 41
+      "duration_ms": 74
     },
     {
       "id": "C11",
@@ -1197,7 +1210,7 @@
       "categories": [
         "ambiguous_policy_version"
       ],
-      "claim_number": "CLM-H-3011",
+      "claim_number": "CLM-H-3018",
       "source": "new packet",
       "packet": "EVAL-H-03",
       "expected": {
@@ -1291,7 +1304,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 92
+      "duration_ms": 158
     },
     {
       "id": "C12",
@@ -1299,7 +1312,7 @@
       "categories": [
         "ambiguous_policy_version"
       ],
-      "claim_number": "CLM-H-3012",
+      "claim_number": "CLM-H-3019",
       "source": "new packet",
       "packet": "EVAL-H-04",
       "expected": {
@@ -1393,7 +1406,1088 @@
           "passed": true
         }
       ],
-      "duration_ms": 92
+      "duration_ms": 146
+    },
+    {
+      "id": "C13",
+      "title": "Home fire loss with contents depreciation and the average clause for underinsurance",
+      "categories": [
+        "partial_coverage"
+      ],
+      "claim_number": "CLM-P-3001",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "347500.00"
+      },
+      "actual": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "347500.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "450,000 assessed; depreciation 20% on refrigerator 58,000 and microwave 14,000 (11,600 + 2,800) and 10% on sofa set 66,000 (6,600) = 21,000 (2.2) -> 429,000; value at risk 30,00,000 exceeds sum insured 25,00,000 by 20%, more than 15%, so average applies (2.3): 429,000 x 25/30 = 357,500, a cut of 71,500; excess 10,000 (4.1) -> 347,500.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "COVERED",
+          "actual": "COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "347500.00",
+          "actual": "347500.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R10_NON_PAYABLE",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R15_DEPRECIATION",
+          "expected": "-21000.00",
+          "actual": "-21000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R25_UNDERINSURANCE",
+          "expected": "-71500.00",
+          "actual": "-71500.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R30_DEDUCTIBLE",
+          "expected": "-10000.00",
+          "actual": "-10000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R50_MAX_LIABILITY",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "PARTIAL_APPROVAL",
+          "actual": "PARTIAL_APPROVAL",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 74
+    },
+    {
+      "id": "C14",
+      "title": "Burglary with unscheduled jewellery, electronics depreciation and the excess",
+      "categories": [
+        "partial_coverage"
+      ],
+      "claim_number": "CLM-P-3002",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "125600.00"
+      },
+      "actual": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "125600.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "305,000 assessed; gold jewellery 140,000 not covered unless scheduled (3.5) -> 165,000; depreciation 20% on laptop 85,000 and television 62,000 = 17,000 + 12,400 = 29,400 (2.2) -> 135,600; value at risk 11,00,000 is below the 12,00,000 sum insured, no average; excess 10,000 -> 125,600. FIR present as 5.2 requires for burglary.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "COVERED",
+          "actual": "COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "125600.00",
+          "actual": "125600.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R10_NON_PAYABLE",
+          "expected": "-140000.00",
+          "actual": "-140000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R15_DEPRECIATION",
+          "expected": "-29400.00",
+          "actual": "-29400.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R25_UNDERINSURANCE",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R30_DEDUCTIBLE",
+          "expected": "-10000.00",
+          "actual": "-10000.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "PARTIAL_APPROVAL",
+          "actual": "PARTIAL_APPROVAL",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 66
+    },
+    {
+      "id": "C15",
+      "title": "Home damage from long-term seepage and gradual deterioration",
+      "categories": [
+        "excluded"
+      ],
+      "claim_number": "CLM-P-3003",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00"
+      },
+      "actual": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "Surveyor attributes the damage to seepage and gradual deterioration of waterproofing; exclusion 3.1 applies, nothing is payable.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "relevant clause retrieved",
+          "expected": "3.1",
+          "actual": [
+            "3.1",
+            "2.1",
+            "5.1",
+            "3.4",
+            "5.2"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "NOT_COVERED",
+          "actual": "NOT_COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": "EXCL_GRADUAL_DETERIORATION",
+          "actual": "EXCL_GRADUAL_DETERIORATION",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "failing check cites clause",
+          "expected": "3.1",
+          "actual": "3.1",
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "RECOMMEND_REJECT",
+          "actual": "RECOMMEND_REJECT",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 87
+    },
+    {
+      "id": "C16",
+      "title": "Emergency appendicectomy abroad with personal comfort items",
+      "categories": [
+        "partial_coverage",
+        "deductible"
+      ],
+      "claim_number": "CLM-T-4001",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "434000.00"
+      },
+      "actual": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "434000.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "442,500 billed in Singapore during the trip 2025-09-01 to 2025-09-20 (1.3); telephone and toiletries 3,500 not payable (2.4) -> 439,000; deductible 5,000 (4.1) -> 434,000; well within the 40,00,000 sum insured. Medical report present as 5.2 requires.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "COVERED",
+          "actual": "COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "434000.00",
+          "actual": "434000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R10_NON_PAYABLE",
+          "expected": "-3500.00",
+          "actual": "-3500.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R30_DEDUCTIBLE",
+          "expected": "-5000.00",
+          "actual": "-5000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R50_MAX_LIABILITY",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "PARTIAL_APPROVAL",
+          "actual": "PARTIAL_APPROVAL",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 65
+    },
+    {
+      "id": "C17",
+      "title": "Lost checked baggage above the per-item and per-trip limits",
+      "categories": [
+        "sub_limit",
+        "partial_coverage"
+      ],
+      "claim_number": "CLM-T-4002",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "95000.00"
+      },
+      "actual": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "95000.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "181,000 claimed; per-item limit 25,000 (2.3): laptop 85,000 -> 25,000 (cut 60,000), camera 40,000 -> 25,000 (cut 15,000); allowed 18,000 + 25,000 + 24,000 + 25,000 + 14,000 = 106,000, above the 1,00,000 per-trip baggage limit (cut 6,000) -> 100,000; deductible 5,000 -> 95,000.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "COVERED",
+          "actual": "COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "95000.00",
+          "actual": "95000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R20_ITEM_LIMIT",
+          "expected": "-75000.00",
+          "actual": "-75000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R20_BENEFIT_LIMIT",
+          "expected": "-6000.00",
+          "actual": "-6000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R30_DEDUCTIBLE",
+          "expected": "-5000.00",
+          "actual": "-5000.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "PARTIAL_APPROVAL",
+          "actual": "PARTIAL_APPROVAL",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 69
+    },
+    {
+      "id": "C18",
+      "title": "Ankle fracture from paragliding abroad",
+      "categories": [
+        "excluded"
+      ],
+      "claim_number": "CLM-T-4003",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00"
+      },
+      "actual": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "Injury sustained while paragliding; hazardous sports exclusion 3.2 applies, nothing is payable.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "relevant clause retrieved",
+          "expected": "3.2",
+          "actual": [
+            "3.2",
+            "3.1",
+            "2.1",
+            "5.1",
+            "3.4"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "NOT_COVERED",
+          "actual": "NOT_COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": "EXCL_HAZARDOUS_SPORTS",
+          "actual": "EXCL_HAZARDOUS_SPORTS",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "failing check cites clause",
+          "expected": "3.2",
+          "actual": "3.2",
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "RECOMMEND_REJECT",
+          "actual": "RECOMMEND_REJECT",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 72
+    },
+    {
+      "id": "C19",
+      "title": "Baggage claim without the airline's property irregularity report",
+      "categories": [
+        "insufficient_evidence"
+      ],
+      "claim_number": "CLM-T-4004",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "REQUEST_INFO",
+        "payable_amount": "38000.00"
+      },
+      "actual": {
+        "recommendation": "REQUEST_INFO",
+        "payable_amount": "38000.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "5.2 requires the airline's property irregularity report for a baggage claim and none was uploaded; the assessable amount would be 43,000 - 5,000 deductible = 38,000, but information is requested first.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "COVERED",
+          "actual": "COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "missing documents",
+          "expected": [
+            "property_irregularity_report"
+          ],
+          "actual": [
+            "property_irregularity_report"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "38000.00",
+          "actual": "38000.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "REQUEST_INFO",
+          "actual": "REQUEST_INFO",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "PENDING_INFORMATION",
+          "actual": "PENDING_INFORMATION",
+          "passed": true
+        }
+      ],
+      "duration_ms": 76
+    },
+    {
+      "id": "C20",
+      "title": "Storm damage to the roof; only the excess applies",
+      "categories": [
+        "clearly_covered",
+        "deductible"
+      ],
+      "claim_number": "CLM-P-3020",
+      "source": "new packet",
+      "packet": "EVAL-P-01",
+      "expected": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "61000.00"
+      },
+      "actual": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "61000.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "71,000 of building repairs, no depreciation on building repairs (2.2); value at risk 16,00,000 is below the 18,00,000 sum insured; excess 10,000 (4.1) -> 61,000.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "COVERED",
+          "actual": "COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "61000.00",
+          "actual": "61000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R10_NON_PAYABLE",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R15_DEPRECIATION",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R25_UNDERINSURANCE",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R30_DEDUCTIBLE",
+          "expected": "-10000.00",
+          "actual": "-10000.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "PARTIAL_APPROVAL",
+          "actual": "PARTIAL_APPROVAL",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 117
+    },
+    {
+      "id": "C21",
+      "title": "Trip cancelled by an airport closure, above the cancellation limit",
+      "categories": [
+        "sub_limit"
+      ],
+      "claim_number": "CLM-T-3021",
+      "source": "new packet",
+      "packet": "EVAL-T-01",
+      "expected": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "145000.00"
+      },
+      "actual": {
+        "recommendation": "PARTIAL_APPROVAL",
+        "payable_amount": "145000.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "Non-refundable airfare 112,000 + hotel 68,000 = 180,000; trip cancellation limit 1,50,000 (2.2) -> 150,000; deductible 5,000 -> 145,000.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "COVERED",
+          "actual": "COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": null,
+          "actual": null,
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "145000.00",
+          "actual": "145000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R20_BENEFIT_LIMIT",
+          "expected": "-30000.00",
+          "actual": "-30000.00",
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "waterfall R30_DEDUCTIBLE",
+          "expected": "-5000.00",
+          "actual": "-5000.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "PARTIAL_APPROVAL",
+          "actual": "PARTIAL_APPROVAL",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 120
+    },
+    {
+      "id": "C22",
+      "title": "Treatment three days after the insured trip ended",
+      "categories": [
+        "excluded"
+      ],
+      "claim_number": "CLM-T-3022",
+      "source": "new packet",
+      "packet": "EVAL-T-02",
+      "expected": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00"
+      },
+      "actual": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "Trip 2026-02-02 to 2026-02-09; treatment on 2026-02-12 is after the return date, outside the period of cover (1.3), although the annual policy is in force.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "NOT_COVERED",
+          "actual": "NOT_COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": "OUTSIDE_TRIP",
+          "actual": "OUTSIDE_TRIP",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "failing check cites clause",
+          "expected": "1.3",
+          "actual": "1.3",
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "RECOMMEND_REJECT",
+          "actual": "RECOMMEND_REJECT",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 118
     }
   ],
   "questions": [
@@ -1613,7 +2707,7 @@
           "actual": [
             "5.1",
             "1.2",
-            "5.2"
+            "6.2"
           ],
           "passed": true
         },
@@ -1677,7 +2771,8 @@
           "check": "expected clause in top 3",
           "expected": "5.2",
           "actual": [
-            "5.2"
+            "5.2",
+            "5.1"
           ],
           "passed": true
         },
@@ -1713,7 +2808,7 @@
           "dimension": "retrieval",
           "check": "answer contains the key term",
           "expected": "10%",
-          "actual": "A co-payment of 10% of the admissible amount remaining after the deductible is borne by the insured on every claim. [HLT-SHIELD v2025.1 \u00a75.2, p.5]",
+          "actual": "A co-payment of 10% of the admissible amount remaining after the deductible is borne by the insured on every claim. [HLT-SHIELD v2025.1 \u00a75.2, p.5] The deductibl",
           "passed": true
         }
       ]
@@ -1743,7 +2838,7 @@
           "actual": [
             "6.2",
             "1.2",
-            "6.3"
+            "2.1"
           ],
           "passed": true
         },
@@ -2539,7 +3634,7 @@
       "question": "What is the share price of the insurer today?",
       "scope": "all policies",
       "mode": "refusal",
-      "top_citation": "1.3",
+      "top_citation": "1.2",
       "expected_clause": null,
       "rank": null,
       "passed": true,
@@ -2572,7 +3667,322 @@
           "passed": true
         }
       ]
+    },
+    {
+      "id": "Q22",
+      "kind": "excluded",
+      "question": "Is gold jewellery covered if it is stolen from my house?",
+      "scope": "HOME-GUARD",
+      "mode": "extractive",
+      "top_citation": "3.5",
+      "expected_clause": "3.5",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "3.5",
+          "actual": [
+            "3.5",
+            "5.2",
+            "5.1"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "3.5",
+          "actual": "3.5",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "kind": "covered",
+      "question": "What happens to my claim if my home is underinsured?",
+      "scope": "HOME-GUARD",
+      "mode": "extractive",
+      "top_citation": "2.3",
+      "expected_clause": "2.3",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "2.3",
+          "actual": [
+            "2.3",
+            "1.3",
+            "1.1"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "2.3",
+          "actual": "2.3",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "15%",
+          "actual": "If the value at risk at the time of loss exceeds the sum insured by more than 15%, the insured shall be considered their own insurer for the difference, and the",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "kind": "covered",
+      "question": "What excess applies to each home insurance claim?",
+      "scope": "HOME-GUARD",
+      "mode": "extractive",
+      "top_citation": "4.1",
+      "expected_clause": "4.1",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "4.1",
+          "actual": [
+            "4.1",
+            "1.1"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "4.1",
+          "actual": "4.1",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "10,000",
+          "actual": "An excess of INR 10,000 applies to each claim and is borne by the insured. [HOME-GUARD v2025.1 \u00a74.1, p.4] Product code HOME-GUARD, wording version 2025.1, effec",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "kind": "covered",
+      "question": "What is the maximum paid for one item of lost checked baggage?",
+      "scope": "TRV-GLOBE",
+      "mode": "extractive",
+      "top_citation": "2.3",
+      "expected_clause": "2.3",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "2.3",
+          "actual": [
+            "2.3",
+            "5.2",
+            "2.4"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "2.3",
+          "actual": "2.3",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "answer contains the key term",
+          "expected": "25,000",
+          "actual": "The insurer will pay for checked baggage permanently lost by the airline up to INR 1,00,000 per trip, subject to a maximum of INR 25,000 for any one item, pair ",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "kind": "excluded",
+      "question": "Is an injury from paragliding covered on my trip?",
+      "scope": "TRV-GLOBE",
+      "mode": "extractive",
+      "top_citation": "3.2",
+      "expected_clause": "3.2",
+      "rank": 1,
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "groundedness",
+          "check": "answers from evidence",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "expected clause in top 3",
+          "expected": "3.2",
+          "actual": [
+            "3.2",
+            "2.2",
+            "1.3"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "top citation is the expected clause",
+          "expected": "3.2",
+          "actual": "3.2",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "citations stay within the selected policy",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "citations resolve to stored clause text",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "every quoted sentence appears in its cited clause",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        }
+      ]
     }
   ],
-  "duration_s": 0.98
+  "duration_s": 2.33
 }

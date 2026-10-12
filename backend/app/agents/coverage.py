@@ -5,11 +5,20 @@ Checks are deterministic over extracted facts and the structured terms; each fin
 from __future__ import annotations
 
 import time
+from datetime import date
 
 from ..rag import service as rag
 from .base import ClaimContext, ToolLog
 
 ACCIDENT_WORDS = ("accident", "accidental", "fall", "injury", "collision", "fracture")
+TEXT_FACTS = ("diagnosis", "procedure", "narrative", "clinical_notes", "police_findings", "survey_findings", "report_remarks")
+
+
+def _date(value) -> date | None:
+    try:
+        return date.fromisoformat(str(value))
+    except ValueError:
+        return None
 
 
 def _cite(ctx: ClaimContext, ref: str | None) -> dict | None:
@@ -23,7 +32,7 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     t = time.perf_counter()
     terms, f, ins = ctx.version.terms, ctx.facts, ctx.insured
     incident = f["incident_date_parsed"]
-    text = " ".join(str(f.get(k, "")) for k in ("diagnosis", "procedure", "narrative", "clinical_notes", "police_findings")).lower()
+    text = " ".join(str(f.get(k, "")) for k in TEXT_FACTS).lower()
     accident = any(w in text for w in ACCIDENT_WORDS)
     findings: list[dict] = []
     status = "COVERED"
@@ -37,6 +46,15 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     else:
         add("POLICY_IN_FORCE", "PASS", f"Incident {incident} is within the policy period {ins.start_date} to {ins.end_date}.",
             terms.get("coverage_clause"))
+
+    trip = terms.get("trip_period_clause")
+    if status == "COVERED" and trip:
+        dep, ret = _date(f.get("departure_date")), _date(f.get("return_date"))
+        if dep and ret and not (dep <= incident <= ret):
+            status = "NOT_COVERED"
+            add("OUTSIDE_TRIP", "FAIL", f"Incident {incident} is outside the insured trip {dep} to {ret}.", trip)
+        elif dep and ret:
+            add("WITHIN_TRIP", "PASS", f"Incident {incident} is within the insured trip {dep} to {ret}.", trip)
 
     days = (incident - ins.start_date).days
     wp = terms.get("waiting_periods", {})
@@ -68,7 +86,11 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
             add("EXCLUSIONS", "PASS", "No exclusion keywords found in diagnosis, procedure or narrative.")
 
     req = terms.get("required_documents", {})
-    missing = [d for d in req.get("documents", []) if d not in ctx.doc_types]
+    needed = list(req.get("documents", []))
+    for cond in terms.get("conditional_documents", []):
+        if cond["document"] not in needed and any(k in text for k in cond["keywords"]):
+            needed.append(cond["document"])
+    missing = [d for d in needed if d not in ctx.doc_types]
     if missing:
         add("REQUIRED_DOCUMENTS", "MISSING", f"Missing required documents: {', '.join(missing)}.", req.get("clause"))
     else:

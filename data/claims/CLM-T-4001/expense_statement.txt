@@ -1,0 +1,16 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Singapore
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Rahul Verma
+
+Itemised Charges:
+Emergency Room Assessment                                       28,000.00
+Hospital Room Charges (3 days)                                 126,000.00
+Surgeon and Anaesthetist Fees                                  210,000.00
+Pharmacy and Medicines                                          34,000.00
+Laboratory and CT Scan                                          41,000.00
+Telephone and Toiletries                                         3,500.00
+
+Total Amount                                                   442,500.00

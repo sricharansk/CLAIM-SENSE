@@ -95,6 +95,14 @@ r = call("POST", f"/claims/{n}/review", {"action": "APPROVE", "notes": "smoke te
 check("human review", r["status"] == "APPROVED", json.dumps(r))
 audit = call("GET", f"/audit?claim_number={n}")
 check("audit trail", {"CLAIM_CREATED", "AI_RECOMMENDATION", "HUMAN_DECISION"} <= {e["event_type"] for e in audit}, f"{len(audit)} events")
+# One claim on each of the other lines, from the seeded packets; the payable amount must match the hand calculation.
+for folder, policy, line, claimant, payable in (("CLM-P-3001", "CS-HOM-25-003101", "property", "Anita Desai", "347500.00"),
+                                                ("CLM-T-4002", "CS-TRV-25-004468", "travel", "Neha Kapoor", "95000.00")):
+    m = call("POST", "/claims", {"policy_number": policy, "claim_type": line, "claimant_name": claimant,
+                                 "description": "smoke test"})["claim_number"]
+    call("POST", f"/claims/{m}/documents", files=sorted((DEMO.parent / folder).glob("*.txt")))
+    got = call("POST", f"/claims/{m}/analyze")["result"]["adjudication"]["payable_amount"]
+    check(f"{line} claim", got == payable, f"{m} payable {got}")
 q = call("POST", "/rag/query", {"question": "What is the room rent limit per day?", "product_code": "HLT-SHIELD", "version": "2025.1"})
 check("policy assistant", q["grounded"] and q["citations"][0]["clause_ref"] == "2.2", q["answer"][:90])
 refusal = call("POST", "/rag/query", {"question": "What is the capital of France?"})

@@ -119,5 +119,111 @@
     ],
     "expected_recommendation": "RECOMMEND_REJECT",
     "scenario": "Driving under the influence exclusion (clause 3.1)"
+  },
+  {
+    "claim_number": "CLM-P-3001",
+    "claim_type": "property",
+    "policy_number": "CS-HOM-25-003101",
+    "claimant_name": "Anita Desai",
+    "incident_date": "2025-08-21",
+    "description": "A fire started in the kitchen after an electrical short circuit; the kitchen, part of the living room and several appliances were damaged.",
+    "documents": [
+      "claim_form.txt",
+      "loss_assessment.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Fire loss with contents depreciation and the average clause for underinsurance (2.3)"
+  },
+  {
+    "claim_number": "CLM-P-3002",
+    "claim_type": "property",
+    "policy_number": "CS-HOM-24-003145",
+    "claimant_name": "Vikram Singh",
+    "incident_date": "2025-06-14",
+    "description": "The house was broken into while the family was away for the weekend; the rear door lock was forced and electronics and jewellery were stolen.",
+    "documents": [
+      "claim_form.txt",
+      "loss_assessment.txt",
+      "police_report.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Burglary: unscheduled jewellery not covered (3.5), depreciation on electronics, excess"
+  },
+  {
+    "claim_number": "CLM-P-3003",
+    "claim_type": "property",
+    "policy_number": "CS-HOM-24-002877",
+    "claimant_name": "Lakshmi Menon",
+    "incident_date": "2025-09-30",
+    "description": "Damp patches and peeling plaster were noticed on the bedroom wall and ceiling after the monsoon.",
+    "documents": [
+      "claim_form.txt",
+      "loss_assessment.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Seepage and gradual deterioration exclusion (3.1)"
+  },
+  {
+    "claim_number": "CLM-T-4001",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004410",
+    "claimant_name": "Rahul Verma",
+    "incident_date": "2025-09-09",
+    "description": "Severe abdominal pain during a business trip; admitted through emergency and operated for acute appendicitis.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "medical_report.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Emergency surgery abroad: personal comfort items not payable (2.4), deductible"
+  },
+  {
+    "claim_number": "CLM-T-4002",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004468",
+    "claimant_name": "Neha Kapoor",
+    "incident_date": "2025-10-05",
+    "description": "Checked suitcase did not arrive at London Heathrow and was declared lost by the airline after 21 days.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "property_irregularity_report.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Lost baggage: per-item limit and per-trip baggage limit (2.3)"
+  },
+  {
+    "claim_number": "CLM-T-4003",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004502",
+    "claimant_name": "Aditya Joshi",
+    "incident_date": "2025-08-17",
+    "description": "Injured in a paragliding accident near Interlaken; fractured left ankle and treated in hospital.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "medical_report.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Hazardous sports exclusion (3.2)"
+  },
+  {
+    "claim_number": "CLM-T-4004",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004533",
+    "claimant_name": "Sana Qureshi",
+    "incident_date": "2025-11-02",
+    "description": "Checked baggage was lost on arrival at Dubai; the airline has not traced it.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "REQUEST_INFO",
+    "scenario": "Baggage claim without the airline's property irregularity report (5.2)"
   }
 ]

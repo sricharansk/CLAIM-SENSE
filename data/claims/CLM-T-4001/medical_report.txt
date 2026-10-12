@@ -1,0 +1,12 @@
+MEDICAL REPORT FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Marina Bay General Hospital (fictional)
+Patient Name: Rahul Verma
+Admission Date: 2025-09-09
+Discharge Date: 2025-09-12
+Diagnosis: Acute appendicitis
+Procedure: Laparoscopic appendicectomy
+
+Clinical Notes:
+No history of abdominal complaints before travel. Fit to fly on 2025-09-15.

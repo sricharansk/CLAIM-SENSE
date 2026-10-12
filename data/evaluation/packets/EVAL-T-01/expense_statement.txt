@@ -1,0 +1,12 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Tokyo
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Kavya Reddy
+
+Itemised Charges:
+Non-refundable Airfare                                         112,000.00
+Hotel Booking (non-refundable)                                  68,000.00
+
+Total Amount                                                   180,000.00

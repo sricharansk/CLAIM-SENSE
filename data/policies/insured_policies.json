@@ -54,5 +54,69 @@
     "start_date": "2025-06-01",
     "end_date": "2026-05-31",
     "sum_insured": 480000
+  },
+  {
+    "policy_number": "CS-HOM-25-003101",
+    "product_code": "HOME-GUARD",
+    "holder_name": "Anita Desai",
+    "start_date": "2025-01-10",
+    "end_date": "2026-01-09",
+    "sum_insured": 2500000
+  },
+  {
+    "policy_number": "CS-HOM-24-003145",
+    "product_code": "HOME-GUARD",
+    "holder_name": "Vikram Singh",
+    "start_date": "2024-11-01",
+    "end_date": "2025-10-31",
+    "sum_insured": 1200000
+  },
+  {
+    "policy_number": "CS-HOM-24-002877",
+    "product_code": "HOME-GUARD",
+    "holder_name": "Lakshmi Menon",
+    "start_date": "2024-07-01",
+    "end_date": "2026-06-30",
+    "sum_insured": 1800000
+  },
+  {
+    "policy_number": "CS-TRV-25-004410",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Rahul Verma",
+    "start_date": "2025-09-01",
+    "end_date": "2025-09-20",
+    "sum_insured": 4000000
+  },
+  {
+    "policy_number": "CS-TRV-25-004468",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Neha Kapoor",
+    "start_date": "2025-04-01",
+    "end_date": "2026-03-31",
+    "sum_insured": 4000000
+  },
+  {
+    "policy_number": "CS-TRV-25-004502",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Aditya Joshi",
+    "start_date": "2025-08-10",
+    "end_date": "2025-08-24",
+    "sum_insured": 4000000
+  },
+  {
+    "policy_number": "CS-TRV-25-004533",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Sana Qureshi",
+    "start_date": "2025-11-02",
+    "end_date": "2025-11-12",
+    "sum_insured": 4000000
+  },
+  {
+    "policy_number": "CS-TRV-25-004588",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Kavya Reddy",
+    "start_date": "2025-06-01",
+    "end_date": "2026-05-31",
+    "sum_insured": 4000000
   }
 ]

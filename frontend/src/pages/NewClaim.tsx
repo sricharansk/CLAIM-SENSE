@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ApiError, api } from "../api";
 import { Card, ErrorBox, useLoad } from "../components/ui";
 
+const LINE_BY_PRODUCT: Record<string, string> = { HLT: "health", MTR: "motor", HOME: "property", TRV: "travel" };
+
 export default function NewClaim() {
   const nav = useNavigate();
   const insured = useLoad(api.insured);
@@ -14,7 +16,7 @@ export default function NewClaim() {
   const pickPolicy = (pn: string) => {
     const p = insured.data?.find((x) => x.policy_number === pn);
     setForm({ ...form, policy_number: pn, claimant_name: p?.holder_name ?? form.claimant_name,
-      claim_type: p?.product_code.startsWith("MTR") ? "motor" : "health" });
+      claim_type: LINE_BY_PRODUCT[p?.product_code.split("-")[0] ?? ""] ?? form.claim_type });
   };
 
   async function submit(e: FormEvent) {
@@ -50,6 +52,7 @@ export default function NewClaim() {
           <label>Claim type
             <select value={form.claim_type} onChange={(e) => setForm({ ...form, claim_type: e.target.value })}>
               <option value="health">Health</option><option value="motor">Motor</option>
+              <option value="property">Property (home)</option><option value="travel">Travel</option>
             </select>
           </label>
           <label>Claimant name<input required value={form.claimant_name} onChange={(e) => setForm({ ...form, claimant_name: e.target.value })} /></label>

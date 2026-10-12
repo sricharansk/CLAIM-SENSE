@@ -7,7 +7,7 @@ export type Letter = { claim_number: string; kind: string; status: "FINAL" | "DR
   signed_by: string | null; based_on: string };
 export type ClaimSummary = {
   settlement: Settlement;
-  claim_number: string; policy_number: string; claim_type: "health" | "motor"; claimant_name: string;
+  claim_number: string; policy_number: string; claim_type: "health" | "motor" | "property" | "travel"; claimant_name: string;
   incident_date: string | null; claimed_amount: string | null; status: string; created_at: string; updated_at: string;
   recommendation: string | null; recommended_payable: string | null; risk_level: string | null; documents: number;
 };
