@@ -4,7 +4,7 @@
     {
       "id": "C01", "categories": ["clearly_covered", "deductible"],
       "title": "Gastroenteritis admission, every check passes; only the deductible and co-pay apply",
-      "packet": "EVAL-H-01", "policy_number": "CS-HLT-24-000233", "claim_type": "health", "claimant": "Suresh Nair",
+      "packet": "EVAL-H-01", "seeded_as": "CLM-H-1013", "policy_number": "CS-HLT-24-000233", "claim_type": "health", "claimant": "Suresh Nair",
       "expect": {
         "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
         "payable_amount": "18000.00",
@@ -98,7 +98,7 @@
     {
       "id": "C09", "categories": ["max_coverage"],
       "title": "Road accident with bills above the sum insured; payment capped at the available sum insured",
-      "packet": "EVAL-H-02", "policy_number": "CS-HLT-25-000342", "claim_type": "health", "claimant": "Meena Iyer",
+      "packet": "EVAL-H-02", "seeded_as": "CLM-H-1014", "policy_number": "CS-HLT-25-000342", "claim_type": "health", "claimant": "Meena Iyer",
       "expect": {
         "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
         "payable_amount": "300000.00",
@@ -122,7 +122,7 @@
     {
       "id": "C11", "categories": ["ambiguous_policy_version"],
       "title": "Admission on 2025-04-01, the first day of the 2025.1 wording",
-      "packet": "EVAL-H-03", "policy_number": "CS-HLT-24-000117", "claim_type": "health", "claimant": "Ravi Kumar",
+      "packet": "EVAL-H-03", "seeded_as": "CLM-H-1015", "policy_number": "CS-HLT-24-000117", "claim_type": "health", "claimant": "Ravi Kumar",
       "expect": {
         "policy_version": "2025.1", "coverage_status": "COVERED", "payable_amount": "27900.00",
         "waterfall": {"R20_PER_DAY_LIMIT": null, "R30_DEDUCTIBLE": "-5000.00", "R40_COPAY": "-3100.00"},
@@ -133,7 +133,7 @@
     {
       "id": "C12", "categories": ["ambiguous_policy_version"],
       "title": "Same bill admitted on 2025-03-31, the last day of the 2024.1 wording",
-      "packet": "EVAL-H-04", "policy_number": "CS-HLT-24-000117", "claim_type": "health", "claimant": "Ravi Kumar",
+      "packet": "EVAL-H-04", "seeded_as": "CLM-H-1016", "policy_number": "CS-HLT-24-000117", "claim_type": "health", "claimant": "Ravi Kumar",
       "expect": {
         "policy_version": "2024.1", "coverage_status": "COVERED", "payable_amount": "19600.00",
         "waterfall": {"R20_PER_DAY_LIMIT": "-1500.00", "R30_DEDUCTIBLE": "-10000.00", "R40_COPAY": "-4900.00"},
@@ -225,7 +225,7 @@
     {
       "id": "C20", "categories": ["clearly_covered", "deductible"],
       "title": "Storm damage to the roof; only the excess applies",
-      "packet": "EVAL-P-01", "policy_number": "CS-HOM-24-002877", "claim_type": "property", "claimant": "Lakshmi Menon",
+      "packet": "EVAL-P-01", "seeded_as": "CLM-P-3008", "policy_number": "CS-HOM-24-002877", "claim_type": "property", "claimant": "Lakshmi Menon",
       "expect": {
         "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
         "payable_amount": "61000.00",
@@ -237,7 +237,7 @@
     {
       "id": "C21", "categories": ["sub_limit"],
       "title": "Trip cancelled by an airport closure, above the cancellation limit",
-      "packet": "EVAL-T-01", "policy_number": "CS-TRV-25-004588", "claim_type": "travel", "claimant": "Kavya Reddy",
+      "packet": "EVAL-T-01", "seeded_as": "CLM-T-4009", "policy_number": "CS-TRV-25-004588", "claim_type": "travel", "claimant": "Kavya Reddy",
       "expect": {
         "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
         "payable_amount": "145000.00",
@@ -249,7 +249,7 @@
     {
       "id": "C22", "categories": ["excluded"],
       "title": "Treatment three days after the insured trip ended",
-      "packet": "EVAL-T-02", "policy_number": "CS-TRV-25-004588", "claim_type": "travel", "claimant": "Kavya Reddy",
+      "packet": "EVAL-T-02", "seeded_as": "CLM-T-4010", "policy_number": "CS-TRV-25-004588", "claim_type": "travel", "claimant": "Kavya Reddy",
       "expect": {
         "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "OUTSIDE_TRIP", "clause_ref": "1.3"},
         "payable_amount": "0.00",

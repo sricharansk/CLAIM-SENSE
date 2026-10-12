@@ -3,7 +3,7 @@
 
 Usage: python scripts/evaluate.py [--out reports]
 
-Creates a temporary SQLite database seeded with the synthetic corpus, runs the 22 claim cases and 26
+Creates a temporary SQLite database seeded with the synthetic corpus, runs the 41 claim cases and 26
 policy-assistant questions in data/evaluation/ through the real API, and writes evaluation.json and
 evaluation.md. Exits 1 if any check fails. The LLM is always off so results are deterministic.
 """
@@ -25,7 +25,7 @@ def main() -> int:
 
     tmp = Path(tempfile.mkdtemp(prefix="claimsense-eval-"))
     os.environ.update(DATABASE_URL=f"sqlite:///{tmp / 'eval.db'}", CLAIMSENSE_STORAGE_DIR=str(tmp / "storage"),
-                      CLAIMSENSE_SEED="true")
+                      CLAIMSENSE_SEED="true", CLAIMSENSE_SEED_PACKETS="false")
     os.environ.pop("ANTHROPIC_API_KEY", None)
     sys.path.insert(0, str(ROOT / "backend"))
 

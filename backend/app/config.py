@@ -12,6 +12,9 @@ class Settings:
     data_dir = Path(os.getenv("CLAIMSENSE_DATA_DIR", REPO_ROOT / "data"))
     storage_dir = Path(os.getenv("CLAIMSENSE_STORAGE_DIR", REPO_ROOT / "backend" / "storage"))
     seed_on_startup = os.getenv("CLAIMSENSE_SEED", "true").lower() == "true"
+    # Also seed the evaluation packets as claims. The evaluation and the claims report turn this off because they
+    # file the same packets themselves, and a second copy would be flagged as a duplicate.
+    seed_packets = os.getenv("CLAIMSENSE_SEED_PACKETS", "true").lower() == "true"
     cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:8080").split(",")
     # Optional LLM narrative. Without a key, explanations are extractive (quoted policy text only).
     anthropic_api_key = os.getenv("ANTHROPIC_API_KEY", "")

@@ -9,6 +9,7 @@ _tmp = Path(tempfile.mkdtemp(prefix="claimsense-test-"))
 os.environ["DATABASE_URL"] = f"sqlite:///{_tmp / 'test.db'}"
 os.environ["CLAIMSENSE_STORAGE_DIR"] = str(_tmp / "storage")
 os.environ["CLAIMSENSE_SEED"] = "true"
+os.environ["CLAIMSENSE_SEED_PACKETS"] = "false"  # tests file the evaluation packets themselves
 os.environ.pop("ANTHROPIC_API_KEY", None)
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 

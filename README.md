@@ -39,7 +39,7 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 
 ## Real results from the golden scenarios
 
-These are the outputs the running system produces for the 34 seeded claims, one or more for every exclusion, waiting period, limit and loss-dependent document in the four wordings (no hand-edited numbers; `backend/tests/test_golden_path.py` asserts the recommendations and `reports/evaluation.md` the amounts). [reports/claims_results.md](reports/claims_results.md) has all 42 claim packets in the repository, totals by line and where the money went; regenerate it with `python3 scripts/claims_report.py`.
+These are the outputs the running system produces for the 34 seeded scenarios, one or more for every exclusion, waiting period, limit and loss-dependent document in the four wordings (no hand-edited numbers; `backend/tests/test_golden_path.py` asserts the recommendations and `reports/evaluation.md` the amounts). [reports/claims_results.md](reports/claims_results.md) has all 42 claim packets in the repository, totals by line and where the money went; regenerate it with `python3 scripts/claims_report.py`. The deployed app starts with 41 of them already analysed (the 34 scenarios and the 7 evaluation packets); the demo upload is the one you file yourself.
 
 | Claim | Scenario | Wording | Claimed | Payable | Coverage | Risk | Recommendation |
 |---|---|---|---:|---:|---|---|---|

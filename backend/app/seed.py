@@ -53,6 +53,28 @@ def _sync_registry(db: Session) -> None:
         db.commit()
 
 
+def _seed_packets(db: Session, analyze: bool) -> int:
+    """File the evaluation packets as claims too, under the numbers in golden_cases.json, so the demo holds every packet."""
+    eval_dir = settings.data_dir / "evaluation"
+    cases = json.loads((eval_dir / "golden_cases.json").read_text(encoding="utf-8"))["claims"]
+    created = 0
+    for case in cases:
+        number = case.get("seeded_as")
+        if not number or db.query(Claim).filter_by(claim_number=number).first():
+            continue
+        claim = Claim(claim_number=number, policy_number=case["policy_number"], claim_type=case["claim_type"],
+                      claimant_name=case["claimant"], description=case["title"], status="SUBMITTED")
+        db.add(claim)
+        db.flush()
+        for path in sorted((eval_dir / "packets" / case["packet"]).glob("*.txt")):
+            add_document(db, claim, path.name, path.read_bytes(), actor="seed")
+        db.commit()
+        created += 1
+        if analyze:
+            analyze_claim(db, claim, actor="seed")
+    return created
+
+
 def seed(db: Session, analyze: bool = True) -> dict:
     pol_dir = settings.data_dir / "policies"
     created = {"policy_versions": 0, "claims": 0}
@@ -90,5 +112,7 @@ def seed(db: Session, analyze: bool = True) -> dict:
         created["claims"] += 1
         if analyze:
             analyze_claim(db, claim, actor="seed")
+    if settings.seed_packets:
+        created["claims"] += _seed_packets(db, analyze)
     log.info("seed complete: %s", created)
     return created
