@@ -42,7 +42,7 @@ export default function EvaluationPage() {
           </div>
           <div className="grid2">
             <Card title="Scorecard by dimension">
-              <div className="bars">{Object.entries(e.dimensions).map(([k, d]) => (
+              <div className="bars scores">{Object.entries(e.dimensions).map(([k, d]) => (
                 <div key={k} className="bar-row">
                   <span className="bar-label">{d.label}</span>
                   <span className="bar-track"><span className="bar-fill" style={{ width: `${(d.score ?? 0) * 100}%` }} /></span>
