@@ -256,6 +256,50 @@
         "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW"
       },
       "working": "Trip 2026-02-02 to 2026-02-09; treatment on 2026-02-12 is after the return date, outside the period of cover (1.3), although the annual policy is in force."
+    },
+    {
+      "id": "C23", "categories": ["excluded"],
+      "title": "Caesarean delivery under the maternity exclusion",
+      "claim_number": "CLM-H-1007",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_MATERNITY", "clause_ref": "4.4"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "4.4"
+      },
+      "working": "Discharge summary records a full term pregnancy delivered by caesarean section; maternity and childbirth are excluded (4.4), nothing is payable."
+    },
+    {
+      "id": "C24", "categories": ["excluded"],
+      "title": "Motor accident with the driver's licence expired",
+      "claim_number": "CLM-M-2003",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_NO_LICENCE", "clause_ref": "3.2"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "3.2"
+      },
+      "working": "Police report records that the driver's licence expired on 2024-12-31, before the accident on 2025-10-03; exclusion 3.2 applies, nothing is payable."
+    },
+    {
+      "id": "C25", "categories": ["excluded"],
+      "title": "Burglary while the home had been unoccupied for about 95 days",
+      "claim_number": "CLM-P-3004",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_UNOCCUPIED", "clause_ref": "3.3"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "3.3"
+      },
+      "working": "Surveyor records the premises unoccupied for about 95 days, more than the 60 consecutive days in 3.3; the burglary is not payable."
+    },
+    {
+      "id": "C26", "categories": ["excluded"],
+      "title": "Heart condition abroad that was under treatment before departure",
+      "claim_number": "CLM-T-4005",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_PRE_EXISTING", "clause_ref": "3.1"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "3.1"
+      },
+      "working": "Claim form and medical report describe coronary artery disease under treatment before departure; pre-existing conditions are excluded (3.1), nothing is payable."
     }
   ]
 }

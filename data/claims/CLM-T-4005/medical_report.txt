@@ -1,0 +1,12 @@
+MEDICAL REPORT FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Lakeshore General Hospital (fictional)
+Patient Name: Gopal Krishnan
+Admission Date: 2025-12-06
+Discharge Date: 2025-12-08
+Diagnosis: Unstable angina in known coronary artery disease
+Procedure: Coronary angiography
+
+Clinical Notes:
+Known case of coronary artery disease on medication for three years; a pre-existing condition.

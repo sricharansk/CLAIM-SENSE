@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-1003-14
+Date of Accident: 2025-10-03
+Vehicle Registration: KA-01-SY-7733
+
+Findings:
+Collision confirmed. The driver's licence expired on 2024-12-31; no valid licence at the time of the accident.

@@ -33,7 +33,7 @@
         "data/policies/insured_policies.json"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "4b0e38a28c88ab0bb9d8dfa44abe3bb1bc924d3e2e5ebcda2d05b4368f999c52"
+      "checksum_sha256": "f50e9e668f0a9ca89a9e346bd8b15d4823fe92c4f7cecae9d8b2f18e1c5ca212"
     },
     {
       "id": "synthetic-policy-pdf-demo",
@@ -60,7 +60,7 @@
     },
     {
       "id": "synthetic-golden-claims",
-      "name": "Synthetic golden claim packets (15 scenarios across health, motor, property and travel, and the demo upload)",
+      "name": "Synthetic golden claim packets (19 scenarios across health, motor, property and travel, and the demo upload)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_claims",
@@ -79,11 +79,11 @@
         "data/claims"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "0f235a5efbcde327fa7de31bc66a8b8e95c1b74201a786d7b48323dceccac56b"
+      "checksum_sha256": "274eacf93d2e4187e59f32beb200843e66ed9bed041b793e9293c70ff19bf322"
     },
     {
       "id": "synthetic-claims-portfolio",
-      "name": "Synthetic claims portfolio (1,000 claims with injected anomaly labels)",
+      "name": "Synthetic claims portfolio (1,000 claims across health, motor, property and travel, with injected anomaly labels)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_claims",
@@ -102,11 +102,11 @@
         "data/synthetic/claims_portfolio.csv"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "32bc6b3f568e2042a2a2f0ba4654f279f11e9088a669891db82c4c1d7a1b440b"
+      "checksum_sha256": "0f161c38f8707b10cd4fc09430990317447cb2a4603578e304b627f39f672acf"
     },
     {
       "id": "golden-evaluation-set",
-      "name": "Golden evaluation set (22 claim cases, 26 policy questions, 7 fresh packets)",
+      "name": "Golden evaluation set (26 claim cases, 26 policy questions, 7 fresh packets)",
       "publisher": "Claim Sense (hand-worked expectations; generated packets)",
       "source_type": "synthetic",
       "data_type": "evaluation",
@@ -124,7 +124,7 @@
         "data/evaluation"
       ],
       "transformation_script": "data/synthetic/generate.py (packets); golden_cases.json and rag_questions.json written by hand",
-      "checksum_sha256": "9b8164112346f2d46a70d66f2dca70c3b9305e5029b5ddedf82934ff9dcadd08"
+      "checksum_sha256": "578e1f446aad8542de0062583bad6419b1713d339f04e5d5113471657ba756e2"
     },
     {
       "id": "irdai-mc-health-2024",

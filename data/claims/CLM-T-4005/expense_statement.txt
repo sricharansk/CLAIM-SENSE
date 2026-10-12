@@ -1,0 +1,13 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Toronto
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Gopal Krishnan
+
+Itemised Charges:
+Emergency Room Assessment                                       35,000.00
+Hospital Room Charges (2 days)                                  98,000.00
+Diagnostic Cardiology Tests and Angiogram                      145,000.00
+
+Total Amount                                                   278,000.00

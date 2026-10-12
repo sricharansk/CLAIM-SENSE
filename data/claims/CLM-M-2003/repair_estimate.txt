@@ -1,0 +1,15 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2003
+Vehicle Registration: KA-01-SY-7733
+Patient/Insured Name: Rohan Gupta
+
+Itemised Charges:
+Front Bumper (plastic) - replace                                13,000.00
+Bonnet (metal) - replace                                        28,000.00
+Headlamp Assembly (plastic)                                      9,500.00
+Denting and Fitting Labour                                       8,000.00
+
+Total Amount                                                    58,500.00
