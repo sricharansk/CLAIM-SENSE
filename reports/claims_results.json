@@ -1,0 +1,953 @@
+{
+  "report": "Claim Sense results on every claim packet",
+  "generated_at": "2026-10-12T07:17:15+00:00",
+  "data": "synthetic only",
+  "llm": "off (deterministic rules and extractive retrieval)",
+  "rules_version": "adjudication-rules/1.0.0",
+  "risk_version": "risk-rules/1.0.0",
+  "summary": {
+    "claims": 23,
+    "billed": "3529100.00",
+    "payable": "2317150.00",
+    "payout_ratio": 0.657,
+    "recommendations": {
+      "PARTIAL_APPROVAL": 14,
+      "RECOMMEND_REJECT": 5,
+      "INVESTIGATE": 2,
+      "REQUEST_INFO": 2
+    },
+    "coverage": {
+      "COVERED": 18,
+      "NOT_COVERED": 5
+    },
+    "risk": {
+      "LOW": 20,
+      "HIGH": 2,
+      "MEDIUM": 1
+    },
+    "queues": {
+      "ADJUSTER_REVIEW": 19,
+      "SIU_INVESTIGATION": 2,
+      "PENDING_INFORMATION": 2
+    },
+    "deductions": {
+      "R10_NON_PAYABLE": "-152100.00",
+      "R15_DEPRECIATION": "-66550.00",
+      "R20_BENEFIT_LIMIT": "-36000.00",
+      "R20_ITEM_LIMIT": "-75000.00",
+      "R20_PER_DAY_LIMIT": "-81500.00",
+      "R25_UNDERINSURANCE": "-71500.00",
+      "R30_DEDUCTIBLE": "-112000.00",
+      "R40_COPAY": "-129800.00",
+      "R50_MAX_LIABILITY": "-64500.00",
+      "R99_NOT_ADMISSIBLE": "-423000.00"
+    },
+    "human_review_required": true
+  },
+  "by_line": {
+    "health": {
+      "claims": 11,
+      "billed": "1421600.00",
+      "payable": "1015700.00",
+      "payout_ratio": 0.714,
+      "recommendations": {
+        "PARTIAL_APPROVAL": 7,
+        "RECOMMEND_REJECT": 1,
+        "INVESTIGATE": 2,
+        "REQUEST_INFO": 1
+      }
+    },
+    "motor": {
+      "claims": 2,
+      "billed": "139000.00",
+      "payable": "55350.00",
+      "payout_ratio": 0.398,
+      "recommendations": {
+        "PARTIAL_APPROVAL": 1,
+        "RECOMMEND_REJECT": 1
+      }
+    },
+    "property": {
+      "claims": 4,
+      "billed": "909000.00",
+      "payable": "534100.00",
+      "payout_ratio": 0.588,
+      "recommendations": {
+        "PARTIAL_APPROVAL": 3,
+        "RECOMMEND_REJECT": 1
+      }
+    },
+    "travel": {
+      "claims": 6,
+      "billed": "1059500.00",
+      "payable": "712000.00",
+      "payout_ratio": 0.672,
+      "recommendations": {
+        "PARTIAL_APPROVAL": 3,
+        "RECOMMEND_REJECT": 2,
+        "REQUEST_INFO": 1
+      }
+    }
+  },
+  "claims": [
+    {
+      "claim_number": "CLM-H-1001",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Ravi Kumar",
+      "policy_number": "CS-HLT-24-000117",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-08-12",
+      "documents": 3,
+      "claimed": "106600.00",
+      "billed": "106600.00",
+      "payable": "84330.00",
+      "deductions": {
+        "R20_PER_DAY_LIMIT": "-4500.00",
+        "R10_NON_PAYABLE": "-3400.00",
+        "R30_DEDUCTIBLE": "-5000.00",
+        "R40_COPAY": "-9370.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 14,
+      "policy_clauses_cited": [
+        "2.1",
+        "2.2",
+        "3.1",
+        "4.3",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-1002",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Meena Iyer",
+      "policy_number": "CS-HLT-25-000342",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-09-05",
+      "documents": 3,
+      "claimed": "61500.00",
+      "billed": "61500.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-61500.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "SPECIFIED_DISEASE_WAITING",
+        "clause_ref": "3.3",
+        "message": "'cataract' is a specified condition with a 24-month waiting period; cover has run about 6 months."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "3.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-1003",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Arjun Mehta",
+      "policy_number": "CS-HLT-25-000518",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-06-20",
+      "documents": 3,
+      "claimed": "468000.00",
+      "billed": "442000.00",
+      "payable": "332100.00",
+      "deductions": {
+        "R20_PER_DAY_LIMIT": "-68000.00",
+        "R30_DEDUCTIBLE": "-5000.00",
+        "R40_COPAY": "-36900.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "HIGH",
+      "risk_score": 75,
+      "risk_signals": [
+        "HIGH_AMOUNT_RATIO",
+        "EARLY_CLAIM",
+        "AMOUNT_MISMATCH"
+      ],
+      "recommendation": "INVESTIGATE",
+      "queue": "SIU_INVESTIGATION",
+      "evidence_items": 15,
+      "policy_clauses_cited": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "3.1",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-1004",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Fatima Shaikh",
+      "policy_number": "CS-HLT-23-000089",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-10-02",
+      "documents": 2,
+      "claimed": "43400.00",
+      "billed": "43400.00",
+      "payable": "34560.00",
+      "deductions": {
+        "R30_DEDUCTIBLE": "-5000.00",
+        "R40_COPAY": "-3840.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [
+        "discharge_summary"
+      ],
+      "risk_level": "LOW",
+      "risk_score": 10,
+      "risk_signals": [
+        "MISSING_DOCUMENTS"
+      ],
+      "recommendation": "REQUEST_INFO",
+      "queue": "PENDING_INFORMATION",
+      "evidence_items": 9,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-1005",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Suresh Nair",
+      "policy_number": "CS-HLT-24-000233",
+      "product": "HLT-SHIELD v2024.1",
+      "incident_date": "2025-02-14",
+      "documents": 3,
+      "claimed": "76500.00",
+      "billed": "76500.00",
+      "payable": "50800.00",
+      "deductions": {
+        "R20_PER_DAY_LIMIT": "-3000.00",
+        "R30_DEDUCTIBLE": "-10000.00",
+        "R40_COPAY": "-12700.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 14,
+      "policy_clauses_cited": [
+        "2.1",
+        "2.2",
+        "3.1",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-1006",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Ravi Kumar",
+      "policy_number": "CS-HLT-24-000117",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-08-12",
+      "documents": 3,
+      "claimed": "106600.00",
+      "billed": "106600.00",
+      "payable": "84330.00",
+      "deductions": {
+        "R20_PER_DAY_LIMIT": "-4500.00",
+        "R10_NON_PAYABLE": "-3400.00",
+        "R30_DEDUCTIBLE": "-5000.00",
+        "R40_COPAY": "-9370.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "HIGH",
+      "risk_score": 50,
+      "risk_signals": [
+        "POSSIBLE_DUPLICATE"
+      ],
+      "recommendation": "INVESTIGATE",
+      "queue": "SIU_INVESTIGATION",
+      "evidence_items": 14,
+      "policy_clauses_cited": [
+        "2.1",
+        "2.2",
+        "3.1",
+        "4.3",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-3016",
+      "source": "evaluation packet EVAL-H-01",
+      "line": "health",
+      "claimant": "Suresh Nair",
+      "policy_number": "CS-HLT-24-000233",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-11-10",
+      "documents": 3,
+      "claimed": "25000.00",
+      "billed": "25000.00",
+      "payable": "18000.00",
+      "deductions": {
+        "R30_DEDUCTIBLE": "-5000.00",
+        "R40_COPAY": "-2000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 14,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-3017",
+      "source": "evaluation packet EVAL-H-02",
+      "line": "health",
+      "claimant": "Meena Iyer",
+      "policy_number": "CS-HLT-25-000342",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-12-05",
+      "documents": 3,
+      "claimed": "410000.00",
+      "billed": "410000.00",
+      "payable": "300000.00",
+      "deductions": {
+        "R30_DEDUCTIBLE": "-5000.00",
+        "R40_COPAY": "-40500.00",
+        "R50_MAX_LIABILITY": "-64500.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "MEDIUM",
+      "risk_score": 30,
+      "risk_signals": [
+        "HIGH_AMOUNT_RATIO"
+      ],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 12,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-3018",
+      "source": "evaluation packet EVAL-H-03",
+      "line": "health",
+      "claimant": "Ravi Kumar",
+      "policy_number": "CS-HLT-24-000117",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-04-01",
+      "documents": 3,
+      "claimed": "36000.00",
+      "billed": "36000.00",
+      "payable": "27900.00",
+      "deductions": {
+        "R30_DEDUCTIBLE": "-5000.00",
+        "R40_COPAY": "-3100.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 11,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-3019",
+      "source": "evaluation packet EVAL-H-04",
+      "line": "health",
+      "claimant": "Ravi Kumar",
+      "policy_number": "CS-HLT-24-000117",
+      "product": "HLT-SHIELD v2024.1",
+      "incident_date": "2025-03-31",
+      "documents": 3,
+      "claimed": "36000.00",
+      "billed": "36000.00",
+      "payable": "19600.00",
+      "deductions": {
+        "R20_PER_DAY_LIMIT": "-1500.00",
+        "R30_DEDUCTIBLE": "-10000.00",
+        "R40_COPAY": "-4900.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 12,
+      "policy_clauses_cited": [
+        "2.1",
+        "2.2",
+        "3.1",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-3023",
+      "source": "demo upload packet",
+      "line": "health",
+      "claimant": "Fatima Shaikh",
+      "policy_number": "CS-HLT-23-000089",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-11-03",
+      "documents": 3,
+      "claimed": "78000.00",
+      "billed": "78000.00",
+      "payable": "64080.00",
+      "deductions": {
+        "R10_NON_PAYABLE": "-1800.00",
+        "R30_DEDUCTIBLE": "-5000.00",
+        "R40_COPAY": "-7120.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 13,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "3.3",
+        "4.3",
+        "5.1",
+        "5.2",
+        "5.3",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-M-2001",
+      "source": "seeded scenario",
+      "line": "motor",
+      "claimant": "Priya Sharma",
+      "policy_number": "CS-MTR-25-001204",
+      "product": "MTR-SECURE v2025.1",
+      "incident_date": "2025-09-18",
+      "documents": 4,
+      "claimed": "73500.00",
+      "billed": "73500.00",
+      "payable": "55350.00",
+      "deductions": {
+        "R15_DEPRECIATION": "-16150.00",
+        "R30_DEDUCTIBLE": "-2000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "1.2",
+        "2.1",
+        "2.2",
+        "2.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-M-2002",
+      "source": "seeded scenario",
+      "line": "motor",
+      "claimant": "Karthik Rao",
+      "policy_number": "CS-MTR-25-001377",
+      "product": "MTR-SECURE v2025.1",
+      "incident_date": "2025-07-27",
+      "documents": 4,
+      "claimed": "65500.00",
+      "billed": "65500.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-65500.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_DUI",
+        "clause_ref": "3.1",
+        "message": "Claim documents mention 'under the influence', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 20,
+      "risk_signals": [
+        "EARLY_CLAIM"
+      ],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-P-3001",
+      "source": "seeded scenario",
+      "line": "property",
+      "claimant": "Anita Desai",
+      "policy_number": "CS-HOM-25-003101",
+      "product": "HOME-GUARD v2025.1",
+      "incident_date": "2025-08-21",
+      "documents": 2,
+      "claimed": "450000.00",
+      "billed": "450000.00",
+      "payable": "347500.00",
+      "deductions": {
+        "R15_DEPRECIATION": "-21000.00",
+        "R25_UNDERINSURANCE": "-71500.00",
+        "R30_DEDUCTIBLE": "-10000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 11,
+      "policy_clauses_cited": [
+        "1.2",
+        "2.1",
+        "2.2",
+        "2.3",
+        "4.1",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-P-3002",
+      "source": "seeded scenario",
+      "line": "property",
+      "claimant": "Vikram Singh",
+      "policy_number": "CS-HOM-24-003145",
+      "product": "HOME-GUARD v2025.1",
+      "incident_date": "2025-06-14",
+      "documents": 3,
+      "claimed": "305000.00",
+      "billed": "305000.00",
+      "payable": "125600.00",
+      "deductions": {
+        "R10_NON_PAYABLE": "-140000.00",
+        "R15_DEPRECIATION": "-29400.00",
+        "R30_DEDUCTIBLE": "-10000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 13,
+      "policy_clauses_cited": [
+        "1.2",
+        "2.1",
+        "2.2",
+        "2.3",
+        "3.5",
+        "4.1",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-P-3003",
+      "source": "seeded scenario",
+      "line": "property",
+      "claimant": "Lakshmi Menon",
+      "policy_number": "CS-HOM-24-002877",
+      "product": "HOME-GUARD v2025.1",
+      "incident_date": "2025-09-30",
+      "documents": 2,
+      "claimed": "83000.00",
+      "billed": "83000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-83000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_GRADUAL_DETERIORATION",
+        "clause_ref": "3.1",
+        "message": "Claim documents mention 'gradual deterioration', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 7,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-P-3020",
+      "source": "evaluation packet EVAL-P-01",
+      "line": "property",
+      "claimant": "Lakshmi Menon",
+      "policy_number": "CS-HOM-24-002877",
+      "product": "HOME-GUARD v2025.1",
+      "incident_date": "2025-07-14",
+      "documents": 2,
+      "claimed": "71000.00",
+      "billed": "71000.00",
+      "payable": "61000.00",
+      "deductions": {
+        "R30_DEDUCTIBLE": "-10000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 12,
+      "policy_clauses_cited": [
+        "1.2",
+        "2.1",
+        "2.3",
+        "4.1",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-T-3021",
+      "source": "evaluation packet EVAL-T-01",
+      "line": "travel",
+      "claimant": "Kavya Reddy",
+      "policy_number": "CS-TRV-25-004588",
+      "product": "TRV-GLOBE v2025.1",
+      "incident_date": "2025-12-20",
+      "documents": 3,
+      "claimed": "180000.00",
+      "billed": "180000.00",
+      "payable": "145000.00",
+      "deductions": {
+        "R20_BENEFIT_LIMIT": "-30000.00",
+        "R30_DEDUCTIBLE": "-5000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 12,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "2.1",
+        "2.2",
+        "4.1",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-T-3022",
+      "source": "evaluation packet EVAL-T-02",
+      "line": "travel",
+      "claimant": "Kavya Reddy",
+      "policy_number": "CS-TRV-25-004588",
+      "product": "TRV-GLOBE v2025.1",
+      "incident_date": "2026-02-12",
+      "documents": 3,
+      "claimed": "12000.00",
+      "billed": "12000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-12000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "OUTSIDE_TRIP",
+        "clause_ref": "1.3",
+        "message": "Incident 2026-02-12 is outside the insured trip 2026-02-02 to 2026-02-09."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 8,
+      "policy_clauses_cited": [
+        "1.3",
+        "2.1",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-T-4001",
+      "source": "seeded scenario",
+      "line": "travel",
+      "claimant": "Rahul Verma",
+      "policy_number": "CS-TRV-25-004410",
+      "product": "TRV-GLOBE v2025.1",
+      "incident_date": "2025-09-09",
+      "documents": 4,
+      "claimed": "442500.00",
+      "billed": "442500.00",
+      "payable": "434000.00",
+      "deductions": {
+        "R10_NON_PAYABLE": "-3500.00",
+        "R30_DEDUCTIBLE": "-5000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 12,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "2.1",
+        "2.4",
+        "4.1",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-T-4002",
+      "source": "seeded scenario",
+      "line": "travel",
+      "claimant": "Neha Kapoor",
+      "policy_number": "CS-TRV-25-004468",
+      "product": "TRV-GLOBE v2025.1",
+      "incident_date": "2025-10-05",
+      "documents": 4,
+      "claimed": "181000.00",
+      "billed": "181000.00",
+      "payable": "95000.00",
+      "deductions": {
+        "R20_ITEM_LIMIT": "-75000.00",
+        "R20_BENEFIT_LIMIT": "-6000.00",
+        "R30_DEDUCTIBLE": "-5000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 11,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "2.1",
+        "2.3",
+        "4.1",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-T-4003",
+      "source": "seeded scenario",
+      "line": "travel",
+      "claimant": "Aditya Joshi",
+      "policy_number": "CS-TRV-25-004502",
+      "product": "TRV-GLOBE v2025.1",
+      "incident_date": "2025-08-17",
+      "documents": 4,
+      "claimed": "201000.00",
+      "billed": "201000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-201000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_HAZARDOUS_SPORTS",
+        "clause_ref": "3.2",
+        "message": "Claim documents mention 'paragliding', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 12,
+      "policy_clauses_cited": [
+        "1.3",
+        "2.1",
+        "3.2",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-T-4004",
+      "source": "seeded scenario",
+      "line": "travel",
+      "claimant": "Sana Qureshi",
+      "policy_number": "CS-TRV-25-004533",
+      "product": "TRV-GLOBE v2025.1",
+      "incident_date": "2025-11-02",
+      "documents": 3,
+      "claimed": "43000.00",
+      "billed": "43000.00",
+      "payable": "38000.00",
+      "deductions": {
+        "R30_DEDUCTIBLE": "-5000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [
+        "property_irregularity_report"
+      ],
+      "risk_level": "LOW",
+      "risk_score": 10,
+      "risk_signals": [
+        "MISSING_DOCUMENTS"
+      ],
+      "recommendation": "REQUEST_INFO",
+      "queue": "PENDING_INFORMATION",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "2.1",
+        "4.1",
+        "5.2"
+      ]
+    }
+  ],
+  "portfolio_risk_rules": {
+    "claims": 1000,
+    "by_risk": {
+      "LOW": 937,
+      "MEDIUM": 32,
+      "HIGH": 31
+    },
+    "by_line": {
+      "health": 659,
+      "motor": 341
+    },
+    "injected_anomalies": 64,
+    "flagged": 63,
+    "precision": 0.841,
+    "recall": 0.828,
+    "confusion": {
+      "tp": 53,
+      "fp": 10,
+      "fn": 11,
+      "tn": 926
+    },
+    "median_claim": 34500.0,
+    "note": "Synthetic portfolio with injected patterns; measures rule recall of injected patterns only."
+  },
+  "golden_evaluation": {
+    "claim_cases": 22,
+    "claim_cases_passed": 22,
+    "questions": 26,
+    "questions_passed": 26,
+    "checks": 405,
+    "checks_passed": 405,
+    "retrieval_hit_at_1": 1.0,
+    "retrieval_hit_at_3": 1.0,
+    "mean_reciprocal_rank": 1.0,
+    "refusal_accuracy": 1.0,
+    "required_categories_covered": true,
+    "avg_claim_case_ms": 88,
+    "all_passed": true
+  }
+}
