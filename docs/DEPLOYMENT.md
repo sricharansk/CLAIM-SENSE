@@ -1,6 +1,6 @@
 # Deployment
 
-Status: **not deployed yet.** No cloud credentials were available while building. Do not claim a deployment until `scripts/smoke_test.py <url>` passes against it.
+Status: **deployed on Render** at https://claim-sense.onrender.com from `main`, verified 2026-10-12 by the **Verify deployment** workflow ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38266390199)). Do not claim a new deployment until `scripts/smoke_test.py <url>` passes against it.
 
 ## Local Docker
 

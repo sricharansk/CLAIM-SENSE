@@ -22,12 +22,12 @@ jobs:
       BASE_URL: ${{ inputs.url }}
       DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD || 'claimsense-demo' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Wait for readiness (a sleeping free instance can take a minute to start)
         run: |
           for i in $(seq 1 60); do curl -sf "${BASE_URL%/}/api/v1/ready" && exit 0; sleep 5; done
           echo "No ready response from $BASE_URL"; exit 1
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         if: inputs.browser_tests
         with:
           node-version: "22"
@@ -40,7 +40,7 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
           npx playwright test
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: failure() && inputs.browser_tests
         with:
           name: playwright-report

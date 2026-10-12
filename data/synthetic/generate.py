@@ -450,6 +450,10 @@ INSURED = [
     ("CS-TRV-25-004502", "TRV-GLOBE", "Aditya Joshi", "2025-08-10", "2025-08-24", 4000000),
     ("CS-TRV-25-004533", "TRV-GLOBE", "Sana Qureshi", "2025-11-02", "2025-11-12", 4000000),
     ("CS-TRV-25-004588", "TRV-GLOBE", "Kavya Reddy", "2025-06-01", "2026-05-31", 4000000),
+    ("CS-HLT-24-000611", "HLT-SHIELD", "Divya Pillai", "2024-03-01", "2026-02-28", 500000),
+    ("CS-MTR-25-001452", "MTR-SECURE", "Rohan Gupta", "2025-05-10", "2026-05-09", 520000),
+    ("CS-HOM-25-003260", "HOME-GUARD", "Farhan Ali", "2025-02-01", "2026-01-31", 1500000),
+    ("CS-TRV-25-004611", "TRV-GLOBE", "Gopal Krishnan", "2025-12-01", "2025-12-15", 4000000),
 ]
 
 
@@ -492,7 +496,7 @@ def police_report(c: dict, text: str) -> str:
 def licence(c: dict) -> str:
     return "\n".join(["DRIVING LICENCE (COPY)", "SYNTHETIC DEMO DOCUMENT", "",
                       f"Name: {c['claimant']}", "Licence Number: KA01-2016-00SYN" + str(c['claim_number'][-2:]),
-                      "Valid Till: 2036-03-31", "Class: LMV"]) + "\n"
+                      f"Valid Till: {c.get('licence_valid_till', '2036-03-31')}", "Class: LMV"]) + "\n"
 
 
 def loss_assessment(c: dict) -> str:
@@ -676,6 +680,41 @@ def golden_claims() -> list[dict]:
                   narrative="Checked baggage was lost on arrival at Dubai; the airline has not traced it.",
                   items=[("Checked Suitcase", 12000), ("Clothing", 22000), ("Shoes and Accessories", 9000)],
                   expected="REQUEST_INFO", story="Baggage claim without the airline's property irregularity report (5.2)"))
+    S.append(dict(claim_number="CLM-H-1007", claim_type="health", policy_number="CS-HLT-24-000611", claimant="Divya Pillai",
+                  incident_date="2025-07-22", hospital="Greenfield General Hospital (fictional)",
+                  narrative="Admitted at full term and delivered by caesarean section.",
+                  items=[("Room Rent - Twin Sharing (3 days @ 4,500)", 13500), ("Obstetrician and Anaesthetist Fees", 40000),
+                         ("Operation Theatre Charges", 15000), ("Pharmacy - Medicines and Drugs", 9000)],
+                  admit="2025-07-22", disch="2025-07-25", diagnosis="Full term pregnancy",
+                  procedure="Lower segment caesarean section", notes="Mother and baby discharged in good health.",
+                  expected="RECOMMEND_REJECT", story="Maternity and childbirth exclusion (4.4)"))
+    S.append(dict(claim_number="CLM-M-2003", claim_type="motor", policy_number="CS-MTR-25-001452", claimant="Rohan Gupta",
+                  incident_date="2025-10-03", fir="FIR-SYN-1003-14", licence_valid_till="2024-12-31",
+                  form_extra={"Vehicle Registration": "KA-01-SY-7733", "Vehicle Make and Model": "Hatchback 1199cc",
+                              "Date of First Registration": "2023-08-19", "Engine Capacity cc": "1199"},
+                  narrative="Skidded on a wet road and hit a parked truck; front bumper, bonnet and headlamp damaged.",
+                  police="Collision confirmed. The driver's licence expired on 2024-12-31; no valid licence at the time of the accident.",
+                  items=[("Front Bumper (plastic) - replace", 13000), ("Bonnet (metal) - replace", 28000),
+                         ("Headlamp Assembly (plastic)", 9500), ("Denting and Fitting Labour", 8000)],
+                  expected="RECOMMEND_REJECT", story="Driver without a valid licence exclusion (3.2)"))
+    S.append(dict(claim_number="CLM-P-3004", claim_type="property", policy_number="CS-HOM-25-003260", claimant="Farhan Ali",
+                  incident_date="2025-09-12", fir="FIR-SYN-0912-27",
+                  form_extra={"Property Address": "3 Hill View Colony, Hyderabad (fictional)", "Value of Property at Risk": "INR 1,400,000.00"},
+                  narrative="The house was broken into and electronics were stolen while the family was abroad; it had been unoccupied since early June.",
+                  items=[("LED Television 50 inch", 70000), ("Laptop Computer", 90000), ("Window Grill and Lock Repair", 12000)],
+                  survey="Forced entry through a rear window is confirmed. The premises were unoccupied for about 95 days before the loss was discovered.",
+                  police="Forced entry through a rear window confirmed. Case registered for housebreaking and theft.",
+                  expected="RECOMMEND_REJECT", story="Unoccupied premises exclusion (3.3)"))
+    S.append(dict(claim_number="CLM-T-4005", claim_type="travel", policy_number="CS-TRV-25-004611", claimant="Gopal Krishnan",
+                  incident_date="2025-12-06",
+                  form_extra={"Destination": "Toronto", "Departure Date": "2025-12-01", "Return Date": "2025-12-15"},
+                  narrative="Chest pain in Toronto; admitted to hospital for a known heart condition that was under treatment before departure.",
+                  items=[("Emergency Room Assessment", 35000), ("Hospital Room Charges (2 days)", 98000),
+                         ("Diagnostic Cardiology Tests and Angiogram", 145000)],
+                  medical=dict(hospital="Lakeshore General Hospital (fictional)", admit="2025-12-06", disch="2025-12-08",
+                               diagnosis="Unstable angina in known coronary artery disease", procedure="Coronary angiography",
+                               notes="Known case of coronary artery disease on medication for three years; a pre-existing condition."),
+                  expected="RECOMMEND_REJECT", story="Pre-existing condition exclusion (3.1)"))
     return S
 
 
@@ -872,6 +911,13 @@ def write_ingest_demo() -> None:
 
 # ------------------------------------------------------------ portfolio ---
 PATTERNS = ["AMOUNT_ANOMALY", "TIMING_ANOMALY", "FREQUENCY_ANOMALY", "DUPLICATE_CLAIM", "DOCUMENT_INCONSISTENCY"]
+# line: (share of claims, sums insured, log-normal mean of the claim amount)
+PORTFOLIO_LINES = {
+    "health": (0.50, [300000, 500000, 1000000], 10.6),
+    "motor": (0.25, [350000, 500000, 800000], 10.2),
+    "property": (0.13, [1000000, 2500000, 5000000], 11.2),
+    "travel": (0.12, [2000000, 4000000], 10.4),
+}
 
 
 def portfolio(n: int = 1000, fraud_rate: float = 0.08) -> None:
@@ -882,16 +928,20 @@ def portfolio(n: int = 1000, fraud_rate: float = 0.08) -> None:
     rng = random.Random(2025)
     rows = []
     for i in range(1, n + 1):
-        line = rng.choices(["health", "motor"], [0.65, 0.35])[0]
-        si = rng.choice([300000, 500000, 1000000]) if line == "health" else rng.choice([350000, 500000, 800000])
+        line = rng.choices(list(PORTFOLIO_LINES), [v[0] for v in PORTFOLIO_LINES.values()])[0]
+        _, sums, mu = PORTFOLIO_LINES[line]
+        si = rng.choice(sums)
         start = date(2024, 4, 1) + timedelta(days=rng.randint(0, 420))
-        incident = start + timedelta(days=rng.randint(45, 330))
-        amount = round(min(si * 0.9, rng.lognormvariate(10.6 if line == "health" else 10.2, 0.6)), -2)
+        # a travel policy starts at departure, so the loss falls within the trip
+        incident = start + timedelta(days=rng.randint(1, 30) if line == "travel" else rng.randint(45, 330))
+        amount = round(min(si * 0.9, rng.lognormvariate(mu, 0.6)), -2)
         prior = rng.choices([0, 1, 2], [0.8, 0.15, 0.05])[0]
         bill_total, dup = amount, 0
         injected: list[str] = []
         if rng.random() < fraud_rate:
-            injected = rng.sample(PATTERNS, rng.choice([1, 1, 2]))
+            # the risk rules do not score timing for trip-based cover, so no timing anomaly is injected there
+            patterns = [x for x in PATTERNS if not (line == "travel" and x == "TIMING_ANOMALY")]
+            injected = rng.sample(patterns, rng.choice([1, 1, 2]))
             if "AMOUNT_ANOMALY" in injected:
                 amount = round(si * rng.uniform(0.82, 0.99), -2)
                 bill_total = amount

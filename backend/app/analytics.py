@@ -76,6 +76,10 @@ def _agrees(ai: str, human: str) -> bool:
             "REQUEST_INFO": "REQUEST_INFO", "INVESTIGATE": "INVESTIGATE"}.get(ai) == human
 
 
+# as in the live risk agent, trip-based cover starts at departure, so an early loss is not a signal
+TRIP_BASED_LINES = {"travel"}
+
+
 @lru_cache(maxsize=1)
 def portfolio_evaluation() -> dict | None:
     """Score the 1,000-claim synthetic portfolio with the live risk rules and compare to injected labels.
@@ -93,7 +97,8 @@ def portfolio_evaluation() -> dict | None:
     for row in csv.DictReader(path.open(encoding="utf-8")):
         claimed, total = float(row["claimed_amount"]), float(row["document_total"])
         score, _ = score_features({
-            "amount_ratio": claimed / float(row["sum_insured"]), "days_since_start": int(row["days_since_policy_start"]),
+            "amount_ratio": claimed / float(row["sum_insured"]), "days_since_start": None if row["line_of_business"] in TRIP_BASED_LINES
+            else int(row["days_since_policy_start"]),
             "prior_claims": int(row["prior_claims_12m"]),
             "duplicate_of": "match" if row["duplicate_match"] == "1" else None,
             "amount_gap": abs(claimed - total) / total if total else 0,

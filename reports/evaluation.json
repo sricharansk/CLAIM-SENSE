@@ -1,66 +1,66 @@
 {
   "suite": "Claim Sense golden evaluation",
-  "generated_at": "2026-10-12T07:17:11+00:00",
+  "generated_at": "2026-10-12T15:05:26+00:00",
   "rules_version": "adjudication-rules/1.0.0",
   "risk_version": "risk-rules/1.0.0",
   "llm": "off (extractive answers)",
   "data": "synthetic only",
   "summary": {
-    "claim_cases": 22,
-    "claim_cases_passed": 22,
+    "claim_cases": 26,
+    "claim_cases_passed": 26,
     "questions": 26,
     "questions_passed": 26,
-    "checks": 405,
-    "checks_passed": 405,
+    "checks": 449,
+    "checks_passed": 449,
     "retrieval_hit_at_1": 1.0,
     "retrieval_hit_at_3": 1.0,
     "mean_reciprocal_rank": 1.0,
     "refusal_accuracy": 1.0,
     "required_categories_covered": true,
-    "avg_claim_case_ms": 88,
+    "avg_claim_case_ms": 99,
     "all_passed": true
   },
   "dimensions": {
     "retrieval": {
       "label": "Retrieval correctness",
-      "passed": 59,
-      "total": 59,
+      "passed": 67,
+      "total": 67,
       "score": 1.0
     },
     "citation": {
       "label": "Citation correctness",
-      "passed": 52,
-      "total": 52,
+      "passed": 56,
+      "total": 56,
       "score": 1.0
     },
     "groundedness": {
       "label": "Groundedness",
-      "passed": 94,
-      "total": 94,
+      "passed": 98,
+      "total": 98,
       "score": 1.0
     },
     "coverage": {
       "label": "Coverage state",
-      "passed": 41,
-      "total": 41,
+      "passed": 49,
+      "total": 49,
       "score": 1.0
     },
     "adjudication": {
       "label": "Adjudication amount",
-      "passed": 68,
-      "total": 68,
+      "passed": 72,
+      "total": 72,
       "score": 1.0
     },
     "risk": {
       "label": "Risk classification",
-      "passed": 25,
-      "total": 25,
+      "passed": 29,
+      "total": 29,
       "score": 1.0
     },
     "workflow": {
       "label": "Workflow outcome",
-      "passed": 66,
-      "total": 66,
+      "passed": 78,
+      "total": 78,
       "score": 1.0
     }
   },
@@ -74,7 +74,11 @@
       "C03",
       "C15",
       "C18",
-      "C22"
+      "C22",
+      "C23",
+      "C24",
+      "C25",
+      "C26"
     ],
     "partial_coverage": [
       "C04",
@@ -122,7 +126,7 @@
         "clearly_covered",
         "deductible"
       ],
-      "claim_number": "CLM-H-3016",
+      "claim_number": "CLM-H-3020",
       "source": "new packet",
       "packet": "EVAL-H-01",
       "expected": {
@@ -237,7 +241,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 144
+      "duration_ms": 153
     },
     {
       "id": "C02",
@@ -345,7 +349,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 73
+      "duration_ms": 88
     },
     {
       "id": "C03",
@@ -452,7 +456,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 66
+      "duration_ms": 74
     },
     {
       "id": "C04",
@@ -569,7 +573,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 62
+      "duration_ms": 66
     },
     {
       "id": "C05",
@@ -671,7 +675,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 52
+      "duration_ms": 61
     },
     {
       "id": "C06",
@@ -763,7 +767,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 56
+      "duration_ms": 60
     },
     {
       "id": "C07",
@@ -873,7 +877,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 69
+      "duration_ms": 60
     },
     {
       "id": "C08",
@@ -983,7 +987,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 59
+      "duration_ms": 78
     },
     {
       "id": "C09",
@@ -991,7 +995,7 @@
       "categories": [
         "max_coverage"
       ],
-      "claim_number": "CLM-H-3017",
+      "claim_number": "CLM-H-3021",
       "source": "new packet",
       "packet": "EVAL-H-02",
       "expected": {
@@ -1110,7 +1114,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 107
+      "duration_ms": 142
     },
     {
       "id": "C10",
@@ -1202,7 +1206,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 74
+      "duration_ms": 59
     },
     {
       "id": "C11",
@@ -1210,7 +1214,7 @@
       "categories": [
         "ambiguous_policy_version"
       ],
-      "claim_number": "CLM-H-3018",
+      "claim_number": "CLM-H-3022",
       "source": "new packet",
       "packet": "EVAL-H-03",
       "expected": {
@@ -1304,7 +1308,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 158
+      "duration_ms": 128
     },
     {
       "id": "C12",
@@ -1312,7 +1316,7 @@
       "categories": [
         "ambiguous_policy_version"
       ],
-      "claim_number": "CLM-H-3019",
+      "claim_number": "CLM-H-3023",
       "source": "new packet",
       "packet": "EVAL-H-04",
       "expected": {
@@ -1406,7 +1410,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 146
+      "duration_ms": 135
     },
     {
       "id": "C13",
@@ -1645,7 +1649,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 66
+      "duration_ms": 68
     },
     {
       "id": "C15",
@@ -1753,7 +1757,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 87
+      "duration_ms": 104
     },
     {
       "id": "C16",
@@ -1863,7 +1867,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 65
+      "duration_ms": 91
     },
     {
       "id": "C17",
@@ -1973,7 +1977,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 69
+      "duration_ms": 111
     },
     {
       "id": "C18",
@@ -2081,7 +2085,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 72
+      "duration_ms": 87
     },
     {
       "id": "C19",
@@ -2173,7 +2177,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 76
+      "duration_ms": 75
     },
     {
       "id": "C20",
@@ -2182,7 +2186,7 @@
         "clearly_covered",
         "deductible"
       ],
-      "claim_number": "CLM-P-3020",
+      "claim_number": "CLM-P-3024",
       "source": "new packet",
       "packet": "EVAL-P-01",
       "expected": {
@@ -2290,7 +2294,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 117
+      "duration_ms": 138
     },
     {
       "id": "C21",
@@ -2298,7 +2302,7 @@
       "categories": [
         "sub_limit"
       ],
-      "claim_number": "CLM-T-3021",
+      "claim_number": "CLM-T-3025",
       "source": "new packet",
       "packet": "EVAL-T-01",
       "expected": {
@@ -2392,7 +2396,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 120
+      "duration_ms": 142
     },
     {
       "id": "C22",
@@ -2400,7 +2404,7 @@
       "categories": [
         "excluded"
       ],
-      "claim_number": "CLM-T-3022",
+      "claim_number": "CLM-T-3026",
       "source": "new packet",
       "packet": "EVAL-T-02",
       "expected": {
@@ -2487,7 +2491,438 @@
           "passed": true
         }
       ],
-      "duration_ms": 118
+      "duration_ms": 169
+    },
+    {
+      "id": "C23",
+      "title": "Caesarean delivery under the maternity exclusion",
+      "categories": [
+        "excluded"
+      ],
+      "claim_number": "CLM-H-1007",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00"
+      },
+      "actual": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "Discharge summary records a full term pregnancy delivered by caesarean section; maternity and childbirth are excluded (4.4), nothing is payable.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "relevant clause retrieved",
+          "expected": "4.4",
+          "actual": [
+            "4.4",
+            "1.3",
+            "6.3",
+            "1.2"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "NOT_COVERED",
+          "actual": "NOT_COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": "EXCL_MATERNITY",
+          "actual": "EXCL_MATERNITY",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "failing check cites clause",
+          "expected": "4.4",
+          "actual": "4.4",
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "RECOMMEND_REJECT",
+          "actual": "RECOMMEND_REJECT",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 124
+    },
+    {
+      "id": "C24",
+      "title": "Motor accident with the driver's licence expired",
+      "categories": [
+        "excluded"
+      ],
+      "claim_number": "CLM-M-2003",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00"
+      },
+      "actual": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "Police report records that the driver's licence expired on 2024-12-31, before the accident on 2025-10-03; exclusion 3.2 applies, nothing is payable.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "relevant clause retrieved",
+          "expected": "3.2",
+          "actual": [
+            "3.2",
+            "4.2",
+            "2.1",
+            "4.1",
+            "3.1"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "NOT_COVERED",
+          "actual": "NOT_COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": "EXCL_NO_LICENCE",
+          "actual": "EXCL_NO_LICENCE",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "failing check cites clause",
+          "expected": "3.2",
+          "actual": "3.2",
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "RECOMMEND_REJECT",
+          "actual": "RECOMMEND_REJECT",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 102
+    },
+    {
+      "id": "C25",
+      "title": "Burglary while the home had been unoccupied for about 95 days",
+      "categories": [
+        "excluded"
+      ],
+      "claim_number": "CLM-P-3004",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00"
+      },
+      "actual": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "Surveyor records the premises unoccupied for about 95 days, more than the 60 consecutive days in 3.3; the burglary is not payable.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "relevant clause retrieved",
+          "expected": "3.3",
+          "actual": [
+            "3.3",
+            "5.2",
+            "2.1",
+            "5.1",
+            "2.2"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "NOT_COVERED",
+          "actual": "NOT_COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": "EXCL_UNOCCUPIED",
+          "actual": "EXCL_UNOCCUPIED",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "failing check cites clause",
+          "expected": "3.3",
+          "actual": "3.3",
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "RECOMMEND_REJECT",
+          "actual": "RECOMMEND_REJECT",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 90
+    },
+    {
+      "id": "C26",
+      "title": "Heart condition abroad that was under treatment before departure",
+      "categories": [
+        "excluded"
+      ],
+      "claim_number": "CLM-T-4005",
+      "source": "seeded scenario",
+      "packet": null,
+      "expected": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00"
+      },
+      "actual": {
+        "recommendation": "RECOMMEND_REJECT",
+        "payable_amount": "0.00",
+        "risk_level": "LOW",
+        "policy_version": "2025.1"
+      },
+      "working": "Claim form and medical report describe coronary artery disease under treatment before departure; pre-existing conditions are excluded (3.1), nothing is payable.",
+      "passed": true,
+      "checks": [
+        {
+          "dimension": "retrieval",
+          "check": "policy version in force",
+          "expected": "2025.1",
+          "actual": "2025.1",
+          "passed": true
+        },
+        {
+          "dimension": "retrieval",
+          "check": "relevant clause retrieved",
+          "expected": "3.1",
+          "actual": [
+            "3.1",
+            "1.3",
+            "3.4",
+            "2.1",
+            "5.1"
+          ],
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "coverage status",
+          "expected": "NOT_COVERED",
+          "actual": "NOT_COVERED",
+          "passed": true
+        },
+        {
+          "dimension": "coverage",
+          "check": "failing check",
+          "expected": "EXCL_PRE_EXISTING",
+          "actual": "EXCL_PRE_EXISTING",
+          "passed": true
+        },
+        {
+          "dimension": "citation",
+          "check": "failing check cites clause",
+          "expected": "3.1",
+          "actual": "3.1",
+          "passed": true
+        },
+        {
+          "dimension": "groundedness",
+          "check": "evidence and waterfall clauses resolve to the matched wording",
+          "expected": [],
+          "actual": [],
+          "passed": true
+        },
+        {
+          "dimension": "adjudication",
+          "check": "payable amount",
+          "expected": "0.00",
+          "actual": "0.00",
+          "passed": true
+        },
+        {
+          "dimension": "risk",
+          "check": "risk level",
+          "expected": "LOW",
+          "actual": "LOW",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "recommendation",
+          "expected": "RECOMMEND_REJECT",
+          "actual": "RECOMMEND_REJECT",
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "human review required",
+          "expected": true,
+          "actual": true,
+          "passed": true
+        },
+        {
+          "dimension": "workflow",
+          "check": "routed to queue",
+          "expected": "ADJUSTER_REVIEW",
+          "actual": "ADJUSTER_REVIEW",
+          "passed": true
+        }
+      ],
+      "duration_ms": 85
     }
   ],
   "questions": [
@@ -3984,5 +4419,5 @@
       ]
     }
   ],
-  "duration_s": 2.33
+  "duration_s": 2.98
 }

@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Divya Pillai
+Admission Date: 2025-07-22
+Discharge Date: 2025-07-25
+Diagnosis: Full term pregnancy
+Procedure: Lower segment caesarean section
+
+Clinical Notes:
+Mother and baby discharged in good health.

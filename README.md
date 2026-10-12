@@ -6,6 +6,8 @@
 
 Claim Sense takes a health, motor, property (home) or travel claim from intake to a human decision. It reads the claim documents, matches the policy wording that was in force on the incident date, retrieves the relevant clauses with page and clause citations, checks coverage and exclusions, calculates the payable amount with deterministic rules, raises risk and fraud signals, and hands an evidence-backed recommendation to a human reviewer. Every step is recorded in an audit trail.
 
+**Live demo:** https://claim-sense.onrender.com (Render free tier; the first request after a quiet spell can take a minute while the service wakes). Verified on 2026-10-12 by the **Verify deployment** workflow: every smoke check passed ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38266390199)).
+
 All policies, people and claims in this repository are **synthetic**. See [Data](#data-and-datasets).
 
 ![Dashboard](docs/screenshots/14-dashboard-after-review.png)
@@ -30,14 +32,14 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor / 5.3 property and travel); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
 | Decision letters | Settlement, repudiation (quotes the clause relied on), document-request and under-review letters built from data, no LLM; printable; marked draft until a human decides | claim page |
 | Export | Download the claim register as CSV with decision, payable amount, risk and settlement status | `/claims` |
-| Golden evaluation | 22 hand-worked claim cases across all four lines (all 10 required types) and 26 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
+| Golden evaluation | 26 hand-worked claim cases across all four lines (all 10 required types) and 26 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
 | Policy library | Browse clauses by version, view structured terms, ingest new wordings as PDF or Markdown with checksum, page-preserving extraction and visible processing states (Uploaded → Validating → Extracting → Indexing → Ready / Failed) | `/policies` |
 | Provenance | Source registry with publisher, dates, licence, intended use and SHA-256 checked on every request; RAG manifest tracing every indexed chunk to file, version, page, clause and extraction run; chunks without provenance are kept out of the index | `/datasets`, [docs/DATA_PROVENANCE.md](docs/DATA_PROVENANCE.md) |
 
 ## Real results from the golden scenarios
 
-These are the outputs the running system produces for the 15 seeded claims (no hand-edited numbers; `backend/tests/test_golden_path.py` asserts the recommendations and `reports/evaluation.md` the amounts). [reports/claims_results.md](reports/claims_results.md) has all 23 claim packets in the repository, totals by line and where the money went; regenerate it with `python3 scripts/claims_report.py`.
+These are the outputs the running system produces for the 19 seeded claims (no hand-edited numbers; `backend/tests/test_golden_path.py` asserts the recommendations and `reports/evaluation.md` the amounts). [reports/claims_results.md](reports/claims_results.md) has all 27 claim packets in the repository, totals by line and where the money went; regenerate it with `python3 scripts/claims_report.py`.
 
 | Claim | Scenario | Wording | Claimed | Payable | Coverage | Risk | Recommendation |
 |---|---|---|---:|---:|---|---|---|
@@ -56,6 +58,10 @@ These are the outputs the running system produces for the 15 seeded claims (no h
 | CLM-T-4002 | Lost checked baggage above per-item and per-trip limits | TRV-GLOBE v2025.1 | ₹1,81,000 | ₹95,000 | Covered | Low | Partial approval |
 | CLM-T-4003 | Paragliding injury in Switzerland | TRV-GLOBE v2025.1 | ₹2,01,000 | ₹0 | Not covered (§3.2) | Low | Reject |
 | CLM-T-4004 | Lost baggage, no airline irregularity report | TRV-GLOBE v2025.1 | ₹43,000 | ₹38,000 | Covered | Low (10) | Request info |
+| CLM-H-1007 | Caesarean delivery | HLT-SHIELD v2025.1 | ₹77,500 | ₹0 | Not covered (§4.4) | Low | Reject |
+| CLM-M-2003 | Driver's licence expired before the accident | MTR-SECURE v2025.1 | ₹58,500 | ₹0 | Not covered (§3.2) | Low | Reject |
+| CLM-P-3004 | Burglary after the home was unoccupied for about 95 days | HOME-GUARD v2025.1 | ₹1,72,000 | ₹0 | Not covered (§3.3) | Low | Reject |
+| CLM-T-4005 | Heart condition under treatment before departure | TRV-GLOBE v2025.1 | ₹2,78,000 | ₹0 | Not covered (§3.1) | Low | Reject |
 
 CLM-H-1001 waterfall, as the app shows it:
 
@@ -68,7 +74,7 @@ CLM-H-1001 waterfall, as the app shows it:
 | R40_COPAY | Co-payment 10% | −₹9,370 | ₹84,330 | §5.2 |
 | R50_MAX_LIABILITY | Within sum insured ₹5,00,000 | — | **₹84,330** | §5.3 |
 
-**Synthetic portfolio check.** The same risk rules scored a 1,000-claim synthetic portfolio with 64 injected anomalies: precision 84.1%, recall 82.8% (TP 53, FP 10, FN 11, TN 926). This only shows the rules recover patterns we injected ourselves; it says nothing about real-world fraud detection.
+**Synthetic portfolio check.** The same risk rules scored a 1,000-claim synthetic portfolio across all four lines (507 health, 241 motor, 124 property, 128 travel) with 69 injected anomalies: precision 86.6%, recall 84.1% (TP 58, FP 9, FN 11, TN 922). This only shows the rules recover patterns we injected ourselves; it says nothing about real-world fraud detection.
 
 | | |
 |---|---|
@@ -157,7 +163,7 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 89 tests
+cd backend && ruff check app tests && python -m pytest -q    # 93 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
 python3 scripts/claims_report.py                             # every claim packet -> reports/claims_results.md
 python3 scripts/provenance.py --check                        # source registry, checksums, RAG manifest
@@ -165,15 +171,15 @@ cd frontend && npm run build                                 # type check + prod
 cd e2e && npm ci && npx playwright test                      # 11 browser tests against a fresh stack on :8080
 ```
 
-Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all 15 golden scenarios, the property and travel rules (average clause, per-item and benefit limits, trip period, loss-dependent documents), settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 405 / 405 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
+Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all 19 golden scenarios, the property and travel rules (average clause, per-item and benefit limits, trip period, loss-dependent documents), settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 449 / 449 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Data and datasets
 
 | Data | Status |
 |---|---|
 | Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, HOME-GUARD 2025.1, TRV-GLOBE 2025.1, each with structured terms that cite clauses | In use |
-| 15 synthetic golden claim packets across the four lines (claim forms, bills, estimates, discharge summaries, police reports, surveyor loss assessments, travel expense statements, airline irregularity reports; one as PDF) | In use |
-| 1,000-claim synthetic portfolio with labelled injected anomaly patterns | In use for analytics and rule evaluation |
+| 19 synthetic golden claim packets across the four lines (claim forms, bills, estimates, discharge summaries, police reports, surveyor loss assessments, travel expense statements, airline irregularity reports; one as PDF) | In use |
+| 1,000-claim synthetic portfolio across the four lines with labelled injected anomaly patterns | In use for analytics and rule evaluation |
 | IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with publication date, URL, licence status and intended use; not downloaded in this build |
 
 Everything is regenerated deterministically with `python data/synthetic/generate.py`; then `python scripts/provenance.py --write` re-stamps the checksums in [data/source_registry.json](data/source_registry.json). The wording borrows common Indian retail-insurance concepts but is not any insurer's product and not regulatory text. Never commit real customer data or confidential policy documents.
@@ -186,7 +192,7 @@ Everything is regenerated deterministically with `python data/synthetic/generate
 
   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sricharansk/CLAIM-SENSE)
 
-The cloud deployment has **not** been run yet. No cloud credentials were available while building. Once deployed, run `python3 scripts/smoke_test.py https://<service> <DEMO_PASSWORD>` (or the **Verify deployment** workflow in GitHub Actions) before calling it live. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+**Deployed** on Render at https://claim-sense.onrender.com from `main`; verified 2026-10-12 ([Verify deployment run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38266390199)). After each deploy, run `python3 scripts/smoke_test.py https://<service> <DEMO_PASSWORD>` (or the **Verify deployment** workflow in GitHub Actions) before calling it live. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Repository layout
 

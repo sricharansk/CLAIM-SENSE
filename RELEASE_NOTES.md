@@ -1,5 +1,12 @@
 # Release notes
 
+## Claim Sense 1.2.0 — 2026-10-12
+
+- **Live on Render** at https://claim-sense.onrender.com, verified by the **Verify deployment** workflow: every smoke check passed, including a health, a property and a travel claim ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38266390199)).
+- **Four more seeded claims** for clauses no claim exercised: maternity (health §4.4), expired driving licence (motor §3.2), unoccupied home (property §3.3), pre-existing condition (travel §3.1). Golden evaluation: 449/449 checks over 26 claim cases and 26 questions.
+- **Synthetic portfolio covers all four lines** (507 health, 241 motor, 124 property, 128 travel). Travel claims are scored without the early-claim signal, as in the live risk agent. Risk rules: precision 86.6%, recall 84.1% on injected anomalies.
+- **No more Node.js 20 warnings in GitHub Actions:** checkout v5, setup-node v5, setup-python v6, upload-artifact v6 (all run on Node 24).
+
 ## Claim Sense 1.1.0 — 2026-10-12
 
 - **Property and travel lines.** HOME-GUARD (householder) and TRV-GLOBE (overseas travel) wordings, each with clause-cited terms. New deterministic rules: depreciation on home contents, the average clause for underinsured homes (2.3), excess, per-item and per-trip baggage limits, trip-cancellation limit, non-payable personal comfort items, and the travel trip-period check (1.3). Documents required only for some losses (police report for burglary, airline irregularity report for lost baggage, medical report for treatment abroad) are checked from the claim text.

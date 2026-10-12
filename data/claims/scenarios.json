@@ -225,5 +225,67 @@
     ],
     "expected_recommendation": "REQUEST_INFO",
     "scenario": "Baggage claim without the airline's property irregularity report (5.2)"
+  },
+  {
+    "claim_number": "CLM-H-1007",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-24-000611",
+    "claimant_name": "Divya Pillai",
+    "incident_date": "2025-07-22",
+    "description": "Admitted at full term and delivered by caesarean section.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Maternity and childbirth exclusion (4.4)"
+  },
+  {
+    "claim_number": "CLM-M-2003",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001452",
+    "claimant_name": "Rohan Gupta",
+    "incident_date": "2025-10-03",
+    "description": "Skidded on a wet road and hit a parked truck; front bumper, bonnet and headlamp damaged.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "police_report.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Driver without a valid licence exclusion (3.2)"
+  },
+  {
+    "claim_number": "CLM-P-3004",
+    "claim_type": "property",
+    "policy_number": "CS-HOM-25-003260",
+    "claimant_name": "Farhan Ali",
+    "incident_date": "2025-09-12",
+    "description": "The house was broken into and electronics were stolen while the family was abroad; it had been unoccupied since early June.",
+    "documents": [
+      "claim_form.txt",
+      "loss_assessment.txt",
+      "police_report.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Unoccupied premises exclusion (3.3)"
+  },
+  {
+    "claim_number": "CLM-T-4005",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004611",
+    "claimant_name": "Gopal Krishnan",
+    "incident_date": "2025-12-06",
+    "description": "Chest pain in Toronto; admitted to hospital for a known heart condition that was under treatment before departure.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "medical_report.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Pre-existing condition exclusion (3.1)"
   }
 ]
