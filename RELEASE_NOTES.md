@@ -4,7 +4,8 @@
 
 - **16 more seeded claims (50 in all; 57 in the live app, 58 in the results report).** Until now most seeded claims tested an exclusion; these cover the common payable situations on every line, each with a hand-worked golden case: hernia after the 24-month wait, ICU above the per-day limit, an accident inside the 30-day wait, a declared pre-existing disease after 36 months (health); a car over five years old, flood, a new car above 1500cc, malicious damage with a police report (motor); a burst pipe, a cyclone with underinsurance, an earthquake (property); a trip cut short by a family death, a large heart-attack claim, lost baggage inside every limit, an accident with an ambulance (travel).
 - **A lapsed policy is now tested** (CLM-H-1021). The rejection for a loss outside the policy period now cites the coverage clause, as the passing check already did, so the letter quotes it.
-- Golden evaluation: 803/803 checks over 57 claim cases and 26 questions. 126 backend tests.
+- Golden evaluation: 803/803 checks over 57 claim cases and 26 questions. 127 backend tests.
+- **Live claims report.** `scripts/claims_report.py --live URL` reports the claims on a deployed site, read-only, including reviewer decisions and claims filed there; the Verify deployment workflow saves it as the `live-claims` artifact before the smoke test runs.
 
 ## Claim Sense 1.3.1 — 2026-10-12
 

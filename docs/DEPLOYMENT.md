@@ -1,6 +1,6 @@
 # Deployment
 
-Status: **deployed on Render** at https://claim-sense.onrender.com from `main`, verified 2026-10-12 by the **Verify deployment** workflow ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38266390199)). Do not claim a new deployment until `scripts/smoke_test.py <url>` passes against it.
+Status: **deployed on Render** at https://claim-sense.onrender.com from `main`, verified 2026-10-12 by the **Verify deployment** workflow ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38321994424): 57 seeded claims, 803/803). Do not claim a new deployment until `scripts/smoke_test.py <url>` passes against it.
 
 ## Local Docker
 
@@ -24,7 +24,7 @@ Behind a TLS-inspecting proxy, pass its CA to the build: `docker build --secret 
 1. Render builds the default branch (`main`). Merge the open pull request first so `main` has every feature in this document; `main` already runs the golden path.
 2. Use the [Deploy to Render](https://render.com/deploy?repo=https://github.com/sricharansk/CLAIM-SENSE) link, or on render.com choose **New → Blueprint** and select this repository; `render.yaml` defines a free Docker web service and generates `AUTH_SECRET`. Enter a `DEMO_PASSWORD` when asked (or leave it to use the default).
 3. Wait for the health check on `/api/v1/health`, then run `python3 scripts/smoke_test.py https://<your-app>.onrender.com <DEMO_PASSWORD>`. For the browser suite as well: `cd e2e && BASE_URL=https://<your-app>.onrender.com DEMO_PASSWORD=<…> npx playwright test` (on a freshly started service).
-4. Or verify from GitHub instead of your machine: run the **Verify deployment** workflow (Actions tab) with the service URL. It waits for `/api/v1/ready`, runs the smoke test and, if ticked, the browser suite. Set the `DEMO_PASSWORD` repository secret first if you changed the password.
+4. Or verify from GitHub instead of your machine: run the **Verify deployment** workflow (Actions tab) with the service URL. It waits for `/api/v1/ready`, saves a read-only snapshot of the claims on the site as the `live-claims` artifact (`scripts/claims_report.py --live`), then runs the smoke test and, if ticked, the browser suite. Set the `DEMO_PASSWORD` repository secret first if you changed the password.
 
 The free plan uses SQLite that is re-seeded on each restart, which suits a demo but not real data. A fresh start holds 57 analysed claims: the 50 seeded scenarios and the 7 evaluation packets (`CLAIMSENSE_SEED_PACKETS`, on by default). Claims filed through the UI or the smoke test are added to these and are lost at the next restart.
 
