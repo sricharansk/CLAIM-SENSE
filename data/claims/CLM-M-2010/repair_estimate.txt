@@ -1,0 +1,16 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2010
+Vehicle Registration: MH-02-SY-5124
+Patient/Insured Name: Nisha Rao
+
+Itemised Charges:
+Rear Bumper (plastic) - replace                                 16,000.00
+Boot Lid Panel (metal) - replace                                30,000.00
+Tail Lamp Assembly (plastic)                                     9,000.00
+Denting and Fitting Labour                                       8,000.00
+Painting Material                                                6,000.00
+
+Total Amount                                                    69,000.00

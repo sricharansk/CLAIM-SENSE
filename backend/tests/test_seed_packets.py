@@ -22,7 +22,7 @@ def test_live_seed_files_every_evaluation_packet_with_the_golden_outcome(client,
     monkeypatch.setattr(settings, "seed_packets", True)
     try:
         with sessionmaker(bind=engine, expire_on_commit=False)() as db:
-            assert seeding.seed(db)["claims"] == 34 + 7
+            assert seeding.seed(db)["claims"] == 50 + 7
             assert seeding.seed(db)["claims"] == 0  # idempotent
             for c in cases:
                 claim = db.query(Claim).filter_by(claim_number=c["seeded_as"]).one()

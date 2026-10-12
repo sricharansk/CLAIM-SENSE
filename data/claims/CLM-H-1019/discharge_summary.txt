@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Sameer Khan
+Admission Date: 2025-07-12
+Discharge Date: 2025-07-15
+Diagnosis: Fracture of the right tibia following a road accident
+Procedure: Intramedullary nailing
+
+Clinical Notes:
+Mobilised with crutches. Discharged.

@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1020
+Admission Date: 2025-10-14
+Discharge Date: 2025-10-17
+Patient/Insured Name: Kamala Devi
+
+Itemised Charges:
+Room Rent - Twin Sharing (3 days @ 6,000)                       18,000.00
+Consultant Physician Fees                                       12,000.00
+Pharmacy - Medicines and Drugs                                   9,000.00
+Laboratory and Diagnostic Tests (ECG, Echo)                      7,000.00
+Admission Kit and Consumables                                    2,000.00
+
+Total Amount                                                    48,000.00

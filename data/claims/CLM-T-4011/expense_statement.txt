@@ -1,0 +1,12 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Melbourne
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Sanjay Gupta
+
+Itemised Charges:
+Unused Hotel Nights (non-refundable)                            54,000.00
+Return Flight Rebooking Charges                                 38,000.00
+
+Total Amount                                                    92,000.00

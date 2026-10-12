@@ -42,7 +42,8 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
 
     if not (ins.start_date <= incident <= ins.end_date):
         status = "NOT_COVERED"
-        add("POLICY_NOT_IN_FORCE", "FAIL", f"Incident {incident} is outside the policy period {ins.start_date} to {ins.end_date}.")
+        add("POLICY_NOT_IN_FORCE", "FAIL", f"Incident {incident} is outside the policy period {ins.start_date} to {ins.end_date}.",
+            terms.get("coverage_clause"))
     else:
         add("POLICY_IN_FORCE", "PASS", f"Incident {incident} is within the policy period {ins.start_date} to {ins.end_date}.",
             terms.get("coverage_clause"))

@@ -4,7 +4,7 @@
 
 ```bash
 cd backend && ruff check app tests ../scripts && python -m pytest -q     # 109 tests
-python3 scripts/evaluate.py                                             # golden evaluation, 612 checks
+python3 scripts/evaluate.py                                             # golden evaluation, 803 checks
 python3 scripts/provenance.py --check                                   # registry, checksums, reproducible RAG manifest
 cd frontend && npm run build                                            # type check + build
 cd e2e && npx playwright test                                           # 12 browser tests (fresh stack)
@@ -20,7 +20,7 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | `test_adjudication.py` | 7 | Hand-calculated waterfalls, rounding, caps, depreciation bands |
 | `test_rag.py` | 5 | Clause parser keeps page/section/clause; hybrid ranking; cited answers; synonyms; refusal |
 | `test_extraction.py` | 4 | Field and line-item extraction from text and PDF |
-| `test_golden_path.py` | 45 | All 34 seeded scenarios across the four lines; version matching; rejection citation; duplicates; create → upload → analyse → review; safe failure; validation; headers and error shape |
+| `test_golden_path.py` | 62 | All 50 seeded scenarios across the four lines; version matching; rejection citation; duplicates; create → upload → analyse → review; safe failure; validation; headers and error shape |
 | `test_auth.py` | 7 | Sign-in, roles, approval limit, escalation, read-only auditor |
 | `test_letters_sla.py` | 7 | Settlement-clock states; letter content per decision type; CSV export |
 | `test_evaluation.py` | 3 | Evaluation report served and complete; sign-in required; refusals |
@@ -36,7 +36,7 @@ Tests use an isolated temporary SQLite database seeded from `data/`, without the
 
 ## Golden evaluation (`scripts/evaluate.py`)
 
-- **Claim cases:** 41 across health, motor, property and travel, covering all ten blueprint case types: clearly covered, excluded, partial, insufficient evidence, high risk, deductible, sub-limit, maximum coverage, duplicate, and ambiguous policy version.
+- **Claim cases:** 57 across health, motor, property and travel, covering all ten blueprint case types: clearly covered, excluded, partial, insufficient evidence, high risk, deductible, sub-limit, maximum coverage, duplicate, and ambiguous policy version.
 - **Policy questions:** 26, split into covered, excluded, ambiguous and unsupported.
 - **Expected values:** worked out by hand in `data/evaluation/golden_cases.json`.
 - **Scoring:** results are scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow. The report is written to `reports/evaluation.{json,md}` and shown at `/evaluation`. CI fails on any failed check.

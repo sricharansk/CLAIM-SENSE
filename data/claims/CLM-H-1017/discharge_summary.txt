@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Anil Kapoor
+Admission Date: 2025-08-20
+Discharge Date: 2025-08-22
+Diagnosis: Right inguinal hernia
+Procedure: Laparoscopic hernia repair with mesh
+
+Clinical Notes:
+Discharged on the second day.

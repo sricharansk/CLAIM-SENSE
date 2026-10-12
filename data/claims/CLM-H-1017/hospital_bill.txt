@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1017
+Admission Date: 2025-08-20
+Discharge Date: 2025-08-22
+Patient/Insured Name: Anil Kapoor
+
+Itemised Charges:
+Room Rent - Twin Sharing (2 days @ 4,500)                        9,000.00
+Surgeon and Anaesthetist Fees                                   38,000.00
+Operation Theatre Charges                                       14,000.00
+Pharmacy - Medicines and Mesh Implant                           16,000.00
+Laboratory and Diagnostic Tests                                  4,000.00
+
+Total Amount                                                    81,000.00

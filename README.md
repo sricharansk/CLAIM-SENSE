@@ -32,14 +32,14 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor / 5.3 property and travel); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
 | Decision letters | Settlement, repudiation (quotes the clause relied on), document-request and under-review letters built from data, no LLM; printable; marked draft until a human decides | claim page |
 | Export | Download the claim register as CSV with decision, payable amount, risk and settlement status | `/claims` |
-| Golden evaluation | 41 hand-worked claim cases across all four lines (all 10 required types) and 26 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
+| Golden evaluation | 57 hand-worked claim cases across all four lines (all 10 required types) and 26 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
 | Policy library | Browse clauses by version, view structured terms, ingest new wordings as PDF or Markdown with checksum, page-preserving extraction and visible processing states (Uploaded → Validating → Extracting → Indexing → Ready / Failed) | `/policies` |
 | Provenance | Source registry with publisher, dates, licence, intended use and SHA-256 checked on every request; RAG manifest tracing every indexed chunk to file, version, page, clause and extraction run; chunks without provenance are kept out of the index | `/datasets`, [docs/DATA_PROVENANCE.md](docs/DATA_PROVENANCE.md) |
 
 ## Real results from the golden scenarios
 
-These are the outputs the running system produces for the 34 seeded scenarios, one or more for every exclusion, waiting period, limit and loss-dependent document in the four wordings (no hand-edited numbers; `backend/tests/test_golden_path.py` asserts the recommendations and `reports/evaluation.md` the amounts). [reports/claims_results.md](reports/claims_results.md) has all 42 claim packets in the repository, totals by line and where the money went; regenerate it with `python3 scripts/claims_report.py`. The deployed app starts with 41 of them already analysed (the 34 scenarios and the 7 evaluation packets); the demo upload is the one you file yourself.
+These are the outputs the running system produces for the 50 seeded scenarios, one or more for every exclusion, waiting period, limit and loss-dependent document in the four wordings, plus the common payable situations on every line and a lapsed policy (no hand-edited numbers; `backend/tests/test_golden_path.py` asserts the recommendations and `reports/evaluation.md` the amounts). [reports/claims_results.md](reports/claims_results.md) has all 58 claim packets in the repository, totals by line and where the money went; regenerate it with `python3 scripts/claims_report.py`. The deployed app starts with 57 of them already analysed (the 50 scenarios and the 7 evaluation packets); the demo upload is the one you file yourself.
 
 | Claim | Scenario | Wording | Claimed | Payable | Coverage | Risk | Recommendation |
 |---|---|---|---:|---:|---|---|---|
@@ -77,6 +77,22 @@ These are the outputs the running system produces for the 34 seeded scenarios, o
 | CLM-T-4006 | Fall while intoxicated abroad | TRV-GLOBE v2025.1 | ₹1,14,000 | ₹0 | Not covered (§3.3) | Low | Reject |
 | CLM-T-4007 | Trip against medical advice after surgery | TRV-GLOBE v2025.1 | ₹1,95,000 | ₹0 | Not covered (§3.4) | Low | Reject |
 | CLM-T-4008 | Hospital treatment abroad, no doctor's report | TRV-GLOBE v2025.1 | ₹68,000 | ₹63,000 | Covered | Low (10) | Request info |
+| CLM-H-1017 | Hernia repair after the 24-month wait | HLT-SHIELD v2025.1 | ₹81,000 | ₹68,400 | Covered | Low | Partial approval |
+| CLM-H-1018 | Severe dengue, ICU above the per-day limit | HLT-SHIELD v2025.1 | ₹94,000 | ₹69,300 | Covered | Low | Partial approval |
+| CLM-H-1019 | Road accident 11 days into cover | HLT-SHIELD v2025.1 | ₹80,000 | ₹67,500 | Covered | Low (20) | Partial approval |
+| CLM-H-1020 | Known hypertension after the 36-month wait | HLT-SHIELD v2025.1 | ₹48,000 | ₹34,200 | Covered | Low | Partial approval |
+| CLM-H-1021 | Admission after the policy lapsed | HLT-SHIELD v2025.1 | ₹27,000 | ₹0 | Not covered (§2.1) | Low | Reject |
+| CLM-M-2008 | Car over five years old: 40% on metal | MTR-SECURE v2025.1 | ₹47,000 | ₹30,400 | Covered | Low | Partial approval |
+| CLM-M-2009 | Flood in a basement car park | MTR-SECURE v2025.1 | ₹68,000 | ₹48,000 | Covered | Low | Partial approval |
+| CLM-M-2010 | New car under six months, 1598cc | MTR-SECURE v2025.1 | ₹69,000 | ₹50,000 | Covered | Low | Partial approval |
+| CLM-M-2011 | Malicious damage with a police report | MTR-SECURE v2025.1 | ₹48,000 | ₹38,000 | Covered | Low | Partial approval |
+| CLM-P-3009 | Burst water tank pipe | HOME-GUARD v2025.1 | ₹1,39,000 | ₹1,19,200 | Covered | Low | Partial approval |
+| CLM-P-3010 | Cyclone, home underinsured | HOME-GUARD v2025.1 | ₹1,45,000 | ₹98,800 | Covered | Low | Partial approval |
+| CLM-P-3011 | Earthquake damage to walls and contents | HOME-GUARD v2025.1 | ₹1,68,000 | ₹1,49,000 | Covered | Low | Partial approval |
+| CLM-T-4011 | Trip cut short by a death in the family | TRV-GLOBE v2025.1 | ₹92,000 | ₹87,000 | Covered | Low | Partial approval |
+| CLM-T-4012 | Heart attack in New York | TRV-GLOBE v2025.1 | ₹8,49,000 | ₹8,40,000 | Covered | Low | Partial approval |
+| CLM-T-4013 | Lost baggage inside every limit | TRV-GLOBE v2025.1 | ₹69,000 | ₹64,000 | Covered | Low | Partial approval |
+| CLM-T-4014 | Scooter accident in Bali, ambulance | TRV-GLOBE v2025.1 | ₹1,85,500 | ₹1,79,000 | Covered | Low | Partial approval |
 
 CLM-H-1001 waterfall, as the app shows it:
 
@@ -196,7 +212,7 @@ Tests cover sign-in, roles, approval limits and escalation, security headers and
 | Data | Status |
 |---|---|
 | Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, HOME-GUARD 2025.1, TRV-GLOBE 2025.1, each with structured terms that cite clauses | In use |
-| 34 synthetic golden claim packets across the four lines (claim forms, bills, estimates, discharge summaries, police reports, surveyor loss assessments, travel expense statements, airline irregularity reports; one as PDF) | In use |
+| 50 synthetic golden claim packets across the four lines (claim forms, bills, estimates, discharge summaries, police reports, surveyor loss assessments, travel expense statements, airline irregularity reports; one as PDF) | In use |
 | 1,000-claim synthetic portfolio across the four lines with labelled injected anomaly patterns | In use for analytics and rule evaluation |
 | IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with publication date, URL, licence status and intended use; not downloaded in this build |
 

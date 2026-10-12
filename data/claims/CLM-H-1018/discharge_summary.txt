@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Patient Name: Rekha Nair
+Admission Date: 2025-09-08
+Discharge Date: 2025-09-13
+Diagnosis: Severe dengue with thrombocytopenia
+Procedure: Medical management in intensive care
+
+Clinical Notes:
+Platelets recovered. Discharged in stable condition.

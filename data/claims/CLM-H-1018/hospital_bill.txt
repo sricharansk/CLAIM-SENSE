@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sunrise Care Hospital (fictional)
+Bill Number: HB-1018
+Admission Date: 2025-09-08
+Discharge Date: 2025-09-13
+Patient/Insured Name: Rekha Nair
+
+Itemised Charges:
+ICU Charges (3 days @ 14,000)                                   42,000.00
+Room Rent - Twin Sharing (2 days @ 5,000)                       10,000.00
+Consultant Physician Fees                                       15,000.00
+Pharmacy - Medicines and IV Fluids                              18,000.00
+Laboratory Tests - Platelet Count Series                         9,000.00
+
+Total Amount                                                    94,000.00

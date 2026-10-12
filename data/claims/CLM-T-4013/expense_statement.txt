@@ -1,0 +1,14 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Sydney
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Rohit Sinha
+
+Itemised Charges:
+Checked Suitcase                                                15,000.00
+Clothing                                                        22,000.00
+Shoes and Accessories                                            8,000.00
+Camera with Lens                                                24,000.00
+
+Total Amount                                                    69,000.00

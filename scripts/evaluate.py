@@ -3,7 +3,7 @@
 
 Usage: python scripts/evaluate.py [--out reports]
 
-Creates a temporary SQLite database seeded with the synthetic corpus, runs the 41 claim cases and 26
+Creates a temporary SQLite database seeded with the synthetic corpus, runs the 57 claim cases and 26
 policy-assistant questions in data/evaluation/ through the real API, and writes evaluation.json and
 evaluation.md. Exits 1 if any check fails. The LLM is always off so results are deterministic.
 """

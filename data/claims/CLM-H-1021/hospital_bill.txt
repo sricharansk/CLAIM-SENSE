@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1021
+Admission Date: 2025-07-20
+Discharge Date: 2025-07-23
+Patient/Insured Name: Varun Bhatia
+
+Itemised Charges:
+Room Rent - General Ward (3 days @ 3,500)                       10,500.00
+Consultant Physician Fees                                        7,000.00
+Pharmacy - Medicines and Drugs                                   6,500.00
+Laboratory Tests - Blood Counts                                  3,000.00
+
+Total Amount                                                    27,000.00

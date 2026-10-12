@@ -1,0 +1,16 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2008
+Vehicle Registration: DL-08-SY-3390
+Patient/Insured Name: Deepak Chawla
+
+Itemised Charges:
+Front Door Panel (metal) - replace                              24,000.00
+Side Mirror Assembly (plastic)                                   5,000.00
+Window Glass (front door)                                        6,000.00
+Denting and Fitting Labour                                       7,000.00
+Painting Material                                                5,000.00
+
+Total Amount                                                    47,000.00

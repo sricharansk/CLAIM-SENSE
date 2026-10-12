@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-1203-33
+Date of Accident: 2025-12-03
+Vehicle Registration: TS-07-SY-8846
+
+Findings:
+Malicious damage by unknown persons confirmed. Case registered.

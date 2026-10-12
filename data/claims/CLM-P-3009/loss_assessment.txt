@@ -1,0 +1,18 @@
+SURVEYOR'S LOSS ASSESSMENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Deccan Loss Surveyors (fictional)
+Survey Reference: SV-3009
+Incident Date: 2025-08-03
+Patient/Insured Name: Sunita Reddy
+
+Itemised Charges:
+Flooring Repair                                                 52,000.00
+Wall Plaster Repair                                             23,000.00
+Wardrobe Panel Replacement                                      30,000.00
+Washing Machine                                                 34,000.00
+
+Total Amount                                                   139,000.00
+
+Surveyor Observations:
+Sudden bursting of the overhead tank outlet pipe is confirmed. The damage is recent and accidental.

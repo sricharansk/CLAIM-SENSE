@@ -1,0 +1,16 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: New York
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Bhavna Shah
+
+Itemised Charges:
+Emergency Room Assessment                                       45,000.00
+Hospital Room Charges (4 days)                                 180,000.00
+Cardiologist and Surgeon Fees                                  260,000.00
+Cardiac Treatment - Angioplasty and Stent                      320,000.00
+Pharmacy and Medicines                                          40,000.00
+Telephone and Laundry                                            4,000.00
+
+Total Amount                                                   849,000.00

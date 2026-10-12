@@ -1,0 +1,15 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2011
+Vehicle Registration: TS-07-SY-8846
+Patient/Insured Name: Farah Khan
+
+Itemised Charges:
+Windshield Glass                                                18,000.00
+Left Door Panel (metal) - repair                                16,000.00
+Painting Material                                                8,000.00
+Denting and Fitting Labour                                       6,000.00
+
+Total Amount                                                    48,000.00
