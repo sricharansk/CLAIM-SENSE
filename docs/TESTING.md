@@ -29,9 +29,10 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | `test_fact_correction.py` | 2 | Correction used by the next analysis, audited, extracted value kept, latest wins; date, amount, reason, role and decided-claim validation |
 | `test_provenance.py` | 6 | Committed registry valid; validator rejects missing or wrong provenance and checksum drift; `/datasets`; every indexed chunk resolves; a chunk without an extraction run is kept out of the index; backfill |
 | `test_property_travel.py` | 11 | Property average clause (hand calculation) and tolerance; valuables; travel per-item and benefit limits; medical without sub-limit; per-line item categories; value at risk extracted; burglary without a police report; travel claim outside the trip; claim-type validation; value-at-risk correction validated and used |
+| `test_seed_packets.py` | 1 | The deployed seed files the 7 evaluation packets as claims, idempotently, each with its hand-worked recommendation and amount |
 | `test_review_assignment.py` | 3 | Queue shows risk, age and assignee; take, release and supervisor reassignment; others cannot take or decide an assigned task; supervisor-queue and auditor limits; audit events |
 
-Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is always off.
+Tests use an isolated temporary SQLite database seeded from `data/`, without the evaluation packets (`CLAIMSENSE_SEED_PACKETS=false`), because several tests file those packets themselves. The LLM is always off.
 
 ## Golden evaluation (`scripts/evaluate.py`)
 
