@@ -58,7 +58,14 @@ async def correlation_id(request: Request, call_next):
     response = await call_next(request)
     response.headers["x-correlation-id"] = cid
     response.headers.update(SECURITY_HEADERS)
-    if request.url.path in ("/docs", "/redoc"):
+    path = request.url.path
+    if path.startswith("/assets/") and response.status_code == 200:
+        # built files carry a content hash in their name, so they never change
+        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+    elif not path.startswith("/api/"):
+        # the page must always be re-checked, or a browser can keep a copy pointing at files that failed to load
+        response.headers["Cache-Control"] = "no-cache"
+    if path in ("/docs", "/redoc"):
         # Swagger UI loads its assets from a CDN; keep the other headers but skip the strict CSP there.
         del response.headers["Content-Security-Policy"]
     return response

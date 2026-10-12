@@ -162,3 +162,19 @@ test("property and travel claims are filed and assessed through the UI", async (
     await expect(page.getByText(rule)).toBeVisible();
   }
 });
+
+test("dashboard tiles, lines and bars open the matching claims", async ({ page }) => {
+  await signIn(page, "Supervisor");
+  await expect(page.locator("a.kpi-link").first()).toHaveCSS("border-top-style", "solid");
+  const travel = page.locator("table.lines tr", { hasText: "Travel" });
+  const count = Number(await travel.locator("td").nth(1).innerText());
+  await travel.getByRole("link", { name: "Travel" }).click();
+  await expect(page.getByText(`Showing ${count} of`)).toBeVisible();
+  await expect(page.locator("tbody tr")).toHaveCount(count);
+  await page.getByRole("button", { name: /type = travel/ }).click();
+  await expect(page.getByText(/Showing \d+ of/)).toHaveCount(0);
+  await page.goto("/");
+  await page.locator(".bar-label a", { hasText: "Recommend reject" }).first().click();
+  await expect(page.getByText(/Showing \d+ of \d+ claims where/)).toBeVisible();
+  for (const badge of await page.locator("tbody tr td:nth-child(8)").allInnerTexts()) expect(badge).toBe("Recommend reject");
+});

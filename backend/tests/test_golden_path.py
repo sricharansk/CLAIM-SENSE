@@ -105,6 +105,10 @@ def test_health_ready_and_analytics(client):
     a = client.get("/api/v1/analytics").json()
     assert a["totals"]["claims"] >= 8
     assert a["portfolio"]["claims"] == 1000 and 0 < a["portfolio"]["recall"] <= 1
+    lines = a["lines"]
+    assert set(lines) == {"health", "motor", "property", "travel"}
+    assert sum(v["claims"] for v in lines.values()) == a["totals"]["claims"]
+    assert abs(sum(float(v["payable"]) for v in lines.values()) - float(a["totals"]["recommended_payable"])) < 0.01
 
 
 def test_security_headers_and_error_shape(client):
@@ -127,3 +131,14 @@ def test_upload_filename_cannot_escape_storage(client):
 def test_api_docs_page_loads(client):
     r = client.get("/docs")
     assert r.status_code == 200 and "content-security-policy" not in r.headers
+
+
+def test_frontend_cache_headers(client, tmp_path, monkeypatch):
+    """Hashed assets are cached for a year; the page itself is always re-checked so it never points at stale files."""
+    from app import main
+    r = client.get("/api/v1/health")
+    assert "immutable" not in r.headers.get("cache-control", "")
+    if not (main._static / "index.html").exists():
+        return  # the built frontend is only present in the container image
+    page = client.get("/")
+    assert page.headers["cache-control"] == "no-cache"

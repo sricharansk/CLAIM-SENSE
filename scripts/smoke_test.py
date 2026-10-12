@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -49,6 +50,16 @@ ROOT_URL = BASE[: -len("/api/v1")]
 with urllib.request.urlopen(ROOT_URL + "/", timeout=60) as r:
     page = r.read().decode("utf-8", "replace")
 check("frontend", r.status == 200 and "<title>Claim Sense</title>" in page and "/assets/" in page, f"{len(page)} bytes of HTML")
+# The page is only usable if its stylesheet and script load with the right type (nosniff makes browsers strict).
+for kind, pattern, want in (("stylesheet", r'href="(/assets/[^"]+\.css)"', "text/css"),
+                            ("script", r'src="(/assets/[^"]+\.js)"', "javascript")):
+    found = re.search(pattern, page)
+    if not found:
+        check(f"frontend {kind}", False, "no link in index.html")
+    with urllib.request.urlopen(ROOT_URL + found.group(1), timeout=60) as a:
+        body, ctype = a.read(), a.headers.get("Content-Type", "")
+    check(f"frontend {kind}", a.status == 200 and want in ctype and len(body) > 1000,
+          f"{found.group(1)} HTTP {a.status}, {ctype}, {len(body)} bytes")
 health = call("GET", "/health")
 check("health", health["status"] == "ok", json.dumps(health))
 ready = call("GET", "/ready")

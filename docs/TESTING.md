@@ -3,11 +3,11 @@
 ## Commands
 
 ```bash
-cd backend && ruff check app tests ../scripts && python -m pytest -q     # 108 tests
+cd backend && ruff check app tests ../scripts && python -m pytest -q     # 109 tests
 python3 scripts/evaluate.py                                             # golden evaluation, 612 checks
 python3 scripts/provenance.py --check                                   # registry, checksums, reproducible RAG manifest
 cd frontend && npm run build                                            # type check + build
-cd e2e && npx playwright test                                           # 11 browser tests (fresh stack)
+cd e2e && npx playwright test                                           # 12 browser tests (fresh stack)
 docker compose up --build -d && python3 scripts/smoke_test.py http://localhost:8080
 ```
 
@@ -42,7 +42,7 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
 
 ## End-to-end
 
-- **`scripts/smoke_test.py <url> [password]`:** checks the frontend, health and readiness, sign-in enforcement, seeded data, policy ingestion records, the evaluation report, the source registry and the RAG manifest. It then runs the golden claim: create, upload, analyse, coverage, adjudication (₹64,080), citations, human review, audit, assistant answer and refusal. It also files a property claim (₹3,47,500 payable) and a travel claim (₹95,000 payable).
+- **`scripts/smoke_test.py <url> [password]`:** checks the frontend (the page, and that its stylesheet and script load with the right content type), health and readiness, sign-in enforcement, seeded data, policy ingestion records, the evaluation report, the source registry and the RAG manifest. It then runs the golden claim: create, upload, analyse, coverage, adjudication (₹64,080), citations, human review, audit, assistant answer and refusal. It also files a property claim (₹3,47,500 payable) and a travel claim (₹95,000 payable).
 - **Browser runs (Playwright, Chromium) against the Docker image:**
   - sign in;
   - create a claim, upload, analyse;
@@ -60,7 +60,7 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
 
 ## Browser tests (`e2e/`)
 
-`e2e/tests/golden.spec.mjs` has 11 Playwright tests that drive the real UI against a running stack (`BASE_URL`, default `http://localhost:8080`):
+`e2e/tests/golden.spec.mjs` has 12 Playwright tests that drive the real UI against a running stack (`BASE_URL`, default `http://localhost:8080`):
 
 - golden claim to approval and letter, with the stage audit events;
 - approval-limit block;
@@ -72,7 +72,8 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
 - data provenance;
 - dashboard rates;
 - phone layout;
-- a property and a travel claim filed from the New Claim screen, with their payable amounts and limit steps.
+- a property and a travel claim filed from the New Claim screen, with their payable amounts and limit steps;
+- dashboard tiles, lines of business and bars open the matching claims, and removing the filter chip shows them all.
 
 Any browser console error fails a test. They need a freshly seeded stack, because a second run files the golden claim again and the system flags it as a duplicate. CI runs them in the `docker-smoke` job before the smoke test.
 

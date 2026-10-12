@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { ApiError, words } from "../api";
+import { Link } from "react-router-dom";
 
 export function useLoad<T>(fn: () => Promise<T>, deps: unknown[] = []) {
   const [data, setData] = useState<T | null>(null);
@@ -61,7 +62,7 @@ export function Card({ title, children, actions }: { title?: ReactNode; children
   );
 }
 
-export function Bars({ data, total }: { data: Record<string, number>; total?: number }) {
+export function Bars({ data, total, to }: { data: Record<string, number>; total?: number; to?: (key: string) => string }) {
   const sum = total ?? Object.values(data).reduce((a, b) => a + b, 0);
   const entries = Object.entries(data).sort((a, b) => b[1] - a[1]);
   if (!entries.length) return <p className="muted">No data yet.</p>;
@@ -69,7 +70,7 @@ export function Bars({ data, total }: { data: Record<string, number>; total?: nu
     <div className="bars">
       {entries.map(([k, v]) => (
         <div key={k} className="bar-row">
-          <span className="bar-label"><Badge value={k} /></span>
+          <span className="bar-label">{to ? <Link to={to(k)} title={`Show these claims`}><Badge value={k} /></Link> : <Badge value={k} />}</span>
           <span className="bar-track"><span className="bar-fill" style={{ width: `${(v / Math.max(sum, 1)) * 100}%` }} /></span>
           <span className="bar-value">{v}</span>
         </div>
