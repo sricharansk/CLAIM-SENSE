@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1010
+Admission Date: 2025-10-20
+Discharge Date: 2025-10-22
+Patient/Insured Name: Latha Raman
+
+Itemised Charges:
+Room Rent - Twin Sharing (2 days @ 5,000)                       10,000.00
+Stem Cell Processing and Injection                             180,000.00
+Consultant Fees                                                 15,000.00
+Laboratory Tests                                                 6,000.00
+
+Total Amount                                                   211,000.00

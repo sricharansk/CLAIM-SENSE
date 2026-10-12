@@ -75,6 +75,17 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
                 f"'{hit}' is a specified condition with a {w['value']}-month waiting period; cover has run about {months} months.", w["clause"])
         elif hit:
             add("SPECIFIED_DISEASE_WAITING", "PASS", f"'{hit}' waiting period of {w['value']} months has elapsed.", w["clause"])
+    ped = wp.get("ped_months")
+    if status == "COVERED" and ped and ped.get("keywords"):
+        hit = next((k for k in ped["keywords"] if k in text), None)
+        months = days // 30
+        if hit and months < ped["value"]:
+            status = "NOT_COVERED"
+            add("PED_WAITING_PERIOD", "FAIL",
+                f"Documents mention '{hit}'; a pre-existing disease has a {ped['value']}-month waiting period and cover has run about {months} months.",
+                ped["clause"])
+        elif hit:
+            add("PED_WAITING_PERIOD", "PASS", f"Pre-existing disease waiting period of {ped['value']} months has elapsed.", ped["clause"])
     if status == "COVERED":
         for ex in terms.get("exclusions", []):
             kw = next((k for k in ex["keywords"] if k in text), None)

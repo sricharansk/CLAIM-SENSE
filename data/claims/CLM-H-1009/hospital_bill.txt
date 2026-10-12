@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1009
+Admission Date: 2025-09-13
+Discharge Date: 2025-09-15
+Patient/Insured Name: Imran Sheikh
+
+Itemised Charges:
+Room Rent - General Ward (2 days @ 3,000)                        6,000.00
+Consultant Physician Fees                                        8,000.00
+CT Scan Head and Laboratory Tests                                9,500.00
+Pharmacy - Medicines and IV Fluids                               4,500.00
+
+Total Amount                                                    28,000.00

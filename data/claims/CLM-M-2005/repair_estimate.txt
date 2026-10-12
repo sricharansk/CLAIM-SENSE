@@ -1,0 +1,14 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2005
+Vehicle Registration: SK-01-SY-0904
+Patient/Insured Name: Tenzin Lama
+
+Itemised Charges:
+Front Bumper (plastic) - replace                                16,000.00
+Bonnet (metal) - replace                                        32,000.00
+Denting and Fitting Labour                                      11,000.00
+
+Total Amount                                                    59,000.00

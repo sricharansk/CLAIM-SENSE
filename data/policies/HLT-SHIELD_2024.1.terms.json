@@ -47,7 +47,12 @@
     },
     "ped_months": {
       "value": 48,
-      "clause": "3.2"
+      "clause": "3.2",
+      "keywords": [
+        "pre-existing",
+        "declared at proposal",
+        "known case of"
+      ]
     }
   },
   "exclusions": [

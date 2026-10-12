@@ -1,0 +1,13 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Paris
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Ritu Agarwal
+
+Itemised Charges:
+Emergency Room Assessment                                       22,000.00
+Hospital Room Charges (1 day)                                   40,000.00
+Pharmacy and Medicines                                           6,000.00
+
+Total Amount                                                    68,000.00

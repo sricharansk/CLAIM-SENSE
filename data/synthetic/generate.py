@@ -151,7 +151,8 @@ def health_terms(v: str, p: dict) -> dict:
         "waiting_periods": {
             "initial_days": {"value": 30, "clause": "3.1", "accident_exempt": True},
             "specified_months": {"value": 24, "clause": "3.3", "conditions": SPECIFIED, "accident_exempt": True},
-            "ped_months": {"value": p["ped_months"], "clause": "3.2"},
+            "ped_months": {"value": p["ped_months"], "clause": "3.2",
+                           "keywords": ["pre-existing", "declared at proposal", "known case of"]},
         },
         "exclusions": [
             {"code": "EXCL_COSMETIC", "clause": "4.1", "keywords": ["cosmetic", "aesthetic", "hair transplant", "liposuction", "weight reduction"]},
@@ -240,6 +241,7 @@ def motor_terms() -> dict:
         ],
         "non_payable_categories": {},
         "required_documents": {"documents": ["claim_form", "repair_estimate", "driving_licence"], "clause": "4.2"},
+        "conditional_documents": [{"document": "police_report", "keywords": ["theft", "stolen", "malicious", "vandal"]}],
         "settlement_days": {"value": 30, "clause": "4.3"},
         "coverage_clause": "2.1",
     }
@@ -454,6 +456,21 @@ INSURED = [
     ("CS-MTR-25-001452", "MTR-SECURE", "Rohan Gupta", "2025-05-10", "2026-05-09", 520000),
     ("CS-HOM-25-003260", "HOME-GUARD", "Farhan Ali", "2025-02-01", "2026-01-31", 1500000),
     ("CS-TRV-25-004611", "TRV-GLOBE", "Gopal Krishnan", "2025-12-01", "2025-12-15", 4000000),
+    ("CS-HLT-23-000702", "HLT-SHIELD", "Nikhil Bose", "2023-08-01", "2026-07-31", 500000),
+    ("CS-HLT-23-000715", "HLT-SHIELD", "Imran Sheikh", "2023-05-01", "2026-04-30", 300000),
+    ("CS-HLT-23-000728", "HLT-SHIELD", "Latha Raman", "2023-02-01", "2026-01-31", 500000),
+    ("CS-HLT-25-000741", "HLT-SHIELD", "Pooja Malhotra", "2025-06-01", "2026-05-31", 300000),
+    ("CS-HLT-24-000756", "HLT-SHIELD", "Mohan Das", "2024-09-01", "2026-08-31", 400000),
+    ("CS-MTR-25-001488", "MTR-SECURE", "Arvind Menon", "2025-04-20", "2026-04-19", 450000),
+    ("CS-MTR-25-001503", "MTR-SECURE", "Tenzin Lama", "2025-05-01", "2026-04-30", 600000),
+    ("CS-MTR-25-001520", "MTR-SECURE", "Sneha Kulkarni", "2025-04-25", "2026-04-24", 950000),
+    ("CS-MTR-25-001536", "MTR-SECURE", "Harish Babu", "2025-06-10", "2026-06-09", 400000),
+    ("CS-HOM-25-003288", "HOME-GUARD", "Rakesh Yadav", "2025-01-15", "2026-01-14", 1200000),
+    ("CS-HOM-24-003301", "HOME-GUARD", "Meera Joshi", "2024-12-01", "2025-11-30", 1000000),
+    ("CS-HOM-25-003317", "HOME-GUARD", "Gurpreet Singh", "2025-03-01", "2026-02-28", 1500000),
+    ("CS-TRV-25-004639", "TRV-GLOBE", "Karan Mehra", "2025-10-01", "2025-10-14", 4000000),
+    ("CS-TRV-25-004652", "TRV-GLOBE", "Usha Pillai", "2025-11-05", "2025-11-25", 4000000),
+    ("CS-TRV-25-004670", "TRV-GLOBE", "Ritu Agarwal", "2025-09-10", "2025-09-24", 4000000),
 ]
 
 
@@ -715,6 +732,123 @@ def golden_claims() -> list[dict]:
                                diagnosis="Unstable angina in known coronary artery disease", procedure="Coronary angiography",
                                notes="Known case of coronary artery disease on medication for three years; a pre-existing condition."),
                   expected="RECOMMEND_REJECT", story="Pre-existing condition exclusion (3.1)"))
+    # ---- one claim for every remaining rule that no claim exercised
+    H = "Greenfield General Hospital (fictional)"
+    S.append(dict(claim_number="CLM-H-1008", claim_type="health", policy_number="CS-HLT-23-000702", claimant="Nikhil Bose",
+                  incident_date="2025-08-04", hospital=H, narrative="Planned nose surgery for appearance.",
+                  items=[("Room Rent - Day Care (1 day @ 4,000)", 4000), ("Plastic Surgeon and Anaesthetist Fees", 60000),
+                         ("Operation Theatre Charges", 14000), ("Pharmacy - Medicines and Drugs", 5000)],
+                  admit="2025-08-04", disch="2025-08-04", diagnosis="Nasal hump, aesthetic concern",
+                  procedure="Cosmetic rhinoplasty", notes="Elective day care procedure.",
+                  expected="RECOMMEND_REJECT", story="Cosmetic surgery exclusion (4.1)"))
+    S.append(dict(claim_number="CLM-H-1009", claim_type="health", policy_number="CS-HLT-23-000715", claimant="Imran Sheikh",
+                  incident_date="2025-09-13", hospital=H, narrative="Fell at a party and hit his head; brought to emergency.",
+                  items=[("Room Rent - General Ward (2 days @ 3,000)", 6000), ("Consultant Physician Fees", 8000),
+                         ("CT Scan Head and Laboratory Tests", 9500), ("Pharmacy - Medicines and IV Fluids", 4500)],
+                  admit="2025-09-13", disch="2025-09-15", diagnosis="Acute alcohol intoxication with minor head injury",
+                  procedure="Observation and medical management", notes="Blood alcohol level high on admission.",
+                  expected="RECOMMEND_REJECT", story="Alcohol and intoxication exclusion (4.2)"))
+    S.append(dict(claim_number="CLM-H-1010", claim_type="health", policy_number="CS-HLT-23-000728", claimant="Latha Raman",
+                  incident_date="2025-10-20", hospital=H, narrative="Admitted for a stem cell therapy session for knee pain.",
+                  items=[("Room Rent - Twin Sharing (2 days @ 5,000)", 10000), ("Stem Cell Processing and Injection", 180000),
+                         ("Consultant Fees", 15000), ("Laboratory Tests", 6000)],
+                  admit="2025-10-20", disch="2025-10-22", diagnosis="Osteoarthritis of the right knee",
+                  procedure="Investigational autologous stem cell therapy", notes="Treatment offered under a research protocol.",
+                  expected="RECOMMEND_REJECT", story="Experimental treatment exclusion (4.5)"))
+    S.append(dict(claim_number="CLM-H-1011", claim_type="health", policy_number="CS-HLT-25-000741", claimant="Pooja Malhotra",
+                  incident_date="2025-06-15", hospital=H, narrative="High fever for five days; admitted for typhoid.",
+                  items=[("Room Rent - General Ward (3 days @ 3,500)", 10500), ("Consultant Physician Fees", 9000),
+                         ("Pharmacy - Medicines and IV Antibiotics", 8500), ("Laboratory Tests - Blood Culture and Widal", 4000)],
+                  admit="2025-06-15", disch="2025-06-18", diagnosis="Typhoid fever", procedure="Medical management",
+                  notes="Recovered on oral antibiotics.",
+                  expected="RECOMMEND_REJECT", story="Illness inside the 30-day initial waiting period (3.1)"))
+    S.append(dict(claim_number="CLM-H-1012", claim_type="health", policy_number="CS-HLT-24-000756", claimant="Mohan Das",
+                  incident_date="2025-11-10", hospital=H,
+                  narrative="Known case of type 2 diabetes declared at proposal; admitted with an infected foot ulcer.",
+                  items=[("Room Rent - Twin Sharing (4 days @ 4,500)", 18000), ("Surgeon Fees - Wound Debridement", 22000),
+                         ("Pharmacy - Medicines and Insulin", 12000), ("Laboratory Tests - Blood Sugar Series", 5000)],
+                  admit="2025-11-10", disch="2025-11-14", diagnosis="Diabetic foot infection in a known case of type 2 diabetes",
+                  procedure="Wound debridement", notes="Diabetes declared at proposal in 2024.",
+                  expected="RECOMMEND_REJECT", story="Pre-existing disease inside the 36-month waiting period (3.2)"))
+    S.append(dict(claim_number="CLM-M-2004", claim_type="motor", policy_number="CS-MTR-25-001488", claimant="Arvind Menon",
+                  incident_date="2025-08-30", fir="FIR-SYN-0830-02",
+                  form_extra={"Vehicle Registration": "KL-07-SY-5521", "Vehicle Make and Model": "Sedan 1462cc",
+                              "Date of First Registration": "2019-02-11", "Engine Capacity cc": "1462"},
+                  narrative="Engine seized while driving on the highway; no collision.",
+                  police="No accident. Vehicle towed after an engine seizure from mechanical breakdown due to oil starvation.",
+                  items=[("Engine Overhaul Labour", 25000), ("Pistons and Rings (metal)", 30000), ("Crankshaft (metal)", 22000)],
+                  expected="RECOMMEND_REJECT", story="Wear, tear and mechanical breakdown exclusion (3.3)"))
+    S.append(dict(claim_number="CLM-M-2005", claim_type="motor", policy_number="CS-MTR-25-001503", claimant="Tenzin Lama",
+                  incident_date="2025-10-11", fir="FIR-SYN-1011-40",
+                  form_extra={"Vehicle Registration": "SK-01-SY-0904", "Vehicle Make and Model": "SUV 1497cc",
+                              "Date of First Registration": "2022-07-01", "Engine Capacity cc": "1497"},
+                  narrative="Collision with a bus while driving in Nepal on a road trip.",
+                  police="Collision occurred near Pokhara, Nepal. Report issued by local police.",
+                  items=[("Front Bumper (plastic) - replace", 16000), ("Bonnet (metal) - replace", 32000),
+                         ("Denting and Fitting Labour", 11000)],
+                  expected="RECOMMEND_REJECT", story="Use outside India exclusion (3.4)"))
+    S.append(dict(claim_number="CLM-M-2006", claim_type="motor", policy_number="CS-MTR-25-001520", claimant="Sneha Kulkarni",
+                  incident_date="2025-11-20", fir="FIR-SYN-1120-18",
+                  form_extra={"Vehicle Registration": "MH-12-SY-2207", "Vehicle Make and Model": "SUV 1956cc",
+                              "Date of First Registration": "2024-03-15", "Engine Capacity cc": "1956"},
+                  narrative="Front-end collision with a stalled tractor at night.",
+                  items=[("Front Bumper (plastic) - replace", 15000), ("Bonnet (metal) - replace", 34000),
+                         ("Headlamp Assembly (plastic)", 12000), ("Front Grille (plastic)", 4000),
+                         ("Denting and Fitting Labour", 10000), ("Painting Material", 7000)],
+                  expected="PARTIAL_APPROVAL", story="Engine above 1500cc: INR 3,500 deductible (2.3) after depreciation"))
+    S.append(dict(claim_number="CLM-M-2007", claim_type="motor", policy_number="CS-MTR-25-001536", claimant="Harish Babu",
+                  incident_date="2025-09-02", skip_police=True,
+                  form_extra={"Vehicle Registration": "TN-09-SY-6618", "Vehicle Make and Model": "Hatchback 1197cc",
+                              "Date of First Registration": "2023-01-10", "Engine Capacity cc": "1197"},
+                  narrative="Windscreen smashed and doors scratched by unknown persons in a parking lot; malicious damage.",
+                  items=[("Windshield Glass", 18000), ("Painting Material", 9000), ("Denting and Fitting Labour", 6000)],
+                  expected="REQUEST_INFO", story="Malicious damage without a police report (4.1)"))
+    S.append(dict(claim_number="CLM-P-3005", claim_type="property", policy_number="CS-HOM-25-003288", claimant="Rakesh Yadav",
+                  incident_date="2025-08-09",
+                  form_extra={"Property Address": "41 Station Road, Lucknow (fictional)", "Value of Property at Risk": "INR 1,100,000.00"},
+                  narrative="Fire in the living room damaged the furniture and walls.",
+                  items=[("Living Room Wall Plaster Repair", 60000), ("Sofa Set and Curtains", 45000), ("LED Television 43 inch", 38000)],
+                  survey="Fire investigation found the fire was deliberately set by the insured; the damage results from an intentional act.",
+                  expected="RECOMMEND_REJECT", story="Wilful act exclusion (3.2)"))
+    S.append(dict(claim_number="CLM-P-3006", claim_type="property", policy_number="CS-HOM-24-003301", claimant="Meera Joshi",
+                  incident_date="2025-10-05",
+                  form_extra={"Property Address": "9 River Bank Lane, Nashik (fictional)", "Value of Property at Risk": "INR 1,100,000.00"},
+                  narrative="Lightning struck the house and the fire that followed destroyed most of the building.",
+                  items=[("Wall and Roof Reconstruction", 900000), ("Kitchen Platform Rebuild (granite and masonry)", 150000),
+                         ("Refrigerator (double door)", 60000), ("Sofa Set and Curtains", 50000)],
+                  survey="Lightning strike confirmed by the weather bulletin. Building largely destroyed; reconstruction estimate verified.",
+                  expected="PARTIAL_APPROVAL", story="Loss above the sum insured: capped at the sum insured (1.2)"))
+    S.append(dict(claim_number="CLM-P-3007", claim_type="property", policy_number="CS-HOM-25-003317", claimant="Gurpreet Singh",
+                  incident_date="2025-07-18",
+                  form_extra={"Property Address": "2 Border Road, Gurdaspur (fictional)", "Value of Property at Risk": "INR 1,400,000.00"},
+                  narrative="Roof and windows damaged by cross-border shelling.",
+                  items=[("Roof Slab Repair", 85000), ("Window Glass and Frame Repair", 22000)],
+                  survey="The district administration recorded the incident as an act of war.",
+                  expected="RECOMMEND_REJECT", story="War and nuclear risks exclusion (3.4)"))
+    S.append(dict(claim_number="CLM-T-4006", claim_type="travel", policy_number="CS-TRV-25-004639", claimant="Karan Mehra",
+                  incident_date="2025-10-07",
+                  form_extra={"Destination": "Bangkok", "Departure Date": "2025-10-01", "Return Date": "2025-10-14"},
+                  narrative="Fell from a hotel balcony while intoxicated after a party; wrist fractured and treated in hospital.",
+                  items=[("Emergency Room Assessment", 26000), ("Orthopaedic Surgeon Fees", 70000), ("X-Ray and Casting", 18000)],
+                  medical=dict(hospital="Sukhumvit General Hospital (fictional)", admit="2025-10-07", disch="2025-10-08",
+                               diagnosis="Fracture of the left wrist", procedure="Closed reduction and casting",
+                               notes="Patient intoxicated on arrival."),
+                  expected="RECOMMEND_REJECT", story="Alcohol and drugs exclusion (3.3)"))
+    S.append(dict(claim_number="CLM-T-4007", claim_type="travel", policy_number="CS-TRV-25-004652", claimant="Usha Pillai",
+                  incident_date="2025-11-12",
+                  form_extra={"Destination": "Dubai", "Departure Date": "2025-11-05", "Return Date": "2025-11-25"},
+                  narrative="Travelled against medical advice two weeks after heart surgery; admitted to hospital with complications.",
+                  items=[("Emergency Room Assessment", 30000), ("Hospital Room Charges (3 days)", 120000), ("Cardiology Consultant Fees", 45000)],
+                  medical=dict(hospital="Creek Side Hospital (fictional)", admit="2025-11-12", disch="2025-11-15",
+                               diagnosis="Post-operative wound infection", procedure="Intravenous antibiotics",
+                               notes="Surgeon had advised against travel for six weeks after surgery."),
+                  expected="RECOMMEND_REJECT", story="Travel against medical advice exclusion (3.4)"))
+    S.append(dict(claim_number="CLM-T-4008", claim_type="travel", policy_number="CS-TRV-25-004670", claimant="Ritu Agarwal",
+                  incident_date="2025-09-16",
+                  form_extra={"Destination": "Paris", "Departure Date": "2025-09-10", "Return Date": "2025-09-24"},
+                  narrative="Severe food poisoning in Paris; admitted to hospital overnight.",
+                  items=[("Emergency Room Assessment", 22000), ("Hospital Room Charges (1 day)", 40000), ("Pharmacy and Medicines", 6000)],
+                  expected="REQUEST_INFO", story="Medical claim abroad without the treating doctor's report (5.2)"))
     return S
 
 
@@ -741,7 +875,8 @@ def write_claim_packets() -> list[dict]:
                                                  "Estimate Number": f"RE-{c['claim_number'][-4:]}",
                                                  "Vehicle Registration": c["form_extra"]["Vehicle Registration"]})
             files["driving_licence.txt"] = licence(c)
-            files["police_report.txt"] = police_report(c, c.get("police", "Collision confirmed. No injuries reported."))
+            if not c.get("skip_police"):
+                files["police_report.txt"] = police_report(c, c.get("police", "Collision confirmed. No injuries reported."))
         for name, body in files.items():
             (d / name).write_text(body, encoding="utf-8")
         # one PDF copy so the PDF extraction path is exercised by the demo and tests

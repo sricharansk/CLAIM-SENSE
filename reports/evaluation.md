@@ -1,20 +1,20 @@
 # Claim Sense evaluation report
 
-Generated 2026-10-12T15:05:26+00:00 by `python scripts/evaluate.py` on a fresh database with synthetic data only. Rules adjudication-rules/1.0.0, risk risk-rules/1.0.0, LLM off (extractive answers).
+Generated 2026-10-12T16:56:13+00:00 by `python scripts/evaluate.py` on a fresh database with synthetic data only. Rules adjudication-rules/1.0.0, risk risk-rules/1.0.0, LLM off (extractive answers).
 
-**Result: all checks passed.** 449 of 449 checks passed across 26 claim cases and 26 policy questions.
+**Result: all checks passed.** 612 of 612 checks passed across 41 claim cases and 26 policy questions.
 
 ## Scorecard
 
 | Dimension | Passed | Score |
 |---|---|---|
-| Retrieval correctness | 67 / 67 | 100% |
-| Citation correctness | 56 / 56 | 100% |
-| Groundedness | 98 / 98 | 100% |
-| Coverage state | 49 / 49 | 100% |
-| Adjudication amount | 72 / 72 | 100% |
-| Risk classification | 29 / 29 | 100% |
-| Workflow outcome | 78 / 78 | 100% |
+| Retrieval correctness | 91 / 91 | 100% |
+| Citation correctness | 67 / 67 | 100% |
+| Groundedness | 113 / 113 | 100% |
+| Coverage state | 79 / 79 | 100% |
+| Adjudication amount | 95 / 95 | 100% |
+| Risk classification | 44 / 44 | 100% |
+| Workflow outcome | 123 / 123 | 100% |
 
 | Policy assistant metric | Value |
 |---|---|
@@ -28,13 +28,13 @@ Generated 2026-10-12T15:05:26+00:00 by `python scripts/evaluate.py` on a fresh d
 | Case type | Covered by |
 |---|---|
 | clearly covered | C01, C20 |
-| excluded | C02, C03, C15, C18, C22, C23, C24, C25, C26 |
-| partial coverage | C04, C05, C13, C14, C16, C17 |
-| insufficient evidence | C06, C19 |
+| excluded | C02, C03, C15, C18, C22, C23, C24, C25, C26, C27, C28, C29, C30, C31, C32, C33, C34, C35, C36, C37 |
+| partial coverage | C04, C05, C13, C14, C16, C17, C38 |
+| insufficient evidence | C06, C19, C39, C41 |
 | high risk | C07 |
-| deductible | C01, C16, C20 |
+| deductible | C01, C16, C20, C38 |
 | sub limit | C04, C08, C17, C21 |
-| max coverage | C09 |
+| max coverage | C09, C40 |
 | duplicate | C10 |
 | ambiguous policy version | C08, C11, C12 |
 
@@ -68,6 +68,21 @@ Generated 2026-10-12T15:05:26+00:00 by `python scripts/evaluate.py` on a fresh d
 | C24 | CLM-M-2003 | Motor accident with the driver's licence expired | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
 | C25 | CLM-P-3004 | Burglary while the home had been unoccupied for about 95 days | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
 | C26 | CLM-T-4005 | Heart condition abroad that was under treatment before departure | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C27 | CLM-H-1008 | Rhinoplasty for appearance | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C28 | CLM-H-1009 | Head injury while intoxicated | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C29 | CLM-H-1010 | Investigational stem cell therapy | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C30 | CLM-H-1011 | Typhoid 14 days after the policy started | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C31 | CLM-H-1012 | Diabetic foot 14 months into cover, diabetes declared at proposal | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C32 | CLM-M-2004 | Engine seizure from mechanical breakdown | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C33 | CLM-M-2005 | Collision while driving in Nepal | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C34 | CLM-P-3005 | Fire deliberately set by the insured | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C35 | CLM-P-3007 | Damage recorded as an act of war | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C36 | CLM-T-4006 | Fall from a balcony while intoxicated abroad | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C37 | CLM-T-4007 | Trip taken against medical advice after surgery | RECOMMEND_REJECT / RECOMMEND_REJECT | 0.00 / 0.00 | pass |
+| C38 | CLM-M-2006 | SUV above 1500cc: depreciation and the higher deductible | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 56100.00 / 56100.00 | pass |
+| C39 | CLM-M-2007 | Malicious damage without a police report | REQUEST_INFO / REQUEST_INFO | 26500.00 / 26500.00 | pass |
+| C40 | CLM-P-3006 | House largely destroyed by fire after lightning: capped at the sum insured | PARTIAL_APPROVAL / PARTIAL_APPROVAL | 1000000.00 / 1000000.00 | pass |
+| C41 | CLM-T-4008 | Hospital treatment abroad without the treating doctor's report | REQUEST_INFO / REQUEST_INFO | 63000.00 / 63000.00 | pass |
 
 ## Policy assistant questions
 
@@ -106,7 +121,7 @@ None.
 
 ## Hand-worked expectations
 
-- **C01** (CLM-H-3020): 25,000 billed; room rent 4,000/day is within the 5,000 limit (2.2); deductible 5,000 (5.1) -> 20,000; co-pay 10% (5.2) = 2,000 -> 18,000.
+- **C01** (CLM-H-3035): 25,000 billed; room rent 4,000/day is within the 5,000 limit (2.2); deductible 5,000 (5.1) -> 20,000; co-pay 10% (5.2) = 2,000 -> 18,000.
 - **C02** (CLM-M-2002): Police report says the driver was under the influence of alcohol; exclusion 3.1 applies, nothing is payable.
 - **C03** (CLM-H-1002): Policy started 2025-02-10, surgery 2025-09-05, about 6 months of cover; cataract needs 24 months (3.3).
 - **C04** (CLM-H-1001): 106,600 billed; consumables 3,400 not payable (4.3); room 3 days x (6,500 - 5,000) = 4,500 over the limit (2.2); deductible 5,000; co-pay 10% of 93,700 = 9,370 -> 84,330.
@@ -114,10 +129,10 @@ None.
 - **C06** (CLM-H-1004): Required documents (6.2) include the discharge summary, which is missing. Provisional amount: 43,400 - 5,000 = 38,400, co-pay 3,840 -> 34,560.
 - **C07** (CLM-H-1003): Form says 468,000, bill totals 442,000 (gap 5.9%); 50 days after start; 468,000 / 500,000 = 94%. ICU 6 x (18,000 - 10,000) = 48,000 and room 5 x (9,000 - 5,000) = 20,000 over limits -> 374,000; deductible 5,000; co-pay 36,900 -> 332,100.
 - **C08** (CLM-H-1005): 2024.1 wording: room limit 4,000/day so 2 x 1,500 = 3,000 over; 76,500 - 3,000 = 73,500; deductible 10,000; co-pay 20% of 63,500 = 12,700 -> 50,800.
-- **C09** (CLM-H-3021): 410,000 billed; room and ICU at exactly their limits; deductible 5,000 -> 405,000; co-pay 40,500 -> 364,500; capped at the 300,000 sum insured (5.3). 410,000 / 300,000 is above 80%, the only risk signal (score 30, MEDIUM).
+- **C09** (CLM-H-3036): 410,000 billed; room and ICU at exactly their limits; deductible 5,000 -> 405,000; co-pay 40,500 -> 364,500; capped at the 300,000 sum insured (5.3). 410,000 / 300,000 is above 80%, the only risk signal (score 30, MEDIUM).
 - **C10** (CLM-H-1006): Same policy, incident date and amount as CLM-H-1001, which was filed first.
-- **C11** (CLM-H-3022): 2025.1: room 4,500/day is within 5,000; 36,000 - 5,000 = 31,000; co-pay 10% = 3,100 -> 27,900.
-- **C12** (CLM-H-3023): 2024.1: room limit 4,000 so 3 x 500 = 1,500 over; 34,500 - 10,000 = 24,500; co-pay 20% = 4,900 -> 19,600.
+- **C11** (CLM-H-3037): 2025.1: room 4,500/day is within 5,000; 36,000 - 5,000 = 31,000; co-pay 10% = 3,100 -> 27,900.
+- **C12** (CLM-H-3038): 2024.1: room limit 4,000 so 3 x 500 = 1,500 over; 34,500 - 10,000 = 24,500; co-pay 20% = 4,900 -> 19,600.
 - **C13** (CLM-P-3001): 450,000 assessed; depreciation 20% on refrigerator 58,000 and microwave 14,000 (11,600 + 2,800) and 10% on sofa set 66,000 (6,600) = 21,000 (2.2) -> 429,000; value at risk 30,00,000 exceeds sum insured 25,00,000 by 20%, more than 15%, so average applies (2.3): 429,000 x 25/30 = 357,500, a cut of 71,500; excess 10,000 (4.1) -> 347,500.
 - **C14** (CLM-P-3002): 305,000 assessed; gold jewellery 140,000 not covered unless scheduled (3.5) -> 165,000; depreciation 20% on laptop 85,000 and television 62,000 = 17,000 + 12,400 = 29,400 (2.2) -> 135,600; value at risk 11,00,000 is below the 12,00,000 sum insured, no average; excess 10,000 -> 125,600. FIR present as 5.2 requires for burglary.
 - **C15** (CLM-P-3003): Surveyor attributes the damage to seepage and gradual deterioration of waterproofing; exclusion 3.1 applies, nothing is payable.
@@ -125,10 +140,25 @@ None.
 - **C17** (CLM-T-4002): 181,000 claimed; per-item limit 25,000 (2.3): laptop 85,000 -> 25,000 (cut 60,000), camera 40,000 -> 25,000 (cut 15,000); allowed 18,000 + 25,000 + 24,000 + 25,000 + 14,000 = 106,000, above the 1,00,000 per-trip baggage limit (cut 6,000) -> 100,000; deductible 5,000 -> 95,000.
 - **C18** (CLM-T-4003): Injury sustained while paragliding; hazardous sports exclusion 3.2 applies, nothing is payable.
 - **C19** (CLM-T-4004): 5.2 requires the airline's property irregularity report for a baggage claim and none was uploaded; the assessable amount would be 43,000 - 5,000 deductible = 38,000, but information is requested first.
-- **C20** (CLM-P-3024): 71,000 of building repairs, no depreciation on building repairs (2.2); value at risk 16,00,000 is below the 18,00,000 sum insured; excess 10,000 (4.1) -> 61,000.
-- **C21** (CLM-T-3025): Non-refundable airfare 112,000 + hotel 68,000 = 180,000; trip cancellation limit 1,50,000 (2.2) -> 150,000; deductible 5,000 -> 145,000.
-- **C22** (CLM-T-3026): Trip 2026-02-02 to 2026-02-09; treatment on 2026-02-12 is after the return date, outside the period of cover (1.3), although the annual policy is in force.
+- **C20** (CLM-P-3039): 71,000 of building repairs, no depreciation on building repairs (2.2); value at risk 16,00,000 is below the 18,00,000 sum insured; excess 10,000 (4.1) -> 61,000.
+- **C21** (CLM-T-3040): Non-refundable airfare 112,000 + hotel 68,000 = 180,000; trip cancellation limit 1,50,000 (2.2) -> 150,000; deductible 5,000 -> 145,000.
+- **C22** (CLM-T-3041): Trip 2026-02-02 to 2026-02-09; treatment on 2026-02-12 is after the return date, outside the period of cover (1.3), although the annual policy is in force.
 - **C23** (CLM-H-1007): Discharge summary records a full term pregnancy delivered by caesarean section; maternity and childbirth are excluded (4.4), nothing is payable.
 - **C24** (CLM-M-2003): Police report records that the driver's licence expired on 2024-12-31, before the accident on 2025-10-03; exclusion 3.2 applies, nothing is payable.
 - **C25** (CLM-P-3004): Surveyor records the premises unoccupied for about 95 days, more than the 60 consecutive days in 3.3; the burglary is not payable.
 - **C26** (CLM-T-4005): Claim form and medical report describe coronary artery disease under treatment before departure; pre-existing conditions are excluded (3.1), nothing is payable.
+- **C27** (CLM-H-1008): Discharge summary records a cosmetic rhinoplasty for an aesthetic concern; cosmetic treatment is excluded (4.1), nothing is payable.
+- **C28** (CLM-H-1009): Diagnosis is acute alcohol intoxication; treatment arising from alcohol is excluded (4.2), nothing is payable.
+- **C29** (CLM-H-1010): Procedure is an investigational stem cell therapy under a research protocol; experimental treatment is excluded (4.5).
+- **C30** (CLM-H-1011): Policy started 2025-06-01, admission 2025-06-15: 14 days, inside the 30-day initial waiting period for illness (3.1); typhoid is not an accident.
+- **C31** (CLM-H-1012): Policy started 2024-09-01, admission 2025-11-10: about 14 months of cover; diabetes was declared at proposal, so the 36-month pre-existing disease waiting period applies (3.2).
+- **C32** (CLM-M-2004): Police report records no accident and a mechanical breakdown from oil starvation; wear, tear and breakdown are excluded (3.3).
+- **C33** (CLM-M-2005): Collision near Pokhara, Nepal; loss arising outside India is excluded (3.4).
+- **C34** (CLM-P-3005): Fire investigation found the fire deliberately set by the insured; wilful acts are excluded (3.2).
+- **C35** (CLM-P-3007): The district administration recorded the shelling as an act of war; war risks are excluded (3.4).
+- **C36** (CLM-T-4006): Claim form and medical report record the insured intoxicated; claims arising under the influence of alcohol are excluded (3.3).
+- **C37** (CLM-T-4007): Insured travelled against medical advice two weeks after surgery; such trips are excluded (3.4).
+- **C38** (CLM-M-2006): 82,000 billed; car first registered 2024-03-15, loss 2025-11-20: 20 months, so metal depreciation 10% (2.2): bonnet 34,000 -> 3,400; plastic 50%: bumper 7,500, headlamp 6,000, grille 2,000; paint 50%: 3,500; labour nil. Total 22,400 -> 59,600; 1956cc is above 1500cc, deductible 3,500 (2.3) -> 56,100.
+- **C39** (CLM-M-2007): 4.1 requires a police report (FIR) for malicious damage and none was uploaded. Assessable amount: 33,000 - paint depreciation 50% of 9,000 = 4,500 -> 28,500 - deductible 2,000 (1197cc) = 26,500. Risk: loss 84 days after start (early claim, 20) + missing document (10) = 30, MEDIUM.
+- **C40** (CLM-P-3006): 11,60,000 assessed; depreciation 20% on refrigerator 60,000 = 12,000 and 10% on sofa 50,000 = 5,000 (2.2) -> 11,43,000; value at risk 11,00,000 is within 15% of the 10,00,000 sum insured, no average (2.3); excess 10,000 -> 11,33,000; capped at the sum insured 10,00,000 (1.2). Risk: claim is 116% of the sum insured (30), MEDIUM.
+- **C41** (CLM-T-4008): 5.2 requires a medical report from the treating doctor for a medical claim and none was uploaded. Assessable amount: 68,000 - deductible 5,000 = 63,000; information is requested first.

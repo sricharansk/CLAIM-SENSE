@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Mohan Das
+Admission Date: 2025-11-10
+Discharge Date: 2025-11-14
+Diagnosis: Diabetic foot infection in a known case of type 2 diabetes
+Procedure: Wound debridement
+
+Clinical Notes:
+Diabetes declared at proposal in 2024.

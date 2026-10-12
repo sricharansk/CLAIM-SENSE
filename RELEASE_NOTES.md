@@ -1,5 +1,11 @@
 # Release notes
 
+## Claim Sense 1.3.0 — 2026-10-12
+
+- **Every rule in the four wordings is now exercised by a claim.** An audit found two rules that were written down but not applied: the health pre-existing disease waiting period (§3.2) and the motor police report for theft or malicious damage (§4.1). Both are now enforced.
+- **15 more seeded claims (34 in all)**, one per rule that had none: cosmetic, alcohol, experimental treatment, the 30-day wait and pre-existing disease (health); mechanical breakdown, outside India, the higher deductible above 1500cc and malicious damage without a police report (motor); wilful act, act of war and a loss above the sum insured (property); alcohol, travel against medical advice and a medical claim without the doctor's report (travel).
+- Golden evaluation: 612/612 checks over 41 claim cases and 26 questions. 108 backend tests.
+
 ## Claim Sense 1.2.0 — 2026-10-12
 
 - **Live on Render** at https://claim-sense.onrender.com, verified by the **Verify deployment** workflow: every smoke check passed, including a health, a property and a travel claim ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38266390199)).

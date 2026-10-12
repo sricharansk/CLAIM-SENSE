@@ -26,6 +26,7 @@ SYNONYMS = {
     "car": "vehicle", "bike": "vehicle", "crash": "collision accident", "stolen": "theft",
     "hospital room": "room rent", "documents": "documents required", "paperwork": "documents required",
     "icu": "intensive care unit", "underinsured": "underinsurance average value at risk",
+    "nepal": "outside india geographical area", "bhutan": "outside india geographical area",
 }
 
 

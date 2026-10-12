@@ -1,0 +1,14 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2004
+Vehicle Registration: KL-07-SY-5521
+Patient/Insured Name: Arvind Menon
+
+Itemised Charges:
+Engine Overhaul Labour                                          25,000.00
+Pistons and Rings (metal)                                       30,000.00
+Crankshaft (metal)                                              22,000.00
+
+Total Amount                                                    77,000.00

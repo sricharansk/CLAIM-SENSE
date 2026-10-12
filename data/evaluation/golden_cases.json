@@ -300,6 +300,174 @@
         "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "3.1"
       },
       "working": "Claim form and medical report describe coronary artery disease under treatment before departure; pre-existing conditions are excluded (3.1), nothing is payable."
+    },
+    {
+      "id": "C27", "categories": ["excluded"],
+      "title": "Rhinoplasty for appearance",
+      "claim_number": "CLM-H-1008",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_COSMETIC", "clause_ref": "4.1"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "4.1"
+      },
+      "working": "Discharge summary records a cosmetic rhinoplasty for an aesthetic concern; cosmetic treatment is excluded (4.1), nothing is payable."
+    },
+    {
+      "id": "C28", "categories": ["excluded"],
+      "title": "Head injury while intoxicated",
+      "claim_number": "CLM-H-1009",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_ALCOHOL", "clause_ref": "4.2"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "4.2"
+      },
+      "working": "Diagnosis is acute alcohol intoxication; treatment arising from alcohol is excluded (4.2), nothing is payable."
+    },
+    {
+      "id": "C29", "categories": ["excluded"],
+      "title": "Investigational stem cell therapy",
+      "claim_number": "CLM-H-1010",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_EXPERIMENTAL", "clause_ref": "4.5"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "4.5"
+      },
+      "working": "Procedure is an investigational stem cell therapy under a research protocol; experimental treatment is excluded (4.5)."
+    },
+    {
+      "id": "C30", "categories": ["excluded"],
+      "title": "Typhoid 14 days after the policy started",
+      "claim_number": "CLM-H-1011",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "INITIAL_WAITING_PERIOD", "clause_ref": "3.1"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Policy started 2025-06-01, admission 2025-06-15: 14 days, inside the 30-day initial waiting period for illness (3.1); typhoid is not an accident."
+    },
+    {
+      "id": "C31", "categories": ["excluded"],
+      "title": "Diabetic foot 14 months into cover, diabetes declared at proposal",
+      "claim_number": "CLM-H-1012",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "PED_WAITING_PERIOD", "clause_ref": "3.2"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Policy started 2024-09-01, admission 2025-11-10: about 14 months of cover; diabetes was declared at proposal, so the 36-month pre-existing disease waiting period applies (3.2)."
+    },
+    {
+      "id": "C32", "categories": ["excluded"],
+      "title": "Engine seizure from mechanical breakdown",
+      "claim_number": "CLM-M-2004",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_WEAR_TEAR", "clause_ref": "3.3"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "3.3"
+      },
+      "working": "Police report records no accident and a mechanical breakdown from oil starvation; wear, tear and breakdown are excluded (3.3)."
+    },
+    {
+      "id": "C33", "categories": ["excluded"],
+      "title": "Collision while driving in Nepal",
+      "claim_number": "CLM-M-2005",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_OUTSIDE_INDIA", "clause_ref": "3.4"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "3.4"
+      },
+      "working": "Collision near Pokhara, Nepal; loss arising outside India is excluded (3.4)."
+    },
+    {
+      "id": "C34", "categories": ["excluded"],
+      "title": "Fire deliberately set by the insured",
+      "claim_number": "CLM-P-3005",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_WILFUL_ACT", "clause_ref": "3.2"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "3.2"
+      },
+      "working": "Fire investigation found the fire deliberately set by the insured; wilful acts are excluded (3.2)."
+    },
+    {
+      "id": "C35", "categories": ["excluded"],
+      "title": "Damage recorded as an act of war",
+      "claim_number": "CLM-P-3007",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_WAR_NUCLEAR", "clause_ref": "3.4"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "3.4"
+      },
+      "working": "The district administration recorded the shelling as an act of war; war risks are excluded (3.4)."
+    },
+    {
+      "id": "C36", "categories": ["excluded"],
+      "title": "Fall from a balcony while intoxicated abroad",
+      "claim_number": "CLM-T-4006",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_ALCOHOL", "clause_ref": "3.3"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "3.3"
+      },
+      "working": "Claim form and medical report record the insured intoxicated; claims arising under the influence of alcohol are excluded (3.3)."
+    },
+    {
+      "id": "C37", "categories": ["excluded"],
+      "title": "Trip taken against medical advice after surgery",
+      "claim_number": "CLM-T-4007",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_AGAINST_ADVICE", "clause_ref": "3.4"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW", "retrieved_clause": "3.4"
+      },
+      "working": "Insured travelled against medical advice two weeks after surgery; such trips are excluded (3.4)."
+    },
+    {
+      "id": "C38", "categories": ["partial_coverage", "deductible"],
+      "title": "SUV above 1500cc: depreciation and the higher deductible",
+      "claim_number": "CLM-M-2006",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "56100.00",
+        "waterfall": {"R15_DEPRECIATION": "-22400.00", "R30_DEDUCTIBLE": "-3500.00", "R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "82,000 billed; car first registered 2024-03-15, loss 2025-11-20: 20 months, so metal depreciation 10% (2.2): bonnet 34,000 -> 3,400; plastic 50%: bumper 7,500, headlamp 6,000, grille 2,000; paint 50%: 3,500; labour nil. Total 22,400 -> 59,600; 1956cc is above 1500cc, deductible 3,500 (2.3) -> 56,100."
+    },
+    {
+      "id": "C39", "categories": ["insufficient_evidence"],
+      "title": "Malicious damage without a police report",
+      "claim_number": "CLM-M-2007",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "missing_documents": ["police_report"],
+        "payable_amount": "26500.00",
+        "risk_level": "MEDIUM", "recommendation": "REQUEST_INFO", "queue": "PENDING_INFORMATION"
+      },
+      "working": "4.1 requires a police report (FIR) for malicious damage and none was uploaded. Assessable amount: 33,000 - paint depreciation 50% of 9,000 = 4,500 -> 28,500 - deductible 2,000 (1197cc) = 26,500. Risk: loss 84 days after start (early claim, 20) + missing document (10) = 30, MEDIUM."
+    },
+    {
+      "id": "C40", "categories": ["max_coverage"],
+      "title": "House largely destroyed by fire after lightning: capped at the sum insured",
+      "claim_number": "CLM-P-3006",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "1000000.00",
+        "waterfall": {"R15_DEPRECIATION": "-17000.00", "R25_UNDERINSURANCE": "0.00", "R30_DEDUCTIBLE": "-10000.00", "R50_MAX_LIABILITY": "-133000.00"},
+        "risk_level": "MEDIUM", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "11,60,000 assessed; depreciation 20% on refrigerator 60,000 = 12,000 and 10% on sofa 50,000 = 5,000 (2.2) -> 11,43,000; value at risk 11,00,000 is within 15% of the 10,00,000 sum insured, no average (2.3); excess 10,000 -> 11,33,000; capped at the sum insured 10,00,000 (1.2). Risk: claim is 116% of the sum insured (30), MEDIUM."
+    },
+    {
+      "id": "C41", "categories": ["insufficient_evidence"],
+      "title": "Hospital treatment abroad without the treating doctor's report",
+      "claim_number": "CLM-T-4008",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "missing_documents": ["medical_report"],
+        "payable_amount": "63000.00",
+        "waterfall": {"R30_DEDUCTIBLE": "-5000.00"},
+        "risk_level": "LOW", "recommendation": "REQUEST_INFO", "queue": "PENDING_INFORMATION"
+      },
+      "working": "5.2 requires a medical report from the treating doctor for a medical claim and none was uploaded. Assessable amount: 68,000 - deductible 5,000 = 63,000; information is requested first."
     }
   ]
 }

@@ -1,0 +1,12 @@
+MEDICAL REPORT FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Sukhumvit General Hospital (fictional)
+Patient Name: Karan Mehra
+Admission Date: 2025-10-07
+Discharge Date: 2025-10-08
+Diagnosis: Fracture of the left wrist
+Procedure: Closed reduction and casting
+
+Clinical Notes:
+Patient intoxicated on arrival.

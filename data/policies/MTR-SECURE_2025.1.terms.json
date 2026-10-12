@@ -101,6 +101,17 @@
     ],
     "clause": "4.2"
   },
+  "conditional_documents": [
+    {
+      "document": "police_report",
+      "keywords": [
+        "theft",
+        "stolen",
+        "malicious",
+        "vandal"
+      ]
+    }
+  ],
   "settlement_days": {
     "value": 30,
     "clause": "4.3"

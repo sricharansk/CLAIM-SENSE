@@ -11,16 +11,16 @@ Status on 2026-10-12: **deployed and verified.** Render serves `main` at https:/
 | Frontend runs; backend runs | Done | Docker image serves both; smoke test `frontend`, `health`, `ready` |
 | PostgreSQL schema works | Done | Docker stack on `postgres:16-alpine`; `/ready` reports `postgresql` |
 | Policy PDF ingestion; clauses and pages preserved | Done | `test_policy_ingestion.py`; screenshot `15-policy-pdf-ingestion.png` |
-| RAG retrieval; citations and evidence | Done | Evaluation: retrieval 67/67, citations 56/56, groundedness 98/98 |
+| RAG retrieval; citations and evidence | Done | Evaluation: retrieval 91/91, citations 67/67, groundedness 113/113 |
 | Claim creation, upload, extraction | Done | Smoke test; `test_extraction.py` |
 | Policy version selection | Done | Evaluation C08, C11, C12 (both sides of 2025-04-01) |
-| Coverage and exclusions; deterministic adjudication | Done | Evaluation: coverage 49/49, amounts 72/72 |
-| Risk and fraud signals | Done | Evaluation: risk 29/29; portfolio (four lines) precision 86.6%, recall 84.1% on injected anomalies |
+| Coverage and exclusions; deterministic adjudication | Done | Evaluation: coverage 79/79, amounts 95/95 |
+| Risk and fraud signals | Done | Evaluation: risk 44/44; portfolio (four lines) precision 86.6%, recall 84.1% on injected anomalies |
 | Human review; workflow transitions; audit | Done | `test_auth.py`, `test_golden_path.py`; browser approve and escalate |
 | Dashboard | Done | Screenshot `14-dashboard-after-review.png` |
 | Error states | Done | Uniform error body with correlation ID; `ErrorBox` on every screen; safe-failure test |
 | Security controls reviewed; injection protections tested | Done | `SECURITY.md`; `test_security_guards.py`; evaluation Q21 |
-| Tests pass | Done | 93 pytest, 11 Playwright browser tests, 449/449 evaluation checks, provenance check; CI green on PR #1; PR #2 CI runs every push. Full report: `FINAL_VALIDATION_REPORT.md` |
+| Tests pass | Done | 108 pytest, 11 Playwright browser tests, 612/612 evaluation checks, provenance check; CI green on PR #1; PR #2 CI runs every push. Full report: `FINAL_VALIDATION_REPORT.md` |
 | Docker build works; README setup from a clean checkout | Done | Fresh clone of the branch built with `--no-cache` and passed the smoke test (2026-10-09). Behind a TLS-inspecting proxy, the build needs `--secret id=ca,src=<ca.crt>` (see README). |
 | Data provenance; every RAG chunk traceable | Done | `DATA_PROVENANCE.md`; `scripts/provenance.py --check` in CI; `test_provenance.py`; screenshot `17-data-provenance.png` |
 | No secrets or confidential data tracked | Done | `.gitignore`, `.dockerignore`; synthetic data only; `AUTH_SECRET` and `DEMO_PASSWORD` set by the environment |

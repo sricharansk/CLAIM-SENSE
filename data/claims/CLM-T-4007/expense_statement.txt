@@ -1,0 +1,13 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Dubai
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Usha Pillai
+
+Itemised Charges:
+Emergency Room Assessment                                       30,000.00
+Hospital Room Charges (3 days)                                 120,000.00
+Cardiology Consultant Fees                                      45,000.00
+
+Total Amount                                                   195,000.00
