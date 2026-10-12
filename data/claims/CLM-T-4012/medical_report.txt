@@ -1,0 +1,12 @@
+MEDICAL REPORT FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Hudson Valley Medical Center (fictional)
+Patient Name: Bhavna Shah
+Admission Date: 2025-07-11
+Discharge Date: 2025-07-15
+Diagnosis: Acute myocardial infarction
+Procedure: Coronary angioplasty with stent
+
+Clinical Notes:
+No history of heart disease before travel. Fit to fly on 2025-07-22.

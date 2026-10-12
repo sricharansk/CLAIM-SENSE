@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Kamala Devi
+Admission Date: 2025-10-14
+Discharge Date: 2025-10-17
+Diagnosis: Hypertensive urgency in a known case of hypertension
+Procedure: Medical management
+
+Clinical Notes:
+Blood pressure controlled. Hypertension declared at proposal in 2022.

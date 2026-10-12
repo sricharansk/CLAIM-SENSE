@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-0825-11
+Date of Accident: 2025-08-25
+Vehicle Registration: DL-08-SY-3390
+
+Findings:
+Collision confirmed. No injuries reported.

@@ -3,7 +3,7 @@
 
 Usage: python scripts/claims_report.py [--out reports]
 
-Creates a temporary SQLite database seeded with the synthetic corpus (the 34 seeded claims are analysed on
+Creates a temporary SQLite database seeded with the synthetic corpus (the 50 seeded claims are analysed on
 start-up), then files the 7 evaluation packets and the demo upload as new claims through the real API, exactly
 as the UI does. Every figure in claims_results.json and claims_results.md is read back from the API: amounts from
 the deterministic rules engine, clauses from the matched wording, routing from the review queue. Also includes the

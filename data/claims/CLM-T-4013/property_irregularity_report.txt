@@ -1,0 +1,8 @@
+PROPERTY IRREGULARITY REPORT (AIRLINE)
+SYNTHETIC DEMO DOCUMENT
+
+PIR Reference: SYDSY67890
+Name: Rohit Sinha
+
+Remarks:
+Bag not traced after 21 days. Declared permanently lost on 2025-12-31.

@@ -1,0 +1,17 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1019
+Admission Date: 2025-07-12
+Discharge Date: 2025-07-15
+Patient/Insured Name: Sameer Khan
+
+Itemised Charges:
+Room Rent - General Ward (3 days @ 3,500)                       10,500.00
+Orthopaedic Surgeon Fees                                        30,000.00
+Operation Theatre Charges                                       12,000.00
+Implants and Medicines                                          24,000.00
+X-Ray and Diagnostics                                            3,500.00
+
+Total Amount                                                    80,000.00

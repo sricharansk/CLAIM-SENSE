@@ -1,0 +1,12 @@
+MEDICAL REPORT FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Denpasar General Hospital (fictional)
+Patient Name: Meghna Das
+Admission Date: 2025-08-06
+Discharge Date: 2025-08-08
+Diagnosis: Fracture of the right clavicle
+Procedure: Open reduction and plate fixation
+
+Clinical Notes:
+Accidental injury. Fit to fly on 2025-08-14.

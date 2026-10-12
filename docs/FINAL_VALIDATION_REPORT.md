@@ -36,10 +36,10 @@ Each step was driven through the real UI by `e2e/tests/golden.spec.mjs` (Playwri
 
 | Check | State | Result |
 |---|---|---|
-| Backend tests | VERIFIED | `pytest`: 108 passed |
+| Backend tests | VERIFIED | `pytest`: 126 passed |
 | Frontend tests | VERIFIED | `e2e` Playwright suite: 11 passed against Docker + PostgreSQL. Any browser console error fails a test. CI runs it in the `docker-smoke` job |
 | Lint and type checks | VERIFIED | `ruff check app tests ../scripts`: clean. `npm run build` (`tsc` + Vite): passed |
-| RAG evaluation | VERIFIED | `scripts/evaluate.py`: 612/612 checks over 41 claim cases and 26 questions; every refusal correct |
+| RAG evaluation | VERIFIED | `scripts/evaluate.py`: 803/803 checks over 57 claim cases and 26 questions; every refusal correct |
 | Adjudication tests | VERIFIED | `test_adjudication.py` and `test_property_travel.py` plus evaluation amounts 95/95, worked out by hand in `data/evaluation/golden_cases.json` |
 | Data provenance | VERIFIED | `scripts/provenance.py --check`: registry has 14 sources and 0 problems; manifest matches the committed copy |
 | Security checks | VERIFIED | `pip-audit`: no known vulnerabilities. `npm audit`: 0 in `frontend/` and 0 in `e2e/`. `test_security_guards.py`: throttle, injection. Secret-pattern scan of tracked files: no hits. Headers and upload tests in `test_golden_path.py` |
@@ -52,7 +52,7 @@ Each step was driven through the real UI by `e2e/tests/golden.spec.mjs` (Playwri
 | Area | State | Note |
 |---|---|---|
 | Golden path, review, audit, dashboard | VERIFIED | See above |
-| Property and travel lines | VERIFIED | 7 seeded claims and 3 evaluation packets with hand-worked amounts; all 42 claim packets run through the API in `reports/claims_results.md`; screenshots 20–22 |
+| Property and travel lines | VERIFIED | 7 seeded claims and 3 evaluation packets with hand-worked amounts; all 58 claim packets run through the API in `reports/claims_results.md`; screenshots 20–22 |
 | Policy PDF ingestion with processing states | VERIFIED | `test_policy_ingestion.py`; earlier browser run on Docker (screenshot 15) |
 | Decision letters, settlement clock, CSV export | VERIFIED | `test_letters_sla.py`; browser letter and CSV download |
 | Phone layout | VERIFIED | Browser at 390 px: navigation behind a menu, no sideways scrolling |

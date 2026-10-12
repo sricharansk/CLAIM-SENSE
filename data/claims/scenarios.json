@@ -514,5 +514,249 @@
     ],
     "expected_recommendation": "REQUEST_INFO",
     "scenario": "Medical claim abroad without the treating doctor's report (5.2)"
+  },
+  {
+    "claim_number": "CLM-H-1017",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-23-000763",
+    "claimant_name": "Anil Kapoor",
+    "incident_date": "2025-08-20",
+    "description": "Planned surgery for a right inguinal hernia.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Hernia after the 24-month specified-disease wait (3.3): deductible and co-pay"
+  },
+  {
+    "claim_number": "CLM-H-1018",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-24-000779",
+    "claimant_name": "Rekha Nair",
+    "incident_date": "2025-09-08",
+    "description": "High fever with bleeding gums; admitted to the ICU with severe dengue.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "ICU charged above the INR 10,000 per-day limit (2.3)"
+  },
+  {
+    "claim_number": "CLM-H-1019",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-25-000784",
+    "claimant_name": "Sameer Khan",
+    "incident_date": "2025-07-12",
+    "description": "Two-wheeler road accident; fracture of the right tibia.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Accident 11 days into cover: the 30-day initial wait does not apply (3.1)"
+  },
+  {
+    "claim_number": "CLM-H-1020",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-22-000795",
+    "claimant_name": "Kamala Devi",
+    "incident_date": "2025-10-14",
+    "description": "Known case of hypertension declared at proposal; admitted with a hypertensive urgency.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Pre-existing disease after the 36-month wait (3.2), room-rent cap, consumables"
+  },
+  {
+    "claim_number": "CLM-H-1021",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-24-000808",
+    "claimant_name": "Varun Bhatia",
+    "incident_date": "2025-07-20",
+    "description": "High fever for four days; admitted for viral fever.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Admission after the policy lapsed on 2025-06-30 (2.1)"
+  },
+  {
+    "claim_number": "CLM-M-2008",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001551",
+    "claimant_name": "Deepak Chawla",
+    "incident_date": "2025-08-25",
+    "description": "Side-swiped by a reversing truck in a parking lot; front door, side mirror and window glass damaged.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "police_report.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Car over 5 years old: 40% depreciation on metal parts (2.2)"
+  },
+  {
+    "claim_number": "CLM-M-2009",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001567",
+    "claimant_name": "Vivek Shetty",
+    "incident_date": "2025-07-28",
+    "description": "Car parked in the basement was submerged when flood water entered during heavy rain.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "police_report.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Flood damage (2.1) with depreciation for a car 29 months old"
+  },
+  {
+    "claim_number": "CLM-M-2010",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001583",
+    "claimant_name": "Nisha Rao",
+    "incident_date": "2025-11-08",
+    "description": "Rear-ended by a bus at a junction; rear bumper, boot lid and tail lamp damaged.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "police_report.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Car under 6 months old: no depreciation on metal (2.2); 1598cc deductible (2.3)"
+  },
+  {
+    "claim_number": "CLM-M-2011",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001599",
+    "claimant_name": "Farah Khan",
+    "incident_date": "2025-12-03",
+    "description": "Windscreen smashed and a door dented by unknown persons during a street protest; malicious damage.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "police_report.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Malicious damage with the police report (4.1): glass without depreciation"
+  },
+  {
+    "claim_number": "CLM-P-3009",
+    "claim_type": "property",
+    "policy_number": "CS-HOM-25-003333",
+    "claimant_name": "Sunita Reddy",
+    "incident_date": "2025-08-03",
+    "description": "The outlet pipe of the overhead water tank burst suddenly and flooded the ground floor.",
+    "documents": [
+      "claim_form.txt",
+      "loss_assessment.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Burst pipe (2.1): contents depreciation and excess, adequately insured"
+  },
+  {
+    "claim_number": "CLM-P-3010",
+    "claim_type": "property",
+    "policy_number": "CS-HOM-24-003349",
+    "claimant_name": "Prakash Pillai",
+    "incident_date": "2025-05-20",
+    "description": "Cyclone winds tore off roof sheets, brought down the compound wall and damaged the air conditioner outdoor unit.",
+    "documents": [
+      "claim_form.txt",
+      "loss_assessment.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Cyclone loss with the average clause for underinsurance (2.3)"
+  },
+  {
+    "claim_number": "CLM-P-3011",
+    "claim_type": "property",
+    "policy_number": "CS-HOM-25-003365",
+    "claimant_name": "Ashok Banerjee",
+    "incident_date": "2025-09-22",
+    "description": "An earthquake cracked the walls and ceiling and toppled a cabinet and the television.",
+    "documents": [
+      "claim_form.txt",
+      "loss_assessment.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Earthquake (2.1): contents depreciation and excess"
+  },
+  {
+    "claim_number": "CLM-T-4011",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004687",
+    "claimant_name": "Sanjay Gupta",
+    "incident_date": "2025-10-15",
+    "description": "Trip cut short after the death of the insured's father in India; returned early on 2025-10-15.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Trip cut short by a family death (2.2), within the cancellation limit"
+  },
+  {
+    "claim_number": "CLM-T-4012",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004703",
+    "claimant_name": "Bhavna Shah",
+    "incident_date": "2025-07-11",
+    "description": "Sudden chest pain in New York; admitted and treated for a heart attack.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "medical_report.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Large emergency medical claim abroad (2.1): comfort items and deductible only"
+  },
+  {
+    "claim_number": "CLM-T-4013",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004719",
+    "claimant_name": "Rohit Sinha",
+    "incident_date": "2025-12-10",
+    "description": "Checked suitcase did not arrive in Sydney and was declared permanently lost by the airline.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "property_irregularity_report.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Lost baggage inside the per-item and per-trip limits (2.3)"
+  },
+  {
+    "claim_number": "CLM-T-4014",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004735",
+    "claimant_name": "Meghna Das",
+    "incident_date": "2025-08-06",
+    "description": "Scooter accident in Bali; fractured right collarbone, taken to hospital by ambulance.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "medical_report.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Accidental injury abroad (2.1) with an ambulance: comfort items and deductible"
   }
 ]

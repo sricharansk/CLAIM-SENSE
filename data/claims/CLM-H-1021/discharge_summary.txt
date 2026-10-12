@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Varun Bhatia
+Admission Date: 2025-07-20
+Discharge Date: 2025-07-23
+Diagnosis: Viral fever
+Procedure: Medical management
+
+Clinical Notes:
+Recovered. Discharged.

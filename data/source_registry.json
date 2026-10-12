@@ -33,7 +33,7 @@
         "data/policies/insured_policies.json"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "7ef08829247d95758ee4f00da386f6760aef600d296600ef28ffc6e430a0580f"
+      "checksum_sha256": "69dad3f3b3456bc84b73717ebe36a134a7788650b08d9f8d11d704b5226d8f96"
     },
     {
       "id": "synthetic-policy-pdf-demo",
@@ -60,7 +60,7 @@
     },
     {
       "id": "synthetic-golden-claims",
-      "name": "Synthetic golden claim packets (34 scenarios across health, motor, property and travel, and the demo upload)",
+      "name": "Synthetic golden claim packets (50 scenarios across health, motor, property and travel, and the demo upload)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_claims",
@@ -79,7 +79,7 @@
         "data/claims"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "4274cd441e4f099ac06918401d0a0afe27b9c205d06b00c5e0883f118cec31c4"
+      "checksum_sha256": "ff80da0252b1a8fdba6bfa0b3bb809f7c70b375803427b4a2595f475ac60fa3a"
     },
     {
       "id": "synthetic-claims-portfolio",
@@ -106,7 +106,7 @@
     },
     {
       "id": "golden-evaluation-set",
-      "name": "Golden evaluation set (41 claim cases, 26 policy questions, 7 fresh packets)",
+      "name": "Golden evaluation set (57 claim cases, 26 policy questions, 7 fresh packets)",
       "publisher": "Claim Sense (hand-worked expectations; generated packets)",
       "source_type": "synthetic",
       "data_type": "evaluation",
@@ -124,7 +124,7 @@
         "data/evaluation"
       ],
       "transformation_script": "data/synthetic/generate.py (packets); golden_cases.json and rag_questions.json written by hand",
-      "checksum_sha256": "16bf4b310eb58ce689b32f3c920878f0761a9554d163796bf4037f6ac440c206"
+      "checksum_sha256": "57a9606ad4d1c765ee70cd7d8b8c387d853db6addc29cc684f34044644367867"
     },
     {
       "id": "irdai-mc-health-2024",

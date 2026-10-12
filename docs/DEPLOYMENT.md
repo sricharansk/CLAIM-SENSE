@@ -26,7 +26,7 @@ Behind a TLS-inspecting proxy, pass its CA to the build: `docker build --secret 
 3. Wait for the health check on `/api/v1/health`, then run `python3 scripts/smoke_test.py https://<your-app>.onrender.com <DEMO_PASSWORD>`. For the browser suite as well: `cd e2e && BASE_URL=https://<your-app>.onrender.com DEMO_PASSWORD=<…> npx playwright test` (on a freshly started service).
 4. Or verify from GitHub instead of your machine: run the **Verify deployment** workflow (Actions tab) with the service URL. It waits for `/api/v1/ready`, runs the smoke test and, if ticked, the browser suite. Set the `DEMO_PASSWORD` repository secret first if you changed the password.
 
-The free plan uses SQLite that is re-seeded on each restart, which suits a demo but not real data. A fresh start holds 41 analysed claims: the 34 seeded scenarios and the 7 evaluation packets (`CLAIMSENSE_SEED_PACKETS`, on by default). Claims filed through the UI or the smoke test are added to these and are lost at the next restart.
+The free plan uses SQLite that is re-seeded on each restart, which suits a demo but not real data. A fresh start holds 57 analysed claims: the 50 seeded scenarios and the 7 evaluation packets (`CLAIMSENSE_SEED_PACKETS`, on by default). Claims filed through the UI or the smoke test are added to these and are lost at the next restart.
 
 ## Environment variables
 

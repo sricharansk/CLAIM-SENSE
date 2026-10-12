@@ -1,0 +1,17 @@
+SURVEYOR'S LOSS ASSESSMENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+Surveyor: Deccan Loss Surveyors (fictional)
+Survey Reference: SV-3010
+Incident Date: 2025-05-20
+Patient/Insured Name: Prakash Pillai
+
+Itemised Charges:
+Roof Sheet Replacement                                          60,000.00
+Compound Wall Rebuild                                           40,000.00
+Air Conditioner Outdoor Unit                                    45,000.00
+
+Total Amount                                                   145,000.00
+
+Surveyor Observations:
+Cyclone confirmed by the weather bulletin. Rebuilding cost of the house and contents as new is assessed at INR 10 lakh against a sum insured of INR 8 lakh.

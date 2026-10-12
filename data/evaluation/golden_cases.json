@@ -468,6 +468,198 @@
         "risk_level": "LOW", "recommendation": "REQUEST_INFO", "queue": "PENDING_INFORMATION"
       },
       "working": "5.2 requires a medical report from the treating doctor for a medical claim and none was uploaded. Assessable amount: 68,000 - deductible 5,000 = 63,000; information is requested first."
+    },
+    {
+      "id": "C42", "categories": ["clearly_covered", "deductible"],
+      "title": "Hernia repair after the 24-month specified-disease wait",
+      "claim_number": "CLM-H-1017",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "68400.00",
+        "waterfall": {"R10_NON_PAYABLE": null, "R20_PER_DAY_LIMIT": null, "R30_DEDUCTIBLE": "-5000.00", "R40_COPAY": "-7600.00", "R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "81,000 billed; room 4,500/day is within the 5,000 limit (2.2); hernia treated 29 months after cover began on 2023-03-01, past the 24-month wait (3.3); deductible 5,000 (5.1) -> 76,000; co-pay 10% (5.2) = 7,600 -> 68,400."
+    },
+    {
+      "id": "C43", "categories": ["sub_limit", "deductible"],
+      "title": "Severe dengue with ICU charged above the per-day limit",
+      "claim_number": "CLM-H-1018",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "69300.00",
+        "waterfall": {"R10_NON_PAYABLE": null, "R20_PER_DAY_LIMIT": "-12000.00", "R30_DEDUCTIBLE": "-5000.00", "R40_COPAY": "-7700.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "94,000 billed; ICU 3 days at 14,000 against the 10,000 limit (2.3) = 12,000 not payable -> 82,000; room 5,000/day is at the limit (2.2); deductible 5,000 -> 77,000; co-pay 10% = 7,700 -> 69,300."
+    },
+    {
+      "id": "C44", "categories": ["clearly_covered", "deductible"],
+      "title": "Road accident 11 days into cover: the initial wait does not apply",
+      "claim_number": "CLM-H-1019",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "67500.00",
+        "waterfall": {"R20_PER_DAY_LIMIT": null, "R30_DEDUCTIBLE": "-5000.00", "R40_COPAY": "-7500.00"},
+        "risk_level": "LOW", "risk_signals": ["EARLY_CLAIM"], "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "80,000 billed; admitted 11 days after commencement, but the 30-day initial waiting period does not apply to an accident (3.1); room 3,500/day within the limit; deductible 5,000 -> 75,000; co-pay 10% = 7,500 -> 67,500. Risk: early claim (20) only, LOW."
+    },
+    {
+      "id": "C45", "categories": ["partial_coverage", "sub_limit"],
+      "title": "Known hypertension after the 36-month pre-existing disease wait",
+      "claim_number": "CLM-H-1020",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "34200.00",
+        "waterfall": {"R10_NON_PAYABLE": "-2000.00", "R20_PER_DAY_LIMIT": "-3000.00", "R30_DEDUCTIBLE": "-5000.00", "R40_COPAY": "-3800.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "48,000 billed; hypertension declared at proposal, admitted 45 months after cover began on 2022-01-10, past the 36-month wait (3.2); admission kit and consumables 2,000 not payable (4.3); room 6,000/day against 5,000 for 3 days = 3,000 (2.2) -> 43,000; deductible 5,000 -> 38,000; co-pay 10% = 3,800 -> 34,200."
+    },
+    {
+      "id": "C46", "categories": ["excluded"],
+      "title": "Admission three weeks after the policy lapsed",
+      "claim_number": "CLM-H-1021",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "POLICY_NOT_IN_FORCE", "clause_ref": "2.1"},
+        "payable_amount": "0.00",
+        "waterfall": {},
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "The policy ran from 2024-07-01 to 2025-06-30 and was not renewed; the admission on 2025-07-20 falls outside the policy period, and 2.1 covers hospitalisation during the policy period only."
+    },
+    {
+      "id": "C47", "categories": ["partial_coverage", "deductible"],
+      "title": "Car over five years old: 40% depreciation on metal parts",
+      "claim_number": "CLM-M-2008",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "30400.00",
+        "waterfall": {"R15_DEPRECIATION": "-14600.00", "R30_DEDUCTIBLE": "-2000.00", "R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "47,000 billed; first registered 2019-06-15, loss 2025-08-25: 74 months, so metal depreciation 40% (2.2): door panel 24,000 -> 9,600; plastic 50%: mirror 2,500; glass nil; paint 50%: 2,500; labour nil. Total 14,600 -> 32,400; deductible 2,000 (1197cc, 2.3) -> 30,400."
+    },
+    {
+      "id": "C48", "categories": ["partial_coverage", "deductible"],
+      "title": "Flood damage to a car parked in a basement",
+      "claim_number": "CLM-M-2009",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "48000.00",
+        "waterfall": {"R15_DEPRECIATION": "-18000.00", "R30_DEDUCTIBLE": "-2000.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Flood is an insured peril (2.1). 68,000 billed; first registered 2023-02-10, loss 2025-07-28: 29 months, metal 15%: floor panel 20,000 -> 3,000; plastic 50%: wiring harness 7,000, bumper 6,000; paint 50%: 2,000; labour nil. Total 18,000 -> 50,000; deductible 2,000 (1497cc) -> 48,000."
+    },
+    {
+      "id": "C49", "categories": ["partial_coverage", "deductible"],
+      "title": "New car under six months old, above 1500cc",
+      "claim_number": "CLM-M-2010",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "50000.00",
+        "waterfall": {"R15_DEPRECIATION": "-15500.00", "R30_DEDUCTIBLE": "-3500.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "69,000 billed; first registered 2025-06-20, loss 2025-11-08: 4 months, so nil depreciation on the boot lid (2.2); plastic 50%: bumper 8,000, tail lamp 4,500; paint 50%: 3,000. Total 15,500 -> 53,500; 1598cc is above 1500cc, deductible 3,500 (2.3) -> 50,000."
+    },
+    {
+      "id": "C50", "categories": ["partial_coverage", "deductible"],
+      "title": "Malicious damage reported to the police",
+      "claim_number": "CLM-M-2011",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "38000.00",
+        "waterfall": {"R15_DEPRECIATION": "-8000.00", "R30_DEDUCTIBLE": "-2000.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "The police report 4.1 asks for is attached, unlike C39. 48,000 billed; first registered 2022-09-01, loss 2025-12-03: 39 months, metal 25%: door panel 16,000 -> 4,000; windshield glass nil; paint 50%: 4,000. Total 8,000 -> 40,000; deductible 2,000 (1199cc) -> 38,000."
+    },
+    {
+      "id": "C51", "categories": ["partial_coverage", "deductible"],
+      "title": "Burst water tank pipe flooded the ground floor",
+      "claim_number": "CLM-P-3009",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "119200.00",
+        "waterfall": {"R10_NON_PAYABLE": null, "R15_DEPRECIATION": "-9800.00", "R25_UNDERINSURANCE": "0.00", "R30_DEDUCTIBLE": "-10000.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Sudden bursting of a water tank pipe is an insured peril (2.1), unlike gradual seepage (C15). 1,39,000 assessed; depreciation 10% on the wardrobe 30,000 = 3,000 and 20% on the washing machine 34,000 = 6,800 (2.2) -> 1,29,200; value at risk 16,00,000 is within 15% of the 15,00,000 sum insured, no average (2.3); excess 10,000 -> 1,19,200."
+    },
+    {
+      "id": "C52", "categories": ["partial_coverage", "sub_limit"],
+      "title": "Cyclone damage to an underinsured home",
+      "claim_number": "CLM-P-3010",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "98800.00",
+        "waterfall": {"R15_DEPRECIATION": "-9000.00", "R25_UNDERINSURANCE": "-27200.00", "R30_DEDUCTIBLE": "-10000.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "1,45,000 assessed; depreciation 20% on the air conditioner unit 45,000 = 9,000 (2.2) -> 1,36,000; value at risk 10,00,000 is more than 15% above the 8,00,000 sum insured, so the loss is reduced to 8/10 (2.3): 1,08,800, a cut of 27,200; excess 10,000 -> 98,800."
+    },
+    {
+      "id": "C53", "categories": ["partial_coverage", "deductible"],
+      "title": "Earthquake cracked the walls and toppled contents",
+      "claim_number": "CLM-P-3011",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "149000.00",
+        "waterfall": {"R15_DEPRECIATION": "-9000.00", "R25_UNDERINSURANCE": "0.00", "R30_DEDUCTIBLE": "-10000.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "1,68,000 assessed; depreciation 10% on the cabinet and bookshelf 18,000 = 1,800 and 20% on the television 36,000 = 7,200 (2.2) -> 1,59,000; value at risk 21,00,000 is within 15% of the 20,00,000 sum insured (2.3); excess 10,000 -> 1,49,000."
+    },
+    {
+      "id": "C54", "categories": ["clearly_covered", "deductible"],
+      "title": "Trip cut short by a death in the family",
+      "claim_number": "CLM-T-4011",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "87000.00",
+        "waterfall": {"R20_BENEFIT_LIMIT": null, "R30_DEDUCTIBLE": "-5000.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Death of an immediate family member is a cause the trip cancellation benefit names (2.2). Unused non-refundable hotel 54,000 + rebooked flight 38,000 = 92,000, within the 1,50,000 limit; deductible 5,000 (4.1) -> 87,000."
+    },
+    {
+      "id": "C55", "categories": ["partial_coverage", "deductible"],
+      "title": "Heart attack abroad: large emergency medical claim",
+      "claim_number": "CLM-T-4012",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "840000.00",
+        "waterfall": {"R10_NON_PAYABLE": "-4000.00", "R30_DEDUCTIBLE": "-5000.00", "R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "8,49,000 of emergency treatment (2.1) with no heart disease before travel; telephone and laundry 4,000 not payable (2.4) -> 8,45,000; medical treatment has no sub-limit; deductible 5,000 -> 8,40,000, well within the 40,00,000 sum insured."
+    },
+    {
+      "id": "C56", "categories": ["clearly_covered", "deductible"],
+      "title": "Lost baggage inside the per-item and per-trip limits",
+      "claim_number": "CLM-T-4013",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "64000.00",
+        "waterfall": {"R20_ITEM_LIMIT": null, "R20_BENEFIT_LIMIT": null, "R30_DEDUCTIBLE": "-5000.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Every item is at most 25,000 and the total 69,000 is below the 1,00,000 baggage limit (2.3), so nothing is cut (compare C17); the airline's irregularity report is attached; deductible 5,000 -> 64,000."
+    },
+    {
+      "id": "C57", "categories": ["partial_coverage", "deductible"],
+      "title": "Scooter accident abroad with an ambulance transfer",
+      "claim_number": "CLM-T-4014",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "179000.00",
+        "waterfall": {"R10_NON_PAYABLE": "-1500.00", "R30_DEDUCTIBLE": "-5000.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "1,85,500 billed for emergency treatment of an accidental injury including the ambulance (2.1); toiletries and laundry 1,500 not payable (2.4) -> 1,84,000; deductible 5,000 -> 1,79,000."
     }
   ]
 }

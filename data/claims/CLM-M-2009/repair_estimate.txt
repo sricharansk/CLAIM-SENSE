@@ -1,0 +1,16 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2009
+Vehicle Registration: KA-19-SY-7712
+Patient/Insured Name: Vivek Shetty
+
+Itemised Charges:
+Engine Cleaning and Flushing Labour                             18,000.00
+Wiring Harness (plastic)                                        14,000.00
+Floor Panel (metal) - replace                                   20,000.00
+Front Bumper (plastic) - replace                                12,000.00
+Painting Material                                                4,000.00
+
+Total Amount                                                    68,000.00

@@ -20,7 +20,7 @@ Status on 2026-10-12: **deployed and verified.** Render serves `main` at https:/
 | Dashboard | Done | Screenshot `14-dashboard-after-review.png` |
 | Error states | Done | Uniform error body with correlation ID; `ErrorBox` on every screen; safe-failure test |
 | Security controls reviewed; injection protections tested | Done | `SECURITY.md`; `test_security_guards.py`; evaluation Q21 |
-| Tests pass | Done | 108 pytest, 11 Playwright browser tests, 612/612 evaluation checks, provenance check; CI green on PR #1; PR #2 CI runs every push. Full report: `FINAL_VALIDATION_REPORT.md` |
+| Tests pass | Done | 126 pytest, 12 Playwright browser tests, 803/803 evaluation checks, provenance check; CI green on PR #1; PR #2 CI runs every push. Full report: `FINAL_VALIDATION_REPORT.md` |
 | Docker build works; README setup from a clean checkout | Done | Fresh clone of the branch built with `--no-cache` and passed the smoke test (2026-10-09). Behind a TLS-inspecting proxy, the build needs `--secret id=ca,src=<ca.crt>` (see README). |
 | Data provenance; every RAG chunk traceable | Done | `DATA_PROVENANCE.md`; `scripts/provenance.py --check` in CI; `test_provenance.py`; screenshot `17-data-provenance.png` |
 | No secrets or confidential data tracked | Done | `.gitignore`, `.dockerignore`; synthetic data only; `AUTH_SECRET` and `DEMO_PASSWORD` set by the environment |
