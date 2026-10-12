@@ -67,6 +67,7 @@ export type Analytics = {
   totals: { overdue: number; claims: number; pending_review: number; high_risk: number; decided: number; claimed_amount: string; recommended_payable: string; avg_analysis_ms: number | null };
   by_status: Record<string, number>; by_recommendation: Record<string, number>; by_risk: Record<string, number>;
   by_line: Record<string, number>; queues: Record<string, number>;
+  lines: Record<string, { claims: number; claimed: string; payable: string; not_covered: number }>;
   human_vs_ai: { decided: number; agreed: number; overridden: number; amount_overridden: number; override_rate: number | null;
     reviewed: number; escalated: number; escalation_rate: number | null };
   human_outcomes: Record<string, number>;

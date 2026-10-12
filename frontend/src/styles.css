@@ -158,3 +158,16 @@ nav.tabs .count { margin-left: 6px; font-size: 0.72rem; background: var(--gray-b
 
 .fact-edit { display: grid; gap: 8px; padding: 8px 0; }
 .fact-edit label { display: grid; gap: 4px; font-size: 0.82rem; color: var(--muted); }
+
+/* dashboard interactions */
+a.kpi.kpi-link { color: inherit; text-decoration: none; cursor: pointer; transition: border-color .15s, transform .15s; }
+a.kpi.kpi-link:hover, a.kpi.kpi-link:focus-visible { border-color: var(--brand); transform: translateY(-1px); }
+a.kpi.kpi-link strong { text-decoration: underline; text-decoration-color: transparent; }
+a.kpi.kpi-link:hover strong { text-decoration-color: currentColor; }
+.bar-label a { text-decoration: none; }
+.bar-label a:hover .badge { outline: 2px solid currentColor; outline-offset: 1px; }
+table.lines td.wide { min-width: 12rem; }
+table.lines .bar-track { position: relative; display: inline-block; width: 70%; vertical-align: middle; margin-right: .5rem; }
+table.lines .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; }
+.bar-fill.muted-fill { opacity: .25; }
+.chip { margin-left: .4rem; padding: .1rem .55rem; border-radius: 999px; border: 1px solid currentColor; background: transparent; cursor: pointer; font: inherit; }

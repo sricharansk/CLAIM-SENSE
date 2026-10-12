@@ -10,14 +10,14 @@ Claim Sense takes a health, motor, property (home) or travel claim from intake t
 
 All policies, people and claims in this repository are **synthetic**. See [Data](#data-and-datasets).
 
-![Dashboard](docs/screenshots/14-dashboard-after-review.png)
+![Dashboard](docs/screenshots/23-dashboard-interactive.png)
 
 ## What works today
 
 | Area | What you can do | Where |
 |---|---|---|
 | Sign-in and roles | Adjuster (approves up to ₹2,00,000), Supervisor (no limit, decides escalations, ingests policies), Auditor (read-only); signed tokens; every action audited under the signed-in user | `/` |
-| Dashboard | Live claim counts, recommendations, risk mix, override and escalation rates, reviewer actions, settlement clock, portfolio evaluation | `/` |
+| Dashboard | Totals by line of business; every tile, line and bar opens the matching claims (filters by line, recommendation, risk or status, removable as chips); live claim counts, recommendations, risk mix, override and escalation rates, reviewer actions, settlement clock, portfolio evaluation | `/` |
 | Claim intake | Create a claim, upload PDF or text documents, run the agent pipeline | `/claims/new` |
 | Document intelligence | Document classification, extracted facts with source file, line and confidence, itemised charges; reviewers correct a fact with a reason before (re-)running the analysis, the extracted value is kept and the correction audited | claim page |
 | Lines of business | Health (HLT-SHIELD), motor (MTR-SECURE), property / home (HOME-GUARD) and overseas travel (TRV-GLOBE), each with its own synthetic wording, structured terms and rules | `/policies` |
@@ -178,12 +178,12 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 108 tests
+cd backend && ruff check app tests && python -m pytest -q    # 109 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
 python3 scripts/claims_report.py                             # every claim packet -> reports/claims_results.md
 python3 scripts/provenance.py --check                        # source registry, checksums, RAG manifest
 cd frontend && npm run build                                 # type check + production build
-cd e2e && npm ci && npx playwright test                      # 11 browser tests against a fresh stack on :8080
+cd e2e && npm ci && npx playwright test                      # 12 browser tests against a fresh stack on :8080
 ```
 
 Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all 19 golden scenarios, the property and travel rules (average clause, per-item and benefit limits, trip period, loss-dependent documents), settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 449 / 449 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).

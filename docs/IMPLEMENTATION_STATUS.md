@@ -40,6 +40,12 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | – | Override and escalation rates (blueprint Prompt 14) | `analytics.dashboard`: override rate, amount overrides, escalation rate, reviewer actions; dashboard KPIs | `test_dashboard_reports_override_and_escalation_rates` |
 | – | Security | Upload allow-list, size limit and filename sanitising; security headers and CSP; non-root container; dependency audits; see `docs/SECURITY.md` | Header and path tests; pip-audit and npm audit clean |
 
+## Validation results (2026-10-12, dashboard and caching)
+
+- **Live site rendered without styles.** The Verify deployment run showed the stylesheet served correctly (HTTP 200, `text/css`), so the browser held a stale copy: the app sent no caching instructions. Pages are now sent with `Cache-Control: no-cache` and the content-hashed files in `/assets/` with `public, max-age=31536000, immutable`. The smoke test now fetches the stylesheet and script the page links to and checks status, type and size; before, it only checked that the page mentioned `/assets/`.
+- **Interactive dashboard.** A lines-of-business card (claims, not covered, claimed, AI payable, payable share), and every count tile, line and bar links to the claims list filtered by line, recommendation, risk or status; filters show as removable chips. `/analytics` returns `lines`. Browser check found the linked tiles losing their card style (they reused the `.link` button class); renamed to `.kpi-link`.
+- `pytest`: 109 passed. `e2e`: 12 / 12 on PostgreSQL. Smoke test with the new asset checks: passed locally and against https://claim-sense.onrender.com. Screenshots `23`, `24`.
+
 ## Validation results (2026-10-12, every rule exercised)
 
 - **Audit of the four wordings.** Every exclusion, waiting period, limit and loss-dependent document in the structured terms was checked for a claim that exercises it. Found and fixed:

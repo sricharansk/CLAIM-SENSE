@@ -49,7 +49,16 @@ def dashboard(db: Session) -> dict:
         run = latest_run.get(c.id)
         terms = db.get(PolicyVersion, run.policy_version_id).terms if run and run.policy_version_id else None
         clocks[sla.settlement_clock(c, terms, last_human.get(c.id))["state"]] += 1
+    lines: dict[str, dict] = {}
+    for c in claims:
+        row = lines.setdefault(c.claim_type, {"claims": 0, "claimed": Decimal(0), "payable": Decimal(0), "not_covered": 0})
+        row["claims"] += 1
+        row["claimed"] += Decimal(c.claimed_amount or 0)
+        if c.id in ai:
+            row["payable"] += Decimal(ai[c.id].payable_amount or 0)
+            row["not_covered"] += ai[c.id].decision == "RECOMMEND_REJECT"
     return {
+        "lines": {k: {**v, "claimed": str(v["claimed"]), "payable": str(v["payable"])} for k, v in sorted(lines.items())},
         "totals": {"claims": len(claims), "pending_review": sum(1 for c in claims if c.status == "PENDING_REVIEW"),
                    "high_risk": risk.get("HIGH", 0), "decided": len(last_human),
                    "claimed_amount": str(claimed), "recommended_payable": str(recommended),

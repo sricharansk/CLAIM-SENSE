@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { api, inr } from "../api";
+import { Analytics, api, inr } from "../api";
 import { useSession } from "../components/session";
 import { Badge, Bars, Card, ErrorBox, Loading, useLoad } from "../components/ui";
 
@@ -20,9 +20,9 @@ export default function Dashboard() {
         {user.can_write && <Link className="btn primary" to="/claims/new">New claim</Link>}
       </header>
       <div className="kpis">
-        <Kpi label="Claims" value={totals.claims} />
-        <Kpi label="Pending human review" value={totals.pending_review} />
-        <Kpi label="High risk" value={totals.high_risk} tone="red" />
+        <Kpi label="Claims" value={totals.claims} to="/claims" />
+        <Kpi label="Pending human review" value={totals.pending_review} to="/claims?status=PENDING_REVIEW" />
+        <Kpi label="High risk" value={totals.high_risk} tone="red" to="/claims?risk=HIGH" />
         <Kpi label="Decided by reviewers" value={totals.decided} />
         <Kpi label="Claimed" value={inr(totals.claimed_amount)} />
         <Kpi label="AI-recommended payable" value={inr(totals.recommended_payable)} />
@@ -31,13 +31,16 @@ export default function Dashboard() {
         <Kpi label="Escalation rate" value={rate(h.escalation_rate, h.escalated, h.reviewed)} />
         <Kpi label="Settlement overdue / breached" value={totals.overdue} tone={totals.overdue ? "red" : undefined} />
       </div>
+      <Card title="Lines of business" actions={<span className="muted small">Select a line to see its claims</span>}>
+        <LineTable lines={a.data.lines} />
+      </Card>
       <div className="grid3">
-        <Card title="AI recommendations"><Bars data={a.data.by_recommendation} />
+        <Card title="AI recommendations"><Bars data={a.data.by_recommendation} to={(k) => `/claims?recommendation=${k}`} />
           <h4>Reviewer actions</h4><Bars data={a.data.human_outcomes} />
           {h.amount_overridden > 0 && <p className="muted small">{h.amount_overridden} approval{h.amount_overridden === 1 ? "" : "s"} at an amount other than the AI's.</p>}
         </Card>
-        <Card title="Risk levels"><Bars data={a.data.by_risk} /></Card>
-        <Card title="Claim status"><Bars data={a.data.by_status} /><h4>Settlement clock</h4><Bars data={a.data.settlement} /></Card>
+        <Card title="Risk levels"><Bars data={a.data.by_risk} to={(k) => `/claims?risk=${k}`} /></Card>
+        <Card title="Claim status"><Bars data={a.data.by_status} to={(k) => `/claims?status=${k}`} /><h4>Settlement clock</h4><Bars data={a.data.settlement} /></Card>
       </div>
       <div className="grid2">
         <Card title="Recent claims" actions={<Link to="/claims">All claims</Link>}>
@@ -75,6 +78,39 @@ export default function Dashboard() {
 
 const rate = (r: number | null, n: number, d: number) => (r === null ? "—" : `${Math.round(r * 100)}% (${n}/${d})`);
 
-function Kpi({ label, value, tone }: { label: string; value: string | number; tone?: string }) {
-  return <div className={`kpi ${tone ?? ""}`}><span>{label}</span><strong>{value}</strong></div>;
+function Kpi({ label, value, tone, to }: { label: string; value: string | number; tone?: string; to?: string }) {
+  const body = <><span>{label}</span><strong>{value}</strong></>;
+  return to ? <Link className={`kpi kpi-link ${tone ?? ""}`} to={to} title={`Show ${label.toLowerCase()}`}>{body}</Link>
+    : <div className={`kpi ${tone ?? ""}`}>{body}</div>;
+}
+
+const LINE_NAMES: Record<string, string> = { health: "Health", motor: "Motor", property: "Property (home)", travel: "Travel" };
+
+function LineTable({ lines }: { lines: Analytics["lines"] }) {
+  const rows = Object.entries(lines);
+  if (!rows.length) return <p className="muted">No claims yet.</p>;
+  const max = Math.max(...rows.map(([, v]) => Number(v.claimed)), 1);
+  return (
+    <table className="lines">
+      <thead><tr><th>Line</th><th>Claims</th><th>Not covered</th><th>Claimed</th><th>AI payable</th><th className="wide">Payable of claimed</th></tr></thead>
+      <tbody>
+        {rows.map(([line, v]) => {
+          const claimed = Number(v.claimed), payable = Number(v.payable);
+          return (
+            <tr key={line}>
+              <td><Link to={`/claims?type=${line}`}>{LINE_NAMES[line] ?? line}</Link></td>
+              <td>{v.claims}</td><td>{v.not_covered}</td><td>{inr(v.claimed)}</td><td>{inr(v.payable)}</td>
+              <td className="wide">
+                <span className="bar-track" title={`${inr(v.payable)} of ${inr(v.claimed)}`}>
+                  <span className="bar-fill muted-fill" style={{ width: `${(claimed / max) * 100}%` }} />
+                  <span className="bar-fill" style={{ width: `${(payable / max) * 100}%` }} />
+                </span>
+                <span className="small muted">{claimed ? `${Math.round((payable / claimed) * 100)}%` : "—"}</span>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
 }
