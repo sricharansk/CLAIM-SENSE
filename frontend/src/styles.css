@@ -83,6 +83,7 @@ input, select, textarea { font: inherit; padding: 8px 10px; border: 1px solid va
 .bar-track { background: var(--gray-bg); border-radius: 999px; height: 10px; overflow: hidden; }
 .bar-fill { display: block; height: 100%; background: var(--brand); border-radius: 999px; }
 .bar-value { text-align: right; font-weight: 600; }
+.bars.scores .bar-row { grid-template-columns: 150px 1fr 64px; }
 .recommendation { border-left: 6px solid var(--brand); }
 .recommendation.RECOMMEND_REJECT, .recommendation.INVESTIGATE { border-left-color: var(--red); }
 .recommendation.REQUEST_INFO { border-left-color: var(--amber); }

@@ -43,6 +43,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 ## Validation results (2026-10-12, screenshots)
 
 - `e2e/screenshots.mjs` regenerates the README screenshots from a freshly seeded stack (PostgreSQL, built frontend served by the backend): browser-created health claim, the rejected waiting-period claim with its repudiation letter, high-risk and motor claims, assistant, review queue, evaluation (612 / 612), PDF ingestion, evidence, provenance, fact correction, property and travel adjudication, the claims list on all four lines, the interactive dashboard (35 claims, ₹58,20,100 claimed, ₹28,91,250 AI payable) and the filtered travel list. No browser errors. Full-page shots are taken at full height so the sidebar spans the image.
+- The evaluation scorecard clipped three-digit counts ("123/12"); its count column is now wider. Live check after deploying the screenshot change: [run 38313979101](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38313979101), every smoke check passed (34 seeded claims, 612 / 612, health ₹64,080, property ₹3,47,500, travel ₹95,000).
 
 ## Validation results (2026-10-12, dashboard and caching)
 
@@ -61,7 +62,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 
 ## Validation results (2026-10-12, deployment and remaining claims)
 
-- **Cloud deployment verified.** Render serves `main` at https://claim-sense.onrender.com. The **Verify deployment** workflow passed every smoke check against it ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38266390199)): frontend, health, readiness, sign-in required, sign-in, 15 seeded claims, 4 wordings ready in the ingestion log, evaluation report 405/405, source registry and RAG manifest (85 chunks, 0 rejected), golden health claim (₹64,080, partial approval, 13 evidence items, approved, 14 audit events), property claim ₹3,47,500, travel claim ₹95,000, cited answer and refusal. That run was against commit `37fd020`; this change set redeploys when merged. The first four runs failed at sign-in because no `DEMO_PASSWORD` repository secret existed and the service uses a custom password; adding the secret fixed it. The service reports `llm: anthropic`, so an Anthropic key is set on Render.
+- **Cloud deployment verified.** Render serves `main` at https://claim-sense.onrender.com. The **Verify deployment** workflow passed every smoke check against it ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38313979101)): frontend, health, readiness, sign-in required, sign-in, 15 seeded claims, 4 wordings ready in the ingestion log, evaluation report 405/405, source registry and RAG manifest (85 chunks, 0 rejected), golden health claim (₹64,080, partial approval, 13 evidence items, approved, 14 audit events), property claim ₹3,47,500, travel claim ₹95,000, cited answer and refusal. That run was against commit `37fd020`; this change set redeploys when merged. The first four runs failed at sign-in because no `DEMO_PASSWORD` repository secret existed and the service uses a custom password; adding the secret fixed it. The service reports `llm: anthropic`, so an Anthropic key is set on Render.
 - Four seeded claims added for clauses no claim exercised: `CLM-H-1007` maternity (§4.4), `CLM-M-2003` expired licence (§3.2), `CLM-P-3004` unoccupied home (§3.3), `CLM-T-4005` pre-existing condition (§3.1). New policies, so no earlier claim's risk or sum insured changes; the 15 earlier seeded claims give identical results.
 - The 1,000-claim synthetic portfolio now covers all four lines (507 health, 241 motor, 124 property, 128 travel); travel is scored without the early-claim signal, as in the live risk agent. Precision 86.6%, recall 84.1% (TP 58, FP 9, FN 11, TN 922).
 - GitHub Actions moved to Node 24 versions (checkout v5, setup-node v5, setup-python v6, upload-artifact v6), removing the Node.js 20 deprecation warning on every run.
@@ -103,7 +104,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | Coverage; deterministic adjudication; risk/fraud; supervisor | Done |
 | Human review; audit; dashboard | Done |
 | Golden tests pass; security checks pass; Docker works; repository clean | Done |
-| Deployment succeeds; deployed health check; deployed smoke test | Done: Render, https://claim-sense.onrender.com, all smoke checks passed 2026-10-12 ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38266390199)) |
+| Deployment succeeds; deployed health check; deployed smoke test | Done: Render, https://claim-sense.onrender.com, all smoke checks passed 2026-10-12 ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38313979101)) |
 
 ## In progress
 
