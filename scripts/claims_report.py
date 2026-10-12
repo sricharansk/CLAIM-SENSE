@@ -226,9 +226,11 @@ def to_markdown(r: dict) -> str:
     out += ["", "| Review queue | Claims |", "|---|---|"] + [f"| {k} | {v} |" for k, v in sorted(s["queues"].items())]
     out += ["", "## Where the money went", "", "Total reductions from billed to payable, by rule:", "", "| Rule | Amount |", "|---|---|"]
     out += [f"| {DEDUCTIONS[k]} (`{k}`) | {_inr(-Decimal(v))} |" for k, v in s["deductions"].items()]
+    live = bool(r.get("source_url"))
     out += ["", "## Every claim", "",
-            "| Claim | Line | Policy wording | Billed | Payable | Coverage | Reason / clause | Risk | Recommendation | Queue |",
-            "|---|---|---|---|---|---|---|---|---|---|"]
+            "| Claim | Line | Policy wording | Billed | Payable | Coverage | Reason / clause | Risk | Recommendation | Queue |"
+            + (" Status | Source |" if live else ""),
+            "|---|---|---|---|---|---|---|---|---|---|" + ("---|---|" if live else "")]
     for c in r["claims"]:
         if c["failing_check"]:
             reason = f"{c['failing_check']['code']} §{c['failing_check']['clause_ref']}"
@@ -238,7 +240,8 @@ def to_markdown(r: dict) -> str:
             reason = ", ".join(DEDUCTIONS[k].lower() for k in c["deductions"]) or "none"
         risk = c["risk_level"] + (f" ({', '.join(c['risk_signals'])})" if c["risk_signals"] else "")
         out.append(f"| {c['claim_number']} | {c['line']} | {c['product']} | {_inr(c['billed'])} | {_inr(c['payable'])} | "
-                   f"{c['coverage']} | {reason} | {risk} | {c['recommendation']} | {c['queue']} |")
+                   f"{c['coverage']} | {reason} | {risk} | {c['recommendation']} | {c['queue']} |"
+                   + (f" {c['status']} | {c['source']} |" if live else ""))
     p = r.get("portfolio_risk_rules")
     if p:
         out += ["", "## Risk rules on the 1,000-claim synthetic portfolio", "",

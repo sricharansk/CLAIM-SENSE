@@ -47,7 +47,9 @@ jobs:
           name: playwright-report
           path: e2e/report/
       - name: Snapshot the live claims (read-only, before the smoke test adds its own)
-        run: python3 scripts/claims_report.py --live "$BASE_URL" --out live-report
+        run: |
+          python3 scripts/claims_report.py --live "$BASE_URL" --out live-report
+          cat live-report/live_claims.md
       - uses: actions/upload-artifact@v6
         with:
           name: live-claims
