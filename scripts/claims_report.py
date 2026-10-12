@@ -8,6 +8,10 @@ start-up), then files the 7 evaluation packets and the demo upload as new claims
 as the UI does. Every figure in claims_results.json and claims_results.md is read back from the API: amounts from
 the deterministic rules engine, clauses from the matched wording, routing from the review queue. Also includes the
 risk-rule results on the 1,000-claim synthetic portfolio. Synthetic data only; the LLM is off.
+
+With --live URL it files nothing: it signs in to a deployed instance (password from $DEMO_PASSWORD) and reports
+the claims that are there now, read-only, to live_claims.json and live_claims.md. Uses only the standard library,
+so the Verify deployment workflow can run it without the backend installed.
 """
 from __future__ import annotations
 
@@ -16,6 +20,8 @@ import json
 import os
 import sys
 import tempfile
+import urllib.error
+import urllib.request
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -56,7 +62,8 @@ def _row(client, number: str, source: str, queues: dict[str, str]) -> dict:
         if s["rule_id"] in DEDUCTIONS and Decimal(s["adjustment"]) != 0:
             deductions[s["rule_id"]] += Decimal(s["adjustment"])
     return {
-        "claim_number": number, "source": source, "line": claim["claim_type"], "claimant": claim["claimant_name"],
+        "claim_number": number, "source": source, "status": claim["status"], "line": claim["claim_type"],
+        "claimant": claim["claimant_name"],
         "policy_number": res["policy"]["policy_number"], "product": f"{res['policy']['product_code']} v{res['policy']['version']}",
         "incident_date": res["facts"].get("incident_date"), "documents": len(claim["documents"]),
         "claimed": adj["claimed_amount"], "billed": adj["gross_billed"], "payable": adj["payable_amount"],
@@ -66,7 +73,9 @@ def _row(client, number: str, source: str, queues: dict[str, str]) -> dict:
                           "message": fail["message"]} if fail else None,
         "missing_documents": cov["missing_documents"],
         "risk_level": risk["level"], "risk_score": risk["score"], "risk_signals": [s["code"] for s in risk["signals"]],
-        "recommendation": rec["decision"], "queue": queues.get(number),
+        "recommendation": rec["decision"],
+        # a claim a reviewer has decided has left the review queues
+        "queue": queues.get(number) or ("DECIDED" if claim["status"] in ("APPROVED", "REJECTED") else None),
         "evidence_items": len(res["evidence"]),
         "policy_clauses_cited": sorted({e["clause_ref"] for e in res["evidence"] if e["kind"] == "policy_clause"}),
     }
@@ -86,8 +95,11 @@ def build(client) -> dict:
                                "Fatima Shaikh", "Demo upload: kidney stone"), "demo upload packet"))
     queues = {t["claim_number"]: t["queue"] for t in _ok(client.get("/api/v1/reviews"), "review queue")}
     rows = [_row(client, n, "seeded scenario", queues) for n in seeded] + [_row(client, n, s, queues) for n, s in filed]
-    rows.sort(key=lambda r: (LINES.index(r["line"]), r["claim_number"]))
+    return _summarise(client, rows, "Claim Sense results on every claim packet", settings.rules_version, settings.risk_version)
 
+
+def _summarise(client, rows: list[dict], title: str, rules_version: str | None, risk_version: str | None) -> dict:
+    rows.sort(key=lambda r: (LINES.index(r["line"]), r["claim_number"]))
     by_line = {}
     for line in LINES:
         rs = [r for r in rows if r["line"] == line]
@@ -106,9 +118,9 @@ def build(client) -> dict:
     evaluation = json.loads((ROOT / "reports" / "evaluation.json").read_text())["summary"] \
         if (ROOT / "reports" / "evaluation.json").exists() else None
     return {
-        "report": "Claim Sense results on every claim packet", "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "report": title, "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "data": "synthetic only", "llm": "off (deterministic rules and extractive retrieval)",
-        "rules_version": settings.rules_version, "risk_version": settings.risk_version,
+        "rules_version": rules_version, "risk_version": risk_version,
         "summary": {
             "claims": len(rows), "billed": f"{billed:.2f}", "payable": f"{payable:.2f}",
             "payout_ratio": round(float(payable / billed), 3) if billed else None,
@@ -125,20 +137,83 @@ def build(client) -> dict:
     }
 
 
+class _Response:
+    def __init__(self, status: int, body: bytes):
+        self.status_code, self.text = status, body.decode("utf-8", "replace")
+
+    def json(self):
+        return json.loads(self.text)
+
+
+class _LiveClient:
+    """The few TestClient calls the report makes, over HTTP to a deployed instance."""
+
+    def __init__(self, base_url: str):
+        self.base, self.headers = base_url.rstrip("/"), {}
+
+    def _call(self, method: str, path: str, body: dict | None = None) -> _Response:
+        data = json.dumps(body).encode() if body is not None else None
+        headers = dict(self.headers, **({"Content-Type": "application/json"} if data else {}))
+        req = urllib.request.Request(self.base + path, data=data, method=method, headers=headers)
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return _Response(r.status, r.read())
+        except urllib.error.HTTPError as e:
+            return _Response(e.code, e.read())
+
+    def get(self, path: str) -> _Response:
+        return self._call("GET", path)
+
+    def post(self, path: str, json: dict | None = None) -> _Response:
+        return self._call("POST", path, json)
+
+
+def build_live(client) -> dict:
+    """Report the claims on a deployed instance as they are now. Files and changes nothing."""
+    data = ROOT / "data"
+    source = {s["claim_number"]: "seeded scenario"
+              for s in json.loads((data / "claims" / "scenarios.json").read_text(encoding="utf-8"))}
+    for case in json.loads((data / "evaluation" / "golden_cases.json").read_text(encoding="utf-8"))["claims"]:
+        if case.get("seeded_as"):
+            source[case["seeded_as"]] = f"evaluation packet {case['packet']}"
+    queues = {t["claim_number"]: t["queue"] for t in _ok(client.get("/api/v1/reviews"), "review queue")}
+    rows, not_analysed = [], []
+    for c in _ok(client.get("/api/v1/claims"), "list claims"):
+        n = c["claim_number"]
+        a = client.get(f"/api/v1/claims/{n}/analysis")
+        if a.status_code == 404 or not a.json().get("result"):  # not analysed yet, or the analysis failed safely
+            not_analysed.append(n)
+            continue
+        rows.append(_row(client, n, source.get(n, "filed on the live site"), queues))
+    first = next((_ok(client.get(f"/api/v1/claims/{r['claim_number']}/analysis"), "read analysis")["result"] for r in rows), None)
+    rules = first["adjudication"].get("rules_version") if first else None
+    risk = first["risk"].get("rules_version") if first else None
+    report = _summarise(client, rows, "Claim Sense claims on the live site", rules, risk)
+    report["not_analysed"] = sorted(not_analysed)
+    return report
+
+
 def _inr(x) -> str:
     v = Decimal(str(x))
     return f"₹{v:,.0f}" if v == v.to_integral() else f"₹{v:,.2f}"
 
 
+def _statuses(rows: list[dict]) -> str:
+    return ", ".join(f"{k.replace('_', ' ').lower()} {v}" for k, v in sorted(Counter(c["status"] for c in rows).items()))
+
+
 def to_markdown(r: dict) -> str:
     s = r["summary"]
     out = [
-        "# Claim Sense results on every claim packet", "",
-        f"Generated {r['generated_at']} by `python scripts/claims_report.py` on a fresh database. Synthetic data only; "
-        f"LLM {r['llm']}. Rules {r['rules_version']}, risk {r['risk_version']}. Every figure is read back from the API.", "",
+        f"# {r['report']}", "",
+        (f"Snapshot of {r['source_url']} taken {r['generated_at']} by `python scripts/claims_report.py --live`, read-only. "
+         if r.get("source_url") else
+         f"Generated {r['generated_at']} by `python scripts/claims_report.py` on a fresh database. ")
+        + f"Synthetic data only; LLM {r['llm']}. Rules {r['rules_version']}, risk {r['risk_version']}. Every figure is read back from the API.", "",
         f"**{s['claims']} claims** across health, motor, property and travel: {_inr(s['billed'])} billed, "
         f"{_inr(s['payable'])} recommended payable ({s['payout_ratio']:.1%}). Every claim was routed to a human review queue; "
-        "no claim was decided by the system.", "",
+        "no claim was decided by the system." + (f" Reviewer decisions so far: {_statuses(r['claims'])}." if r.get("source_url") else "")
+        + (f" Not yet analysed, so not counted: {', '.join(r['not_analysed'])}." if r.get("not_analysed") else ""), "",
         "## By line of business", "", "| Line | Claims | Billed | Payable | Payout | Recommendations |", "|---|---|---|---|---|---|",
     ]
     for line, b in r["by_line"].items():
@@ -151,9 +226,11 @@ def to_markdown(r: dict) -> str:
     out += ["", "| Review queue | Claims |", "|---|---|"] + [f"| {k} | {v} |" for k, v in sorted(s["queues"].items())]
     out += ["", "## Where the money went", "", "Total reductions from billed to payable, by rule:", "", "| Rule | Amount |", "|---|---|"]
     out += [f"| {DEDUCTIONS[k]} (`{k}`) | {_inr(-Decimal(v))} |" for k, v in s["deductions"].items()]
+    live = bool(r.get("source_url"))
     out += ["", "## Every claim", "",
-            "| Claim | Line | Policy wording | Billed | Payable | Coverage | Reason / clause | Risk | Recommendation | Queue |",
-            "|---|---|---|---|---|---|---|---|---|---|"]
+            "| Claim | Line | Policy wording | Billed | Payable | Coverage | Reason / clause | Risk | Recommendation | Queue |"
+            + (" Status | Source |" if live else ""),
+            "|---|---|---|---|---|---|---|---|---|---|" + ("---|---|" if live else "")]
     for c in r["claims"]:
         if c["failing_check"]:
             reason = f"{c['failing_check']['code']} §{c['failing_check']['clause_ref']}"
@@ -163,7 +240,8 @@ def to_markdown(r: dict) -> str:
             reason = ", ".join(DEDUCTIONS[k].lower() for k in c["deductions"]) or "none"
         risk = c["risk_level"] + (f" ({', '.join(c['risk_signals'])})" if c["risk_signals"] else "")
         out.append(f"| {c['claim_number']} | {c['line']} | {c['product']} | {_inr(c['billed'])} | {_inr(c['payable'])} | "
-                   f"{c['coverage']} | {reason} | {risk} | {c['recommendation']} | {c['queue']} |")
+                   f"{c['coverage']} | {reason} | {risk} | {c['recommendation']} | {c['queue']} |"
+                   + (f" {c['status']} | {c['source']} |" if live else ""))
     p = r.get("portfolio_risk_rules")
     if p:
         out += ["", "## Risk rules on the 1,000-claim synthetic portfolio", "",
@@ -185,7 +263,10 @@ def to_markdown(r: dict) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--out", default=str(ROOT / "reports"), help="output directory (default: reports/)")
+    ap.add_argument("--live", metavar="URL", help="report the claims on a deployed instance instead, read-only")
     args = ap.parse_args()
+    if args.live:
+        return main_live(args.live, Path(args.out))
     tmp = Path(tempfile.mkdtemp(prefix="claimsense-report-"))
     os.environ.update(DATABASE_URL=f"sqlite:///{tmp / 'report.db'}", CLAIMSENSE_STORAGE_DIR=str(tmp / "storage"),
                       CLAIMSENSE_SEED="true", CLAIMSENSE_SEED_PACKETS="false")
@@ -211,6 +292,22 @@ def main() -> int:
           f"recommendations {s['recommendations']}")
     print(f"wrote {out / 'claims_results.json'} and {out / 'claims_results.md'}")
     return 0 if s["human_review_required"] else 1
+
+
+def main_live(url: str, out: Path) -> int:
+    client = _LiveClient(url)
+    token = _ok(client.post("/api/v1/auth/login", json={"username": "supervisor",
+                                                        "password": os.getenv("DEMO_PASSWORD", "claimsense-demo")}),
+                "sign in")["token"]
+    client.headers["Authorization"] = f"Bearer {token}"
+    report = build_live(client)
+    report["source_url"] = url.rstrip("/")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "live_claims.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    (out / "live_claims.md").write_text(to_markdown(report), encoding="utf-8")
+    s = report["summary"]
+    print(f"{url}: {s['claims']} claims, billed {s['billed']}, payable {s['payable']}; statuses {_statuses(report['claims'])}")
+    return 0
 
 
 if __name__ == "__main__":

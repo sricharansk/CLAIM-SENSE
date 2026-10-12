@@ -1,6 +1,6 @@
 # Claim Sense results on every claim packet
 
-Generated 2026-10-12T22:59:05+00:00 by `python scripts/claims_report.py` on a fresh database. Synthetic data only; LLM off (deterministic rules and extractive retrieval). Rules adjudication-rules/1.0.0, risk risk-rules/1.0.0. Every figure is read back from the API.
+Generated 2026-10-12T23:36:25+00:00 by `python scripts/claims_report.py` on a fresh database. Synthetic data only; LLM off (deterministic rules and extractive retrieval). Rules adjudication-rules/1.0.0, risk risk-rules/1.0.0. Every figure is read back from the API.
 
 **58 claims** across health, motor, property and travel: ₹8,773,600 billed, ₹5,405,550 recommended payable (61.6%). Every claim was routed to a human review queue; no claim was decided by the system.
 

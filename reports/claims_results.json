@@ -1,6 +1,6 @@
 {
   "report": "Claim Sense results on every claim packet",
-  "generated_at": "2026-10-12T22:59:05+00:00",
+  "generated_at": "2026-10-12T23:36:25+00:00",
   "data": "synthetic only",
   "llm": "off (deterministic rules and extractive retrieval)",
   "rules_version": "adjudication-rules/1.0.0",
@@ -94,6 +94,7 @@
     {
       "claim_number": "CLM-H-1001",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Ravi Kumar",
       "policy_number": "CS-HLT-24-000117",
@@ -132,6 +133,7 @@
     {
       "claim_number": "CLM-H-1002",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Meena Iyer",
       "policy_number": "CS-HLT-25-000342",
@@ -167,6 +169,7 @@
     {
       "claim_number": "CLM-H-1003",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Arjun Mehta",
       "policy_number": "CS-HLT-25-000518",
@@ -208,6 +211,7 @@
     {
       "claim_number": "CLM-H-1004",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Fatima Shaikh",
       "policy_number": "CS-HLT-23-000089",
@@ -246,6 +250,7 @@
     {
       "claim_number": "CLM-H-1005",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Suresh Nair",
       "policy_number": "CS-HLT-24-000233",
@@ -282,6 +287,7 @@
     {
       "claim_number": "CLM-H-1006",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Ravi Kumar",
       "policy_number": "CS-HLT-24-000117",
@@ -322,6 +328,7 @@
     {
       "claim_number": "CLM-H-1007",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Divya Pillai",
       "policy_number": "CS-HLT-24-000611",
@@ -357,6 +364,7 @@
     {
       "claim_number": "CLM-H-1008",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Nikhil Bose",
       "policy_number": "CS-HLT-23-000702",
@@ -392,6 +400,7 @@
     {
       "claim_number": "CLM-H-1009",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Imran Sheikh",
       "policy_number": "CS-HLT-23-000715",
@@ -427,6 +436,7 @@
     {
       "claim_number": "CLM-H-1010",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Latha Raman",
       "policy_number": "CS-HLT-23-000728",
@@ -462,6 +472,7 @@
     {
       "claim_number": "CLM-H-1011",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Pooja Malhotra",
       "policy_number": "CS-HLT-25-000741",
@@ -498,6 +509,7 @@
     {
       "claim_number": "CLM-H-1012",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Mohan Das",
       "policy_number": "CS-HLT-24-000756",
@@ -533,6 +545,7 @@
     {
       "claim_number": "CLM-H-1017",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Anil Kapoor",
       "policy_number": "CS-HLT-23-000763",
@@ -568,6 +581,7 @@
     {
       "claim_number": "CLM-H-1018",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Rekha Nair",
       "policy_number": "CS-HLT-24-000779",
@@ -604,6 +618,7 @@
     {
       "claim_number": "CLM-H-1019",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Sameer Khan",
       "policy_number": "CS-HLT-25-000784",
@@ -640,6 +655,7 @@
     {
       "claim_number": "CLM-H-1020",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Kamala Devi",
       "policy_number": "CS-HLT-22-000795",
@@ -679,6 +695,7 @@
     {
       "claim_number": "CLM-H-1021",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Varun Bhatia",
       "policy_number": "CS-HLT-24-000808",
@@ -712,6 +729,7 @@
     {
       "claim_number": "CLM-H-3051",
       "source": "evaluation packet EVAL-H-01",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Suresh Nair",
       "policy_number": "CS-HLT-24-000233",
@@ -746,6 +764,7 @@
     {
       "claim_number": "CLM-H-3052",
       "source": "evaluation packet EVAL-H-02",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Meena Iyer",
       "policy_number": "CS-HLT-25-000342",
@@ -783,6 +802,7 @@
     {
       "claim_number": "CLM-H-3053",
       "source": "evaluation packet EVAL-H-03",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Ravi Kumar",
       "policy_number": "CS-HLT-24-000117",
@@ -817,6 +837,7 @@
     {
       "claim_number": "CLM-H-3054",
       "source": "evaluation packet EVAL-H-04",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Ravi Kumar",
       "policy_number": "CS-HLT-24-000117",
@@ -853,6 +874,7 @@
     {
       "claim_number": "CLM-H-3058",
       "source": "demo upload packet",
+      "status": "PENDING_REVIEW",
       "line": "health",
       "claimant": "Fatima Shaikh",
       "policy_number": "CS-HLT-23-000089",
@@ -890,6 +912,7 @@
     {
       "claim_number": "CLM-M-2001",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Priya Sharma",
       "policy_number": "CS-MTR-25-001204",
@@ -923,6 +946,7 @@
     {
       "claim_number": "CLM-M-2002",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Karthik Rao",
       "policy_number": "CS-MTR-25-001377",
@@ -959,6 +983,7 @@
     {
       "claim_number": "CLM-M-2003",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Rohan Gupta",
       "policy_number": "CS-MTR-25-001452",
@@ -993,6 +1018,7 @@
     {
       "claim_number": "CLM-M-2004",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Arvind Menon",
       "policy_number": "CS-MTR-25-001488",
@@ -1027,6 +1053,7 @@
     {
       "claim_number": "CLM-M-2005",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Tenzin Lama",
       "policy_number": "CS-MTR-25-001503",
@@ -1061,6 +1088,7 @@
     {
       "claim_number": "CLM-M-2006",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Sneha Kulkarni",
       "policy_number": "CS-MTR-25-001520",
@@ -1094,6 +1122,7 @@
     {
       "claim_number": "CLM-M-2007",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Harish Babu",
       "policy_number": "CS-MTR-25-001536",
@@ -1132,6 +1161,7 @@
     {
       "claim_number": "CLM-M-2008",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Deepak Chawla",
       "policy_number": "CS-MTR-25-001551",
@@ -1165,6 +1195,7 @@
     {
       "claim_number": "CLM-M-2009",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Vivek Shetty",
       "policy_number": "CS-MTR-25-001567",
@@ -1198,6 +1229,7 @@
     {
       "claim_number": "CLM-M-2010",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Nisha Rao",
       "policy_number": "CS-MTR-25-001583",
@@ -1231,6 +1263,7 @@
     {
       "claim_number": "CLM-M-2011",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "motor",
       "claimant": "Farah Khan",
       "policy_number": "CS-MTR-25-001599",
@@ -1264,6 +1297,7 @@
     {
       "claim_number": "CLM-P-3001",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Anita Desai",
       "policy_number": "CS-HOM-25-003101",
@@ -1299,6 +1333,7 @@
     {
       "claim_number": "CLM-P-3002",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Vikram Singh",
       "policy_number": "CS-HOM-24-003145",
@@ -1335,6 +1370,7 @@
     {
       "claim_number": "CLM-P-3003",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Lakshmi Menon",
       "policy_number": "CS-HOM-24-002877",
@@ -1369,6 +1405,7 @@
     {
       "claim_number": "CLM-P-3004",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Farhan Ali",
       "policy_number": "CS-HOM-25-003260",
@@ -1403,6 +1440,7 @@
     {
       "claim_number": "CLM-P-3005",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Rakesh Yadav",
       "policy_number": "CS-HOM-25-003288",
@@ -1437,6 +1475,7 @@
     {
       "claim_number": "CLM-P-3006",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Meera Joshi",
       "policy_number": "CS-HOM-24-003301",
@@ -1474,6 +1513,7 @@
     {
       "claim_number": "CLM-P-3007",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Gurpreet Singh",
       "policy_number": "CS-HOM-25-003317",
@@ -1508,6 +1548,7 @@
     {
       "claim_number": "CLM-P-3009",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Sunita Reddy",
       "policy_number": "CS-HOM-25-003333",
@@ -1542,6 +1583,7 @@
     {
       "claim_number": "CLM-P-3010",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Prakash Pillai",
       "policy_number": "CS-HOM-24-003349",
@@ -1577,6 +1619,7 @@
     {
       "claim_number": "CLM-P-3011",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Ashok Banerjee",
       "policy_number": "CS-HOM-25-003365",
@@ -1611,6 +1654,7 @@
     {
       "claim_number": "CLM-P-3055",
       "source": "evaluation packet EVAL-P-01",
+      "status": "PENDING_REVIEW",
       "line": "property",
       "claimant": "Lakshmi Menon",
       "policy_number": "CS-HOM-24-002877",
@@ -1643,6 +1687,7 @@
     {
       "claim_number": "CLM-T-3056",
       "source": "evaluation packet EVAL-T-01",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Kavya Reddy",
       "policy_number": "CS-TRV-25-004588",
@@ -1677,6 +1722,7 @@
     {
       "claim_number": "CLM-T-3057",
       "source": "evaluation packet EVAL-T-02",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Kavya Reddy",
       "policy_number": "CS-TRV-25-004588",
@@ -1711,6 +1757,7 @@
     {
       "claim_number": "CLM-T-4001",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Rahul Verma",
       "policy_number": "CS-TRV-25-004410",
@@ -1745,6 +1792,7 @@
     {
       "claim_number": "CLM-T-4002",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Neha Kapoor",
       "policy_number": "CS-TRV-25-004468",
@@ -1780,6 +1828,7 @@
     {
       "claim_number": "CLM-T-4003",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Aditya Joshi",
       "policy_number": "CS-TRV-25-004502",
@@ -1815,6 +1864,7 @@
     {
       "claim_number": "CLM-T-4004",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Sana Qureshi",
       "policy_number": "CS-TRV-25-004533",
@@ -1851,6 +1901,7 @@
     {
       "claim_number": "CLM-T-4005",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Gopal Krishnan",
       "policy_number": "CS-TRV-25-004611",
@@ -1886,6 +1937,7 @@
     {
       "claim_number": "CLM-T-4006",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Karan Mehra",
       "policy_number": "CS-TRV-25-004639",
@@ -1921,6 +1973,7 @@
     {
       "claim_number": "CLM-T-4007",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Usha Pillai",
       "policy_number": "CS-TRV-25-004652",
@@ -1956,6 +2009,7 @@
     {
       "claim_number": "CLM-T-4008",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Ritu Agarwal",
       "policy_number": "CS-TRV-25-004670",
@@ -1992,6 +2046,7 @@
     {
       "claim_number": "CLM-T-4011",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Sanjay Gupta",
       "policy_number": "CS-TRV-25-004687",
@@ -2024,6 +2079,7 @@
     {
       "claim_number": "CLM-T-4012",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Bhavna Shah",
       "policy_number": "CS-TRV-25-004703",
@@ -2058,6 +2114,7 @@
     {
       "claim_number": "CLM-T-4013",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Rohit Sinha",
       "policy_number": "CS-TRV-25-004719",
@@ -2090,6 +2147,7 @@
     {
       "claim_number": "CLM-T-4014",
       "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
       "line": "travel",
       "claimant": "Meghna Das",
       "policy_number": "CS-TRV-25-004735",

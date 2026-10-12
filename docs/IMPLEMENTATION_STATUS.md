@@ -40,6 +40,12 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | – | Override and escalation rates (blueprint Prompt 14) | `analytics.dashboard`: override rate, amount overrides, escalation rate, reviewer actions; dashboard KPIs | `test_dashboard_reports_override_and_escalation_rates` |
 | – | Security | Upload allow-list, size limit and filename sanitising; security headers and CSP; non-root container; dependency audits; see `docs/SECURITY.md` | Header and path tests; pip-audit and npm audit clean |
 
+## Validation results (2026-10-12, live claims snapshot)
+
+- The build environment cannot reach `onrender.com`, so the live claims are read from GitHub Actions: `claims_report.py --live` (standard library only) signs in, lists every claim with its analysis, queue and reviewer status, and writes `live_claims.{json,md}`; Verify deployment uploads them as the `live-claims` artifact before the smoke test adds its own claims.
+- Writing the test found two real cases the snapshot crashed on: a claim created but not analysed, and a claim whose analysis failed safely. Both are now listed apart and not counted. Decided claims show queue `DECIDED`.
+- `pytest`: 127 passed. Local run against a fresh server: 57 claims, one created-but-unanalysed claim listed apart. The live run of 2026-10-12 (before this change) passed every smoke check with 57 seeded claims ([run 38321994424](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38321994424)).
+
 ## Validation results (2026-10-12, 50 seeded claims)
 
 - 16 claims added (CLM-H-1017 to 1021, CLM-M-2008 to 2011, CLM-P-3009 to 3011, CLM-T-4011 to 4014), mostly the payable situations the corpus lacked, plus a lapsed policy. Each has a hand-worked golden case (C42 to C57) written before the run; all 16 matched on the first run.
