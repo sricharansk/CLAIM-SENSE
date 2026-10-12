@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Pooja Malhotra
+Admission Date: 2025-06-15
+Discharge Date: 2025-06-18
+Diagnosis: Typhoid fever
+Procedure: Medical management
+
+Clinical Notes:
+Recovered on oral antibiotics.

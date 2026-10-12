@@ -1,0 +1,17 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2006
+Vehicle Registration: MH-12-SY-2207
+Patient/Insured Name: Sneha Kulkarni
+
+Itemised Charges:
+Front Bumper (plastic) - replace                                15,000.00
+Bonnet (metal) - replace                                        34,000.00
+Headlamp Assembly (plastic)                                     12,000.00
+Front Grille (plastic)                                           4,000.00
+Denting and Fitting Labour                                      10,000.00
+Painting Material                                                7,000.00
+
+Total Amount                                                    82,000.00

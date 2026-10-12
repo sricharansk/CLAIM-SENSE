@@ -1,0 +1,14 @@
+WORKSHOP REPAIR ESTIMATE
+SYNTHETIC DEMO DOCUMENT
+
+Workshop: Ring Road Auto Works (fictional)
+Estimate Number: RE-2007
+Vehicle Registration: TN-09-SY-6618
+Patient/Insured Name: Harish Babu
+
+Itemised Charges:
+Windshield Glass                                                18,000.00
+Painting Material                                                9,000.00
+Denting and Fitting Labour                                       6,000.00
+
+Total Amount                                                    33,000.00

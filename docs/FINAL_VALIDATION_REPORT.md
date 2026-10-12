@@ -22,12 +22,12 @@ Each step was driven through the real UI by `e2e/tests/golden.spec.mjs` (Playwri
 | Upload documents | VERIFIED | Browser uploads the 3 demo documents; smoke `upload + extract` (6, 12 and 7 facts) |
 | Extract facts | VERIFIED | `test_extraction.py` (text and PDF); fact correction and re-run in the browser; `test_fact_correction.py` |
 | Policy/version match | VERIFIED | Evaluation C08, C11 and C12 (both sides of 2025-04-01); `test_version_matching_uses_wording_in_force` |
-| RAG | VERIFIED | Evaluation: retrieval 67/67, hit@1 100%, MRR 1.00; RAG manifest has 85 chunks from 5 wordings, 0 rejected |
-| Evidence | VERIFIED | Evaluation: citations 56/56, groundedness 98/98; browser *Policy & evidence* tab; smoke `citations` (13 items) |
-| Coverage | VERIFIED | Evaluation: coverage 49/49; browser rejection cites §3.3 |
-| Adjudication | VERIFIED | Browser and smoke: ₹64,080 payable on ₹78,000 billed; evaluation amounts 72/72; `test_adjudication.py` (7 hand calculations); `test_property_travel.py`; browser and smoke file a property claim (₹3,47,500) and a travel claim (₹95,000) |
-| Risk | VERIFIED | Evaluation: risk 29/29; `test_security_guards.py` (planted-instruction signal) |
-| Recommendation | VERIFIED | Browser: *Partial approval*; evaluation: workflow 78/78 |
+| RAG | VERIFIED | Evaluation: retrieval 91/91, hit@1 100%, MRR 1.00; RAG manifest has 85 chunks from 5 wordings, 0 rejected |
+| Evidence | VERIFIED | Evaluation: citations 67/67, groundedness 113/113; browser *Policy & evidence* tab; smoke `citations` (13 items) |
+| Coverage | VERIFIED | Evaluation: coverage 79/79; browser rejection cites §3.3 |
+| Adjudication | VERIFIED | Browser and smoke: ₹64,080 payable on ₹78,000 billed; evaluation amounts 95/95; `test_adjudication.py` (7 hand calculations); `test_property_travel.py`; browser and smoke file a property claim (₹3,47,500) and a travel claim (₹95,000) |
+| Risk | VERIFIED | Evaluation: risk 44/44; `test_security_guards.py` (planted-instruction signal) |
+| Recommendation | VERIFIED | Browser: *Partial approval*; evaluation: workflow 123/123 |
 | Human review | VERIFIED | Browser: approve, approval-limit block, take and release a task; `test_auth.py`; `test_review_assignment.py` |
 | Decision | VERIFIED | Browser: status *Approved* and a settlement letter for INR 64,080.00; smoke `human review` |
 | Audit | VERIFIED | Browser *Audit* tab shows each stage event; `test_golden_path.py` checks every stage event and the recorded payable |
@@ -36,11 +36,11 @@ Each step was driven through the real UI by `e2e/tests/golden.spec.mjs` (Playwri
 
 | Check | State | Result |
 |---|---|---|
-| Backend tests | VERIFIED | `pytest`: 93 passed |
+| Backend tests | VERIFIED | `pytest`: 108 passed |
 | Frontend tests | VERIFIED | `e2e` Playwright suite: 11 passed against Docker + PostgreSQL. Any browser console error fails a test. CI runs it in the `docker-smoke` job |
 | Lint and type checks | VERIFIED | `ruff check app tests ../scripts`: clean. `npm run build` (`tsc` + Vite): passed |
-| RAG evaluation | VERIFIED | `scripts/evaluate.py`: 449/449 checks over 26 claim cases and 26 questions; every refusal correct |
-| Adjudication tests | VERIFIED | `test_adjudication.py` and `test_property_travel.py` plus evaluation amounts 72/72, worked out by hand in `data/evaluation/golden_cases.json` |
+| RAG evaluation | VERIFIED | `scripts/evaluate.py`: 612/612 checks over 41 claim cases and 26 questions; every refusal correct |
+| Adjudication tests | VERIFIED | `test_adjudication.py` and `test_property_travel.py` plus evaluation amounts 95/95, worked out by hand in `data/evaluation/golden_cases.json` |
 | Data provenance | VERIFIED | `scripts/provenance.py --check`: registry has 14 sources and 0 problems; manifest matches the committed copy |
 | Security checks | VERIFIED | `pip-audit`: no known vulnerabilities. `npm audit`: 0 in `frontend/` and 0 in `e2e/`. `test_security_guards.py`: throttle, injection. Secret-pattern scan of tracked files: no hits. Headers and upload tests in `test_golden_path.py` |
 | Docker smoke test | VERIFIED | `scripts/smoke_test.py http://localhost:8080`: all checks passed on the Compose stack with PostgreSQL 16. A fresh clone also built with `--no-cache` and passed |
@@ -52,7 +52,7 @@ Each step was driven through the real UI by `e2e/tests/golden.spec.mjs` (Playwri
 | Area | State | Note |
 |---|---|---|
 | Golden path, review, audit, dashboard | VERIFIED | See above |
-| Property and travel lines | VERIFIED | 7 seeded claims and 3 evaluation packets with hand-worked amounts; all 27 claim packets run through the API in `reports/claims_results.md`; screenshots 20–22 |
+| Property and travel lines | VERIFIED | 7 seeded claims and 3 evaluation packets with hand-worked amounts; all 42 claim packets run through the API in `reports/claims_results.md`; screenshots 20–22 |
 | Policy PDF ingestion with processing states | VERIFIED | `test_policy_ingestion.py`; earlier browser run on Docker (screenshot 15) |
 | Decision letters, settlement clock, CSV export | VERIFIED | `test_letters_sla.py`; browser letter and CSV download |
 | Phone layout | VERIFIED | Browser at 390 px: navigation behind a menu, no sideways scrolling |

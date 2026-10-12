@@ -1,91 +1,92 @@
 {
   "report": "Claim Sense results on every claim packet",
-  "generated_at": "2026-10-12T15:05:45+00:00",
+  "generated_at": "2026-10-12T16:56:25+00:00",
   "data": "synthetic only",
   "llm": "off (deterministic rules and extractive retrieval)",
   "rules_version": "adjudication-rules/1.0.0",
   "risk_version": "risk-rules/1.0.0",
   "summary": {
-    "claims": 27,
-    "billed": "4115100.00",
-    "payable": "2317150.00",
-    "payout_ratio": 0.563,
+    "claims": 42,
+    "billed": "6564100.00",
+    "payable": "3462750.00",
+    "payout_ratio": 0.528,
     "recommendations": {
-      "PARTIAL_APPROVAL": 14,
-      "RECOMMEND_REJECT": 9,
+      "PARTIAL_APPROVAL": 16,
+      "RECOMMEND_REJECT": 20,
       "INVESTIGATE": 2,
-      "REQUEST_INFO": 2
+      "REQUEST_INFO": 4
     },
     "coverage": {
-      "COVERED": 18,
-      "NOT_COVERED": 9
+      "COVERED": 22,
+      "NOT_COVERED": 20
     },
     "risk": {
-      "LOW": 24,
+      "LOW": 37,
       "HIGH": 2,
-      "MEDIUM": 1
+      "MEDIUM": 3
     },
     "queues": {
-      "ADJUSTER_REVIEW": 23,
+      "ADJUSTER_REVIEW": 36,
       "SIU_INVESTIGATION": 2,
-      "PENDING_INFORMATION": 2
+      "PENDING_INFORMATION": 4
     },
     "deductions": {
       "R10_NON_PAYABLE": "-152100.00",
-      "R15_DEPRECIATION": "-66550.00",
+      "R15_DEPRECIATION": "-110450.00",
       "R20_BENEFIT_LIMIT": "-36000.00",
       "R20_ITEM_LIMIT": "-75000.00",
       "R20_PER_DAY_LIMIT": "-81500.00",
       "R25_UNDERINSURANCE": "-71500.00",
-      "R30_DEDUCTIBLE": "-112000.00",
+      "R30_DEDUCTIBLE": "-132500.00",
       "R40_COPAY": "-129800.00",
-      "R50_MAX_LIABILITY": "-64500.00",
-      "R99_NOT_ADMISSIBLE": "-1009000.00"
+      "R50_MAX_LIABILITY": "-197500.00",
+      "R99_NOT_ADMISSIBLE": "-2115000.00"
     },
     "human_review_required": true
   },
   "by_line": {
     "health": {
-      "claims": 12,
-      "billed": "1499100.00",
+      "claims": 17,
+      "billed": "1910100.00",
       "payable": "1015700.00",
-      "payout_ratio": 0.678,
+      "payout_ratio": 0.532,
       "recommendations": {
         "PARTIAL_APPROVAL": 7,
-        "RECOMMEND_REJECT": 2,
+        "RECOMMEND_REJECT": 7,
         "INVESTIGATE": 2,
         "REQUEST_INFO": 1
       }
     },
     "motor": {
-      "claims": 3,
-      "billed": "197500.00",
-      "payable": "55350.00",
-      "payout_ratio": 0.28,
+      "claims": 7,
+      "billed": "448500.00",
+      "payable": "137950.00",
+      "payout_ratio": 0.308,
       "recommendations": {
-        "PARTIAL_APPROVAL": 1,
-        "RECOMMEND_REJECT": 2
+        "PARTIAL_APPROVAL": 2,
+        "RECOMMEND_REJECT": 4,
+        "REQUEST_INFO": 1
       }
     },
     "property": {
-      "claims": 5,
-      "billed": "1081000.00",
-      "payable": "534100.00",
-      "payout_ratio": 0.494,
+      "claims": 8,
+      "billed": "2491000.00",
+      "payable": "1534100.00",
+      "payout_ratio": 0.616,
       "recommendations": {
-        "PARTIAL_APPROVAL": 3,
-        "RECOMMEND_REJECT": 2
+        "PARTIAL_APPROVAL": 4,
+        "RECOMMEND_REJECT": 4
       }
     },
     "travel": {
-      "claims": 7,
-      "billed": "1337500.00",
-      "payable": "712000.00",
-      "payout_ratio": 0.532,
+      "claims": 10,
+      "billed": "1714500.00",
+      "payable": "775000.00",
+      "payout_ratio": 0.452,
       "recommendations": {
         "PARTIAL_APPROVAL": 3,
-        "RECOMMEND_REJECT": 3,
-        "REQUEST_INFO": 1
+        "RECOMMEND_REJECT": 5,
+        "REQUEST_INFO": 2
       }
     }
   },
@@ -354,7 +355,183 @@
       ]
     },
     {
-      "claim_number": "CLM-H-3020",
+      "claim_number": "CLM-H-1008",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Nikhil Bose",
+      "policy_number": "CS-HLT-23-000702",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-08-04",
+      "documents": 3,
+      "claimed": "83000.00",
+      "billed": "83000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-83000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_COSMETIC",
+        "clause_ref": "4.1",
+        "message": "Claim documents mention 'cosmetic', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 9,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "4.1",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-1009",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Imran Sheikh",
+      "policy_number": "CS-HLT-23-000715",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-09-13",
+      "documents": 3,
+      "claimed": "28000.00",
+      "billed": "28000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-28000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_ALCOHOL",
+        "clause_ref": "4.2",
+        "message": "Claim documents mention 'alcohol', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "4.2",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-1010",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Latha Raman",
+      "policy_number": "CS-HLT-23-000728",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-10-20",
+      "documents": 3,
+      "claimed": "211000.00",
+      "billed": "211000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-211000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_EXPERIMENTAL",
+        "clause_ref": "4.5",
+        "message": "Claim documents mention 'investigational', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 9,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "4.5",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-1011",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Pooja Malhotra",
+      "policy_number": "CS-HLT-25-000741",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-06-15",
+      "documents": 3,
+      "claimed": "32000.00",
+      "billed": "32000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-32000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "INITIAL_WAITING_PERIOD",
+        "clause_ref": "3.1",
+        "message": "Illness 14 days after commencement, inside the 30-day initial waiting period."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 20,
+      "risk_signals": [
+        "EARLY_CLAIM"
+      ],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-1012",
+      "source": "seeded scenario",
+      "line": "health",
+      "claimant": "Mohan Das",
+      "policy_number": "CS-HLT-24-000756",
+      "product": "HLT-SHIELD v2025.1",
+      "incident_date": "2025-11-10",
+      "documents": 3,
+      "claimed": "57000.00",
+      "billed": "57000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-57000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "PED_WAITING_PERIOD",
+        "clause_ref": "3.2",
+        "message": "Documents mention 'declared at proposal'; a pre-existing disease has a 36-month waiting period and cover has run about 14 months."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 9,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.1",
+        "3.2",
+        "6.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-H-3035",
       "source": "evaluation packet EVAL-H-01",
       "line": "health",
       "claimant": "Suresh Nair",
@@ -388,7 +565,7 @@
       ]
     },
     {
-      "claim_number": "CLM-H-3021",
+      "claim_number": "CLM-H-3036",
       "source": "evaluation packet EVAL-H-02",
       "line": "health",
       "claimant": "Meena Iyer",
@@ -425,7 +602,7 @@
       ]
     },
     {
-      "claim_number": "CLM-H-3022",
+      "claim_number": "CLM-H-3037",
       "source": "evaluation packet EVAL-H-03",
       "line": "health",
       "claimant": "Ravi Kumar",
@@ -459,7 +636,7 @@
       ]
     },
     {
-      "claim_number": "CLM-H-3023",
+      "claim_number": "CLM-H-3038",
       "source": "evaluation packet EVAL-H-04",
       "line": "health",
       "claimant": "Ravi Kumar",
@@ -495,7 +672,7 @@
       ]
     },
     {
-      "claim_number": "CLM-H-3027",
+      "claim_number": "CLM-H-3042",
       "source": "demo upload packet",
       "line": "health",
       "claimant": "Fatima Shaikh",
@@ -631,6 +808,145 @@
       "policy_clauses_cited": [
         "2.1",
         "3.2",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-M-2004",
+      "source": "seeded scenario",
+      "line": "motor",
+      "claimant": "Arvind Menon",
+      "policy_number": "CS-MTR-25-001488",
+      "product": "MTR-SECURE v2025.1",
+      "incident_date": "2025-08-30",
+      "documents": 4,
+      "claimed": "77000.00",
+      "billed": "77000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-77000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_WEAR_TEAR",
+        "clause_ref": "3.3",
+        "message": "Claim documents mention 'mechanical breakdown', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-M-2005",
+      "source": "seeded scenario",
+      "line": "motor",
+      "claimant": "Tenzin Lama",
+      "policy_number": "CS-MTR-25-001503",
+      "product": "MTR-SECURE v2025.1",
+      "incident_date": "2025-10-11",
+      "documents": 4,
+      "claimed": "59000.00",
+      "billed": "59000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-59000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_OUTSIDE_INDIA",
+        "clause_ref": "3.4",
+        "message": "Claim documents mention 'nepal', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.4",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-M-2006",
+      "source": "seeded scenario",
+      "line": "motor",
+      "claimant": "Sneha Kulkarni",
+      "policy_number": "CS-MTR-25-001520",
+      "product": "MTR-SECURE v2025.1",
+      "incident_date": "2025-11-20",
+      "documents": 4,
+      "claimed": "82000.00",
+      "billed": "82000.00",
+      "payable": "56100.00",
+      "deductions": {
+        "R15_DEPRECIATION": "-22400.00",
+        "R30_DEDUCTIBLE": "-3500.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 9,
+      "policy_clauses_cited": [
+        "1.2",
+        "2.1",
+        "2.2",
+        "2.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-M-2007",
+      "source": "seeded scenario",
+      "line": "motor",
+      "claimant": "Harish Babu",
+      "policy_number": "CS-MTR-25-001536",
+      "product": "MTR-SECURE v2025.1",
+      "incident_date": "2025-09-02",
+      "documents": 3,
+      "claimed": "33000.00",
+      "billed": "33000.00",
+      "payable": "26500.00",
+      "deductions": {
+        "R15_DEPRECIATION": "-4500.00",
+        "R30_DEDUCTIBLE": "-2000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [
+        "police_report"
+      ],
+      "risk_level": "MEDIUM",
+      "risk_score": 30,
+      "risk_signals": [
+        "EARLY_CLAIM",
+        "MISSING_DOCUMENTS"
+      ],
+      "recommendation": "REQUEST_INFO",
+      "queue": "PENDING_INFORMATION",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "1.2",
+        "2.1",
+        "2.2",
+        "2.3",
         "4.2"
       ]
     },
@@ -774,7 +1090,112 @@
       ]
     },
     {
-      "claim_number": "CLM-P-3024",
+      "claim_number": "CLM-P-3005",
+      "source": "seeded scenario",
+      "line": "property",
+      "claimant": "Rakesh Yadav",
+      "policy_number": "CS-HOM-25-003288",
+      "product": "HOME-GUARD v2025.1",
+      "incident_date": "2025-08-09",
+      "documents": 2,
+      "claimed": "143000.00",
+      "billed": "143000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-143000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_WILFUL_ACT",
+        "clause_ref": "3.2",
+        "message": "Claim documents mention 'intentional', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.2",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-P-3006",
+      "source": "seeded scenario",
+      "line": "property",
+      "claimant": "Meera Joshi",
+      "policy_number": "CS-HOM-24-003301",
+      "product": "HOME-GUARD v2025.1",
+      "incident_date": "2025-10-05",
+      "documents": 2,
+      "claimed": "1160000.00",
+      "billed": "1160000.00",
+      "payable": "1000000.00",
+      "deductions": {
+        "R15_DEPRECIATION": "-17000.00",
+        "R30_DEDUCTIBLE": "-10000.00",
+        "R50_MAX_LIABILITY": "-133000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "MEDIUM",
+      "risk_score": 30,
+      "risk_signals": [
+        "HIGH_AMOUNT_RATIO"
+      ],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 11,
+      "policy_clauses_cited": [
+        "1.2",
+        "2.1",
+        "2.2",
+        "2.3",
+        "4.1",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-P-3007",
+      "source": "seeded scenario",
+      "line": "property",
+      "claimant": "Gurpreet Singh",
+      "policy_number": "CS-HOM-25-003317",
+      "product": "HOME-GUARD v2025.1",
+      "incident_date": "2025-07-18",
+      "documents": 2,
+      "claimed": "107000.00",
+      "billed": "107000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-107000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_WAR_NUCLEAR",
+        "clause_ref": "3.4",
+        "message": "Claim documents mention 'act of war', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 8,
+      "policy_clauses_cited": [
+        "2.1",
+        "3.4",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-P-3039",
       "source": "evaluation packet EVAL-P-01",
       "line": "property",
       "claimant": "Lakshmi Menon",
@@ -806,7 +1227,7 @@
       ]
     },
     {
-      "claim_number": "CLM-T-3025",
+      "claim_number": "CLM-T-3040",
       "source": "evaluation packet EVAL-T-01",
       "line": "travel",
       "claimant": "Kavya Reddy",
@@ -840,7 +1261,7 @@
       ]
     },
     {
-      "claim_number": "CLM-T-3026",
+      "claim_number": "CLM-T-3041",
       "source": "evaluation packet EVAL-T-02",
       "line": "travel",
       "claimant": "Kavya Reddy",
@@ -1047,6 +1468,112 @@
         "3.1",
         "5.2"
       ]
+    },
+    {
+      "claim_number": "CLM-T-4006",
+      "source": "seeded scenario",
+      "line": "travel",
+      "claimant": "Karan Mehra",
+      "policy_number": "CS-TRV-25-004639",
+      "product": "TRV-GLOBE v2025.1",
+      "incident_date": "2025-10-07",
+      "documents": 4,
+      "claimed": "114000.00",
+      "billed": "114000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-114000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_ALCOHOL",
+        "clause_ref": "3.3",
+        "message": "Claim documents mention 'intoxicated', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 13,
+      "policy_clauses_cited": [
+        "1.3",
+        "2.1",
+        "3.3",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-T-4007",
+      "source": "seeded scenario",
+      "line": "travel",
+      "claimant": "Usha Pillai",
+      "policy_number": "CS-TRV-25-004652",
+      "product": "TRV-GLOBE v2025.1",
+      "incident_date": "2025-11-12",
+      "documents": 4,
+      "claimed": "195000.00",
+      "billed": "195000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-195000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_AGAINST_ADVICE",
+        "clause_ref": "3.4",
+        "message": "Claim documents mention 'against medical advice', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 11,
+      "policy_clauses_cited": [
+        "1.3",
+        "2.1",
+        "3.4",
+        "5.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-T-4008",
+      "source": "seeded scenario",
+      "line": "travel",
+      "claimant": "Ritu Agarwal",
+      "policy_number": "CS-TRV-25-004670",
+      "product": "TRV-GLOBE v2025.1",
+      "incident_date": "2025-09-16",
+      "documents": 3,
+      "claimed": "68000.00",
+      "billed": "68000.00",
+      "payable": "63000.00",
+      "deductions": {
+        "R30_DEDUCTIBLE": "-5000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [
+        "medical_report"
+      ],
+      "risk_level": "LOW",
+      "risk_score": 10,
+      "risk_signals": [
+        "MISSING_DOCUMENTS"
+      ],
+      "recommendation": "REQUEST_INFO",
+      "queue": "PENDING_INFORMATION",
+      "evidence_items": 10,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "2.1",
+        "4.1",
+        "5.2"
+      ]
     }
   ],
   "portfolio_risk_rules": {
@@ -1076,18 +1603,18 @@
     "note": "Synthetic portfolio with injected patterns; measures rule recall of injected patterns only."
   },
   "golden_evaluation": {
-    "claim_cases": 26,
-    "claim_cases_passed": 26,
+    "claim_cases": 41,
+    "claim_cases_passed": 41,
     "questions": 26,
     "questions_passed": 26,
-    "checks": 449,
-    "checks_passed": 449,
+    "checks": 612,
+    "checks_passed": 612,
     "retrieval_hit_at_1": 1.0,
     "retrieval_hit_at_3": 1.0,
     "mean_reciprocal_rank": 1.0,
     "refusal_accuracy": 1.0,
     "required_categories_covered": true,
-    "avg_claim_case_ms": 99,
+    "avg_claim_case_ms": 135,
     "all_passed": true
   }
 }

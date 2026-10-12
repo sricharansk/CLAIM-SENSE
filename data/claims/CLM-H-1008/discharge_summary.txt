@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Nikhil Bose
+Admission Date: 2025-08-04
+Discharge Date: 2025-08-04
+Diagnosis: Nasal hump, aesthetic concern
+Procedure: Cosmetic rhinoplasty
+
+Clinical Notes:
+Elective day care procedure.

@@ -150,5 +150,125 @@
     "start_date": "2025-12-01",
     "end_date": "2025-12-15",
     "sum_insured": 4000000
+  },
+  {
+    "policy_number": "CS-HLT-23-000702",
+    "product_code": "HLT-SHIELD",
+    "holder_name": "Nikhil Bose",
+    "start_date": "2023-08-01",
+    "end_date": "2026-07-31",
+    "sum_insured": 500000
+  },
+  {
+    "policy_number": "CS-HLT-23-000715",
+    "product_code": "HLT-SHIELD",
+    "holder_name": "Imran Sheikh",
+    "start_date": "2023-05-01",
+    "end_date": "2026-04-30",
+    "sum_insured": 300000
+  },
+  {
+    "policy_number": "CS-HLT-23-000728",
+    "product_code": "HLT-SHIELD",
+    "holder_name": "Latha Raman",
+    "start_date": "2023-02-01",
+    "end_date": "2026-01-31",
+    "sum_insured": 500000
+  },
+  {
+    "policy_number": "CS-HLT-25-000741",
+    "product_code": "HLT-SHIELD",
+    "holder_name": "Pooja Malhotra",
+    "start_date": "2025-06-01",
+    "end_date": "2026-05-31",
+    "sum_insured": 300000
+  },
+  {
+    "policy_number": "CS-HLT-24-000756",
+    "product_code": "HLT-SHIELD",
+    "holder_name": "Mohan Das",
+    "start_date": "2024-09-01",
+    "end_date": "2026-08-31",
+    "sum_insured": 400000
+  },
+  {
+    "policy_number": "CS-MTR-25-001488",
+    "product_code": "MTR-SECURE",
+    "holder_name": "Arvind Menon",
+    "start_date": "2025-04-20",
+    "end_date": "2026-04-19",
+    "sum_insured": 450000
+  },
+  {
+    "policy_number": "CS-MTR-25-001503",
+    "product_code": "MTR-SECURE",
+    "holder_name": "Tenzin Lama",
+    "start_date": "2025-05-01",
+    "end_date": "2026-04-30",
+    "sum_insured": 600000
+  },
+  {
+    "policy_number": "CS-MTR-25-001520",
+    "product_code": "MTR-SECURE",
+    "holder_name": "Sneha Kulkarni",
+    "start_date": "2025-04-25",
+    "end_date": "2026-04-24",
+    "sum_insured": 950000
+  },
+  {
+    "policy_number": "CS-MTR-25-001536",
+    "product_code": "MTR-SECURE",
+    "holder_name": "Harish Babu",
+    "start_date": "2025-06-10",
+    "end_date": "2026-06-09",
+    "sum_insured": 400000
+  },
+  {
+    "policy_number": "CS-HOM-25-003288",
+    "product_code": "HOME-GUARD",
+    "holder_name": "Rakesh Yadav",
+    "start_date": "2025-01-15",
+    "end_date": "2026-01-14",
+    "sum_insured": 1200000
+  },
+  {
+    "policy_number": "CS-HOM-24-003301",
+    "product_code": "HOME-GUARD",
+    "holder_name": "Meera Joshi",
+    "start_date": "2024-12-01",
+    "end_date": "2025-11-30",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-HOM-25-003317",
+    "product_code": "HOME-GUARD",
+    "holder_name": "Gurpreet Singh",
+    "start_date": "2025-03-01",
+    "end_date": "2026-02-28",
+    "sum_insured": 1500000
+  },
+  {
+    "policy_number": "CS-TRV-25-004639",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Karan Mehra",
+    "start_date": "2025-10-01",
+    "end_date": "2025-10-14",
+    "sum_insured": 4000000
+  },
+  {
+    "policy_number": "CS-TRV-25-004652",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Usha Pillai",
+    "start_date": "2025-11-05",
+    "end_date": "2025-11-25",
+    "sum_insured": 4000000
+  },
+  {
+    "policy_number": "CS-TRV-25-004670",
+    "product_code": "TRV-GLOBE",
+    "holder_name": "Ritu Agarwal",
+    "start_date": "2025-09-10",
+    "end_date": "2025-09-24",
+    "sum_insured": 4000000
   }
 ]

@@ -1,0 +1,18 @@
+CLAIM FORM — Synthetic Assurance Co. Ltd. (fictional)
+SYNTHETIC DEMO DOCUMENT
+
+Claim Type: Motor
+Policy Number: CS-MTR-25-001488
+Claimant Name: Arvind Menon
+Incident Date: 2025-08-30
+Vehicle Registration: KL-07-SY-5521
+Vehicle Make and Model: Sedan 1462cc
+Date of First Registration: 2019-02-11
+Engine Capacity cc: 1462
+Claimed Amount: INR 77,000.00
+
+Description of Loss:
+Engine seized while driving on the highway; no collision.
+
+I declare that the information given is true and complete.
+Signed: Arvind Menon

@@ -1,0 +1,13 @@
+CLAIM EXPENSE STATEMENT
+SYNTHETIC DEMO DOCUMENT
+
+Destination: Bangkok
+Currency: Amounts in INR, converted at the reference rate on the date of loss
+Patient/Insured Name: Karan Mehra
+
+Itemised Charges:
+Emergency Room Assessment                                       26,000.00
+Orthopaedic Surgeon Fees                                        70,000.00
+X-Ray and Casting                                               18,000.00
+
+Total Amount                                                   114,000.00

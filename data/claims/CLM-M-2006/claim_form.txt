@@ -1,0 +1,18 @@
+CLAIM FORM — Synthetic Assurance Co. Ltd. (fictional)
+SYNTHETIC DEMO DOCUMENT
+
+Claim Type: Motor
+Policy Number: CS-MTR-25-001520
+Claimant Name: Sneha Kulkarni
+Incident Date: 2025-11-20
+Vehicle Registration: MH-12-SY-2207
+Vehicle Make and Model: SUV 1956cc
+Date of First Registration: 2024-03-15
+Engine Capacity cc: 1956
+Claimed Amount: INR 82,000.00
+
+Description of Loss:
+Front-end collision with a stalled tractor at night.
+
+I declare that the information given is true and complete.
+Signed: Sneha Kulkarni

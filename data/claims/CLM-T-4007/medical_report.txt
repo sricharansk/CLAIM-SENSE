@@ -1,0 +1,12 @@
+MEDICAL REPORT FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Creek Side Hospital (fictional)
+Patient Name: Usha Pillai
+Admission Date: 2025-11-12
+Discharge Date: 2025-11-15
+Diagnosis: Post-operative wound infection
+Procedure: Intravenous antibiotics
+
+Clinical Notes:
+Surgeon had advised against travel for six weeks after surgery.

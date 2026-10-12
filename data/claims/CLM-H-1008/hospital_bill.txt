@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1008
+Admission Date: 2025-08-04
+Discharge Date: 2025-08-04
+Patient/Insured Name: Nikhil Bose
+
+Itemised Charges:
+Room Rent - Day Care (1 day @ 4,000)                             4,000.00
+Plastic Surgeon and Anaesthetist Fees                           60,000.00
+Operation Theatre Charges                                       14,000.00
+Pharmacy - Medicines and Drugs                                   5,000.00
+
+Total Amount                                                    83,000.00

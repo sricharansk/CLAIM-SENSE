@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-0830-02
+Date of Accident: 2025-08-30
+Vehicle Registration: KL-07-SY-5521
+
+Findings:
+No accident. Vehicle towed after an engine seizure from mechanical breakdown due to oil starvation.

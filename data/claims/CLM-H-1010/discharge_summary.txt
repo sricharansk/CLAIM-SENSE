@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Latha Raman
+Admission Date: 2025-10-20
+Discharge Date: 2025-10-22
+Diagnosis: Osteoarthritis of the right knee
+Procedure: Investigational autologous stem cell therapy
+
+Clinical Notes:
+Treatment offered under a research protocol.

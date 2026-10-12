@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1012
+Admission Date: 2025-11-10
+Discharge Date: 2025-11-14
+Patient/Insured Name: Mohan Das
+
+Itemised Charges:
+Room Rent - Twin Sharing (4 days @ 4,500)                       18,000.00
+Surgeon Fees - Wound Debridement                                22,000.00
+Pharmacy - Medicines and Insulin                                12,000.00
+Laboratory Tests - Blood Sugar Series                            5,000.00
+
+Total Amount                                                    57,000.00

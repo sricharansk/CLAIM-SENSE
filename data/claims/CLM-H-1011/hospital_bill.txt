@@ -1,0 +1,16 @@
+FINAL HOSPITAL BILL
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Bill Number: HB-1011
+Admission Date: 2025-06-15
+Discharge Date: 2025-06-18
+Patient/Insured Name: Pooja Malhotra
+
+Itemised Charges:
+Room Rent - General Ward (3 days @ 3,500)                       10,500.00
+Consultant Physician Fees                                        9,000.00
+Pharmacy - Medicines and IV Antibiotics                          8,500.00
+Laboratory Tests - Blood Culture and Widal                       4,000.00
+
+Total Amount                                                    32,000.00

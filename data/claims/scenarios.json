@@ -287,5 +287,232 @@
     ],
     "expected_recommendation": "RECOMMEND_REJECT",
     "scenario": "Pre-existing condition exclusion (3.1)"
+  },
+  {
+    "claim_number": "CLM-H-1008",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-23-000702",
+    "claimant_name": "Nikhil Bose",
+    "incident_date": "2025-08-04",
+    "description": "Planned nose surgery for appearance.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Cosmetic surgery exclusion (4.1)"
+  },
+  {
+    "claim_number": "CLM-H-1009",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-23-000715",
+    "claimant_name": "Imran Sheikh",
+    "incident_date": "2025-09-13",
+    "description": "Fell at a party and hit his head; brought to emergency.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Alcohol and intoxication exclusion (4.2)"
+  },
+  {
+    "claim_number": "CLM-H-1010",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-23-000728",
+    "claimant_name": "Latha Raman",
+    "incident_date": "2025-10-20",
+    "description": "Admitted for a stem cell therapy session for knee pain.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Experimental treatment exclusion (4.5)"
+  },
+  {
+    "claim_number": "CLM-H-1011",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-25-000741",
+    "claimant_name": "Pooja Malhotra",
+    "incident_date": "2025-06-15",
+    "description": "High fever for five days; admitted for typhoid.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Illness inside the 30-day initial waiting period (3.1)"
+  },
+  {
+    "claim_number": "CLM-H-1012",
+    "claim_type": "health",
+    "policy_number": "CS-HLT-24-000756",
+    "claimant_name": "Mohan Das",
+    "incident_date": "2025-11-10",
+    "description": "Known case of type 2 diabetes declared at proposal; admitted with an infected foot ulcer.",
+    "documents": [
+      "claim_form.txt",
+      "discharge_summary.txt",
+      "hospital_bill.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Pre-existing disease inside the 36-month waiting period (3.2)"
+  },
+  {
+    "claim_number": "CLM-M-2004",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001488",
+    "claimant_name": "Arvind Menon",
+    "incident_date": "2025-08-30",
+    "description": "Engine seized while driving on the highway; no collision.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "police_report.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Wear, tear and mechanical breakdown exclusion (3.3)"
+  },
+  {
+    "claim_number": "CLM-M-2005",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001503",
+    "claimant_name": "Tenzin Lama",
+    "incident_date": "2025-10-11",
+    "description": "Collision with a bus while driving in Nepal on a road trip.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "police_report.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Use outside India exclusion (3.4)"
+  },
+  {
+    "claim_number": "CLM-M-2006",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001520",
+    "claimant_name": "Sneha Kulkarni",
+    "incident_date": "2025-11-20",
+    "description": "Front-end collision with a stalled tractor at night.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "police_report.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Engine above 1500cc: INR 3,500 deductible (2.3) after depreciation"
+  },
+  {
+    "claim_number": "CLM-M-2007",
+    "claim_type": "motor",
+    "policy_number": "CS-MTR-25-001536",
+    "claimant_name": "Harish Babu",
+    "incident_date": "2025-09-02",
+    "description": "Windscreen smashed and doors scratched by unknown persons in a parking lot; malicious damage.",
+    "documents": [
+      "claim_form.txt",
+      "driving_licence.txt",
+      "repair_estimate.txt"
+    ],
+    "expected_recommendation": "REQUEST_INFO",
+    "scenario": "Malicious damage without a police report (4.1)"
+  },
+  {
+    "claim_number": "CLM-P-3005",
+    "claim_type": "property",
+    "policy_number": "CS-HOM-25-003288",
+    "claimant_name": "Rakesh Yadav",
+    "incident_date": "2025-08-09",
+    "description": "Fire in the living room damaged the furniture and walls.",
+    "documents": [
+      "claim_form.txt",
+      "loss_assessment.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Wilful act exclusion (3.2)"
+  },
+  {
+    "claim_number": "CLM-P-3006",
+    "claim_type": "property",
+    "policy_number": "CS-HOM-24-003301",
+    "claimant_name": "Meera Joshi",
+    "incident_date": "2025-10-05",
+    "description": "Lightning struck the house and the fire that followed destroyed most of the building.",
+    "documents": [
+      "claim_form.txt",
+      "loss_assessment.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Loss above the sum insured: capped at the sum insured (1.2)"
+  },
+  {
+    "claim_number": "CLM-P-3007",
+    "claim_type": "property",
+    "policy_number": "CS-HOM-25-003317",
+    "claimant_name": "Gurpreet Singh",
+    "incident_date": "2025-07-18",
+    "description": "Roof and windows damaged by cross-border shelling.",
+    "documents": [
+      "claim_form.txt",
+      "loss_assessment.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "War and nuclear risks exclusion (3.4)"
+  },
+  {
+    "claim_number": "CLM-T-4006",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004639",
+    "claimant_name": "Karan Mehra",
+    "incident_date": "2025-10-07",
+    "description": "Fell from a hotel balcony while intoxicated after a party; wrist fractured and treated in hospital.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "medical_report.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Alcohol and drugs exclusion (3.3)"
+  },
+  {
+    "claim_number": "CLM-T-4007",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004652",
+    "claimant_name": "Usha Pillai",
+    "incident_date": "2025-11-12",
+    "description": "Travelled against medical advice two weeks after heart surgery; admitted to hospital with complications.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "medical_report.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Travel against medical advice exclusion (3.4)"
+  },
+  {
+    "claim_number": "CLM-T-4008",
+    "claim_type": "travel",
+    "policy_number": "CS-TRV-25-004670",
+    "claimant_name": "Ritu Agarwal",
+    "incident_date": "2025-09-16",
+    "description": "Severe food poisoning in Paris; admitted to hospital overnight.",
+    "documents": [
+      "claim_form.txt",
+      "expense_statement.txt",
+      "travel_proof.txt"
+    ],
+    "expected_recommendation": "REQUEST_INFO",
+    "scenario": "Medical claim abroad without the treating doctor's report (5.2)"
   }
 ]

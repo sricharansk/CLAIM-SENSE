@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-1011-40
+Date of Accident: 2025-10-11
+Vehicle Registration: SK-01-SY-0904
+
+Findings:
+Collision occurred near Pokhara, Nepal. Report issued by local police.

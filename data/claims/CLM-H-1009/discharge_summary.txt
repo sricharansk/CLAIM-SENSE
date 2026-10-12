@@ -1,0 +1,12 @@
+DISCHARGE SUMMARY
+SYNTHETIC DEMO DOCUMENT
+
+Hospital: Greenfield General Hospital (fictional)
+Patient Name: Imran Sheikh
+Admission Date: 2025-09-13
+Discharge Date: 2025-09-15
+Diagnosis: Acute alcohol intoxication with minor head injury
+Procedure: Observation and medical management
+
+Clinical Notes:
+Blood alcohol level high on admission.

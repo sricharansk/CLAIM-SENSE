@@ -33,7 +33,7 @@
         "data/policies/insured_policies.json"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "f50e9e668f0a9ca89a9e346bd8b15d4823fe92c4f7cecae9d8b2f18e1c5ca212"
+      "checksum_sha256": "7ef08829247d95758ee4f00da386f6760aef600d296600ef28ffc6e430a0580f"
     },
     {
       "id": "synthetic-policy-pdf-demo",
@@ -56,11 +56,11 @@
         "data/policies/ingest_demo"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "e953a16db78c9e93bf8b9e5e3a614977aa07c48097ae0ba00c31cfc4c43c8fdc"
+      "checksum_sha256": "98e36c475f8b50a49111df75181d1cfa21487e875d0b4274d9c0c84d9918dd09"
     },
     {
       "id": "synthetic-golden-claims",
-      "name": "Synthetic golden claim packets (19 scenarios across health, motor, property and travel, and the demo upload)",
+      "name": "Synthetic golden claim packets (34 scenarios across health, motor, property and travel, and the demo upload)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_claims",
@@ -79,7 +79,7 @@
         "data/claims"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "274eacf93d2e4187e59f32beb200843e66ed9bed041b793e9293c70ff19bf322"
+      "checksum_sha256": "4274cd441e4f099ac06918401d0a0afe27b9c205d06b00c5e0883f118cec31c4"
     },
     {
       "id": "synthetic-claims-portfolio",
@@ -106,7 +106,7 @@
     },
     {
       "id": "golden-evaluation-set",
-      "name": "Golden evaluation set (26 claim cases, 26 policy questions, 7 fresh packets)",
+      "name": "Golden evaluation set (41 claim cases, 26 policy questions, 7 fresh packets)",
       "publisher": "Claim Sense (hand-worked expectations; generated packets)",
       "source_type": "synthetic",
       "data_type": "evaluation",
@@ -124,7 +124,7 @@
         "data/evaluation"
       ],
       "transformation_script": "data/synthetic/generate.py (packets); golden_cases.json and rag_questions.json written by hand",
-      "checksum_sha256": "578e1f446aad8542de0062583bad6419b1713d339f04e5d5113471657ba756e2"
+      "checksum_sha256": "4ab25960939db298c7e118cb19993b0cb26eb19b32ab511c2bd4e8607ad66ee4"
     },
     {
       "id": "irdai-mc-health-2024",

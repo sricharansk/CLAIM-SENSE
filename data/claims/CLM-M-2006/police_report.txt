@@ -1,0 +1,9 @@
+POLICE / ACCIDENT REPORT
+SYNTHETIC DEMO DOCUMENT
+
+FIR Number: FIR-SYN-1120-18
+Date of Accident: 2025-11-20
+Vehicle Registration: MH-12-SY-2207
+
+Findings:
+Collision confirmed. No injuries reported.
