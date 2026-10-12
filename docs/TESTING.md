@@ -56,7 +56,11 @@ Tests use an isolated temporary SQLite database seeded from `data/`. The LLM is 
   - PDF policy ingestion;
   - take, release and reassign review tasks.
 
-  The screenshots are in `docs/screenshots/`.
+  The screenshots are in `docs/screenshots/`. `e2e/screenshots.mjs` regenerates the ones the README uses from a freshly seeded stack (it rejects CLM-H-1002, corrects a fact on CLM-H-1001 and ingests the demo PDF on the way, so run it against a fresh database) and exits non-zero on any browser error:
+
+  ```bash
+  cd e2e && PW_CHROMIUM=/path/to/chrome node screenshots.mjs http://localhost:8080
+  ```
 
 ## Browser tests (`e2e/`)
 

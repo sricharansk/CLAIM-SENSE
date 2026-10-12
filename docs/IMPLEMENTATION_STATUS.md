@@ -10,7 +10,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 
 | # | Golden-path step | Implementation | Validation |
 |---|---|---|---|
-| 1 | Dashboard | `frontend/src/pages/Dashboard.tsx`, `GET /api/v1/analytics` | Browser run, screenshot `docs/screenshots/01-dashboard.png` |
+| 1 | Dashboard | `frontend/src/pages/Dashboard.tsx`, `GET /api/v1/analytics` | Browser run, screenshot `docs/screenshots/23-dashboard-interactive.png` |
 | 2 | Claim creation and document upload | `POST /claims`, `POST /claims/{n}/documents`, `NewClaim.tsx` | Browser upload of `data/claims/demo_upload`, API test |
 | 3 | Extraction and structured facts | `agents/document.py` (PDF via pypdf, text), facts with file/line/confidence; `POST /claims/{n}/facts` records a reviewer correction with a reason (blueprint section 'New Claim'), the next analysis uses it (`intake.consolidate`: latest correction, then the first document value), the extracted value is kept and shown, `FACT_CORRECTED` audited; bill totals and line items are not correctable | `test_extraction.py` incl. PDF; `test_fact_correction.py`; browser correction and re-run, 0 console errors |
 | 4 | Policy and version matching | `agents/policy.py`, effective-dated `policy_versions` | `test_version_matching_uses_wording_in_force` |
@@ -39,6 +39,10 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | – | Sign-in throttle and injection guard (blueprint Prompt 16) | `auth.LoginThrottle` (429 + `Retry-After`), `safety.py` scan in the Intake Agent, `EMBEDDED_INSTRUCTIONS` risk signal; assistant refusal gate | `test_security_guards.py`: 5 failures then 429; injected discharge summary is flagged HIGH, routed to investigation, payable unchanged at ₹64,080 |
 | – | Override and escalation rates (blueprint Prompt 14) | `analytics.dashboard`: override rate, amount overrides, escalation rate, reviewer actions; dashboard KPIs | `test_dashboard_reports_override_and_escalation_rates` |
 | – | Security | Upload allow-list, size limit and filename sanitising; security headers and CSP; non-root container; dependency audits; see `docs/SECURITY.md` | Header and path tests; pip-audit and npm audit clean |
+
+## Validation results (2026-10-12, screenshots)
+
+- `e2e/screenshots.mjs` regenerates the README screenshots from a freshly seeded stack (PostgreSQL, built frontend served by the backend): browser-created health claim, the rejected waiting-period claim with its repudiation letter, high-risk and motor claims, assistant, review queue, evaluation (612 / 612), PDF ingestion, evidence, provenance, fact correction, property and travel adjudication, the claims list on all four lines, the interactive dashboard (35 claims, ₹58,20,100 claimed, ₹28,91,250 AI payable) and the filtered travel list. No browser errors. Full-page shots are taken at full height so the sidebar spans the image.
 
 ## Validation results (2026-10-12, dashboard and caching)
 
@@ -119,4 +123,4 @@ Single sign-on and user management, OCR for scanned images, embedding retriever,
 
 ## Next action
 
-Render deploys `main` automatically. After merging a change, run the **Verify deployment** workflow with `https://claim-sense.onrender.com` (it signs in with the `DEMO_PASSWORD` repository secret). This build environment cannot reach `onrender.com`, so verification runs from GitHub Actions.
+Auto-deploy is off on the Render service: after merging a change, use *Manual Deploy → Deploy latest commit*, then run the **Verify deployment** workflow with `https://claim-sense.onrender.com` (it signs in with the `DEMO_PASSWORD` repository secret). This build environment cannot reach `onrender.com`, so verification runs from GitHub Actions.
