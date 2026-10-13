@@ -239,12 +239,16 @@ backend/app/
 backend/tests/   pytest suite
 frontend/src/    React + TypeScript UI (pages/, components/, api.ts)
 data/            synthetic policies, claim packets, portfolio, source registry, generator
-docs/            blueprint, status, architecture, decisions, deployment, validation report, screenshots
+docs/            blueprint, status, architecture, decisions, deployment, validation report, screenshots, presentation
 e2e/             Playwright browser tests (run against a running stack)
 reports/         golden evaluation, results on every claim packet, RAG ingestion manifest
 references/      supporting planning documents
 scripts/         smoke_test.py, evaluate.py, claims_report.py, provenance.py
 ```
+
+## Project presentation
+
+The M.Tech Review III presentation (16 slides: introduction, objectives, modules, problem statement, architecture and workflow diagrams, approach, results, conclusion and references) is at [docs/presentation/Claim_Sense_Review_III_SK_Sricharan.pptx](docs/presentation/Claim_Sense_Review_III_SK_Sricharan.pptx). Its figures come from `reports/claims_results.md` and `reports/evaluation.md`.
 
 ## Roadmap
 
