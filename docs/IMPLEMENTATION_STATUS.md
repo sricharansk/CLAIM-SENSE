@@ -1,6 +1,6 @@
 # Implementation Status
 
-Last updated: 2026-10-12 (deployment verified). Source of truth: `docs/Claim_Sense_Project_1_..._FINAL_V2_..._Deployment_Ready.md` and `PROJECT_1_FINAL_CONTENTS.md`.
+Last updated: 2026-10-13. **Status: complete** — every item in the definition of done is met and verified on the live deployment; the items under *Blocked* need decisions or credentials from the owner and are outside this build. Source of truth: `docs/Claim_Sense_Project_1_..._FINAL_V2_..._Deployment_Ready.md` and `PROJECT_1_FINAL_CONTENTS.md`.
 
 ## Starting point
 
@@ -39,6 +39,12 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | – | Sign-in throttle and injection guard (blueprint Prompt 16) | `auth.LoginThrottle` (429 + `Retry-After`), `safety.py` scan in the Intake Agent, `EMBEDDED_INSTRUCTIONS` risk signal; assistant refusal gate | `test_security_guards.py`: 5 failures then 429; injected discharge summary is flagged HIGH, routed to investigation, payable unchanged at ₹64,080 |
 | – | Override and escalation rates (blueprint Prompt 14) | `analytics.dashboard`: override rate, amount overrides, escalation rate, reviewer actions; dashboard KPIs | `test_dashboard_reports_override_and_escalation_rates` |
 | – | Security | Upload allow-list, size limit and filename sanitising; security headers and CSP; non-root container; dependency audits; see `docs/SECURITY.md` | Header and path tests; pip-audit and npm audit clean |
+
+## Validation results (2026-10-13, final)
+
+- Live site re-verified with the **Verify deployment** workflow after each restart of the free Render instance: snapshot and every smoke check passed, 57 seeded claims, 803/803 golden checks, 85 chunks with 0 rejected, 14 sources with 0 problems ([run 38358451765](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38358451765), 2026-10-13 06:45 UTC). The live snapshot (₹86,95,600 billed, ₹53,41,470 payable) matches the seeded claims line by line.
+- Review III presentation added: `docs/presentation/Claim_Sense_Review_III_SK_Sricharan.pptx` (16 slides on the program template, architecture and workflow diagrams drawn as editable shapes, figures taken from `reports/`; package validation passed, every slide rendered and checked). Linked from the README.
+- The free Render instance sleeps when idle and restarts with the 57 seeded claims, so claims filed on the live site last only until the next restart. A paid instance with a persistent database removes this.
 
 ## Validation results (2026-10-12, live claims snapshot)
 
@@ -122,7 +128,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | Coverage; deterministic adjudication; risk/fraud; supervisor | Done |
 | Human review; audit; dashboard | Done |
 | Golden tests pass; security checks pass; Docker works; repository clean | Done |
-| Deployment succeeds; deployed health check; deployed smoke test | Done: Render, https://claim-sense.onrender.com, all smoke checks passed 2026-10-12 ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38313979101)) |
+| Deployment succeeds; deployed health check; deployed smoke test | Done: Render, https://claim-sense.onrender.com, all smoke checks passed, last on 2026-10-13 ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38358451765)) |
 
 ## In progress
 
