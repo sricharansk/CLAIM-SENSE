@@ -1,5 +1,9 @@
 # Release notes
 
+## Claim Sense 1.4.2 — 2026-10-15
+
+- **Presentation updated** with the final status: project complete, live site re-verified on 15 Oct 2026, the live snapshot (57 seeded claims, ₹86.96 L billed, ₹53.41 L payable) beside the repository figures, the live-claims snapshot in the verify workflow, and the free hosting tier's restart limitation.
+
 ## Claim Sense 1.4.1 — 2026-10-13
 
 - **Project complete.** The live deployment at https://claim-sense.onrender.com passes every check (57 seeded claims, 803/803 golden checks) after each restart of the free instance.
