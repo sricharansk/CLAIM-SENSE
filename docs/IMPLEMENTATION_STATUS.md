@@ -1,6 +1,6 @@
 # Implementation Status
 
-Last updated: 2026-10-13. **Status: complete** — every item in the definition of done is met and verified on the live deployment; the items under *Blocked* need decisions or credentials from the owner and are outside this build. Source of truth: `docs/Claim_Sense_Project_1_..._FINAL_V2_..._Deployment_Ready.md` and `PROJECT_1_FINAL_CONTENTS.md`.
+Last updated: 2026-10-15. **Status: complete** — every item in the definition of done is met and verified on the live deployment; the items under *Blocked* need decisions or credentials from the owner and are outside this build. Source of truth: `docs/Claim_Sense_Project_1_..._FINAL_V2_..._Deployment_Ready.md` and `PROJECT_1_FINAL_CONTENTS.md`.
 
 ## Starting point
 
@@ -42,6 +42,7 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 
 ## Validation results (2026-10-13, final)
 
+- 2026-10-15: live site re-verified ([run 38685398836](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38685398836)): every smoke check passed; the snapshot (57 seeded claims, ₹86,95,600 billed, ₹53,41,470 payable) is unchanged. The presentation now records the final status, this live verification, the live snapshot figures and the free-tier limitation.
 - Live site re-verified with the **Verify deployment** workflow after each restart of the free Render instance: snapshot and every smoke check passed, 57 seeded claims, 803/803 golden checks, 85 chunks with 0 rejected, 14 sources with 0 problems ([run 38358451765](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38358451765), 2026-10-13 06:45 UTC). The live snapshot (₹86,95,600 billed, ₹53,41,470 payable) matches the seeded claims line by line.
 - Review III presentation added: `docs/presentation/Claim_Sense_Review_III_SK_Sricharan.pptx` (16 slides on the program template, architecture and workflow diagrams drawn as editable shapes, figures taken from `reports/`; package validation passed, every slide rendered and checked). Linked from the README.
 - The free Render instance sleeps when idle and restarts with the 57 seeded claims, so claims filed on the live site last only until the next restart. A paid instance with a persistent database removes this.
