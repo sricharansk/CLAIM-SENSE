@@ -29,6 +29,85 @@ Update `docs/IMPLEMENTATION_STATUS.md` after meaningful changes. A task is compl
 
 This section records everything built for the project, so work can continue on any machine. Last updated **2026-10-15**.
 
+## Continue on your own laptop (step by step)
+
+Run these commands in a terminal **on your laptop**, not inside a Claude conversation. On Windows use **PowerShell** or **Git Bash**; on Mac or Linux use **Terminal**. Type each command and press Enter.
+
+### Step 1: install the tools (one time)
+
+| Tool | Why | How |
+|---|---|---|
+| Git | Download and update the project | https://git-scm.com/downloads (on Windows keep the default options; this also installs Git Bash) |
+| Claude Code | AI assistant that already knows this project | Windows PowerShell: `irm https://claude.ai/install.ps1 \| iex`<br>Mac/Linux: `curl -fsSL https://claude.ai/install.sh \| bash` |
+| Python 3.11+ | Runs the backend | https://www.python.org/downloads/ (on Windows tick **Add python.exe to PATH**) |
+| Node.js 22 | Builds and runs the frontend | https://nodejs.org/ (LTS) |
+| Docker Desktop (optional) | Runs the full app with PostgreSQL in one command | https://www.docker.com/products/docker-desktop/ |
+
+Close and reopen the terminal after installing, so the new commands are found. Check them with `git --version`, `claude --version`, `python --version` (on Mac: `python3 --version`) and `node --version`.
+
+### Step 2: download the project (first time only)
+
+```bash
+git clone https://github.com/sricharansk/CLAIM-SENSE.git   # downloads the project from GitHub
+cd CLAIM-SENSE                                              # moves into the project folder
+claude                                                      # starts Claude Code in the project
+```
+
+The first time you run `claude`, it asks you to sign in. Use the same claude.ai account as before. Claude Code reads this `CLAUDE.md` file on its own, so it starts with the whole project context. You do not need to copy any old conversations.
+
+### Step 3: ask Claude Code in plain English
+
+For example:
+- "Summarise the project status from CLAUDE.md"
+- "Help me set up this project to run locally"
+- "Run the tests"
+- "Refresh the results dashboard"
+- "Update the presentation with …"
+
+To run the app yourself without Claude Code, follow *Run it on your laptop* below.
+
+### Step 4: get the latest version from GitHub (every time you start work)
+
+Changes merged on GitHub (from another laptop or a cloud session) only reach your laptop when you pull them:
+
+```bash
+cd CLAIM-SENSE
+git checkout main          # switch to the main branch
+git pull origin main       # download the latest merged changes
+claude                     # start Claude Code with the updated files
+```
+
+If `git pull` reports local changes in the way, either save them first (Step 5) or ask Claude Code to sort it out.
+
+### Step 5: save your own changes back to GitHub
+
+The easiest way is to ask Claude Code: "commit my changes on a new branch, push it and open a pull request". To do it by hand:
+
+```bash
+git checkout -b my-change                 # new branch for this piece of work (any name)
+git add -A                                # stage every changed file
+git commit -m "Describe what you changed" # save a snapshot locally
+git push -u origin my-change              # upload the branch to GitHub
+```
+
+Then open https://github.com/sricharansk/CLAIM-SENSE: GitHub shows a **Compare & pull request** button. Create the pull request, wait for the green checks, and click **Merge**. Back on your laptop, run `git checkout main` and `git pull origin main` to bring the merged result down.
+
+The first push asks you to sign in to GitHub. On Windows, a browser window opens through Git Credential Manager; on Mac, use a personal access token or install the GitHub CLI and run `gh auth login`. Set your name once with:
+
+```bash
+git config --global user.name "S.K. Sricharan"
+git config --global user.email "<your GitHub email>"
+```
+
+### Step 6: after merging a change to the app
+
+Render does not deploy automatically:
+1. Open the Render dashboard, then the `claim-sense` service, then *Manual Deploy → Deploy latest commit*.
+2. On GitHub → **Actions** → **Verify deployment** → **Run workflow**, enter `https://claim-sense.onrender.com`. It must pass.
+3. If you like, refresh the dashboard and update `docs/IMPLEMENTATION_STATUS.md` and `RELEASE_NOTES.md`.
+
+Never commit `.env` files or passwords. The deployed `DEMO_PASSWORD` is kept only in Render and in the GitHub repository secrets.
+
 ## Status: complete
 
 Every item in the blueprint's definition of done (PART 20) is built, tested, deployed and documented. Nothing is in progress. The only open items need owner decisions or credentials (see *Open items* below).
