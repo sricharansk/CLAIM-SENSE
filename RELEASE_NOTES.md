@@ -1,5 +1,10 @@
 # Release notes
 
+## Claim Sense 1.4.1 — 2026-10-13
+
+- **Project complete.** The live deployment at https://claim-sense.onrender.com passes every check (57 seeded claims, 803/803 golden checks) after each restart of the free instance.
+- **Review III presentation** in `docs/presentation/`, linked from the README.
+
 ## Claim Sense 1.4.0 — 2026-10-12
 
 - **16 more seeded claims (50 in all; 57 in the live app, 58 in the results report).** Until now most seeded claims tested an exclusion; these cover the common payable situations on every line, each with a hand-worked golden case: hernia after the 24-month wait, ICU above the per-day limit, an accident inside the 30-day wait, a declared pre-existing disease after 36 months (health); a car over five years old, flood, a new car above 1500cc, malicious damage with a police report (motor); a burst pipe, a cyclone with underinsurance, an earthquake (property); a trip cut short by a family death, a large heart-attack claim, lost baggage inside every limit, an accident with an ambulance (travel).
