@@ -1,0 +1,13 @@
+[
+ {
+  "claims": 1000,
+  "injected": 69,
+  "flagged": 67,
+  "precision": 0.866,
+  "recall": 0.841,
+  "tp": 58,
+  "fp": 9,
+  "fn": 11,
+  "tn": 922
+ }
+]

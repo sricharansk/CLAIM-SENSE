@@ -1,0 +1,52 @@
+[
+ {
+  "rule": "R10_NON_PAYABLE",
+  "label": "Not payable items",
+  "amount": 157800
+ },
+ {
+  "rule": "R15_DEPRECIATION",
+  "label": "Depreciation",
+  "amount": 194350
+ },
+ {
+  "rule": "R20_BENEFIT_LIMIT",
+  "label": "Benefit limit",
+  "amount": 36000
+ },
+ {
+  "rule": "R20_ITEM_LIMIT",
+  "label": "Per-item limit",
+  "amount": 75000
+ },
+ {
+  "rule": "R20_PER_DAY_LIMIT",
+  "label": "Per-day room limit",
+  "amount": 96500
+ },
+ {
+  "rule": "R25_UNDERINSURANCE",
+  "label": "Underinsurance (average clause)",
+  "amount": 98700
+ },
+ {
+  "rule": "R30_DEDUCTIBLE",
+  "label": "Deductible / excess",
+  "amount": 207000
+ },
+ {
+  "rule": "R40_COPAY",
+  "label": "Co-payment",
+  "amount": 149280
+ },
+ {
+  "rule": "R50_MAX_LIABILITY",
+  "label": "Sum insured cap",
+  "amount": 197500
+ },
+ {
+  "rule": "R99_NOT_ADMISSIBLE",
+  "label": "Not admissible (claim not covered)",
+  "amount": 2142000
+ }
+]

@@ -1,0 +1,374 @@
+<style>
+.cs { display: grid; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); max-width: 78rem; margin-inline: auto; }
+.cs-head { display: grid; gap: var(--cds-gap-sm); }
+.cs-head h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.cs-take { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-body); max-width: 68ch; line-height: 1.5; }
+.cs-take span { color: var(--color-fg); font-variant-numeric: tabular-nums; }
+.cs-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr)); gap: var(--cds-gap-md); }
+.cs-kpi { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: grid; gap: var(--cds-gap-xs); align-content: start; }
+.cs-kpi .lbl { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.cs-kpi .val { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; line-height: 1.15; }
+.cs-kpi .sub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.cs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: var(--cds-gap-md); }
+.cs-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-md); align-content: start; min-width: 0; }
+.cs-card h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+.cs-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.45; }
+.cs-bars { display: grid; gap: var(--cds-gap-md); position: relative; min-height: 8rem; }
+.cs-bar-row { display: grid; gap: var(--cds-gap-xs); }
+.cs-bar-top { display: flex; justify-content: space-between; gap: var(--cds-gap-sm); flex-wrap: wrap; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.cs-bar-top .name { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+.cs-bar-top .num { color: var(--color-fg-muted); }
+.cs-track { position: relative; height: 0.875rem; border-radius: 4px; background: var(--cds-chart-grid); overflow: hidden; }
+.cs-fill { position: absolute; inset-block: 0; left: 0; border-radius: 4px; }
+.cs-fill.billed { background: var(--cds-chart-muted); }
+.cs-legend { display: flex; gap: var(--cds-gap-md); flex-wrap: wrap; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.cs-legend i { display: inline-block; width: 0.625rem; height: 0.625rem; border-radius: 2px; margin-right: 0.35rem; vertical-align: -1px; }
+.cs-tip { position: absolute; z-index: 5; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; max-width: 16rem; }
+.cs-tip .t { color: var(--cds-text-secondary); }
+.cs-tools { display: flex; gap: var(--cds-gap-sm); flex-wrap: wrap; align-items: center; }
+.cs-tools input { font: inherit; font-size: var(--cds-font-size-caption); padding: var(--cds-pad-xs) var(--cds-pad-sm); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-bg); color: var(--color-fg); min-width: 0; flex: 1 1 12rem; max-width: 20rem; }
+.cs-chip { font: inherit; font-size: var(--cds-font-size-caption); padding: var(--cds-pad-xs) var(--cds-pad-sm); border: 1px solid var(--color-border-line); border-radius: 999px; background: transparent; color: var(--color-fg-muted); cursor: pointer; }
+.cs-chip[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); border-color: var(--color-fg); }
+.cs-chip:focus-visible, .cs-sort:focus-visible, .cs-tools input:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.cs-tablewrap { overflow: auto; max-height: 34rem; }
+.cs-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.cs-table th { position: sticky; top: 0; background: var(--color-panel); text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); border-bottom: 1px solid var(--color-border-line); padding: 0; white-space: nowrap; }
+.cs-sort { font: inherit; color: inherit; background: none; border: 0; padding: var(--cds-pad-xs) var(--cds-pad-sm); cursor: pointer; width: 100%; text-align: inherit; }
+.cs-table td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+.cs-table .r { text-align: right; }
+.cs-table td.mono { font-family: var(--font-anthropic-mono, ui-monospace, monospace); white-space: nowrap; }
+.cs-table .reason { min-width: 12rem; }
+.hide-narrow { }
+@container (max-width: 40rem) { .hide-narrow { display: none; } }
+.cs-card.claims { container-type: inline-size; }
+.pill { display: inline-block; padding: 0 0.45rem; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; line-height: 1.5; }
+.ok { color: var(--color-ok); } .warn { color: var(--color-warn); } .bad { color: var(--color-bad); } .muted { color: var(--color-fg-muted); }
+.cs-matrix { display: grid; grid-template-columns: auto 1fr 1fr; gap: var(--cds-gap-xs); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.cs-matrix div { padding: var(--cds-pad-sm); border-radius: var(--cds-radius); }
+.cs-matrix .h { color: var(--color-fg-muted); }
+.cs-matrix .c { background: var(--color-bg); border: 1px solid var(--color-border-line); }
+.cs-matrix .c b { display: block; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-heading); }
+.cs-pr { display: flex; gap: var(--cds-gap-xl); flex-wrap: wrap; }
+.cs-pr div { display: grid; }
+.cs-pr .val { font-family: var(--font-anthropic-serif); font-size: var(--cds-font-size-title); font-weight: 400; font-variant-numeric: tabular-nums; }
+.cs-pr .lbl { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.cs-foot { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; line-height: 1.5; max-width: 80ch; }
+[data-dash-source-state=empty] { color: transparent; }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+.cs-fail { display: flex; align-items: center; justify-content: center; gap: 0.4rem; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); min-height: 6rem; }
+.cs-fail::before { content: ""; width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--color-bad); }
+@media (prefers-reduced-motion: no-preference) {
+  .cs-fill.grow { animation: cs-grow var(--cds-dur-slow) var(--cds-ease-out) both; transform-origin: left; }
+  @keyframes cs-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+}
+</style>
+
+<div class="cs">
+  <header class="cs-head">
+    <h1 id="title">Claim Sense live claims</h1>
+    <p class="cs-take" id="takeaway">
+      <span data-source="totals" data-field="claims" data-row="0" class="dash-skeleton">—</span> synthetic claims on the live site at claim-sense.onrender.com:
+      <span data-source="totals" data-field="billed" data-row="0" class="dash-skeleton">—</span> billed and
+      <span data-source="totals" data-field="payable" data-row="0" class="dash-skeleton">—</span> recommended payable by the deterministic rules engine
+      (<span data-source="totals" data-field="payout" data-row="0" class="dash-skeleton">—</span>).
+      <span data-source="totals" data-field="awaiting" data-row="0" class="dash-skeleton">—</span> are waiting for a person to decide; reviewers have decided the rest, and the system decided none.
+    </p>
+  </header>
+
+  <section class="cs-kpis" id="headline" aria-label="Headline figures">
+    <div class="cs-kpi"><span class="lbl">Claims on the live site</span><span class="val dash-skeleton" data-source="totals" data-field="claims" data-row="0">—</span><span class="sub"><span data-source="totals" data-field="seeded" data-row="0">—</span> seeded at start-up, <span data-source="totals" data-field="filed" data-row="0">—</span> filed on the site</span></div>
+    <div class="cs-kpi"><span class="lbl">Billed</span><span class="val dash-skeleton" data-source="totals" data-field="billed" data-row="0">—</span><span class="sub">Itemised bills, estimates and assessments</span></div>
+    <div class="cs-kpi"><span class="lbl">Recommended payable</span><span class="val dash-skeleton" data-source="totals" data-field="payable" data-row="0">—</span><span class="sub">After policy deductions</span></div>
+    <div class="cs-kpi"><span class="lbl">Payout ratio</span><span class="val dash-skeleton" data-source="totals" data-field="payout" data-row="0">—</span><span class="sub">Payable as a share of billed</span></div>
+    <div class="cs-kpi"><span class="lbl">Not covered</span><span class="val dash-skeleton" data-source="totals" data-field="not_covered" data-row="0">—</span><span class="sub">Each rejection cites its clause</span></div>
+    <div class="cs-kpi"><span class="lbl">Missing documents</span><span class="val dash-skeleton" data-source="totals" data-field="request_info" data-row="0">—</span><span class="sub">Sent back for information</span></div>
+  </section>
+
+  <section class="cs-grid">
+    <div class="cs-card" id="by-line">
+      <h2>Billed and payable by line of business</h2>
+      <p class="cs-note">Each bar is what was billed; the coloured part is what the rules engine found payable.</p>
+      <div class="cs-legend"><span><i class="lg-pay"></i>Payable</span><span><i style="background: var(--cds-chart-muted)"></i>Billed</span></div>
+      <div class="cs-bars" id="line-bars" data-source="by_line"></div>
+    </div>
+    <div class="cs-card" id="outcomes">
+      <h2>Recommendations</h2>
+      <p class="cs-note">What the agents recommended. Every recommendation goes to a review queue for a person to decide.</p>
+      <div class="cs-bars" id="rec-bars" data-source="recs"></div>
+    </div>
+  </section>
+
+  <section class="cs-grid">
+    <div class="cs-card" id="deductions">
+      <h2>Where the money went</h2>
+      <p class="cs-note">Total reduction from billed to payable, by adjudication rule. Each step in a claim's waterfall cites the policy clause it applies.</p>
+      <div class="cs-bars" id="ded-bars" data-source="deductions"></div>
+    </div>
+    <div class="cs-card" id="evaluation">
+      <h2>Golden evaluation</h2>
+      <p class="cs-note"><span data-source="eval_total" data-field="passed" data-row="0">—</span> of <span data-source="eval_total" data-field="total" data-row="0">—</span> checks passed. Expected values were worked out by hand from the policy wordings, not copied from system output.</p>
+      <div class="cs-tablewrap" style="max-height:none">
+        <table class="cs-table" id="eval-table" data-source="evaluation" data-row-key="dimension">
+          <thead><tr><th data-field="dimension"><span class="cs-sort">Dimension</span></th><th data-field="passed" class="r"><span class="cs-sort">Passed</span></th><th data-field="total" class="r"><span class="cs-sort">Checks</span></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-card claims" id="every-claim">
+    <h2>Every claim</h2>
+    <p class="cs-note">Every claim on https://claim-sense.onrender.com in a read-only snapshot taken 2026-10-15 05:11 UTC by the Verify deployment workflow (scripts/claims_report.py --live). Amounts in rupees.</p>
+    <div class="cs-tools">
+      <input id="claim-search" type="search" placeholder="Search claims, reasons, wordings" aria-label="Search claims">
+      <div class="cs-tools" id="line-filter" role="group" aria-label="Line of business"></div>
+    </div>
+    <div class="cs-tablewrap">
+      <table class="cs-table" id="claims-table" data-source="claims" data-row-key="claim">
+        <thead><tr></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="cs-card" id="portfolio">
+    <h2>Risk rules on the synthetic portfolio</h2>
+    <p class="cs-note">The same transparent risk rules scored a synthetic portfolio of <span data-source="portfolio" data-field="claims" data-row="0">—</span> claims into which <span data-source="portfolio" data-field="injected" data-row="0">—</span> anomaly patterns were injected; they flagged <span data-source="portfolio" data-field="flagged" data-row="0">—</span>. This shows the rules recover patterns we injected ourselves, not real-world fraud detection.</p>
+    <div class="cs-grid" style="align-items:center">
+      <div class="cs-pr">
+        <div><span class="val" data-source="portfolio" data-field="precision" data-row="0">—</span><span class="lbl">Precision: flagged claims that were injected</span></div>
+        <div><span class="val" data-source="portfolio" data-field="recall" data-row="0">—</span><span class="lbl">Recall: injected claims that were flagged</span></div>
+      </div>
+      <div class="cs-matrix" aria-label="Confusion matrix">
+        <div></div><div class="h">Injected anomaly</div><div class="h">Clean</div>
+        <div class="h">Flagged</div><div class="c">True positive<b data-source="portfolio" data-field="tp" data-row="0">—</b></div><div class="c">False positive<b data-source="portfolio" data-field="fp" data-row="0">—</b></div>
+        <div class="h">Not flagged</div><div class="c">False negative<b data-source="portfolio" data-field="fn" data-row="0">—</b></div><div class="c">True negative<b data-source="portfolio" data-field="tn" data-row="0">—</b></div>
+      </div>
+    </div>
+  </section>
+
+  <p class="cs-foot">All policies, people and claims are synthetic. Figures come from <code>scripts/claims_report.py</code> and <code>scripts/evaluate.py</code> in the Claim Sense repository: deterministic Decimal rules, extractive retrieval, no LLM. Recommendations are decision support; a person makes every decision. Try the live app at <a href="https://claim-sense.onrender.com" target="_blank" rel="noopener">claim-sense.onrender.com</a> (sign-in required; the free instance may take a minute to wake).</p>
+</div>
+
+<script>
+dash.calc("totals", {
+  title: "Headline totals",
+  description: "Counts and rupee totals over every analysed claim.",
+  inputs: ["claims"],
+  fn: (claims) => {
+    const sum = (k) => claims.reduce((a, c) => a + Number(c[k]), 0);
+    const billed = sum("billed"), payable = sum("payable");
+    return [{
+      claims: claims.length, billed, payable, payout: billed ? payable / billed : 0,
+      seeded: claims.filter((c) => c.source.startsWith("seeded")).length,
+      filed: claims.filter((c) => !c.source.startsWith("seeded")).length,
+      not_covered: claims.filter((c) => c.coverage === "Not covered").length,
+      request_info: claims.filter((c) => c.recommendation === "Request info").length,
+      awaiting: claims.filter((c) => c.queue && c.queue !== "Decided").length,
+    }];
+  },
+});
+dash.calc("by_line", {
+  title: "Totals by line of business",
+  description: "Claims, billed and payable per line.",
+  inputs: ["claims"],
+  fn: (claims) => ["Health", "Motor", "Property", "Travel"].map((line) => {
+    const rs = claims.filter((c) => c.line === line);
+    const billed = rs.reduce((a, c) => a + Number(c.billed), 0);
+    const payable = rs.reduce((a, c) => a + Number(c.payable), 0);
+    return { line, claims: rs.length, billed, payable, payout: billed ? payable / billed : 0 };
+  }),
+});
+dash.calc("recs", {
+  title: "Recommendations",
+  description: "Claims per AI recommendation.",
+  inputs: ["claims"],
+  fn: (claims) => ["Partial approval", "Reject", "Request info", "Investigate"].map((recommendation) =>
+    ({ recommendation, claims: claims.filter((c) => c.recommendation === recommendation).length })),
+});
+dash.calc("eval_total", {
+  title: "Evaluation checks",
+  description: "Checks passed across all evaluation dimensions.",
+  inputs: ["evaluation"],
+  fn: (evaluation) => [{
+    passed: evaluation.reduce((a, d) => a + Number(d.passed), 0),
+    total: evaluation.reduce((a, d) => a + Number(d.total), 0),
+  }],
+});
+
+(() => {
+  const root = document.querySelector(".cs");
+  const rupees = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
+  const lakh = (v) => `₹${(v / 1e5).toLocaleString("en-IN", { maximumFractionDigits: 2, minimumFractionDigits: 2 })} lakh`;
+  const pct = d3.format(".1%");
+  const count = d3.format(",");
+  const accent = dash.colors[0];
+  root.querySelectorAll(".lg-pay").forEach((el) => { el.style.background = accent; });
+
+  // shared tooltip
+  const tip = document.createElement("div");
+  tip.className = "cs-tip"; tip.hidden = true; root.style.position = "relative"; root.appendChild(tip);
+  const showTip = (ev, title, lines) => {
+    tip.replaceChildren();
+    const t = document.createElement("div"); t.className = "t"; t.textContent = title; tip.appendChild(t);
+    lines.forEach((l) => { const d = document.createElement("div"); d.textContent = l; tip.appendChild(d); });
+    tip.hidden = false;
+    const box = root.getBoundingClientRect();
+    let x = ev.clientX - box.left + 12, y = ev.clientY - box.top + 12;
+    x = Math.min(x, box.width - tip.offsetWidth - 4);
+    tip.style.left = `${Math.max(0, x)}px`; tip.style.top = `${y}px`;
+  };
+  const hideTip = () => { tip.hidden = true; };
+
+  const fail = (el) => { el.replaceChildren(); const d = document.createElement("div"); d.className = "cs-fail"; d.textContent = "Failed to load"; el.appendChild(d); };
+  const settle = (el, s) => { if (s !== "loading") el.classList.remove("dash-skeleton"); };
+
+  function fillFields(src, fmt) {
+    const st = dash.data(src);
+    root.querySelectorAll(`[data-source="${src}"][data-field][data-row]`).forEach((el) => {
+      settle(el, st.status);
+      if (st.status !== "ok" || !st.data.length) { el.textContent = "—"; return; }
+      const v = st.data[Number(el.dataset.row)][el.dataset.field];
+      el.textContent = (fmt[el.dataset.field] || count)(v);
+    });
+  }
+
+  function barRow(parent, name, right, frac, color, extra, tipTitle, tipLines) {
+    const row = document.createElement("div"); row.className = "cs-bar-row";
+    const top = document.createElement("div"); top.className = "cs-bar-top";
+    const n = document.createElement("span"); n.className = "name"; n.textContent = name;
+    const r = document.createElement("span"); r.className = "num"; r.textContent = right;
+    top.append(n, r);
+    const track = document.createElement("div"); track.className = "cs-track";
+    if (extra) { const b = document.createElement("div"); b.className = "cs-fill billed grow"; b.style.width = `${extra * 100}%`; track.appendChild(b); }
+    const f = document.createElement("div"); f.className = "cs-fill grow"; f.style.width = `${frac * 100}%`; f.style.background = color; track.appendChild(f);
+    row.append(top, track);
+    row.addEventListener("pointermove", (ev) => showTip(ev, tipTitle, tipLines));
+    row.addEventListener("pointerleave", hideTip);
+    parent.appendChild(row);
+  }
+
+  // claims table state
+  const COLS = [
+    ["claim", "Claim", (v) => v, "mono"], ["line", "Line", (v) => v], ["wording", "Policy wording", (v) => v, "hide-narrow"],
+    ["billed", "Billed", (v) => rupees.format(v), "r"], ["payable", "Payable", (v) => rupees.format(v), "r"],
+    ["coverage", "Coverage", (v) => v, "pill"], ["reason", "Reason or deductions", (v) => v, "reason hide-narrow"],
+    ["clause", "Clause", (v) => (v ? `§${v}` : ""), "hide-narrow"], ["risk", "Risk", (v) => v, "pill"],
+    ["recommendation", "Recommendation", (v) => v, "pill"], ["queue", "Review queue", (v) => v, "hide-narrow"],
+    ["status", "Status", (v) => v, "hide-narrow"],
+  ];
+  const NUMERIC = new Set(["billed", "payable"]);
+  let sortKey = "claim", sortDir = 1, query = "", lineSel = "All";
+  const tone = (k, v) => {
+    if (k === "coverage") return v === "Covered" ? "ok" : "bad";
+    if (k === "risk") return v === "High" ? "bad" : v === "Medium" ? "warn" : "muted";
+    if (k === "recommendation") return v === "Reject" ? "bad" : v === "Investigate" ? "warn" : v === "Request info" ? "warn" : "ok";
+    return "";
+  };
+  const table = document.getElementById("claims-table");
+  const headRow = table.querySelector("thead tr");
+  COLS.forEach(([k, label, , cls]) => {
+    const th = document.createElement("th"); th.dataset.field = k;
+    if (cls && cls.includes("hide-narrow")) th.classList.add("hide-narrow");
+    if (NUMERIC.has(k)) th.classList.add("r");
+    const b = document.createElement("button"); b.className = "cs-sort"; b.type = "button"; b.textContent = label;
+    b.addEventListener("click", () => { sortDir = sortKey === k ? -sortDir : (NUMERIC.has(k) ? -1 : 1); sortKey = k; drawTable(); });
+    th.appendChild(b); headRow.appendChild(th);
+  });
+  document.getElementById("claim-search").addEventListener("input", (e) => { query = e.target.value.toLowerCase(); drawTable(); });
+  const filter = document.getElementById("line-filter");
+  ["All", "Health", "Motor", "Property", "Travel"].forEach((l) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "cs-chip"; b.textContent = l;
+    b.setAttribute("aria-pressed", String(l === lineSel));
+    b.addEventListener("click", () => { lineSel = l; filter.querySelectorAll(".cs-chip").forEach((c) => c.setAttribute("aria-pressed", String(c.textContent === l))); drawTable(); });
+    filter.appendChild(b);
+  });
+
+  function drawTable() {
+    const st = dash.data("claims");
+    const body = table.querySelector("tbody");
+    body.replaceChildren();
+    headRow.querySelectorAll("th").forEach((th) => th.setAttribute("aria-sort", th.dataset.field === sortKey ? (sortDir > 0 ? "ascending" : "descending") : "none"));
+    if (st.status === "error") { const tr = body.insertRow(); const td = tr.insertCell(); td.colSpan = COLS.length; fail(td); return; }
+    if (st.status !== "ok") return;
+    const rows = st.data
+      .filter((r) => lineSel === "All" || r.line === lineSel)
+      .filter((r) => !query || COLS.some(([k]) => String(r[k] ?? "").toLowerCase().includes(query)))
+      .sort((a, b) => {
+        const x = NUMERIC.has(sortKey) ? Number(a[sortKey]) : String(a[sortKey] ?? "");
+        const y = NUMERIC.has(sortKey) ? Number(b[sortKey]) : String(b[sortKey] ?? "");
+        return (x < y ? -1 : x > y ? 1 : 0) * sortDir;
+      });
+    rows.forEach((r) => {
+      const tr = body.insertRow();
+      COLS.forEach(([k, , fmt, cls]) => {
+        const td = tr.insertCell();
+        if (cls) cls.split(" ").filter((c) => c !== "pill").forEach((c) => td.classList.add(c));
+        if (NUMERIC.has(k)) td.classList.add("r");
+        if (cls && cls.includes("pill")) {
+          const s = document.createElement("span"); s.className = `pill ${tone(k, r[k])}`; s.textContent = fmt(r[k]); td.appendChild(s);
+        } else td.textContent = fmt(r[k]);
+      });
+    });
+    if (!rows.length) { const tr = body.insertRow(); const td = tr.insertCell(); td.colSpan = COLS.length; td.className = "muted"; td.textContent = "No claims match this search."; }
+  }
+
+  dash.onData(() => {
+    fillFields("totals", { billed: lakh, payable: lakh, payout: pct });
+    fillFields("portfolio", { precision: pct, recall: pct });
+    fillFields("eval_total", {});
+
+    // by line
+    const lineEl = document.getElementById("line-bars");
+    const ls = dash.data("by_line");
+    lineEl.replaceChildren();
+    if (ls.status === "error") fail(lineEl);
+    else if (ls.status === "ok") {
+      const max = d3.max(ls.data, (d) => d.billed) || 1;
+      ls.data.forEach((d) => barRow(lineEl, `${d.line} · ${count(d.claims)} claims`,
+        `${lakh(d.payable)} of ${lakh(d.billed)} · ${pct(d.payout)}`, d.payable / max, accent, d.billed / max,
+        d.line, [`Claims: ${count(d.claims)}`, `Billed: ${rupees.format(d.billed)}`, `Payable: ${rupees.format(d.payable)}`, `Payout: ${pct(d.payout)}`]));
+    }
+
+    // recommendations
+    const recEl = document.getElementById("rec-bars");
+    const rs = dash.data("recs");
+    recEl.replaceChildren();
+    if (rs.status === "error") fail(recEl);
+    else if (rs.status === "ok") {
+      const total = d3.sum(rs.data, (d) => d.claims) || 1;
+      const colorOf = { "Partial approval": accent, Reject: "var(--cds-chart-status-critical)", "Request info": "var(--cds-chart-muted)", Investigate: dash.colors[2] };
+      rs.data.forEach((d) => barRow(recEl, d.recommendation, `${count(d.claims)} · ${pct(d.claims / total)}`, d.claims / total,
+        colorOf[d.recommendation] || accent, null, d.recommendation, [`Claims: ${count(d.claims)}`, `Share: ${pct(d.claims / total)}`]));
+    }
+
+    // deductions
+    const dedEl = document.getElementById("ded-bars");
+    const ds = dash.data("deductions");
+    dedEl.replaceChildren();
+    if (ds.status === "error") fail(dedEl);
+    else if (ds.status === "ok") {
+      const rows = ds.data.map((d) => ({ ...d, amount: Number(d.amount) })).sort((a, b) => b.amount - a.amount);
+      const max = d3.max(rows, (d) => d.amount) || 1;
+      const all = d3.sum(rows, (d) => d.amount) || 1;
+      rows.forEach((d) => barRow(dedEl, d.label, rupees.format(d.amount), d.amount / max,
+        d.rule === "R99_NOT_ADMISSIBLE" ? "var(--cds-chart-status-critical)" : accent, null,
+        d.label, [`Rule: ${d.rule}`, `Reduced: ${rupees.format(d.amount)}`, `Share of all reductions: ${pct(d.amount / all)}`]));
+    }
+
+    // evaluation table
+    const et = document.querySelector("#eval-table tbody");
+    const es = dash.data("evaluation");
+    et.replaceChildren();
+    if (es.status === "error") { const td = et.insertRow().insertCell(); td.colSpan = 3; fail(td); }
+    else if (es.status === "ok") es.data.forEach((d) => {
+      const tr = et.insertRow();
+      tr.insertCell().textContent = d.dimension;
+      const p = tr.insertCell(); p.className = "r"; p.textContent = count(d.passed);
+      const t = tr.insertCell(); t.className = "r"; t.textContent = count(d.total);
+    });
+
+    drawTable();
+  });
+})();
+</script>

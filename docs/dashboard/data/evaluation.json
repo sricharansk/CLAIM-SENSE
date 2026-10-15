@@ -1,0 +1,37 @@
+[
+ {
+  "dimension": "Retrieval correctness",
+  "passed": 107,
+  "total": 107
+ },
+ {
+  "dimension": "Citation correctness",
+  "passed": 68,
+  "total": 68
+ },
+ {
+  "dimension": "Groundedness",
+  "passed": 129,
+  "total": 129
+ },
+ {
+  "dimension": "Coverage state",
+  "passed": 111,
+  "total": 111
+ },
+ {
+  "dimension": "Adjudication amount",
+  "passed": 156,
+  "total": 156
+ },
+ {
+  "dimension": "Risk classification",
+  "passed": 61,
+  "total": 61
+ },
+ {
+  "dimension": "Workflow outcome",
+  "passed": 171,
+  "total": 171
+ }
+]
