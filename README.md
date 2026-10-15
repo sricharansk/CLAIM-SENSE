@@ -197,7 +197,7 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 109 tests
+cd backend && ruff check app tests && python -m pytest -q    # 127 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
 python3 scripts/claims_report.py                             # every claim packet -> reports/claims_results.md
 python3 scripts/provenance.py --check                        # source registry, checksums, RAG manifest
@@ -245,6 +245,10 @@ reports/         golden evaluation, results on every claim packet, RAG ingestion
 references/      supporting planning documents
 scripts/         smoke_test.py, evaluate.py, claims_report.py, provenance.py
 ```
+
+## Project context
+
+[CLAUDE.md](CLAUDE.md) holds the full project history and handover: status, every pull request, how to run, deploy and verify, how to refresh the results dashboard ([docs/dashboard/](docs/dashboard)) and rebuild the presentation, and the open items.
 
 ## Project presentation
 

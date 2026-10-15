@@ -2,6 +2,8 @@
 
 ## Claim Sense 1.4.2 — 2026-10-15
 
+- **Project handover in `CLAUDE.md`**: status, every pull request, how to run, deploy, verify and refresh the dashboard, and the open items, so work can continue on any machine.
+- **Dashboard source and data** in `docs/dashboard/`; **presentation build script and inputs** in `docs/presentation/build/`.
 - **Presentation updated** with the final status: project complete, live site re-verified on 15 Oct 2026, the live snapshot (57 seeded claims, ₹86.96 L billed, ₹53.41 L payable) beside the repository figures, the live-claims snapshot in the verify workflow, and the free hosting tier's restart limitation.
 
 ## Claim Sense 1.4.1 — 2026-10-13
