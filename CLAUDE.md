@@ -271,3 +271,10 @@ To refresh it:
 | Persistent live data | Paid Render instance with PostgreSQL (`DATABASE_URL`) |
 
 Roadmap ideas (not started): single sign-on, OCR for scanned documents, an embedding retriever alongside BM25, an ML fraud model, more property perils and travel benefits.
+
+## The second project: Site Guard AI
+
+Site Guard AI: Multi-Agent Construction Safety & Quality Incident Resolution System is the second project (same
+owner, same programme). Its code is in https://github.com/sricharansk/SITEGUARD-AI and its full context (status,
+results, timeline, how to run it, presentation, open items) is in that repository's `CLAUDE.md`. A copy is kept in
+`site-guard-ai/CLAUDE.md` in this repository. To work on it, clone SITEGUARD-AI and start `claude` there.
