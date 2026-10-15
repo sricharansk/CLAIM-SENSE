@@ -248,7 +248,7 @@ scripts/         smoke_test.py, evaluate.py, claims_report.py, provenance.py
 
 ## Project context
 
-[CLAUDE.md](CLAUDE.md) holds the full project history and handover: status, every pull request, how to run, deploy and verify, how to refresh the results dashboard ([docs/dashboard/](docs/dashboard)) and rebuild the presentation, and the open items.
+[CLAUDE.md](CLAUDE.md) holds the full project history and handover, starting with a step-by-step guide to continuing on your own laptop (install the tools, clone, pull updates, push changes, deploy). It also covers status, every pull request, how to run, deploy and verify, how to refresh the results dashboard ([docs/dashboard/](docs/dashboard)) and rebuild the presentation, and the open items.
 
 ## Project presentation
 
