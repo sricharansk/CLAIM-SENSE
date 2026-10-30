@@ -33,7 +33,7 @@
         "data/policies/insured_policies.json"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "69dad3f3b3456bc84b73717ebe36a134a7788650b08d9f8d11d704b5226d8f96"
+      "checksum_sha256": "d50f597897db0f0e6042e15bfb50e20a00a428ce78a4737d0b0c87911d10acd2"
     },
     {
       "id": "synthetic-policy-pdf-demo",
@@ -79,7 +79,7 @@
         "data/claims"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "ff80da0252b1a8fdba6bfa0b3bb809f7c70b375803427b4a2595f475ac60fa3a"
+      "checksum_sha256": "be0b74b9fdc2fd958d93d4f9f26e2a859a1d6946e92037275ae8396a0894df17"
     },
     {
       "id": "synthetic-claims-portfolio",
@@ -102,7 +102,7 @@
         "data/synthetic/claims_portfolio.csv"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "0f161c38f8707b10cd4fc09430990317447cb2a4603578e304b627f39f672acf"
+      "checksum_sha256": "429394933359749370802139a76ae4d56cdccec07727799b7d44c87a88ab03b6"
     },
     {
       "id": "golden-evaluation-set",
@@ -124,7 +124,7 @@
         "data/evaluation"
       ],
       "transformation_script": "data/synthetic/generate.py (packets); golden_cases.json and rag_questions.json written by hand",
-      "checksum_sha256": "57a9606ad4d1c765ee70cd7d8b8c387d853db6addc29cc684f34044644367867"
+      "checksum_sha256": "e8a4e25caf2b88dfed5595d018f957d6561e7932af0a5a70e728c1898807a7f8"
     },
     {
       "id": "irdai-mc-health-2024",

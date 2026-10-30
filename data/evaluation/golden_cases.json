@@ -660,6 +660,178 @@
         "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
       },
       "working": "1,85,500 billed for emergency treatment of an accidental injury including the ambulance (2.1); toiletries and laundry 1,500 not payable (2.4) -> 1,84,000; deductible 5,000 -> 1,79,000."
+    },
+    {
+      "id": "C58", "categories": ["partial_coverage", "sub_limit"],
+      "title": "Ankle fracture: weekly disablement benefit above the INR 10,000 weekly cap",
+      "claim_number": "CLM-A-5001",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "105000.00",
+        "waterfall": {"R20_BENEFIT_SCHEDULE": "-12000.00", "R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Temporary total disablement is 1% of 12,00,000 = 12,000 a week, capped at 10,000 (2.4): 6 weeks x 10,000 = 60,000 against 72,000 claimed (-12,000). Medical expenses 45,000 are within 10% of the sum insured = 1,20,000 (2.5). No deductible (1.2). 1,17,000 -> 1,05,000."
+    },
+    {
+      "id": "C59", "categories": ["partial_coverage"],
+      "title": "Loss of an index finger is priced by the disablement table, not the amount claimed",
+      "claim_number": "CLM-A-5002",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "70000.00",
+        "waterfall": {"R20_BENEFIT_SCHEDULE": "-25000.00", "R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Index finger is 10% of 5,00,000 = 50,000 (2.3) against 75,000 claimed (-25,000). Disablement 1% = 5,000 a week (below the 10,000 cap) x 4 weeks = 20,000, as claimed (2.4). 95,000 -> 70,000."
+    },
+    {
+      "id": "C60", "categories": ["clearly_covered", "max_coverage"],
+      "title": "Accidental death on the highway: the full capital sum insured to the nominee",
+      "claim_number": "CLM-A-5003",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "1500000.00",
+        "waterfall": {"R20_BENEFIT_SCHEDULE": null, "R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "MEDIUM", "recommendation": "APPROVE", "queue": "ADJUSTER_REVIEW", "risk_signals": ["HIGH_AMOUNT_RATIO"]
+      },
+      "working": "Death from a road accident within 12 months is 100% of 15,00,000 (2.1), exactly the amount claimed, within the available sum insured (1.2). 15,00,000 / 15,00,000 = 100% of the sum insured (+30, MEDIUM); 168 days after commencement, so no early-claim signal."
+    },
+    {
+      "id": "C61", "categories": ["excluded"],
+      "title": "Dengue is an illness, not an accident",
+      "claim_number": "CLM-A-5004",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "NOT_ACCIDENTAL", "clause_ref": "1.3"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "The policy covers injury caused by an accident only; illness and disease are not covered (1.3). The documents describe dengue fever and no accident, so nothing is payable."
+    },
+    {
+      "id": "C62", "categories": ["excluded"],
+      "title": "Road accident while drunk",
+      "claim_number": "CLM-A-5005",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_ALCOHOL", "clause_ref": "3.2"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "The accident is covered in principle (1.3), but the police report and the doctor record that the insured was under the influence of alcohol; exclusion 3.2 applies."
+    },
+    {
+      "id": "C63", "categories": ["high_risk"],
+      "title": "Paraplegia claimed for the full sum insured 45 days after cover began",
+      "claim_number": "CLM-A-5006",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "800000.00",
+        "waterfall": {"R20_BENEFIT_SCHEDULE": null},
+        "risk_level": "HIGH", "recommendation": "INVESTIGATE", "queue": "SIU_INVESTIGATION", "risk_signals": ["HIGH_AMOUNT_RATIO", "EARLY_CLAIM"]
+      },
+      "working": "Permanent total disablement is 100% of 8,00,000 (2.2), as claimed. Risk: 8,00,000 / 8,00,000 = 100% of the sum insured (+30) and 45 days after commencement, under 90 (+20) = 50, HIGH, so the claim goes to investigation."
+    },
+    {
+      "id": "C64", "categories": ["insufficient_evidence"],
+      "title": "Wrist fracture without the treating doctor's certificate",
+      "claim_number": "CLM-A-5007",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "30000.00",
+        "risk_level": "LOW", "recommendation": "REQUEST_INFO", "queue": "PENDING_INFORMATION", "missing_documents": ["medical_certificate"]
+      },
+      "working": "Clause 4.2 requires a certificate from the treating doctor; only the claim form and benefit statement were sent. The amount is assessable: 1% of 6,00,000 = 6,000 a week x 5 weeks = 30,000 (2.4)."
+    },
+    {
+      "id": "C65", "categories": ["clearly_covered"],
+      "title": "Death from a heart attack six years into a term policy",
+      "claim_number": "CLM-L-6001",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "2000000.00",
+        "waterfall": {"R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "LOW", "recommendation": "APPROVE", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Policy in force since 2019-08-01; death on 2025-07-21. The sum assured of 20,00,000 is paid in full (2.1), no deductible. Outside the three-year section 45 period (3.2), so LOW risk."
+    },
+    {
+      "id": "C66", "categories": ["high_risk"],
+      "title": "Death 17 months into the policy: inside the section 45 period",
+      "claim_number": "CLM-L-6002",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "2500000.00",
+        "risk_level": "HIGH", "recommendation": "INVESTIGATE", "queue": "SIU_INVESTIGATION", "risk_signals": ["CONTESTABLE_PERIOD"]
+      },
+      "working": "Policy began 2024-03-15; death on 2025-08-28 is 531 days later, inside the three years in which the policy can be questioned for non-disclosure (3.2). The sum assured of 25,00,000 is payable if the investigation clears it (2.1)."
+    },
+    {
+      "id": "C67", "categories": ["excluded"],
+      "title": "Suicide eight months after commencement",
+      "claim_number": "CLM-L-6003",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "EXCL_SUICIDE", "clause_ref": "3.1"},
+        "payable_amount": "0.00",
+        "risk_level": "HIGH", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Commencement 2024-11-01; death on 2025-07-02 is 243 days (about 8 months) later. Suicide within 12 months is excluded (3.1). The death is also inside the section 45 period, so the risk is HIGH, but coverage decides the recommendation."
+    },
+    {
+      "id": "C68", "categories": ["clearly_covered"],
+      "title": "Suicide 56 months after commencement: the 12-month exclusion no longer applies",
+      "claim_number": "CLM-L-6004",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "1500000.00",
+        "risk_level": "LOW", "recommendation": "APPROVE", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Commencement 2021-02-01; death on 2025-09-10 is 1,682 days (56 months) later, after the 12-month suicide exclusion (3.1) and after the three-year section 45 period. The sum assured of 15,00,000 is payable (2.1)."
+    },
+    {
+      "id": "C69", "categories": ["insufficient_evidence"],
+      "title": "Death claim without the death certificate",
+      "claim_number": "CLM-L-6005",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "1200000.00",
+        "risk_level": "LOW", "recommendation": "REQUEST_INFO", "queue": "PENDING_INFORMATION", "missing_documents": ["death_certificate"]
+      },
+      "working": "Clause 4.2 requires the death certificate issued by the local authority; it is missing. Otherwise the sum assured of 12,00,000 is payable (2.1)."
+    },
+    {
+      "id": "C70", "categories": ["excluded"],
+      "title": "Death after the ten-year term ended",
+      "claim_number": "CLM-L-6006",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "NOT_COVERED", "failing_check": {"code": "POLICY_NOT_IN_FORCE", "clause_ref": "1.3"},
+        "payable_amount": "0.00",
+        "risk_level": "LOW", "recommendation": "RECOMMEND_REJECT", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "The term ran from 2015-06-01 to 2025-05-31; death on 2025-07-20 is after cover ended (1.3), so no benefit is payable."
+    },
+    {
+      "id": "C71", "categories": ["partial_coverage", "sub_limit"],
+      "title": "Thumb lost in a kitchen accident: three benefits, two above their limits",
+      "packet": "EVAL-A-01", "seeded_as": "CLM-A-5008", "policy_number": "CS-PAC-25-005170", "claim_type": "personal_accident", "claimant": "Lata Krishnan",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "152000.00",
+        "waterfall": {"R20_BENEFIT_SCHEDULE": "-26000.00", "R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "LOW", "recommendation": "PARTIAL_APPROVAL", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Thumb is 25% of 4,00,000 = 1,00,000, as claimed (2.3). Disablement 1% = 4,000 a week x 3 = 12,000 against 18,000 (-6,000, 2.4). Medical expenses limited to 10% = 40,000 against 60,000 (-20,000, 2.5). 1,78,000 -> 1,52,000; 1,78,000 / 4,00,000 = 44.5%, below the 50% signal."
+    },
+    {
+      "id": "C72", "categories": ["clearly_covered"],
+      "title": "Death in a bus accident after the section 45 period",
+      "packet": "EVAL-L-01", "seeded_as": "CLM-L-6007", "policy_number": "CS-LIF-22-006170", "claim_type": "life", "claimant": "Kavya Vardhan",
+      "expect": {
+        "policy_version": "2025.1", "coverage_status": "COVERED", "failing_check": null,
+        "payable_amount": "1000000.00",
+        "waterfall": {"R50_MAX_LIABILITY": "0.00"},
+        "risk_level": "LOW", "recommendation": "APPROVE", "queue": "ADJUSTER_REVIEW"
+      },
+      "working": "Policy began 2022-01-10; death on 2025-10-05 is 1,364 days later, after the three-year period (3.2). The sum assured of 10,00,000 is paid in full to the nominee (2.1)."
     }
   ]
 }

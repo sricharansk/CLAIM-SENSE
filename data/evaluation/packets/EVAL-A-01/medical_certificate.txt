@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Lata Krishnan
+Nature of Injury: Traumatic amputation of the left thumb
+Doctor: Dr. S. Synthetic (fictional)
+
+Clinical Notes:
+Thumb amputated at the base; wound healed.

@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Suresh Babu
+Nature of Injury: Spinal cord injury with paraplegia after a fall
+Doctor: Dr. S. Synthetic (fictional)
+
+Clinical Notes:
+Complete loss of use of both legs; wheelchair bound.

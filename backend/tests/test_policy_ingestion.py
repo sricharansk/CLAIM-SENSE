@@ -44,7 +44,7 @@ def test_seeded_wordings_have_ready_ingestion_records(client):
     hist = client.get("/api/v1/policy-ingestions").json()
     seeded = {h["filename"] for h in hist if h["actor"] == "seed" and h["status"] == "READY"}
     assert seeded == {"HLT-SHIELD_2024.1.md", "HLT-SHIELD_2025.1.md", "MTR-SECURE_2025.1.md", "HOME-GUARD_2025.1.md",
-                      "TRV-GLOBE_2025.1.md"}
+                      "TRV-GLOBE_2025.1.md", "PA-SECURE_2025.1.md", "LIFE-TERM_2025.1.md"}
 
 
 def test_ingestion_failures_are_recorded_at_the_failing_stage(client):

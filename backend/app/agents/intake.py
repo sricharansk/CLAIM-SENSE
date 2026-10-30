@@ -12,11 +12,12 @@ SINGLE_VALUE = ["policy_number", "claimant_name", "incident_date", "admission_da
                 "procedure", "claimed_amount", "hospital", "vehicle_registration", "vehicle_first_registration",
                 "engine_cc", "fir_number", "narrative", "clinical_notes", "police_findings", "document_total",
                 "patient_name", "licence_holder", "licence_valid_till", "value_at_risk", "survey_findings", "report_remarks",
-                "destination", "departure_date", "return_date"]
+                "destination", "departure_date", "return_date", "injury", "cause_of_death", "date_of_death",
+                "deceased_name", "nominee_name"]
 
 
 # documents whose itemised lines are the source of truth for the amount
-ITEMISED = ("hospital_bill", "repair_estimate", "loss_assessment", "expense_statement")
+ITEMISED = ("hospital_bill", "repair_estimate", "loss_assessment", "expense_statement", "claim_statement")
 
 # Reviewers may correct these before (re-)running the analysis; bill totals and line items stay as extracted.
 CORRECTABLE = [n for n in SINGLE_VALUE if n != "document_total"]

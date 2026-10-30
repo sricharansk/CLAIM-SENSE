@@ -1,0 +1,52 @@
+{
+  "product_code": "LIFE-TERM",
+  "product_name": "ClaimSense Life Term Protect",
+  "line_of_business": "life",
+  "adjudication_model": "benefit_schedule",
+  "insurer": "Synthetic Assurance Co. Ltd. (fictional)",
+  "version": "2025.1",
+  "effective_from": "2025-04-01",
+  "effective_to": "2026-03-31",
+  "benefits": {
+    "death_benefit": {
+      "basis": "percent_of_si",
+      "percent": 100,
+      "clause": "2.1"
+    }
+  },
+  "deductible": {
+    "amount": 0,
+    "clause": "2.1"
+  },
+  "max_liability_clause": "1.2",
+  "amount_ratio_signal": false,
+  "contestable_period": {
+    "days": 1095,
+    "clause": "3.2"
+  },
+  "exclusions": [
+    {
+      "code": "EXCL_SUICIDE",
+      "clause": "3.1",
+      "keywords": [
+        "suicide",
+        "self-inflicted"
+      ],
+      "within_months": 12
+    }
+  ],
+  "required_documents": {
+    "documents": [
+      "claim_form",
+      "claim_statement",
+      "death_certificate",
+      "medical_certificate"
+    ],
+    "clause": "4.2"
+  },
+  "settlement_days": {
+    "value": 30,
+    "clause": "4.3"
+  },
+  "coverage_clause": "1.3"
+}

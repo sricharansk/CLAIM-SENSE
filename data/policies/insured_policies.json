@@ -398,5 +398,125 @@
     "start_date": "2025-08-01",
     "end_date": "2025-08-15",
     "sum_insured": 4000000
+  },
+  {
+    "policy_number": "CS-PAC-25-005101",
+    "product_code": "PA-SECURE",
+    "holder_name": "Arjun Nair",
+    "start_date": "2025-04-15",
+    "end_date": "2026-04-14",
+    "sum_insured": 1200000
+  },
+  {
+    "policy_number": "CS-PAC-25-005118",
+    "product_code": "PA-SECURE",
+    "holder_name": "Manoj Tiwari",
+    "start_date": "2025-05-01",
+    "end_date": "2026-04-30",
+    "sum_insured": 500000
+  },
+  {
+    "policy_number": "CS-PAC-25-005125",
+    "product_code": "PA-SECURE",
+    "holder_name": "Imran Sheikh",
+    "start_date": "2025-04-20",
+    "end_date": "2026-04-19",
+    "sum_insured": 1500000
+  },
+  {
+    "policy_number": "CS-PAC-25-005132",
+    "product_code": "PA-SECURE",
+    "holder_name": "Pooja Iyer",
+    "start_date": "2025-06-01",
+    "end_date": "2026-05-31",
+    "sum_insured": 300000
+  },
+  {
+    "policy_number": "CS-PAC-25-005149",
+    "product_code": "PA-SECURE",
+    "holder_name": "Rohan Kapoor",
+    "start_date": "2025-04-10",
+    "end_date": "2026-04-09",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-PAC-25-005156",
+    "product_code": "PA-SECURE",
+    "holder_name": "Suresh Babu",
+    "start_date": "2025-07-01",
+    "end_date": "2026-06-30",
+    "sum_insured": 800000
+  },
+  {
+    "policy_number": "CS-PAC-25-005163",
+    "product_code": "PA-SECURE",
+    "holder_name": "Divya Menon",
+    "start_date": "2025-05-15",
+    "end_date": "2026-05-14",
+    "sum_insured": 600000
+  },
+  {
+    "policy_number": "CS-PAC-25-005170",
+    "product_code": "PA-SECURE",
+    "holder_name": "Lata Krishnan",
+    "start_date": "2025-04-05",
+    "end_date": "2026-04-04",
+    "sum_insured": 400000
+  },
+  {
+    "policy_number": "CS-LIF-19-006101",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Venkatesh Iyer",
+    "start_date": "2019-08-01",
+    "end_date": "2049-07-31",
+    "sum_insured": 2000000
+  },
+  {
+    "policy_number": "CS-LIF-24-006118",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Amit Banerjee",
+    "start_date": "2024-03-15",
+    "end_date": "2054-03-14",
+    "sum_insured": 2500000
+  },
+  {
+    "policy_number": "CS-LIF-24-006125",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Karan Malhotra",
+    "start_date": "2024-11-01",
+    "end_date": "2054-10-31",
+    "sum_insured": 1000000
+  },
+  {
+    "policy_number": "CS-LIF-21-006132",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Rajesh Agarwal",
+    "start_date": "2021-02-01",
+    "end_date": "2051-01-31",
+    "sum_insured": 1500000
+  },
+  {
+    "policy_number": "CS-LIF-20-006149",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Thomas Verghese",
+    "start_date": "2020-06-01",
+    "end_date": "2050-05-31",
+    "sum_insured": 1200000
+  },
+  {
+    "policy_number": "CS-LIF-15-006156",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Prabhakar Rao",
+    "start_date": "2015-06-01",
+    "end_date": "2025-05-31",
+    "sum_insured": 1500000
+  },
+  {
+    "policy_number": "CS-LIF-22-006170",
+    "product_code": "LIFE-TERM",
+    "holder_name": "Harsha Vardhan",
+    "start_date": "2022-01-10",
+    "end_date": "2052-01-09",
+    "sum_insured": 1000000
   }
 ]

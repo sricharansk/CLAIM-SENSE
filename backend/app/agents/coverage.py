@@ -11,7 +11,8 @@ from ..rag import service as rag
 from .base import ClaimContext, ToolLog
 
 ACCIDENT_WORDS = ("accident", "accidental", "fall", "injury", "collision", "fracture")
-TEXT_FACTS = ("diagnosis", "procedure", "narrative", "clinical_notes", "police_findings", "survey_findings", "report_remarks")
+TEXT_FACTS = ("diagnosis", "procedure", "narrative", "clinical_notes", "police_findings", "survey_findings", "report_remarks",
+              "injury", "cause_of_death")
 
 
 def _date(value) -> date | None:
@@ -58,6 +59,14 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
             add("WITHIN_TRIP", "PASS", f"Incident {incident} is within the insured trip {dep} to {ret}.", trip)
 
     days = (incident - ins.start_date).days
+    acc = terms.get("accident_only")
+    if status == "COVERED" and acc:
+        if accident:
+            add("ACCIDENTAL_CAUSE", "PASS", "The documents describe an accident.", acc["clause"])
+        else:
+            status = "NOT_COVERED"
+            add("NOT_ACCIDENTAL", "FAIL", "The documents do not describe an accident; the policy covers accidental injury only.",
+                acc["clause"])
     wp = terms.get("waiting_periods", {})
     if status == "COVERED" and "initial_days" in wp:
         w = wp["initial_days"]
@@ -90,12 +99,16 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     if status == "COVERED":
         for ex in terms.get("exclusions", []):
             kw = next((k for k in ex["keywords"] if k in text), None)
+            if kw and ex.get("within_months") and days // 30 >= ex["within_months"]:
+                add(ex["code"], "PASS", f"Documents mention '{kw}', but this exclusion applies only in the first "
+                    f"{ex['within_months']} months; cover has run about {days // 30} months.", ex["clause"])
+                continue
             if kw:
                 status = "NOT_COVERED"
                 add(ex["code"], "FAIL", f"Claim documents mention '{kw}', which falls under an exclusion.", ex["clause"])
                 break
         else:
-            add("EXCLUSIONS", "PASS", "No exclusion keywords found in diagnosis, procedure or narrative.")
+            add("EXCLUSIONS", "PASS", "No exclusion applies to the diagnosis, procedure or narrative.")
 
     req = terms.get("required_documents", {})
     needed = list(req.get("documents", []))

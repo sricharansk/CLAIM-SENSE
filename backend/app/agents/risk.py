@@ -10,7 +10,7 @@ from .base import ClaimContext, ToolLog
 
 WEIGHTS = {"HIGH_AMOUNT_RATIO": 30, "ELEVATED_AMOUNT_RATIO": 15, "EARLY_CLAIM": 20, "FREQUENT_CLAIMS": 20,
            "POSSIBLE_DUPLICATE": 50, "AMOUNT_MISMATCH": 25, "NAME_MISMATCH": 20, "MISSING_DOCUMENTS": 10,
-           "EMBEDDED_INSTRUCTIONS": 50}
+           "EMBEDDED_INSTRUCTIONS": 50, "CONTESTABLE_PERIOD": 50}
 
 
 def score_features(f: dict) -> tuple[int, list[dict]]:
@@ -27,6 +27,9 @@ def score_features(f: dict) -> tuple[int, list[dict]]:
         sig("ELEVATED_AMOUNT_RATIO", f"Claimed amount is {ratio:.0%} of the sum insured.")
     if f.get("days_since_start") is not None and f["days_since_start"] < 90:
         sig("EARLY_CLAIM", f"Loss occurred {f['days_since_start']} days after policy start.")
+    if f.get("contestable_days") and f.get("days_in_force") is not None and f["days_in_force"] < f["contestable_days"]:
+        sig("CONTESTABLE_PERIOD", f"Death {f['days_in_force']} days after the policy began, inside the "
+            f"{f['contestable_days']}-day period in which the policy can be questioned for non-disclosure.")
     if f.get("prior_claims", 0) >= 2:
         sig("FREQUENT_CLAIMS", f"{f['prior_claims']} other claims on this policy in the last 12 months.")
     if f.get("duplicate_of"):
@@ -57,10 +60,17 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
     dup = next((c for c in others if c.incident_date == incident and c.claimed_amount
                 and abs(Decimal(c.claimed_amount) - claimed) <= claimed * Decimal("0.05")
                 and c.id < ctx.claim.id), None)
+    terms = ctx.version.terms
+    contest = terms.get("contestable_period")
     features = {
-        "amount_ratio": float(claimed / Decimal(ctx.insured.sum_insured)) if ctx.insured.sum_insured else 0,
-        # a single-trip policy starts at departure, so an early loss says nothing about the claim
-        "days_since_start": None if ctx.version.terms.get("trip_based") else ctx.coverage["days_since_commencement"],
+        # a death claim is always the full sum assured, so the ratio says nothing about a life claim
+        "amount_ratio": float(claimed / Decimal(ctx.insured.sum_insured))
+        if ctx.insured.sum_insured and terms.get("amount_ratio_signal", True) else 0,
+        # a single-trip policy starts at departure, so an early loss says nothing about the claim; life cover uses
+        # its contestable period instead
+        "days_since_start": None if terms.get("trip_based") or contest else ctx.coverage["days_since_commencement"],
+        "days_in_force": ctx.coverage["days_since_commencement"] if contest else None,
+        "contestable_days": contest["days"] if contest else None,
         "prior_claims": len(prior),
         "duplicate_of": dup.claim_number if dup else None,
         "amount_gap": float(abs(claimed - gross) / gross) if gross else 0,

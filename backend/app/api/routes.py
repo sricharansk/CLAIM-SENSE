@@ -104,14 +104,15 @@ def me(user: User = Depends(current_user)):
 # ------------------------------------------------------------------ claims
 class ClaimIn(BaseModel):
     policy_number: str = Field(min_length=3, max_length=40)
-    claim_type: str = Field(pattern="^(health|motor|property|travel)$")
+    claim_type: str = Field(pattern="^(health|motor|property|travel|personal_accident|life)$")
     claimant_name: str = Field(min_length=2, max_length=200)
     incident_date: date | None = None
     claimed_amount: Decimal | None = Field(default=None, ge=0)
     description: str = Field(default="", max_length=4000)
 
 
-CLAIM_PREFIX = {"health": "CLM-H", "motor": "CLM-M", "property": "CLM-P", "travel": "CLM-T"}
+CLAIM_PREFIX = {"health": "CLM-H", "motor": "CLM-M", "property": "CLM-P", "travel": "CLM-T", "personal_accident": "CLM-A",
+                "life": "CLM-L"}
 
 
 def _clock(db: Session, c: Claim) -> dict:

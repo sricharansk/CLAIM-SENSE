@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Arjun Nair
+Nature of Injury: Fracture of the right ankle after a fall on a staircase
+Doctor: Dr. S. Synthetic (fictional)
+
+Clinical Notes:
+Plate fixation; unable to work for six weeks.

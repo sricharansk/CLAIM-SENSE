@@ -81,8 +81,11 @@ def answer(db: Session, question: str, version_ids: set[int] | None = None, k: i
     overlap with the question is generic insurance vocabulary."""
     hits = retrieve(db, question, version_ids, k)
     focus = set(word_tokens(expand_query(question))) - GENERIC
+    # a question with several specific terms must share at least two of them with the clause, so one stray word
+    # ("capital" in "capital of France" against "capital sum insured") is not enough to answer
+    need = min(2, len(focus))
     strong = [h for h in hits if h["score"] >= settings.rag_min_score
-              and focus & set(word_tokens(f"{h['title']} {h['text']}"))]
+              and len(focus & set(word_tokens(f"{h['title']} {h['text']}"))) >= max(need, 1)]
     if not strong:
         return {"question": question, "grounded": False, "mode": "refusal",
                 "answer": "I could not find policy wording that answers this question, so I will not guess. "

@@ -247,6 +247,61 @@ def adjudicate_travel(items: list[LineItem], claimed: Decimal, terms: dict, sum_
     return r
 
 
+WEEKS = re.compile(r"(\d+)\s*weeks?", re.I)
+
+
+def benefit_entitlement(item: LineItem, benefit: dict, sum_insured: Decimal) -> tuple[Decimal, str]:
+    """Contractual amount for one scheduled benefit (personal accident and life), with how it was worked out."""
+    si = money(sum_insured)
+    basis = benefit["basis"]
+    if basis == "percent_of_si":
+        pct = Decimal(str(benefit["percent"]))
+        return money(si * pct / 100), f"{pct}% of sum insured {si}"
+    if basis == "schedule":
+        d = item.description.lower()
+        row = next((x for x in benefit["schedule"] if any(k in d for k in x["keywords"])), None)
+        if row is None:
+            return ZERO, "injury not in the schedule; needs a medical board assessment"
+        pct = Decimal(str(row["percent"]))
+        return money(si * pct / 100), f"{row['keywords'][0]}: {pct}% of sum insured {si}"
+    if basis == "weekly":
+        m = WEEKS.search(item.description)
+        if not m:
+            return ZERO, "number of weeks not stated"
+        weeks = min(int(m.group(1)), int(benefit["max_weeks"]))
+        weekly = min(money(si * Decimal(str(benefit["percent"])) / 100), money(benefit["weekly_cap"]))
+        return money(weekly * weeks), f"{weeks} weeks x {weekly} a week"
+    if basis == "reimbursement":
+        cap = money(si * Decimal(str(benefit["percent"])) / 100)
+        return min(item.amount, cap), f"actual {item.amount}, limit {benefit['percent']}% of sum insured = {cap}"
+    raise ValueError(f"unknown benefit basis {basis}")
+
+
+def adjudicate_benefits(items: list[LineItem], claimed: Decimal, terms: dict, sum_insured: Decimal,
+                        sum_insured_available: Decimal) -> Adjudication:
+    """Scheduled benefits (personal accident and life): each claimed benefit is replaced by the amount the schedule
+    fixes, which can be more or less than the amount written on the claim; then the available sum insured cap."""
+    r, w = _start(items, claimed)
+    benefits = terms["benefits"]
+    for it in items:
+        b = benefits.get(it.category)
+        if b is None:
+            w.apply("R10_NON_PAYABLE", f"Not a scheduled benefit: {it.description}", -it.amount,
+                    terms.get("coverage_clause"), f"category '{it.category}'")
+            r.non_covered += it.amount
+            continue
+        entitled, how = benefit_entitlement(it, b, sum_insured)
+        if entitled != it.amount:
+            w.apply("R20_BENEFIT_SCHEDULE", f"{it.description}: scheduled benefit {entitled}", entitled - it.amount,
+                    b["clause"], how)
+            if entitled < it.amount:
+                r.non_covered += it.amount - entitled
+    _cap(w, r, sum_insured_available, terms.get("max_liability_clause"), "Available sum insured")
+    r.non_covered = money(r.non_covered)
+    r.payable = max(w.total, ZERO)
+    return r
+
+
 def _cap(w: _Waterfall, r: Adjudication, cap: Decimal, clause: str | None, label: str) -> None:
     cap = money(cap)
     if w.total > cap:

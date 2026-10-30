@@ -1,0 +1,9 @@
+MEDICAL ATTENDANT'S CERTIFICATE
+SYNTHETIC DEMO DOCUMENT
+
+Deceased Name: Thomas Verghese
+Cause of Death: Intracerebral haemorrhage
+Doctor: Dr. S. Synthetic (fictional)
+
+Clinical Notes:
+Admitted unconscious; died on day three.

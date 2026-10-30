@@ -13,7 +13,7 @@ Outputs (deterministic, seed=2025):
   data/claims/scenarios.json                    claim headers + expected outcome
   data/evaluation/packets/<CASE>/*.txt          extra packets used only by scripts/evaluate.py (never seeded)
   data/policies/ingest_demo/HLT-SHIELD_2026.1.pdf  a new wording version as a multi-page PDF, for live ingestion
-  data/synthetic/claims_portfolio.csv           1,000 claims with injected fraud patterns
+  data/synthetic/claims_portfolio.csv           10,000 claims on six lines with injected fraud patterns
 
 Run: python data/synthetic/generate.py
 """
@@ -435,6 +435,165 @@ def travel_terms() -> dict:
     }
 
 
+# ----------------------------------------------------- personal accident ---
+def pa_wording() -> str:
+    return f"""# ClaimSense Personal Accident Secure — Personal Accident Policy Wording (Version 2025.1)
+
+<!-- page: 1 -->
+## 1. Preamble and Definitions
+
+### 1.1 Insurer and Policy
+This policy is issued by {INSURER}. Product code PA-SECURE, wording version 2025.1, effective for claims arising from 2025-04-01 to 2026-03-31. {NOTICE}
+
+### 1.2 Capital Sum Insured
+Benefits are a percentage of the capital sum insured stated in the schedule. The total paid for all claims in the policy period shall not exceed 100% of the capital sum insured. No deductible applies to any benefit.
+
+### 1.3 Accident
+Accident means a sudden, unforeseen and involuntary event caused by external, violent and visible means. The policy covers bodily injury caused solely and directly by an accident; illness and disease are not covered.
+
+<!-- page: 2 -->
+## 2. Benefits
+
+### 2.1 Accidental Death
+If injury results in death within 12 months of the accident, 100% of the capital sum insured is paid to the nominee.
+
+### 2.2 Permanent Total Disablement
+If injury results in permanent total disablement, such as paraplegia or the loss of both hands, both feet or the sight of both eyes, 100% of the capital sum insured is paid.
+
+### 2.3 Permanent Partial Disablement
+For permanent partial disablement the following percentages of the capital sum insured are paid: loss of one hand, one foot, one arm, one leg or the sight of one eye, 50%; loss of a thumb, 25%; total loss of hearing in one ear, 15%; loss of an index finger, 10%; loss of any other finger or of a big toe, 5%.
+
+### 2.4 Temporary Total Disablement
+If injury prevents the insured from working at all, 1% of the capital sum insured is paid for each week of disablement, up to INR 10,000 a week and for at most 100 weeks.
+
+### 2.5 Accident Medical Expenses
+Medical expenses for treating an injury covered by this policy are reimbursed up to 10% of the capital sum insured.
+
+<!-- page: 3 -->
+## 3. Exclusions
+
+### 3.1 Suicide and Self-injury
+Suicide, attempted suicide and intentionally self-inflicted injury are not covered.
+
+### 3.2 Alcohol and Drugs
+Injury sustained while under the influence of alcohol or drugs is not covered.
+
+### 3.3 Hazardous Sports
+Injury sustained in motor racing, speed contests or bungee jumping is not covered.
+
+### 3.4 War
+Injury caused by an act of war, invasion or civil war is not covered.
+
+<!-- page: 4 -->
+## 4. Claims Procedure
+
+### 4.1 Claim Intimation
+The insurer must be notified within 30 days of the accident. Road accidents must be reported to the police.
+
+### 4.2 Documents Required
+A claim must include the claim form, a benefit claim statement listing each benefit claimed, and a certificate from the treating doctor describing the injury and the disablement.
+
+### 4.3 Claim Settlement
+The insurer will settle the claim within 30 days of receiving all necessary documents.
+"""
+
+
+def pa_terms() -> dict:
+    return {
+        "product_code": "PA-SECURE", "product_name": "ClaimSense Personal Accident Secure",
+        "line_of_business": "personal_accident", "adjudication_model": "benefit_schedule",
+        "insurer": INSURER, "version": "2025.1", "effective_from": "2025-04-01", "effective_to": "2026-03-31",
+        "accident_only": {"clause": "1.3"},
+        "benefits": {
+            "accidental_death": {"basis": "percent_of_si", "percent": 100, "clause": "2.1"},
+            "ptd": {"basis": "percent_of_si", "percent": 100, "clause": "2.2"},
+            "ppd": {"basis": "schedule", "clause": "2.3", "schedule": [
+                {"keywords": ["one hand", "one foot", "one eye", "one arm", "one leg"], "percent": 50},
+                {"keywords": ["thumb"], "percent": 25},
+                {"keywords": ["hearing in one ear"], "percent": 15},
+                {"keywords": ["index finger"], "percent": 10},
+                {"keywords": ["big toe", "finger"], "percent": 5}]},
+            "ttd": {"basis": "weekly", "percent": 1, "weekly_cap": 10000, "max_weeks": 100, "clause": "2.4"},
+            "medical_expenses": {"basis": "reimbursement", "percent": 10, "clause": "2.5"},
+        },
+        "deductible": {"amount": 0, "clause": "1.2"}, "max_liability_clause": "1.2",
+        "exclusions": [
+            {"code": "EXCL_SELF_INJURY", "clause": "3.1", "keywords": ["suicide", "self-inflicted"]},
+            {"code": "EXCL_ALCOHOL", "clause": "3.2", "keywords": ["under the influence", "intoxicated", "drunk"]},
+            {"code": "EXCL_HAZARDOUS_SPORT", "clause": "3.3", "keywords": ["motor racing", "speed contest", "bungee"]},
+            {"code": "EXCL_WAR", "clause": "3.4", "keywords": ["act of war", "invasion", "civil war"]},
+        ],
+        "required_documents": {"documents": ["claim_form", "claim_statement", "medical_certificate"], "clause": "4.2"},
+        "settlement_days": {"value": 30, "clause": "4.3"},
+        "coverage_clause": "1.3",
+    }
+
+
+# ------------------------------------------------------------------ life ---
+def life_wording() -> str:
+    return f"""# ClaimSense Life Term Protect — Term Life Insurance Policy Wording (Version 2025.1)
+
+<!-- page: 1 -->
+## 1. Preamble and Definitions
+
+### 1.1 Insurer and Policy
+This policy is issued by {INSURER}. Product code LIFE-TERM, wording version 2025.1, effective for claims arising from 2025-04-01 to 2026-03-31. {NOTICE}
+
+### 1.2 Sum Assured
+The sum assured is the amount stated in the schedule. It is the most the insurer will pay under this policy.
+
+### 1.3 Policy in Force
+The policy is in force while premiums are paid within the due date or the 30-day grace period. Cover ends on the expiry date in the schedule.
+
+<!-- page: 2 -->
+## 2. Benefit
+
+### 2.1 Death Benefit
+If the life assured dies while the policy is in force, the sum assured is paid in full to the nominee, without any deductible. This is the only benefit under the policy.
+
+### 2.2 Nominee
+The death benefit is paid to the nominee recorded in the schedule, or to the legal heirs if there is no valid nomination.
+
+<!-- page: 3 -->
+## 3. Exclusions and Conditions
+
+### 3.1 Suicide
+If the life assured dies by suicide within 12 months of the date of commencement of risk, the death benefit is not payable. The nominee is entitled to 80% of the premiums paid, which is refunded through policy servicing and is not part of a death claim.
+
+### 3.2 Non-disclosure and Section 45
+In line with section 45 of the Insurance Act, 1938, the policy cannot be called in question on any ground after three years from the date of the policy. Claims within those three years may be investigated for misstatement or suppression of material facts.
+
+<!-- page: 4 -->
+## 4. Claims Procedure
+
+### 4.1 Claim Intimation
+The nominee should notify the insurer of the death as soon as possible.
+
+### 4.2 Documents Required
+A death claim must include the claim form signed by the nominee, a benefit claim statement, the death certificate issued by the local authority and the certificate of the doctor who attended the life assured.
+
+### 4.3 Claim Settlement
+The insurer will settle the claim within 30 days of receiving the last necessary document, or within 120 days when the claim needs investigation.
+"""
+
+
+def life_terms() -> dict:
+    return {
+        "product_code": "LIFE-TERM", "product_name": "ClaimSense Life Term Protect", "line_of_business": "life",
+        "adjudication_model": "benefit_schedule",
+        "insurer": INSURER, "version": "2025.1", "effective_from": "2025-04-01", "effective_to": "2026-03-31",
+        "benefits": {"death_benefit": {"basis": "percent_of_si", "percent": 100, "clause": "2.1"}},
+        "deductible": {"amount": 0, "clause": "2.1"}, "max_liability_clause": "1.2",
+        # a death claim is always the sum assured; a death in the section 45 window (3.2) is investigated instead
+        "amount_ratio_signal": False, "contestable_period": {"days": 1095, "clause": "3.2"},
+        "exclusions": [{"code": "EXCL_SUICIDE", "clause": "3.1", "keywords": ["suicide", "self-inflicted"], "within_months": 12}],
+        "required_documents": {"documents": ["claim_form", "claim_statement", "death_certificate", "medical_certificate"],
+                               "clause": "4.2"},
+        "settlement_days": {"value": 30, "clause": "4.3"},
+        "coverage_clause": "1.3",
+    }
+
+
 INSURED = [
     # policy_number, product, holder, start, end, sum insured
     ("CS-HLT-24-000117", "HLT-SHIELD", "Ravi Kumar", "2024-06-01", "2026-05-31", 500000),
@@ -488,13 +647,29 @@ INSURED = [
     ("CS-TRV-25-004703", "TRV-GLOBE", "Bhavna Shah", "2025-07-05", "2025-07-25", 4000000),
     ("CS-TRV-25-004719", "TRV-GLOBE", "Rohit Sinha", "2025-12-10", "2025-12-20", 4000000),
     ("CS-TRV-25-004735", "TRV-GLOBE", "Meghna Das", "2025-08-01", "2025-08-15", 4000000),
+    # personal accident and life
+    ("CS-PAC-25-005101", "PA-SECURE", "Arjun Nair", "2025-04-15", "2026-04-14", 1200000),
+    ("CS-PAC-25-005118", "PA-SECURE", "Manoj Tiwari", "2025-05-01", "2026-04-30", 500000),
+    ("CS-PAC-25-005125", "PA-SECURE", "Imran Sheikh", "2025-04-20", "2026-04-19", 1500000),
+    ("CS-PAC-25-005132", "PA-SECURE", "Pooja Iyer", "2025-06-01", "2026-05-31", 300000),
+    ("CS-PAC-25-005149", "PA-SECURE", "Rohan Kapoor", "2025-04-10", "2026-04-09", 1000000),
+    ("CS-PAC-25-005156", "PA-SECURE", "Suresh Babu", "2025-07-01", "2026-06-30", 800000),
+    ("CS-PAC-25-005163", "PA-SECURE", "Divya Menon", "2025-05-15", "2026-05-14", 600000),
+    ("CS-PAC-25-005170", "PA-SECURE", "Lata Krishnan", "2025-04-05", "2026-04-04", 400000),
+    ("CS-LIF-19-006101", "LIFE-TERM", "Venkatesh Iyer", "2019-08-01", "2049-07-31", 2000000),
+    ("CS-LIF-24-006118", "LIFE-TERM", "Amit Banerjee", "2024-03-15", "2054-03-14", 2500000),
+    ("CS-LIF-24-006125", "LIFE-TERM", "Karan Malhotra", "2024-11-01", "2054-10-31", 1000000),
+    ("CS-LIF-21-006132", "LIFE-TERM", "Rajesh Agarwal", "2021-02-01", "2051-01-31", 1500000),
+    ("CS-LIF-20-006149", "LIFE-TERM", "Thomas Verghese", "2020-06-01", "2050-05-31", 1200000),
+    ("CS-LIF-15-006156", "LIFE-TERM", "Prabhakar Rao", "2015-06-01", "2025-05-31", 1500000),
+    ("CS-LIF-22-006170", "LIFE-TERM", "Harsha Vardhan", "2022-01-10", "2052-01-09", 1000000),
 ]
 
 
 # --------------------------------------------------------------- claims ---
 def claim_form(c: dict) -> str:
     lines = ["CLAIM FORM — Synthetic Assurance Co. Ltd. (fictional)", "SYNTHETIC DEMO DOCUMENT", "",
-             f"Claim Type: {c['claim_type'].title()}", f"Policy Number: {c['policy_number']}",
+             f"Claim Type: {c['claim_type'].replace('_', ' ').title()}", f"Policy Number: {c['policy_number']}",
              f"Claimant Name: {c['claimant']}", f"Incident Date: {c['incident_date']}"]
     for k, v in c.get("form_extra", {}).items():
         lines.append(f"{k}: {v}")
@@ -570,10 +745,46 @@ def travel_proof(c: dict) -> str:
                       f"Return Date: {f['Return Date']}"]) + "\n"
 
 
+def benefit_statement(c: dict) -> str:
+    name_label = "Claimant Name" if c.get("deceased") else "Patient/Insured Name"
+    lines = [f"BENEFIT CLAIM STATEMENT — {c['claim_type'].replace('_', ' ').upper()}", "SYNTHETIC DEMO DOCUMENT", "",
+             f"Policy Number: {c['policy_number']}"] + ([f"Deceased Name: {c['deceased']}"] if c.get("deceased") else [])
+    lines += [f"{name_label}: {c['claimant']}", "", "Itemised Charges:"]
+    for desc, amt in c["items"]:
+        lines.append(f"{desc:<60} {amt:>12,.2f}")
+    lines += ["", f"{'Total Amount':<60} {sum(a for _, a in c['items']):>12,.2f}"]
+    return "\n".join(lines) + "\n"
+
+
+def medical_certificate(c: dict) -> str:
+    who = [f"Deceased Name: {c['deceased']}"] if c.get("deceased") else [f"Patient Name: {c['claimant']}"]
+    if c["claim_type"] == "life":
+        head, facts = "MEDICAL ATTENDANT'S CERTIFICATE", [f"Cause of Death: {c['cause_of_death']}"]
+    else:
+        head, facts = "MEDICAL CERTIFICATE FROM TREATING DOCTOR", [f"Nature of Injury: {c['injury']}"]
+    return "\n".join([head, "SYNTHETIC DEMO DOCUMENT", "", *who, *facts, "Doctor: Dr. S. Synthetic (fictional)", "",
+                      "Clinical Notes:", c["notes"]]) + "\n"
+
+
+def death_certificate(c: dict) -> str:
+    return "\n".join(["DEATH CERTIFICATE", "SYNTHETIC DEMO DOCUMENT", "", f"Deceased Name: {c['deceased']}",
+                      f"Date of Death: {c['incident_date']}", f"Registration Number: DC-SYN-{c['claim_number'][-4:]}",
+                      "Issued by: Municipal Registrar of Births and Deaths (fictional)"]) + "\n"
+
+
 def line_documents(c: dict) -> dict[str, str]:
-    """Documents for the property and travel lines; health and motor packets are built in write_claim_packets."""
+    """Documents for the property, travel, personal accident and life lines; health and motor packets are built in
+    write_claim_packets."""
     files = {"claim_form.txt": claim_form(c)}
-    if c["claim_type"] == "property":
+    if c["claim_type"] in ("personal_accident", "life"):
+        files["claim_statement.txt"] = benefit_statement(c)
+        if not c.get("skip_certificate"):
+            files["medical_certificate.txt"] = medical_certificate(c)
+        if c["claim_type"] == "life" and not c.get("skip_death_certificate"):
+            files["death_certificate.txt"] = death_certificate(c)
+        if c.get("police"):
+            files["police_report.txt"] = property_police_report(c)
+    elif c["claim_type"] == "property":
         files["loss_assessment.txt"] = loss_assessment(c)
         if c.get("police"):
             files["police_report.txt"] = property_police_report(c)
@@ -1003,16 +1214,95 @@ def golden_claims() -> list[dict]:
     return S
 
 
+def benefit_claims() -> list[dict]:
+    """Personal accident and life claims: the benefit schedule, not a bill, fixes the amount."""
+    S = []
+
+    def pa(number, policy, claimant, incident, narrative, items, injury, notes, expected, story, **extra):
+        S.append(dict(claim_number=number, claim_type="personal_accident", policy_number=policy, claimant=claimant,
+                      incident_date=incident, narrative=narrative, items=items, injury=injury, notes=notes,
+                      expected=expected, story=story, **extra))
+
+    def life(number, policy, deceased, nominee, incident, narrative, cause, notes, sum_assured, expected, story, **extra):
+        S.append(dict(claim_number=number, claim_type="life", policy_number=policy, claimant=nominee, deceased=deceased,
+                      incident_date=incident, narrative=narrative, cause_of_death=cause, notes=notes,
+                      items=[("Death Benefit - Sum Assured", sum_assured)],
+                      form_extra={"Deceased Name": deceased, "Nominee Name": nominee},
+                      expected=expected, story=story, **extra))
+
+    pa("CLM-A-5001", "CS-PAC-25-005101", "Arjun Nair", "2025-08-10",
+       "Slipped on a wet staircase at the office and fractured the right ankle.",
+       [("Temporary Total Disablement - 6 weeks", 72000), ("Accident Medical Expenses - Surgery and Physiotherapy", 45000)],
+       "Fracture of the right ankle after a fall on a staircase", "Plate fixation; unable to work for six weeks.",
+       "PARTIAL_APPROVAL", "Weekly benefit capped at INR 10,000 a week (2.4); medical expenses within 10% (2.5)")
+    pa("CLM-A-5002", "CS-PAC-25-005118", "Manoj Tiwari", "2025-09-02",
+       "Right index finger crushed in a press machine accident at the workshop.",
+       [("Permanent Partial Disablement - loss of right index finger", 75000), ("Temporary Total Disablement - 4 weeks", 20000)],
+       "Traumatic amputation of the right index finger", "Finger amputated at the base; stump healed.",
+       "PARTIAL_APPROVAL", "Index finger is 10% of the sum insured in the disablement table (2.3)")
+    pa("CLM-A-5003", "CS-PAC-25-005125", "Rehana Sheikh", "2025-10-05",
+       "The insured, Imran Sheikh, was killed when a truck hit his motorcycle on the highway.",
+       [("Accidental Death Benefit", 1500000)],
+       "Fatal head injury in a road traffic accident", "Declared dead on arrival at the trauma centre.",
+       "APPROVE", "Accidental death: 100% of the capital sum insured to the nominee (2.1)",
+       deceased="Imran Sheikh", fir="FIR-SYN-1005-14",
+       police="Truck hit the motorcycle from behind on the highway. Truck driver arrested.")
+    pa("CLM-A-5004", "CS-PAC-25-005132", "Pooja Iyer", "2025-09-15",
+       "Hospitalised with dengue fever and unable to work for three weeks.",
+       [("Temporary Total Disablement - 3 weeks", 9000)],
+       "Dengue fever with low platelets", "Viral illness treated with intravenous fluids.",
+       "RECOMMEND_REJECT", "Dengue is an illness, not an accident (1.3)")
+    pa("CLM-A-5005", "CS-PAC-25-005149", "Rohan Kapoor", "2025-08-23",
+       "Car hit a road divider late at night; the insured was driving home from a party.",
+       [("Temporary Total Disablement - 8 weeks", 56000), ("Accident Medical Expenses - Hospital Treatment", 38000)],
+       "Fracture of both forearm bones in a road accident", "Blood alcohol well above the legal limit on admission; drunk.",
+       "RECOMMEND_REJECT", "Injury while drunk: excluded (3.2)", fir="FIR-SYN-0823-07",
+       police="Single-vehicle accident. The driver was under the influence of alcohol.")
+    pa("CLM-A-5006", "CS-PAC-25-005156", "Suresh Babu", "2025-08-15",
+       "Fell from a first-floor balcony at home; spinal cord injury with paralysis below the waist.",
+       [("Permanent Total Disablement - paraplegia", 800000)],
+       "Spinal cord injury with paraplegia after a fall", "Complete loss of use of both legs; wheelchair bound.",
+       "INVESTIGATE", "Full sum insured claimed 45 days after cover began: high risk, sent to investigation")
+    pa("CLM-A-5007", "CS-PAC-25-005163", "Divya Menon", "2025-11-02",
+       "Fell from a ladder while repairing the roof and fractured the left wrist.",
+       [("Temporary Total Disablement - 5 weeks", 30000)],
+       "Fracture of the left wrist after a fall", "Cast applied.",
+       "REQUEST_INFO", "Treating doctor's certificate not submitted (4.2)", skip_certificate=True)
+    life("CLM-L-6001", "CS-LIF-19-006101", "Venkatesh Iyer", "Lalitha Venkatesh", "2025-07-21",
+         "The life assured died of a heart attack at home.", "Acute myocardial infarction",
+         "Known hypertensive for eight years; collapsed at home and was declared dead on arrival.", 2000000,
+         "APPROVE", "Death six years into the policy: sum assured paid in full (2.1)")
+    life("CLM-L-6002", "CS-LIF-24-006118", "Amit Banerjee", "Sourav Banerjee", "2025-08-28",
+         "The life assured died of advanced stomach cancer.", "Carcinoma of the stomach with metastases",
+         "Diagnosed in May 2025; hospital records mention symptoms for two years before the policy began.", 2500000,
+         "INVESTIGATE", "Death 17 months into the policy, inside the three-year section 45 period (3.2): investigated")
+    life("CLM-L-6003", "CS-LIF-24-006125", "Karan Malhotra", "Neha Malhotra", "2025-07-02",
+         "The life assured was found dead at home.", "Suicide by hanging", "Inquest concluded suicide.", 1000000,
+         "RECOMMEND_REJECT", "Suicide eight months after commencement: excluded (3.1)")
+    life("CLM-L-6004", "CS-LIF-21-006132", "Rajesh Agarwal", "Sarita Agarwal", "2025-09-10",
+         "The life assured died after a long period of depression.", "Suicide during severe depression",
+         "Treated for depression since 2024.", 1500000,
+         "APPROVE", "Suicide 55 months after commencement: the 12-month exclusion no longer applies (3.1)")
+    life("CLM-L-6005", "CS-LIF-20-006149", "Thomas Verghese", "Joseph Verghese", "2025-09-18",
+         "The life assured died in hospital after a stroke.", "Intracerebral haemorrhage",
+         "Admitted unconscious; died on day three.", 1200000,
+         "REQUEST_INFO", "Death certificate not submitted (4.2)", skip_death_certificate=True)
+    life("CLM-L-6006", "CS-LIF-15-006156", "Prabhakar Rao", "Kamala Rao", "2025-07-20",
+         "The life assured died of kidney failure.", "End-stage renal disease", "On dialysis for one year.", 1500000,
+         "RECOMMEND_REJECT", "Death on 2025-07-20, after the ten-year term ended on 2025-05-31 (1.3)")
+    return S
+
+
 def write_claim_packets() -> list[dict]:
     out = []
-    for c in golden_claims():
+    for c in golden_claims() + benefit_claims():
         d = CLM / c["claim_number"]
         d.mkdir(parents=True, exist_ok=True)
         total = sum(a for _, a in c["items"])
         c.setdefault("form_amount", total)
         files = {}
         files["claim_form.txt"] = claim_form(c)
-        if c["claim_type"] in ("property", "travel"):
+        if c["claim_type"] in ("property", "travel", "personal_accident", "life"):
             files.update(line_documents(c))
         elif c["claim_type"] == "health":
             files["hospital_bill.txt"] = bill("FINAL HOSPITAL BILL", c, c["items"],
@@ -1103,6 +1393,19 @@ def evaluation_claims() -> list[dict]:
                   form_extra={"Destination": "Bangkok", "Departure Date": "2026-02-02", "Return Date": "2026-02-09"},
                   narrative="Treated at a clinic for a sprained knee three days after the trip ended, during an extended personal stay in Bangkok.",
                   items=[("Clinic Consultation and X-Ray", 9500), ("Pharmacy and Medicines", 2500)]))
+    E.append(dict(claim_number="EVAL-A-01", claim_type="personal_accident", policy_number="CS-PAC-25-005170",
+                  claimant="Lata Krishnan", incident_date="2025-10-20",
+                  narrative="Left thumb cut off by a food processor blade in a kitchen accident.",
+                  items=[("Permanent Partial Disablement - loss of left thumb", 100000),
+                         ("Temporary Total Disablement - 3 weeks", 18000), ("Accident Medical Expenses - Surgery", 60000)],
+                  injury="Traumatic amputation of the left thumb", notes="Thumb amputated at the base; wound healed."))
+    E.append(dict(claim_number="EVAL-L-01", claim_type="life", policy_number="CS-LIF-22-006170", claimant="Kavya Vardhan",
+                  deceased="Harsha Vardhan", incident_date="2025-10-05",
+                  narrative="The life assured died in a road accident while travelling by bus.",
+                  cause_of_death="Multiple injuries in a road traffic accident",
+                  notes="Bus overturned on the highway; declared dead at the scene.",
+                  items=[("Death Benefit - Sum Assured", 1000000)],
+                  form_extra={"Deceased Name": "Harsha Vardhan", "Nominee Name": "Kavya Vardhan"}))
     return E
 
 
@@ -1111,7 +1414,7 @@ def write_evaluation_packets() -> None:
         d = EVAL / c["claim_number"]
         d.mkdir(parents=True, exist_ok=True)
         c["form_amount"] = sum(a for _, a in c["items"])
-        if c["claim_type"] in ("property", "travel"):
+        if c["claim_type"] in ("property", "travel", "personal_accident", "life"):
             for name, body in line_documents(c).items():
                 (d / name).write_text(body, encoding="utf-8")
             continue
@@ -1199,14 +1502,18 @@ def write_ingest_demo() -> None:
 PATTERNS = ["AMOUNT_ANOMALY", "TIMING_ANOMALY", "FREQUENCY_ANOMALY", "DUPLICATE_CLAIM", "DOCUMENT_INCONSISTENCY"]
 # line: (share of claims, sums insured, log-normal mean of the claim amount)
 PORTFOLIO_LINES = {
-    "health": (0.50, [300000, 500000, 1000000], 10.6),
-    "motor": (0.25, [350000, 500000, 800000], 10.2),
-    "property": (0.13, [1000000, 2500000, 5000000], 11.2),
-    "travel": (0.12, [2000000, 4000000], 10.4),
+    "health": (0.42, [300000, 500000, 1000000], 10.6),
+    "motor": (0.22, [350000, 500000, 800000], 10.2),
+    "property": (0.11, [1000000, 2500000, 5000000], 11.2),
+    "travel": (0.10, [2000000, 4000000], 10.4),
+    "personal_accident": (0.10, [500000, 1000000, 1500000], 10.8),
+    "life": (0.05, [1000000, 2000000, 5000000], None),  # a death claim is the full sum assured
 }
+# life cover can be questioned for non-disclosure for three years (section 45); later deaths are the norm
+LIFE_CONTESTABLE_DAYS = 1095
 
 
-def portfolio(n: int = 1000, fraud_rate: float = 0.08) -> None:
+def portfolio(n: int = 10000, fraud_rate: float = 0.08) -> None:
     """Synthetic claim portfolio with labelled, injected anomaly patterns.
 
     The injection rate is a demo parameter, not an estimate of real-world fraud prevalence.
@@ -1220,19 +1527,24 @@ def portfolio(n: int = 1000, fraud_rate: float = 0.08) -> None:
         start = date(2024, 4, 1) + timedelta(days=rng.randint(0, 420))
         # a travel policy starts at departure, so the loss falls within the trip
         incident = start + timedelta(days=rng.randint(1, 30) if line == "travel" else rng.randint(45, 330))
-        amount = round(min(si * 0.9, rng.lognormvariate(mu, 0.6)), -2)
-        prior = rng.choices([0, 1, 2], [0.8, 0.15, 0.05])[0]
+        if line == "life":
+            start = date(2010, 4, 1) + timedelta(days=rng.randint(0, 4000))
+            incident = start + timedelta(days=rng.randint(LIFE_CONTESTABLE_DAYS, LIFE_CONTESTABLE_DAYS + 4000))
+        amount = si if mu is None else round(min(si * 0.9, rng.lognormvariate(mu, 0.6)), -2)
+        prior = 0 if line == "life" else rng.choices([0, 1, 2], [0.8, 0.15, 0.05])[0]
         bill_total, dup = amount, 0
         injected: list[str] = []
         if rng.random() < fraud_rate:
-            # the risk rules do not score timing for trip-based cover, so no timing anomaly is injected there
-            patterns = [x for x in PATTERNS if not (line == "travel" and x == "TIMING_ANOMALY")]
+            # the risk rules do not score timing for trip-based cover, so no timing anomaly is injected there; a life
+            # claim is always the sum assured, so it has no amount anomaly, and a death is not a repeat claim
+            patterns = [x for x in PATTERNS if not (line == "travel" and x == "TIMING_ANOMALY")
+                        and not (line == "life" and x in ("AMOUNT_ANOMALY", "FREQUENCY_ANOMALY"))]
             injected = rng.sample(patterns, rng.choice([1, 1, 2]))
             if "AMOUNT_ANOMALY" in injected:
                 amount = round(si * rng.uniform(0.82, 0.99), -2)
                 bill_total = amount
             if "TIMING_ANOMALY" in injected:
-                incident = start + timedelta(days=rng.randint(31, 55))
+                incident = start + timedelta(days=rng.randint(200, 900) if line == "life" else rng.randint(31, 55))
             if "FREQUENCY_ANOMALY" in injected:
                 prior = rng.randint(3, 5)
             if "DUPLICATE_CLAIM" in injected:
@@ -1264,6 +1576,10 @@ def main() -> None:
     (POL / "HOME-GUARD_2025.1.terms.json").write_text(json.dumps(property_terms(), indent=2), encoding="utf-8")
     (POL / "TRV-GLOBE_2025.1.md").write_text(travel_wording(), encoding="utf-8")
     (POL / "TRV-GLOBE_2025.1.terms.json").write_text(json.dumps(travel_terms(), indent=2), encoding="utf-8")
+    (POL / "PA-SECURE_2025.1.md").write_text(pa_wording(), encoding="utf-8")
+    (POL / "PA-SECURE_2025.1.terms.json").write_text(json.dumps(pa_terms(), indent=2), encoding="utf-8")
+    (POL / "LIFE-TERM_2025.1.md").write_text(life_wording(), encoding="utf-8")
+    (POL / "LIFE-TERM_2025.1.terms.json").write_text(json.dumps(life_terms(), indent=2), encoding="utf-8")
     (POL / "insured_policies.json").write_text(json.dumps([
         dict(policy_number=a, product_code=b, holder_name=c, start_date=d, end_date=e, sum_insured=f)
         for a, b, c, d, e, f in INSURED], indent=2), encoding="utf-8")
@@ -1273,7 +1589,7 @@ def main() -> None:
     write_ingest_demo()
     (CLM / "scenarios.json").write_text(json.dumps(scen, indent=2), encoding="utf-8")
     portfolio()
-    print(f"policies: {len(list(POL.glob('*.md')))}, claims: {len(scen)}, portfolio rows: 1000")
+    print(f"policies: {len(list(POL.glob('*.md')))}, claims: {len(scen)}, portfolio rows: 10000")
 
 
 if __name__ == "__main__":

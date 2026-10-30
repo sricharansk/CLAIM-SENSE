@@ -85,13 +85,15 @@ def _agrees(ai: str, human: str) -> bool:
             "REQUEST_INFO": "REQUEST_INFO", "INVESTIGATE": "INVESTIGATE"}.get(ai) == human
 
 
-# as in the live risk agent, trip-based cover starts at departure, so an early loss is not a signal
+# as in the live risk agent, trip-based cover starts at departure, so an early loss is not a signal; life cover is
+# scored on its contestable period (section 45, three years) instead of the early-claim window and amount ratio
 TRIP_BASED_LINES = {"travel"}
+CONTESTABLE_DAYS = {"life": 1095}
 
 
 @lru_cache(maxsize=1)
 def portfolio_evaluation() -> dict | None:
-    """Score the 1,000-claim synthetic portfolio with the live risk rules and compare to injected labels.
+    """Score the 10,000-claim synthetic portfolio with the live risk rules and compare to injected labels.
 
     This measures how well the transparent rules recover patterns we injected ourselves; it is not a
     claim about real-world fraud detection performance.
@@ -105,9 +107,12 @@ def portfolio_evaluation() -> dict | None:
     amounts: list[float] = []
     for row in csv.DictReader(path.open(encoding="utf-8")):
         claimed, total = float(row["claimed_amount"]), float(row["document_total"])
+        line, days = row["line_of_business"], int(row["days_since_policy_start"])
+        contest = CONTESTABLE_DAYS.get(line)
         score, _ = score_features({
-            "amount_ratio": claimed / float(row["sum_insured"]), "days_since_start": None if row["line_of_business"] in TRIP_BASED_LINES
-            else int(row["days_since_policy_start"]),
+            "amount_ratio": 0 if contest else claimed / float(row["sum_insured"]),
+            "days_since_start": None if line in TRIP_BASED_LINES or contest else days,
+            "days_in_force": days if contest else None, "contestable_days": contest,
             "prior_claims": int(row["prior_claims_12m"]),
             "duplicate_of": "match" if row["duplicate_match"] == "1" else None,
             "amount_gap": abs(claimed - total) / total if total else 0,
