@@ -69,7 +69,7 @@ cd frontend
 npm run dev
 ```
 
-Open http://localhost:5173. On first start the API creates `backend\claimsense.db` and seeds 5 policy wordings and 57 synthetic claims.
+Open http://localhost:5173. On first start the API creates `backend\claimsense.db` and seeds 7 policy wordings and 72 synthetic claims.
 
 Sign in as `adjuster`, `supervisor` or `auditor`. Locally the password is the default `claimsense-demo`, unless you set the `DEMO_PASSWORD` environment variable before starting the API. (The live site uses a different password, kept only in Render and the GitHub secret.)
 
@@ -84,11 +84,11 @@ By hand, from the repository folder with the virtual environment active:
 ```powershell
 cd backend
 ruff check app tests ../scripts
-python -m pytest -q                 # 127 tests
+python -m pytest -q                 # 158 tests
 cd ..
 python scripts/provenance.py --check
-python scripts/evaluate.py          # 803/803 checks -> reports/evaluation.md
-python scripts/claims_report.py     # 58 claims -> reports/claims_results.md
+python scripts/evaluate.py          # 986/986 checks -> reports/evaluation.md
+python scripts/claims_report.py     # 73 claims -> reports/claims_results.md
 cd frontend
 npm run build
 cd ..

@@ -4,7 +4,7 @@
 
 > AI recommends. Evidence supports. Rules calculate. Humans decide. Workflows execute. Audit trails record.
 
-Claim Sense takes a health, motor, property (home) or travel claim from intake to a human decision. It reads the claim documents, matches the policy wording that was in force on the incident date, retrieves the relevant clauses with page and clause citations, checks coverage and exclusions, calculates the payable amount with deterministic rules, raises risk and fraud signals, and hands an evidence-backed recommendation to a human reviewer. Every step is recorded in an audit trail.
+Claim Sense takes a health, motor, property (home), travel, personal accident or life claim from intake to a human decision. It reads the claim documents, matches the policy wording that was in force on the incident date, retrieves the relevant clauses with page and clause citations, checks coverage and exclusions, calculates the payable amount with deterministic rules, raises risk and fraud signals, and hands an evidence-backed recommendation to a human reviewer. Every step is recorded in an audit trail.
 
 **Live demo:** https://claim-sense.onrender.com (Render free tier; the first request after a quiet spell can take a minute while the service wakes). Verified on 2026-10-12 by the **Verify deployment** workflow: every smoke check passed ([run](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/38266390199)).
 
@@ -20,26 +20,26 @@ All policies, people and claims in this repository are **synthetic**. See [Data]
 | Dashboard | Totals by line of business; every tile, line and bar opens the matching claims (filters by line, recommendation, risk or status, removable as chips); live claim counts, recommendations, risk mix, override and escalation rates, reviewer actions, settlement clock, portfolio evaluation | `/` |
 | Claim intake | Create a claim, upload PDF or text documents, run the agent pipeline | `/claims/new` |
 | Document intelligence | Document classification, extracted facts with source file, line and confidence, itemised charges; reviewers correct a fact with a reason before (re-)running the analysis, the extracted value is kept and the correction audited | claim page |
-| Lines of business | Health (HLT-SHIELD), motor (MTR-SECURE), property / home (HOME-GUARD) and overseas travel (TRV-GLOBE), each with its own synthetic wording, structured terms and rules | `/policies` |
+| Lines of business | Health (HLT-SHIELD), motor (MTR-SECURE), property / home (HOME-GUARD), overseas travel (TRV-GLOBE), personal accident (PA-SECURE) and term life (LIFE-TERM), each with its own synthetic wording, structured terms and rules | `/policies` |
 | Policy versioning | Picks the wording version in force on the incident date (HLT-SHIELD 2024.1 vs 2025.1) | claim page |
 | Hybrid RAG | BM25 + character n-gram vectors fused with reciprocal rank fusion; clause, section and page citations; refuses when evidence is weak | `/assistant` |
-| Coverage | Policy period, trip period (travel), initial and specified-disease waiting periods, exclusions, required documents including those that depend on the loss (police report for burglary, airline report for lost baggage, medical report for treatment abroad), each citing its clause | claim page |
-| Adjudication | Decimal rules engine: non-payable items, per-day limits, depreciation (motor parts, home contents), average clause for underinsured homes, per-item and per-benefit travel limits, deductible or excess, co-pay, sum-insured cap, shown as a waterfall | claim page |
-| Risk / fraud | Transparent weighted signals: amount ratio, early claim, frequency, duplicates, amount and name mismatches, missing documents, text in documents addressed to an AI | claim page |
+| Coverage | Policy period, trip period (travel), accident-only cover (personal accident), initial and specified-disease waiting periods, exclusions including time-limited ones (suicide within 12 months for life), required documents including those that depend on the loss (police report for burglary, airline report for lost baggage, medical report for treatment abroad), each citing its clause | claim page |
+| Adjudication | Decimal rules engine: non-payable items, per-day limits, depreciation (motor parts, home contents), average clause for underinsured homes, per-item and per-benefit travel limits, deductible or excess, co-pay, sum-insured cap; personal accident and life pay from a benefit schedule (share of the sum insured, disablement table, capped weekly benefit); shown as a waterfall | claim page |
+| Risk / fraud | Transparent weighted signals: amount ratio, early claim, death inside the life contestable period, frequency, duplicates, amount and name mismatches, missing documents, text in documents addressed to an AI | claim page |
 | Recommendation | Approve, partial approval, reject, request info or investigate, with reasons and an evidence package | claim page |
 | Human review | Approve (with amount override), reject, request info, investigate, escalate; notes required for adverse actions; approval limits enforced; escalated claims need a supervisor | claim page, `/reviews` |
 | Workflow | Routing to adjuster, investigation (SIU), pending-information and supervisor queues; queue shows status, risk, age and assignee; adjusters take and release tasks, supervisors reassign | `/reviews` |
-| Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor / 5.3 property and travel); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
+| Settlement clock | Due date from the policy's settlement clause (30 days after the last document, clause 6.3 health / 4.3 motor, personal accident and life / 5.3 property and travel); on track, due soon, overdue, met or breached | claim page, `/claims`, `/reviews`, `/` |
 | Decision letters | Settlement, repudiation (quotes the clause relied on), document-request and under-review letters built from data, no LLM; printable; marked draft until a human decides | claim page |
 | Export | Download the claim register as CSV with decision, payable amount, risk and settlement status | `/claims` |
-| Golden evaluation | 57 hand-worked claim cases across all four lines (all 10 required types) and 26 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
+| Golden evaluation | 72 hand-worked claim cases across all six lines (all 10 required types) and 30 assistant questions scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow; CI fails on any miss | `/evaluation`, `reports/evaluation.md` |
 | Audit | Append-only events with actor, details and correlation IDs | `/audit` |
 | Policy library | Browse clauses by version, view structured terms, ingest new wordings as PDF or Markdown with checksum, page-preserving extraction and visible processing states (Uploaded → Validating → Extracting → Indexing → Ready / Failed) | `/policies` |
 | Provenance | Source registry with publisher, dates, licence, intended use and SHA-256 checked on every request; RAG manifest tracing every indexed chunk to file, version, page, clause and extraction run; chunks without provenance are kept out of the index | `/datasets`, [docs/DATA_PROVENANCE.md](docs/DATA_PROVENANCE.md) |
 
 ## Real results from the golden scenarios
 
-These are the outputs the running system produces for the 50 seeded scenarios, one or more for every exclusion, waiting period, limit and loss-dependent document in the four wordings, plus the common payable situations on every line and a lapsed policy (no hand-edited numbers; `backend/tests/test_golden_path.py` asserts the recommendations and `reports/evaluation.md` the amounts). [reports/claims_results.md](reports/claims_results.md) has all 58 claim packets in the repository, totals by line and where the money went; regenerate it with `python3 scripts/claims_report.py`. The deployed app starts with 57 of them already analysed (the 50 scenarios and the 7 evaluation packets); the demo upload is the one you file yourself.
+These are the outputs the running system produces for the 63 seeded scenarios, one or more for every exclusion, waiting period, limit, benefit and loss-dependent document in the six wordings, plus the common payable situations on every line and a lapsed policy (no hand-edited numbers; `backend/tests/test_golden_path.py` asserts the recommendations and `reports/evaluation.md` the amounts). [reports/claims_results.md](reports/claims_results.md) has all 73 claim packets in the repository, totals by line and where the money went; regenerate it with `python3 scripts/claims_report.py`. The deployed app starts with 72 of them already analysed (the 63 scenarios and the 9 evaluation packets); the demo upload is the one you file yourself.
 
 | Claim | Scenario | Wording | Claimed | Payable | Coverage | Risk | Recommendation |
 |---|---|---|---:|---:|---|---|---|
@@ -93,6 +93,19 @@ These are the outputs the running system produces for the 50 seeded scenarios, o
 | CLM-T-4012 | Heart attack in New York | TRV-GLOBE v2025.1 | ₹8,49,000 | ₹8,40,000 | Covered | Low | Partial approval |
 | CLM-T-4013 | Lost baggage inside every limit | TRV-GLOBE v2025.1 | ₹69,000 | ₹64,000 | Covered | Low | Partial approval |
 | CLM-T-4014 | Scooter accident in Bali, ambulance | TRV-GLOBE v2025.1 | ₹1,85,500 | ₹1,79,000 | Covered | Low | Partial approval |
+| CLM-A-5001 | Weekly disablement benefit capped at ₹10,000; medical expenses within 10% | PA-SECURE v2025.1 | ₹1,17,000 | ₹1,05,000 | Covered | Low | Partial approval |
+| CLM-A-5002 | Loss of an index finger: 10% in the disablement table | PA-SECURE v2025.1 | ₹95,000 | ₹70,000 | Covered | Low | Partial approval |
+| CLM-A-5003 | Accidental death: 100% of the capital sum insured | PA-SECURE v2025.1 | ₹15,00,000 | ₹15,00,000 | Covered | Medium (30) | Approve |
+| CLM-A-5004 | Dengue is an illness, not an accident | PA-SECURE v2025.1 | ₹9,000 | ₹0 | Not covered (§1.3) | Low | Reject |
+| CLM-A-5005 | Injury while drunk | PA-SECURE v2025.1 | ₹94,000 | ₹0 | Not covered (§3.2) | Low | Reject |
+| CLM-A-5006 | Full sum insured claimed 45 days after cover began | PA-SECURE v2025.1 | ₹8,00,000 | ₹8,00,000 | Covered | High (50) | Investigate |
+| CLM-A-5007 | Treating doctor's certificate missing | PA-SECURE v2025.1 | ₹30,000 | ₹30,000 | Covered | Low (10) | Request info |
+| CLM-L-6001 | Death six years into the policy | LIFE-TERM v2025.1 | ₹20,00,000 | ₹20,00,000 | Covered | Low | Approve |
+| CLM-L-6002 | Death 17 months in, inside the three-year section 45 period | LIFE-TERM v2025.1 | ₹25,00,000 | ₹25,00,000 | Covered | High (50) | Investigate |
+| CLM-L-6003 | Suicide eight months after commencement | LIFE-TERM v2025.1 | ₹10,00,000 | ₹0 | Not covered (§3.1) | High (50) | Reject |
+| CLM-L-6004 | Suicide 55 months in: the 12-month exclusion has lapsed | LIFE-TERM v2025.1 | ₹15,00,000 | ₹15,00,000 | Covered | Low | Approve |
+| CLM-L-6005 | Death certificate missing | LIFE-TERM v2025.1 | ₹12,00,000 | ₹12,00,000 | Covered | Low (10) | Request info |
+| CLM-L-6006 | Death after the ten-year term ended | LIFE-TERM v2025.1 | ₹15,00,000 | ₹0 | Not covered (§1.3) | Low | Reject |
 
 CLM-H-1001 waterfall, as the app shows it:
 
@@ -105,7 +118,7 @@ CLM-H-1001 waterfall, as the app shows it:
 | R40_COPAY | Co-payment 10% | −₹9,370 | ₹84,330 | §5.2 |
 | R50_MAX_LIABILITY | Within sum insured ₹5,00,000 | — | **₹84,330** | §5.3 |
 
-**Synthetic portfolio check.** The same risk rules scored a 1,000-claim synthetic portfolio across all four lines (507 health, 241 motor, 124 property, 128 travel) with 69 injected anomalies: precision 86.6%, recall 84.1% (TP 58, FP 9, FN 11, TN 922). This only shows the rules recover patterns we injected ourselves; it says nothing about real-world fraud detection.
+**Synthetic portfolio check.** The same risk rules scored a 10,000-claim synthetic portfolio across all six lines (4,231 health, 2,162 motor, 1,111 property, 974 travel, 1,045 personal accident, 477 life) with 764 injected anomalies: precision 90.1%, recall 78.3% (TP 598, FP 66, FN 166, TN 9,170). This only shows the rules recover patterns we injected ourselves; it says nothing about real-world fraud detection.
 
 | | |
 |---|---|
@@ -199,7 +212,7 @@ All accounts are synthetic. The password is `DEMO_PASSWORD` (default `claimsense
 ## Tests and checks
 
 ```bash
-cd backend && ruff check app tests && python -m pytest -q    # 127 tests
+cd backend && ruff check app tests && python -m pytest -q    # 158 tests
 python3 scripts/evaluate.py                                  # golden evaluation -> reports/evaluation.md
 python3 scripts/claims_report.py                             # every claim packet -> reports/claims_results.md
 python3 scripts/provenance.py --check                        # source registry, checksums, RAG manifest
@@ -207,15 +220,16 @@ cd frontend && npm run build                                 # type check + prod
 cd e2e && npm ci && npx playwright test                      # 12 browser tests against a fresh stack on :8080
 ```
 
-Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all 19 golden scenarios, the property and travel rules (average clause, per-item and benefit limits, trip period, loss-dependent documents), settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 803 / 803 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
+Tests cover sign-in, roles, approval limits and escalation, security headers and upload path handling, the rules engine (hand-calculated waterfalls, rounding, caps, depreciation bands), the clause parser and retriever, extraction from text and PDF, risk levels, all 63 seeded scenarios, the property and travel rules (average clause, per-item and benefit limits, trip period, loss-dependent documents), the personal accident and life rules (benefit schedule, weekly cap, accident-only cover, the 12-month suicide exclusion, the contestable period), the industry benchmark endpoint, settlement-clock states, letter content for each decision type, CSV export, the full create → upload → analyse → review API flow, safe failure, upload validation and policy-ingestion validation. CI runs these plus the golden evaluation ([reports/evaluation.md](reports/evaluation.md), 986 / 986 checks), the provenance check, `pip-audit`, `npm audit`, and on a Docker + PostgreSQL stack the Playwright browser suite and the smoke test ([.github/workflows/ci.yml](.github/workflows/ci.yml)). Results: [docs/FINAL_VALIDATION_REPORT.md](docs/FINAL_VALIDATION_REPORT.md). Security controls and known gaps: [docs/SECURITY.md](docs/SECURITY.md).
 
 ## Data and datasets
 
 | Data | Status |
 |---|---|
-| Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, HOME-GUARD 2025.1, TRV-GLOBE 2025.1, each with structured terms that cite clauses | In use |
-| 50 synthetic golden claim packets across the four lines (claim forms, bills, estimates, discharge summaries, police reports, surveyor loss assessments, travel expense statements, airline irregularity reports; one as PDF) | In use |
-| 1,000-claim synthetic portfolio across the four lines with labelled injected anomaly patterns | In use for analytics and rule evaluation |
+| Synthetic policy wordings: HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, HOME-GUARD 2025.1, TRV-GLOBE 2025.1, PA-SECURE 2025.1, LIFE-TERM 2025.1, each with structured terms that cite clauses | In use |
+| 63 synthetic golden claim packets across the six lines (claim forms, bills, estimates, discharge summaries, police reports, surveyor loss assessments, travel expense statements, airline irregularity reports, benefit claim statements, medical and death certificates; one as PDF) | In use |
+| 10,000-claim synthetic portfolio across the six lines with labelled injected anomaly patterns | In use for analytics and rule evaluation |
+| CAS Loss Reserving Database (NAIC Schedule P, accident years 1998-2007, six US lines): industry loss ratios and paid development, aggregates only, fetched and checked by `scripts/fetch_public_data.py` | In use as an external benchmark on the Data sources screen; not used in any claim decision |
 | IRDAI 2024 master circulars and statistics handbook, APRA NCPD 2026, CMS TiC PUF PY2026, Figshare 2025 and Zenodo 2024 claims datasets | Registered with publication date, URL, licence status and intended use; not downloaded in this build |
 
 Everything is regenerated deterministically with `python data/synthetic/generate.py`; then `python scripts/provenance.py --write` re-stamps the checksums in [data/source_registry.json](data/source_registry.json). The wording borrows common Indian retail-insurance concepts but is not any insurer's product and not regulatory text. Never commit real customer data or confidential policy documents.

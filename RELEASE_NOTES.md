@@ -1,5 +1,14 @@
 # Release notes
 
+## Claim Sense 1.5.0 — 2026-10-30
+
+- **Personal accident and life lines.** PA-SECURE and LIFE-TERM 2025.1 synthetic wordings with structured terms that cite their clauses. Benefits are paid from a schedule (share of the sum insured, the disablement table, a weekly benefit capped at ₹10,000, medical expenses up to 10%), in `Decimal`, with a clause on every step. Accident-only cover, the 12-month suicide exclusion and the life contestable period (section 45) are checked and cited.
+- **72 seeded claims** (63 scenarios and 9 evaluation packets; 73 in the results report with the demo upload): 13 new seeded claims and 2 new evaluation packets, each with a hand-worked golden case. Golden evaluation: 986 / 986 checks over 72 claim cases and 30 questions. 158 backend tests.
+- **10,000-claim synthetic portfolio** across all six lines: the risk rules find injected anomalies with 90.1% precision and 78.3% recall.
+- **CAS Schedule P industry benchmark** on the Data sources screen and at `GET /api/v1/benchmarks/industry`: loss ratios and paid development for six US lines, aggregates only, downloaded and checked by `scripts/fetch_public_data.py`. It is context, not an input to any decision.
+- **Blueprint documents**: `docs/API.md`, `ENVIRONMENT.md`, `ERROR_HANDLING.md`, `OBSERVABILITY.md`, `UX_FLOWS.md`, `ROADMAP.md` and `CHANGELOG.md`; decisions D27–D31.
+- Rules and risk versions are now `adjudication-rules/1.1.0` and `risk-rules/1.1.0`. The smoke test and the browser tests file a personal accident and a life claim too.
+
 ## Claim Sense 1.4.3 — 2026-10-30
 
 - **Windows and VS Code setup guide** (`docs/LOCAL_SETUP.md`) and VS Code tasks (`.vscode/`) to start the API and UI and run the tests.

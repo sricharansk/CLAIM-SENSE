@@ -114,7 +114,7 @@ Every item in the blueprint's definition of done (PART 20) is built, tested, dep
 
 | What | Where |
 |---|---|
-| Repository | https://github.com/sricharansk/CLAIM-SENSE (branch `main`; PRs #1, #2 and #4–#17 merged; #3 open but superseded, #18 closed) |
+| Repository | https://github.com/sricharansk/CLAIM-SENSE (branch `main`; PRs #1, #2 and #4–#17 merged; #19 open; #3 superseded, its six-line work rebuilt in #19; #18 closed) |
 | Live app | https://claim-sense.onrender.com (Render free tier, Docker, SQLite) |
 | Results dashboard | https://claude.ai/artifact/FPQnN7TjiwjiwbqW7BSpau (claude.ai artifact in the current account, refreshed 2026-10-30 17:55 UTC). The earlier copy, https://claude.ai/artifact/XzzbSf7X1PYcxwThkMvb1V, belongs to the other claude.ai account |
 | Review III presentation | `docs/presentation/Claim_Sense_Review_III_SK_Sricharan.pptx` (16 slides) |
@@ -122,20 +122,20 @@ Every item in the blueprint's definition of done (PART 20) is built, tested, dep
 
 ## What the product is
 
-**Claim Sense: RAG-Based Insurance Claims Adjudication & Policy Knowledge Assistant.** It is a decision-support system for health, motor, home (property) and travel insurance claims. It reads a claim packet and finds the policy wording in force on the incident date. It checks waiting periods and exclusions, then calculates the payable amount in exact `Decimal` arithmetic. It flags risk and hands a cited recommendation to a human reviewer, who makes every decision.
+**Claim Sense: RAG-Based Insurance Claims Adjudication & Policy Knowledge Assistant.** It is a decision-support system for health, motor, home (property), travel, personal accident and term life insurance claims. It reads a claim packet and finds the policy wording in force on the incident date. It checks waiting periods and exclusions, then calculates the payable amount in exact `Decimal` arithmetic. It flags risk and hands a cited recommendation to a human reviewer, who makes every decision.
 
 - **Backend:** FastAPI modular monolith (`backend/app`). The agent supervisor runs 8 agents in order: document → intake → policy → coverage → adjudicator → risk → evidence → review, then audit. Agent errors stop the pipeline safely (`AgentError`).
 - **Rules engine:** `adjudication/rules.py` runs a waterfall of rules R10–R99. Each step carries a clause reference:
   - R10 not payable;
   - R15 depreciation;
-  - R20 per-day, item and benefit limits;
+  - R20 per-day, item and benefit limits, and the benefit schedule for personal accident and life (`adjudicate_benefits`);
   - R25 underinsurance;
   - R30 deductible;
   - R40 co-pay;
   - R50 sum-insured cap;
   - R99 not admissible.
 - **RAG:** `rag/` turns wordings into clause-level chunks. Retrieval is hybrid: BM25 (weight 1.5) plus character 3–5-gram TF-IDF (weight 1.0), fused by weighted reciprocal rank. The policy version is matched by incident date. The assistant refuses when the evidence is weak.
-- **Risk:** weighted rules with a score from 0 to 100. Low is below 25, Medium 25+, High 50+. The signals are duplicates, early claims, high amount ratio, amount mismatch, name mismatch, missing documents and embedded instructions.
+- **Risk:** weighted rules with a score from 0 to 100. Low is below 25, Medium 25+, High 50+. The signals are duplicates, early claims, high amount ratio (not for life), a life death inside the three-year contestable period, amount mismatch, name mismatch, missing documents and embedded instructions.
 - **LLM:** optional (Anthropic). It writes only the explanation narrative and never decides or calculates. The golden evaluation runs with it off.
 - **Frontend:** React, TypeScript and Vite (`frontend/src`). Pages: Dashboard, Claims, Claim detail, New claim, Review queue, Policy library, Assistant, Audit, Evaluation, Data sources.
 - **Auth and accounts:** three demo accounts, `adjuster` (approves up to ₹2,00,000), `supervisor` and `auditor` (read-only). The password is the `DEMO_PASSWORD` env var. Never commit or paste the deployed value.
@@ -143,27 +143,31 @@ Every item in the blueprint's definition of done (PART 20) is built, tested, dep
 
 ## Data and results (all synthetic)
 
-- **Policy wordings (5):** HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, HOME-GUARD 2025.1 and TRV-GLOBE 2025.1. They live in `data/policies/` with `.terms.json` files whose terms cite clauses.
-- **Claims seeded at start-up: 57.**
-  - The 50 scenario packets in `data/claims/`:
+- **Policy wordings (7):** HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, HOME-GUARD 2025.1, TRV-GLOBE 2025.1, PA-SECURE 2025.1 and LIFE-TERM 2025.1. They live in `data/policies/` with `.terms.json` files whose terms cite clauses.
+- **Claims seeded at start-up: 72.**
+  - The 63 scenario packets in `data/claims/`:
     - health CLM-H-1001…1021;
     - motor CLM-M-2001…2011;
     - property CLM-P-3001…3011;
-    - travel CLM-T-4001…4014.
-  - The 7 evaluation packets in `data/evaluation/packets/`, seeded as H-1013…1016, P-3008, T-4009 and T-4010 via `seeded_as` in `golden_cases.json` (env `CLAIMSENSE_SEED_PACKETS`).
-  - The smoke test files 3 more claims each run (CLM-H-3058 is the demo upload, plus P-3059 and T-3060).
-- **Repository report** (`reports/claims_results.md`): 58 claims (the 57 above plus the demo upload). ₹87,73,600 billed and ₹54,05,550 payable (61.6%).
-  - Recommendations: partial approval 31, reject 21, request info 4, investigate 2.
-- **Live site** (fresh start): 57 claims. ₹86,95,600 billed and ₹53,41,470 payable (61.4%).
-  - By line: Health 21, Motor 11, Home 11, Travel 14.
-- **Golden evaluation** (`scripts/evaluate.py` → `reports/evaluation.md`): 57 hand-worked claim cases and 26 assistant questions. **803/803 checks pass.** Retrieval hit@1 is 100%.
-- **Risk rules on the 1,000-claim portfolio:** precision 86.6%, recall 84.1% (injected patterns only).
-- **Tests:** 127 backend pytest, 12 Playwright browser tests (`e2e/`) and a golden-path smoke test (`scripts/smoke_test.py`). CI (`.github/workflows/ci.yml`) runs:
+    - travel CLM-T-4001…4014;
+    - personal accident CLM-A-5001…5007;
+    - life CLM-L-6001…6006.
+  - The 9 evaluation packets in `data/evaluation/packets/`, seeded as H-1013…1016, P-3008, T-4009, T-4010, A-5008 and L-6007 via `seeded_as` in `golden_cases.json` (env `CLAIMSENSE_SEED_PACKETS`).
+  - The smoke test files 5 more claims each run (the health demo upload, then one property, travel, personal accident and life claim; numbers from 3073 on a fresh start).
+- **Repository report** (`reports/claims_results.md`): 73 claims (the 72 above plus the demo upload). ₹2,22,96,600 billed and ₹1,62,62,550 payable (72.9%).
+  - Recommendations: partial approval 34, reject 25, request info 6, investigate 4, approve 4.
+- **Live site** (fresh start, once PR #19 is deployed): 72 claims, ₹2,22,18,600 billed and ₹1,61,98,470 payable (72.9%).
+  - By line: Health 21, Motor 11, Home 11, Travel 14, Personal accident 8, Life 7.
+  - Before that deploy the site runs the four-line build: 57 claims, ₹86,95,600 billed, ₹53,41,470 payable.
+- **Golden evaluation** (`scripts/evaluate.py` → `reports/evaluation.md`): 72 hand-worked claim cases and 30 assistant questions. **986/986 checks pass.** Retrieval hit@1 is 100%.
+- **Risk rules on the 10,000-claim portfolio** (six lines): precision 90.1%, recall 78.3% (injected patterns only).
+- **Industry benchmark:** CAS Schedule P aggregates (six US lines) from `scripts/fetch_public_data.py`, on the Data sources screen; not used in any decision.
+- **Tests:** 158 backend pytest, 12 Playwright browser tests (`e2e/`) and a golden-path smoke test (`scripts/smoke_test.py`). CI (`.github/workflows/ci.yml`) runs:
   - ruff, pytest, the evaluation and the provenance check;
   - pip-audit and npm audit;
   - the frontend build;
   - Docker Compose, then the browser tests and the smoke test.
-- **Provenance:** `data/source_registry.json` holds SHA-256 checksums. `reports/rag_manifest.json` traces every chunk to its source. Real public datasets (IRDAI etc.) are registered only; they are not downloaded or ingested.
+- **Provenance:** `data/source_registry.json` holds SHA-256 checksums. `reports/rag_manifest.json` traces every chunk to its source. The CAS Schedule P benchmark is the only public dataset in use (aggregates only); the other public datasets (IRDAI etc.) are registered only, not downloaded or ingested.
 
 ## Timeline of work (pull requests, all merged into `main`)
 
@@ -184,9 +188,9 @@ Every item in the blueprint's definition of done (PART 20) is built, tested, dep
 | #14 | 2026-10-15 | Final status recorded; live verification run 38358451765 |
 | #15 | 2026-10-15 | Presentation updated with the final status and the 15 Oct live check (run 38685398836) |
 | #16, #17 | 2026-10-15 | Project handover and laptop guide in `CLAUDE.md` |
-| #19 | 2026-10-30 | Work resumed from a second claude.ai account: full validation re-run, live check (run 41102353747), dashboard republished in this account, Windows and VS Code setup guide (`docs/LOCAL_SETUP.md`, `.vscode/`) |
+| #19 | 2026-10-30 | Work resumed from a second claude.ai account: full validation re-run, live check (run 41102353747), dashboard republished in this account, Windows and VS Code setup guide (`docs/LOCAL_SETUP.md`, `.vscode/`). Then, at the owner's request, PR #3's extras rebuilt on `main`: personal accident and life lines (72 seeded claims, 986 checks), 10,000-claim portfolio, CAS benchmark, blueprint docs (API, environment, errors, observability, UX flows, roadmap, changelog); browser-test CI jobs pinned to ubuntu-24.04. Open until the owner merges |
 
-The dashboard source and its data are also kept in `docs/dashboard/`. Design decisions D1–D26 are in `docs/DECISIONS.md`; release history is in `RELEASE_NOTES.md` (latest 1.4.2).
+The dashboard source and its data are also kept in `docs/dashboard/`. Design decisions D1–D31 are in `docs/DECISIONS.md`; release history is in `RELEASE_NOTES.md` (latest 1.5.0) and `docs/CHANGELOG.md`.
 
 ## Run it on your laptop
 
@@ -199,7 +203,7 @@ cp .env.example .env                       # local only; never commit .env
 # backend
 cd backend && python -m venv .venv && . .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -r requirements-dev.txt
-uvicorn app.main:app --reload --port 8000  # seeds the 57 claims on first start; API docs at /docs
+uvicorn app.main:app --reload --port 8000  # seeds the 72 claims on first start; API docs at /docs
 
 # frontend (second terminal)
 cd frontend && npm install && npm run dev  # http://localhost:5173, proxies /api to :8000
@@ -218,7 +222,7 @@ Other checks: `python3 scripts/evaluate.py`, `python3 scripts/claims_report.py`,
   1. Waits for `/api/v1/ready`.
   2. Snapshots the live claims (`live-claims` artifact, also printed in the log).
   3. Runs the smoke test. It signs in with the repository secret `DEMO_PASSWORD`.
-- **Free tier behaviour:** the instance sleeps when idle and restarts with a fresh SQLite database of the 57 seeded claims. Claims filed on the site, and reviewer decisions, are lost on restart. A paid instance with PostgreSQL fixes this.
+- **Free tier behaviour:** the instance sleeps when idle and restarts with a fresh SQLite database of the seeded claims (72 once PR #19 is deployed). Claims filed on the site, and reviewer decisions, are lost on restart. A paid instance with PostgreSQL fixes this.
 - **Azure:** `deploy-azure.yml` is ready but needs `AZURE_CREDENTIALS` and the variables listed in `docs/DEPLOYMENT.md`. It has never been run.
 
 ## Results dashboard (claude.ai artifact)
@@ -269,7 +273,7 @@ To refresh it:
 |---|---|
 | Azure Container Apps deployment | Azure credentials in repository secrets, then run `deploy-azure.yml` |
 | Scoring LLM-written explanations | An evaluation mode that runs with the Anthropic key and checks each sentence against its cited clause |
-| Real public datasets (IRDAI circulars etc.) | Licence review, then download, `provenance.py --write`, and ingest through the policy pipeline |
+| More public datasets (IRDAI circulars etc.; the CAS benchmark is already in use) | Licence review, then download, `provenance.py --write`, and ingest through the policy pipeline |
 | Persistent live data | Paid Render instance with PostgreSQL (`DATABASE_URL`) |
 
-Roadmap ideas (not started): single sign-on, OCR for scanned documents, an embedding retriever alongside BM25, an ML fraud model, more property perils and travel benefits.
+Roadmap ideas (not started; see `docs/ROADMAP.md`): single sign-on, OCR for scanned documents, an embedding retriever alongside BM25, an ML fraud model, more property perils and travel benefits.

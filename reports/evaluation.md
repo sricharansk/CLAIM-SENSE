@@ -1,6 +1,6 @@
 # Claim Sense evaluation report
 
-Generated 2026-10-30T18:18:26+00:00 by `python scripts/evaluate.py` on a fresh database with synthetic data only. Rules adjudication-rules/1.0.0, risk risk-rules/1.0.0, LLM off (extractive answers).
+Generated 2026-10-30T18:31:41+00:00 by `python scripts/evaluate.py` on a fresh database with synthetic data only. Rules adjudication-rules/1.1.0, risk risk-rules/1.1.0, LLM off (extractive answers).
 
 **Result: all checks passed.** 986 of 986 checks passed across 72 claim cases and 30 policy questions.
 
