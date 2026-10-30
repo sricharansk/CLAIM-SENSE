@@ -758,5 +758,206 @@
     ],
     "expected_recommendation": "PARTIAL_APPROVAL",
     "scenario": "Accidental injury abroad (2.1) with an ambulance: comfort items and deductible"
+  },
+  {
+    "claim_number": "CLM-A-5001",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-25-005101",
+    "claimant_name": "Arjun Nair",
+    "incident_date": "2025-08-10",
+    "description": "Slipped on a wet staircase at the office and fractured the right ankle.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Weekly benefit capped at INR 10,000 a week (2.4); medical expenses within 10% (2.5)"
+  },
+  {
+    "claim_number": "CLM-A-5002",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-25-005118",
+    "claimant_name": "Manoj Tiwari",
+    "incident_date": "2025-09-02",
+    "description": "Right index finger crushed in a press machine accident at the workshop.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "PARTIAL_APPROVAL",
+    "scenario": "Index finger is 10% of the sum insured in the disablement table (2.3)"
+  },
+  {
+    "claim_number": "CLM-A-5003",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-25-005125",
+    "claimant_name": "Rehana Sheikh",
+    "incident_date": "2025-10-05",
+    "description": "The insured, Imran Sheikh, was killed when a truck hit his motorcycle on the highway.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt",
+      "police_report.txt"
+    ],
+    "expected_recommendation": "APPROVE",
+    "scenario": "Accidental death: 100% of the capital sum insured to the nominee (2.1)"
+  },
+  {
+    "claim_number": "CLM-A-5004",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-25-005132",
+    "claimant_name": "Pooja Iyer",
+    "incident_date": "2025-09-15",
+    "description": "Hospitalised with dengue fever and unable to work for three weeks.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Dengue is an illness, not an accident (1.3)"
+  },
+  {
+    "claim_number": "CLM-A-5005",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-25-005149",
+    "claimant_name": "Rohan Kapoor",
+    "incident_date": "2025-08-23",
+    "description": "Car hit a road divider late at night; the insured was driving home from a party.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt",
+      "police_report.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Injury while drunk: excluded (3.2)"
+  },
+  {
+    "claim_number": "CLM-A-5006",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-25-005156",
+    "claimant_name": "Suresh Babu",
+    "incident_date": "2025-08-15",
+    "description": "Fell from a first-floor balcony at home; spinal cord injury with paralysis below the waist.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "INVESTIGATE",
+    "scenario": "Full sum insured claimed 45 days after cover began: high risk, sent to investigation"
+  },
+  {
+    "claim_number": "CLM-A-5007",
+    "claim_type": "personal_accident",
+    "policy_number": "CS-PAC-25-005163",
+    "claimant_name": "Divya Menon",
+    "incident_date": "2025-11-02",
+    "description": "Fell from a ladder while repairing the roof and fractured the left wrist.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt"
+    ],
+    "expected_recommendation": "REQUEST_INFO",
+    "scenario": "Treating doctor's certificate not submitted (4.2)"
+  },
+  {
+    "claim_number": "CLM-L-6001",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-19-006101",
+    "claimant_name": "Lalitha Venkatesh",
+    "incident_date": "2025-07-21",
+    "description": "The life assured died of a heart attack at home.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "APPROVE",
+    "scenario": "Death six years into the policy: sum assured paid in full (2.1)"
+  },
+  {
+    "claim_number": "CLM-L-6002",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-24-006118",
+    "claimant_name": "Sourav Banerjee",
+    "incident_date": "2025-08-28",
+    "description": "The life assured died of advanced stomach cancer.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "INVESTIGATE",
+    "scenario": "Death 17 months into the policy, inside the three-year section 45 period (3.2): investigated"
+  },
+  {
+    "claim_number": "CLM-L-6003",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-24-006125",
+    "claimant_name": "Neha Malhotra",
+    "incident_date": "2025-07-02",
+    "description": "The life assured was found dead at home.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Suicide eight months after commencement: excluded (3.1)"
+  },
+  {
+    "claim_number": "CLM-L-6004",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-21-006132",
+    "claimant_name": "Sarita Agarwal",
+    "incident_date": "2025-09-10",
+    "description": "The life assured died after a long period of depression.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "APPROVE",
+    "scenario": "Suicide 55 months after commencement: the 12-month exclusion no longer applies (3.1)"
+  },
+  {
+    "claim_number": "CLM-L-6005",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-20-006149",
+    "claimant_name": "Joseph Verghese",
+    "incident_date": "2025-09-18",
+    "description": "The life assured died in hospital after a stroke.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "REQUEST_INFO",
+    "scenario": "Death certificate not submitted (4.2)"
+  },
+  {
+    "claim_number": "CLM-L-6006",
+    "claim_type": "life",
+    "policy_number": "CS-LIF-15-006156",
+    "claimant_name": "Kamala Rao",
+    "incident_date": "2025-07-20",
+    "description": "The life assured died of kidney failure.",
+    "documents": [
+      "claim_form.txt",
+      "claim_statement.txt",
+      "death_certificate.txt",
+      "medical_certificate.txt"
+    ],
+    "expected_recommendation": "RECOMMEND_REJECT",
+    "scenario": "Death on 2025-07-20, after the ten-year term ended on 2025-05-31 (1.3)"
   }
 ]

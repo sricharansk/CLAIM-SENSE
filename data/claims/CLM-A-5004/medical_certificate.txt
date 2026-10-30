@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Patient Name: Pooja Iyer
+Nature of Injury: Dengue fever with low platelets
+Doctor: Dr. S. Synthetic (fictional)
+
+Clinical Notes:
+Viral illness treated with intravenous fluids.

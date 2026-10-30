@@ -23,6 +23,9 @@ DOC_TYPES = [
     ("medical_report", ["medical report"]),
     ("property_irregularity_report", ["property irregularity"]),
     ("travel_proof", ["proof of travel", "boarding pass"]),
+    ("claim_statement", ["benefit claim statement"]),
+    ("death_certificate", ["death certificate"]),
+    ("medical_certificate", ["medical certificate", "medical attendant"]),
     ("police_report", ["police", "fir number", "accident report"]),
 ]
 
@@ -37,6 +40,8 @@ FIELD_MAP = {
     "valid till": "licence_valid_till", "workshop": "workshop", "bill number": "bill_number",
     "estimate number": "estimate_number", "value of property at risk": "value_at_risk",
     "destination": "destination", "departure date": "departure_date", "return date": "return_date",
+    "nature of injury": "injury", "cause of death": "cause_of_death", "date of death": "date_of_death",
+    "deceased name": "deceased_name", "nominee name": "nominee_name",
 }
 AMOUNT_FIELDS = {"claimed_amount", "value_at_risk"}
 NARRATIVE_HEADERS = {"description of loss:": "narrative", "clinical notes:": "clinical_notes", "findings:": "police_findings",
@@ -63,6 +68,15 @@ CATEGORY_RULES = [
 ]
 # Lines added after health and motor get their own vocabulary, so a word like "laptop" or "room" means the right thing.
 LINE_CATEGORY_RULES = {
+    # scheduled benefits: the category is the benefit claimed, which the policy schedule prices
+    "personal_accident": [
+        ("accidental_death", ["accidental death"]),
+        ("ptd", ["permanent total disablement"]),
+        ("ppd", ["permanent partial disablement"]),
+        ("ttd", ["temporary total disablement"]),
+        ("medical_expenses", ["medical expenses"]),
+    ],
+    "life": [("death_benefit", ["death benefit"])],
     "property": [
         ("valuables", ["jewellery", "jewelry", "gold", "cash", "bullion"]),
         ("contents_electronics", ["television", "laptop", "refrigerator", "washing machine", "air conditioner",

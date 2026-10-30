@@ -42,7 +42,7 @@ A human decides, within role-based limits. Every step is audited.
 
 ## In scope (MVP)
 
-Health, motor, property (home) and travel lines on synthetic data. The MVP covers:
+Health, motor, property (home), travel, personal accident and term life lines on synthetic data. The MVP covers:
 - policy ingestion from PDF or Markdown;
 - hybrid RAG with citations;
 - coverage checks and deterministic adjudication;

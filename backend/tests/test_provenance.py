@@ -122,3 +122,12 @@ def test_seed_backfills_a_missing_extraction_run(client):
             original.policy_version_id = v.id
             db.commit()
             rag.rebuild_index(db)
+
+
+def test_industry_benchmark_is_served_with_its_provenance(client):
+    b = client.get("/api/v1/benchmarks/industry").json()
+    assert set(b["lines"]) == {"ppauto", "comauto", "wkcomp", "medmal", "othliab", "prodliab"}
+    assert b["rows_read"] == 71650 and b["registry"]["valid"] and b["registry"]["status"] == "IN_USE"
+    for v in b["lines"].values():
+        paid = [d["percent_paid"] for d in v["paid_development"]]
+        assert paid == sorted(paid) and paid[-1] == 100.0 and 0.3 < v["loss_ratio"] < 1.5

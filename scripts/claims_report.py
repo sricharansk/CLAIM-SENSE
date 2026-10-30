@@ -28,10 +28,11 @@ from decimal import Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-LINES = ["health", "motor", "property", "travel"]
+LINES = ["health", "motor", "property", "travel", "personal_accident", "life"]
 DEDUCTIONS = {
     "R10_NON_PAYABLE": "Not payable", "R15_DEPRECIATION": "Depreciation", "R20_PER_DAY_LIMIT": "Per-day limit",
-    "R20_ITEM_LIMIT": "Per-item limit", "R20_BENEFIT_LIMIT": "Benefit limit", "R25_UNDERINSURANCE": "Underinsurance",
+    "R20_ITEM_LIMIT": "Per-item limit", "R20_BENEFIT_LIMIT": "Benefit limit",
+    "R20_BENEFIT_SCHEDULE": "Benefit schedule", "R25_UNDERINSURANCE": "Underinsurance",
     "R30_DEDUCTIBLE": "Deductible / excess", "R40_COPAY": "Co-payment", "R50_MAX_LIABILITY": "Sum insured cap",
     "R99_NOT_ADMISSIBLE": "Not admissible",
 }
@@ -210,7 +211,7 @@ def to_markdown(r: dict) -> str:
          if r.get("source_url") else
          f"Generated {r['generated_at']} by `python scripts/claims_report.py` on a fresh database. ")
         + f"Synthetic data only; LLM {r['llm']}. Rules {r['rules_version']}, risk {r['risk_version']}. Every figure is read back from the API.", "",
-        f"**{s['claims']} claims** across health, motor, property and travel: {_inr(s['billed'])} billed, "
+        f"**{s['claims']} claims** across health, motor, property, travel, personal accident and life: {_inr(s['billed'])} billed, "
         f"{_inr(s['payable'])} recommended payable ({s['payout_ratio']:.1%}). Every claim was routed to a human review queue; "
         "no claim was decided by the system." + (f" Reviewer decisions so far: {_statuses(r['claims'])}." if r.get("source_url") else "")
         + (f" Not yet analysed, so not counted: {', '.join(r['not_analysed'])}." if r.get("not_analysed") else ""), "",
@@ -218,7 +219,7 @@ def to_markdown(r: dict) -> str:
     ]
     for line, b in r["by_line"].items():
         recs = ", ".join(f"{k.replace('_', ' ').lower()} {v}" for k, v in sorted(b["recommendations"].items()))
-        out.append(f"| {line.title()} | {b['claims']} | {_inr(b['billed'])} | {_inr(b['payable'])} | "
+        out.append(f"| {line.replace('_', ' ').title()} | {b['claims']} | {_inr(b['billed'])} | {_inr(b['payable'])} | "
                    f"{b['payout_ratio']:.1%} | {recs} |")
     out += ["", "## Outcomes", "", "| Recommendation | Claims |", "|---|---|"]
     out += [f"| {k} | {v} |" for k, v in sorted(s["recommendations"].items())]

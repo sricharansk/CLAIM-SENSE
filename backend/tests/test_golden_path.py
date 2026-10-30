@@ -104,9 +104,9 @@ def test_health_ready_and_analytics(client):
     assert client.get("/api/v1/ready").json()["policy_index"] == "ok"
     a = client.get("/api/v1/analytics").json()
     assert a["totals"]["claims"] >= 8
-    assert a["portfolio"]["claims"] == 1000 and 0 < a["portfolio"]["recall"] <= 1
+    assert a["portfolio"]["claims"] == 10000 and 0 < a["portfolio"]["recall"] <= 1
     lines = a["lines"]
-    assert set(lines) == {"health", "motor", "property", "travel"}
+    assert set(lines) == {"health", "motor", "property", "travel", "personal_accident", "life"}
     assert sum(v["claims"] for v in lines.values()) == a["totals"]["claims"]
     assert abs(sum(float(v["payable"]) for v in lines.values()) - float(a["totals"]["recommended_payable"])) < 0.01
 

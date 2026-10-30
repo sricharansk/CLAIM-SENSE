@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { api, words } from "../api";
+import { Benchmark, api, words } from "../api";
 import { Badge, Card, ErrorBox, Loading, useLoad } from "../components/ui";
 
 const short = (h: string | null) => (h ? `${h.slice(0, 12)}…` : "—");
@@ -7,6 +7,7 @@ const short = (h: string | null) => (h ? `${h.slice(0, 12)}…` : "—");
 export default function Datasets() {
   const d = useLoad(api.datasets);
   const m = useLoad(api.manifest);
+  const b = useLoad(api.benchmark);
   const [open, setOpen] = useState<string | null>(null);
   const reg = d.data, man = m.data;
   const inUse = reg?.sources.filter((s) => s.status === "IN_USE") ?? [];
@@ -19,7 +20,8 @@ export default function Datasets() {
         <>
           <div className="kpis">
             <div className="kpi"><span>Sources registered</span><strong>{reg.sources.length}</strong></div>
-            <div className="kpi"><span>In use (synthetic)</span><strong>{inUse.length}</strong></div>
+            <div className="kpi"><span>In use</span><strong>{inUse.length}</strong>
+              <small className="muted">{inUse.filter((s) => s.source_type === "synthetic").length} synthetic, {inUse.filter((s) => s.source_type !== "synthetic").length} public</small></div>
             <div className={`kpi ${inUse.every((s) => s.valid) ? "" : "red"}`}><span>Checksums verified</span><strong>{inUse.filter((s) => s.valid).length} / {inUse.length}</strong></div>
             <div className={`kpi ${reg.problems.length ? "red" : ""}`}><span>Provenance problems</span><strong>{reg.problems.length}</strong></div>
             <div className="kpi"><span>Indexed policy chunks</span><strong>{man.indexed_chunks}</strong></div>
@@ -43,6 +45,7 @@ export default function Datasets() {
                 </tr>))}</tbody>
             </table>
           </Card>
+          <IndustryBenchmark b={b.data} error={b.error?.message} />
           <Card title="RAG ingestion manifest">
             <p className="muted small">Policy wordings in the retrieval index. A chunk that cannot be traced to its source file, version, page, section, clause and extraction run is kept out of the index and listed here. The same manifest, built from a fresh database, is committed as <span className="mono">reports/rag_manifest.json</span> and CI checks it is reproducible.</p>
             <table>
@@ -71,5 +74,38 @@ export default function Datasets() {
         </>
       )}
     </>
+  );
+}
+
+const pct = (x: number | null) => (x === null ? "—" : `${(x * 100).toFixed(1)}%`);
+const LAGS = [1, 2, 3, 5];
+
+// Industry benchmark from the CAS Schedule P database (aggregates only), shown next to the registry entry it came from.
+function IndustryBenchmark({ b, error }: { b: Benchmark | null; error?: string }) {
+  if (!b) return <Card title="Industry benchmark: CAS Schedule P"><p className="muted">{error ?? "Loading…"}</p></Card>;
+  const lines = Object.entries(b.lines);
+  return (
+    <Card title="Industry benchmark: CAS Schedule P">
+      <p className="muted small">{b.source.name}, {b.source.publisher}. {b.rows_read.toLocaleString("en-IN")} company rows
+        aggregated by <span className="mono">{b.source.transformation_script}</span>; amounts in {b.source.units}. {b.note}</p>
+      <table>
+        <thead><tr><th>Line</th><th className="num">Companies</th><th className="num">Net premium (USD bn)</th><th className="num">Loss ratio</th>
+          {LAGS.map((l) => <th key={l} className="num">Paid by year {l}</th>)}<th>Years 1 to 10</th></tr></thead>
+        <tbody>{lines.map(([k, v]) => (
+          <tr key={k}>
+            <td>{v.label}<div className="mono small muted">{k}</div></td>
+            <td className="num">{v.companies}</td>
+            <td className="num">{(v.net_earned_premium / 1e6).toFixed(1)}</td>
+            <td className="num">{pct(v.loss_ratio)}</td>
+            {LAGS.map((l) => <td key={l} className="num">{v.paid_development[l - 1]?.percent_paid ?? "—"}%</td>)}
+            <td><span className="spark" aria-label={`Paid development for ${v.label}`}>
+              {v.paid_development.map((d) => <i key={d.lag_years} style={{ height: `${Math.max(2, d.percent_paid * 0.28)}px` }} title={`Year ${d.lag_years}: ${d.percent_paid}%`} />)}
+            </span></td>
+          </tr>))}</tbody>
+      </table>
+      <p className="muted small">Loss ratio: {b.definitions.loss_ratio}. Paid by year n: {b.definitions.paid_development}.
+        File <span className="mono">{b.source.file}</span> SHA-256 <span className="mono" title={b.source.file_sha256}>{b.source.file_sha256.slice(0, 12)}…</span>,
+        retrieved {b.source.retrieval_date}. Licence: {b.registry?.license ?? "see the registry"}</p>
+    </Card>
   );
 }

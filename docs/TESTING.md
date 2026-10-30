@@ -3,8 +3,8 @@
 ## Commands
 
 ```bash
-cd backend && ruff check app tests ../scripts && python -m pytest -q     # 109 tests
-python3 scripts/evaluate.py                                             # golden evaluation, 803 checks
+cd backend && ruff check app tests ../scripts && python -m pytest -q     # 158 tests
+python3 scripts/evaluate.py                                             # golden evaluation, 986 checks
 python3 scripts/provenance.py --check                                   # registry, checksums, reproducible RAG manifest
 cd frontend && npm run build                                            # type check + build
 cd e2e && npx playwright test                                           # 12 browser tests (fresh stack)
@@ -20,31 +20,32 @@ CI (`.github/workflows/ci.yml`) runs all of these on every push and pull request
 | `test_adjudication.py` | 7 | Hand-calculated waterfalls, rounding, caps, depreciation bands |
 | `test_rag.py` | 5 | Clause parser keeps page/section/clause; hybrid ranking; cited answers; synonyms; refusal |
 | `test_extraction.py` | 4 | Field and line-item extraction from text and PDF |
-| `test_golden_path.py` | 62 | All 50 seeded scenarios across the four lines; version matching; rejection citation; duplicates; create → upload → analyse → review; safe failure; validation; headers and error shape |
+| `test_golden_path.py` | 75 | All 63 seeded scenarios across the six lines; version matching; rejection citation; duplicates; create → upload → analyse → review; safe failure; validation; headers and error shape |
 | `test_auth.py` | 7 | Sign-in, roles, approval limit, escalation, read-only auditor |
 | `test_letters_sla.py` | 7 | Settlement-clock states; letter content per decision type; CSV export |
 | `test_evaluation.py` | 3 | Evaluation report served and complete; sign-in required; refusals |
 | `test_security_guards.py` | 4 | Sign-in throttle; injection scan; injected document flagged with amount unchanged; override and escalation rates |
 | `test_policy_ingestion.py` | 4 | PDF ingestion with pages and states; duplicate, scanned, unreadable and wrong-type failures; supervisor only; seeded records |
 | `test_fact_correction.py` | 2 | Correction used by the next analysis, audited, extracted value kept, latest wins; date, amount, reason, role and decided-claim validation |
-| `test_provenance.py` | 6 | Committed registry valid; validator rejects missing or wrong provenance and checksum drift; `/datasets`; every indexed chunk resolves; a chunk without an extraction run is kept out of the index; backfill |
+| `test_provenance.py` | 7 | Committed registry valid; validator rejects missing or wrong provenance and checksum drift; `/datasets`; the CAS benchmark served with its registry entry; every indexed chunk resolves; a chunk without an extraction run is kept out of the index; backfill |
 | `test_property_travel.py` | 11 | Property average clause (hand calculation) and tolerance; valuables; travel per-item and benefit limits; medical without sub-limit; per-line item categories; value at risk extracted; burglary without a police report; travel claim outside the trip; claim-type validation; value-at-risk correction validated and used |
 | `test_live_report.py` | 1 | `claims_report.py --live` reads every claim without changing any; claims not analysed (or whose analysis failed) are listed apart |
-| `test_seed_packets.py` | 1 | The deployed seed files the 7 evaluation packets as claims, idempotently, each with its hand-worked recommendation and amount |
+| `test_seed_packets.py` | 1 | The deployed seed files the 9 evaluation packets as claims, idempotently, each with its hand-worked recommendation and amount |
+| `test_benefit_lines.py` | 17 | Personal accident benefit schedule worked by hand (disablement table, weekly cap, capped medical expenses); unscheduled benefit; available sum insured cap; life death benefit; benefit categorisation and document classification; life contestable period in the risk score; accident-only, alcohol and suicide-window outcomes through the full pipeline |
 | `test_review_assignment.py` | 3 | Queue shows risk, age and assignee; take, release and supervisor reassignment; others cannot take or decide an assigned task; supervisor-queue and auditor limits; audit events |
 
 Tests use an isolated temporary SQLite database seeded from `data/`, without the evaluation packets (`CLAIMSENSE_SEED_PACKETS=false`), because several tests file those packets themselves. The LLM is always off.
 
 ## Golden evaluation (`scripts/evaluate.py`)
 
-- **Claim cases:** 57 across health, motor, property and travel, covering all ten blueprint case types: clearly covered, excluded, partial, insufficient evidence, high risk, deductible, sub-limit, maximum coverage, duplicate, and ambiguous policy version.
-- **Policy questions:** 26, split into covered, excluded, ambiguous and unsupported.
+- **Claim cases:** 72 across health, motor, property, travel, personal accident and life, covering all ten blueprint case types: clearly covered, excluded, partial, insufficient evidence, high risk, deductible, sub-limit, maximum coverage, duplicate, and ambiguous policy version.
+- **Policy questions:** 30, split into covered, excluded, ambiguous and unsupported.
 - **Expected values:** worked out by hand in `data/evaluation/golden_cases.json`.
 - **Scoring:** results are scored on retrieval, citations, groundedness, coverage, amounts, risk and workflow. The report is written to `reports/evaluation.{json,md}` and shown at `/evaluation`. CI fails on any failed check.
 
 ## End-to-end
 
-- **`scripts/smoke_test.py <url> [password]`:** checks the frontend (the page, and that its stylesheet and script load with the right content type), health and readiness, sign-in enforcement, seeded data, policy ingestion records, the evaluation report, the source registry and the RAG manifest. It then runs the golden claim: create, upload, analyse, coverage, adjudication (₹64,080), citations, human review, audit, assistant answer and refusal. It also files a property claim (₹3,47,500 payable) and a travel claim (₹95,000 payable).
+- **`scripts/smoke_test.py <url> [password]`:** checks the frontend (the page, and that its stylesheet and script load with the right content type), health and readiness, sign-in enforcement, seeded data, policy ingestion records, the evaluation report, the source registry and the RAG manifest. It then runs the golden claim: create, upload, analyse, coverage, adjudication (₹64,080), citations, human review, audit, assistant answer and refusal. It also files a property claim (₹3,47,500 payable), a travel claim (₹95,000), a personal accident claim (₹1,05,000) and a life claim (₹20,00,000).
 - **Browser runs (Playwright, Chromium) against the Docker image:**
   - sign in;
   - create a claim, upload, analyse;
@@ -78,7 +79,7 @@ Tests use an isolated temporary SQLite database seeded from `data/`, without the
 - data provenance;
 - dashboard rates;
 - phone layout;
-- a property and a travel claim filed from the New Claim screen, with their payable amounts and limit steps;
+- a property, a travel, a personal accident and a life claim filed from the New Claim screen, with their payable amounts and waterfall steps;
 - dashboard tiles, lines of business and bars open the matching claims, and removing the filter chip shows them all.
 
 Any browser console error fails a test. They need a freshly seeded stack, because a second run files the golden claim again and the system flags it as a duplicate. CI runs them in the `docker-smoke` job before the smoke test.

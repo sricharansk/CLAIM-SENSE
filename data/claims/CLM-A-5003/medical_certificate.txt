@@ -1,0 +1,9 @@
+MEDICAL CERTIFICATE FROM TREATING DOCTOR
+SYNTHETIC DEMO DOCUMENT
+
+Deceased Name: Imran Sheikh
+Nature of Injury: Fatal head injury in a road traffic accident
+Doctor: Dr. S. Synthetic (fictional)
+
+Clinical Notes:
+Declared dead on arrival at the trauma centre.

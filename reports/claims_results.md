@@ -1,8 +1,8 @@
 # Claim Sense results on every claim packet
 
-Generated 2026-10-12T23:36:25+00:00 by `python scripts/claims_report.py` on a fresh database. Synthetic data only; LLM off (deterministic rules and extractive retrieval). Rules adjudication-rules/1.0.0, risk risk-rules/1.0.0. Every figure is read back from the API.
+Generated 2026-10-30T18:31:47+00:00 by `python scripts/claims_report.py` on a fresh database. Synthetic data only; LLM off (deterministic rules and extractive retrieval). Rules adjudication-rules/1.1.0, risk risk-rules/1.1.0. Every figure is read back from the API.
 
-**58 claims** across health, motor, property and travel: ₹8,773,600 billed, ₹5,405,550 recommended payable (61.6%). Every claim was routed to a human review queue; no claim was decided by the system.
+**73 claims** across health, motor, property, travel, personal accident and life: ₹22,296,600 billed, ₹16,262,550 recommended payable (72.9%). Every claim was routed to a human review queue; no claim was decided by the system.
 
 ## By line of business
 
@@ -12,27 +12,30 @@ Generated 2026-10-12T23:36:25+00:00 by `python scripts/claims_report.py` on a fr
 | Motor | 11 | ₹680,500 | ₹304,350 | 44.7% | partial approval 6, recommend reject 4, request info 1 |
 | Property | 11 | ₹2,943,000 | ₹1,901,100 | 64.6% | partial approval 7, recommend reject 4 |
 | Travel | 14 | ₹2,910,000 | ₹1,945,000 | 66.8% | partial approval 7, recommend reject 5, request info 2 |
+| Personal Accident | 8 | ₹2,823,000 | ₹2,657,000 | 94.1% | approve 1, investigate 1, partial approval 3, recommend reject 2, request info 1 |
+| Life | 7 | ₹10,700,000 | ₹8,200,000 | 76.6% | approve 3, investigate 1, recommend reject 2, request info 1 |
 
 ## Outcomes
 
 | Recommendation | Claims |
 |---|---|
-| INVESTIGATE | 2 |
-| PARTIAL_APPROVAL | 31 |
-| RECOMMEND_REJECT | 21 |
-| REQUEST_INFO | 4 |
+| APPROVE | 4 |
+| INVESTIGATE | 4 |
+| PARTIAL_APPROVAL | 34 |
+| RECOMMEND_REJECT | 25 |
+| REQUEST_INFO | 6 |
 
 | Risk level | Claims |
 |---|---|
-| HIGH | 2 |
-| LOW | 53 |
-| MEDIUM | 3 |
+| HIGH | 5 |
+| LOW | 64 |
+| MEDIUM | 4 |
 
 | Review queue | Claims |
 |---|---|
-| ADJUSTER_REVIEW | 52 |
-| PENDING_INFORMATION | 4 |
-| SIU_INVESTIGATION | 2 |
+| ADJUSTER_REVIEW | 63 |
+| PENDING_INFORMATION | 6 |
+| SIU_INVESTIGATION | 4 |
 
 ## Where the money went
 
@@ -43,13 +46,14 @@ Total reductions from billed to payable, by rule:
 | Not payable (`R10_NON_PAYABLE`) | ₹159,600 |
 | Depreciation (`R15_DEPRECIATION`) | ₹194,350 |
 | Benefit limit (`R20_BENEFIT_LIMIT`) | ₹36,000 |
+| Benefit schedule (`R20_BENEFIT_SCHEDULE`) | ₹63,000 |
 | Per-item limit (`R20_ITEM_LIMIT`) | ₹75,000 |
 | Per-day limit (`R20_PER_DAY_LIMIT`) | ₹96,500 |
 | Underinsurance (`R25_UNDERINSURANCE`) | ₹98,700 |
 | Deductible / excess (`R30_DEDUCTIBLE`) | ₹212,000 |
 | Co-payment (`R40_COPAY`) | ₹156,400 |
 | Sum insured cap (`R50_MAX_LIABILITY`) | ₹197,500 |
-| Not admissible (`R99_NOT_ADMISSIBLE`) | ₹2,142,000 |
+| Not admissible (`R99_NOT_ADMISSIBLE`) | ₹4,745,000 |
 
 ## Every claim
 
@@ -72,11 +76,11 @@ Total reductions from billed to payable, by rule:
 | CLM-H-1019 | health | HLT-SHIELD v2025.1 | ₹80,000 | ₹67,500 | COVERED | deductible / excess, co-payment | LOW (EARLY_CLAIM) | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
 | CLM-H-1020 | health | HLT-SHIELD v2025.1 | ₹48,000 | ₹34,200 | COVERED | per-day limit, not payable, deductible / excess, co-payment | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
 | CLM-H-1021 | health | HLT-SHIELD v2025.1 | ₹27,000 | ₹0 | NOT_COVERED | POLICY_NOT_IN_FORCE §2.1 | LOW | RECOMMEND_REJECT | ADJUSTER_REVIEW |
-| CLM-H-3051 | health | HLT-SHIELD v2025.1 | ₹25,000 | ₹18,000 | COVERED | deductible / excess, co-payment | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
-| CLM-H-3052 | health | HLT-SHIELD v2025.1 | ₹410,000 | ₹300,000 | COVERED | deductible / excess, co-payment, sum insured cap | MEDIUM (HIGH_AMOUNT_RATIO) | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
-| CLM-H-3053 | health | HLT-SHIELD v2025.1 | ₹36,000 | ₹27,900 | COVERED | deductible / excess, co-payment | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
-| CLM-H-3054 | health | HLT-SHIELD v2024.1 | ₹36,000 | ₹19,600 | COVERED | per-day limit, deductible / excess, co-payment | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
-| CLM-H-3058 | health | HLT-SHIELD v2025.1 | ₹78,000 | ₹64,080 | COVERED | not payable, deductible / excess, co-payment | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-H-3064 | health | HLT-SHIELD v2025.1 | ₹25,000 | ₹18,000 | COVERED | deductible / excess, co-payment | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-H-3065 | health | HLT-SHIELD v2025.1 | ₹410,000 | ₹300,000 | COVERED | deductible / excess, co-payment, sum insured cap | MEDIUM (HIGH_AMOUNT_RATIO) | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-H-3066 | health | HLT-SHIELD v2025.1 | ₹36,000 | ₹27,900 | COVERED | deductible / excess, co-payment | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-H-3067 | health | HLT-SHIELD v2024.1 | ₹36,000 | ₹19,600 | COVERED | per-day limit, deductible / excess, co-payment | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-H-3073 | health | HLT-SHIELD v2025.1 | ₹78,000 | ₹64,080 | COVERED | not payable, deductible / excess, co-payment | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
 | CLM-M-2001 | motor | MTR-SECURE v2025.1 | ₹73,500 | ₹55,350 | COVERED | depreciation, deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
 | CLM-M-2002 | motor | MTR-SECURE v2025.1 | ₹65,500 | ₹0 | NOT_COVERED | EXCL_DUI §3.1 | LOW (EARLY_CLAIM) | RECOMMEND_REJECT | ADJUSTER_REVIEW |
 | CLM-M-2003 | motor | MTR-SECURE v2025.1 | ₹58,500 | ₹0 | NOT_COVERED | EXCL_NO_LICENCE §3.2 | LOW | RECOMMEND_REJECT | ADJUSTER_REVIEW |
@@ -98,9 +102,9 @@ Total reductions from billed to payable, by rule:
 | CLM-P-3009 | property | HOME-GUARD v2025.1 | ₹139,000 | ₹119,200 | COVERED | depreciation, deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
 | CLM-P-3010 | property | HOME-GUARD v2025.1 | ₹145,000 | ₹98,800 | COVERED | depreciation, underinsurance, deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
 | CLM-P-3011 | property | HOME-GUARD v2025.1 | ₹168,000 | ₹149,000 | COVERED | depreciation, deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
-| CLM-P-3055 | property | HOME-GUARD v2025.1 | ₹71,000 | ₹61,000 | COVERED | deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
-| CLM-T-3056 | travel | TRV-GLOBE v2025.1 | ₹180,000 | ₹145,000 | COVERED | benefit limit, deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
-| CLM-T-3057 | travel | TRV-GLOBE v2025.1 | ₹12,000 | ₹0 | NOT_COVERED | OUTSIDE_TRIP §1.3 | LOW | RECOMMEND_REJECT | ADJUSTER_REVIEW |
+| CLM-P-3068 | property | HOME-GUARD v2025.1 | ₹71,000 | ₹61,000 | COVERED | deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-T-3069 | travel | TRV-GLOBE v2025.1 | ₹180,000 | ₹145,000 | COVERED | benefit limit, deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-T-3070 | travel | TRV-GLOBE v2025.1 | ₹12,000 | ₹0 | NOT_COVERED | OUTSIDE_TRIP §1.3 | LOW | RECOMMEND_REJECT | ADJUSTER_REVIEW |
 | CLM-T-4001 | travel | TRV-GLOBE v2025.1 | ₹442,500 | ₹434,000 | COVERED | not payable, deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
 | CLM-T-4002 | travel | TRV-GLOBE v2025.1 | ₹181,000 | ₹95,000 | COVERED | per-item limit, benefit limit, deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
 | CLM-T-4003 | travel | TRV-GLOBE v2025.1 | ₹201,000 | ₹0 | NOT_COVERED | EXCL_HAZARDOUS_SPORTS §3.2 | LOW | RECOMMEND_REJECT | ADJUSTER_REVIEW |
@@ -113,11 +117,26 @@ Total reductions from billed to payable, by rule:
 | CLM-T-4012 | travel | TRV-GLOBE v2025.1 | ₹849,000 | ₹840,000 | COVERED | not payable, deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
 | CLM-T-4013 | travel | TRV-GLOBE v2025.1 | ₹69,000 | ₹64,000 | COVERED | deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
 | CLM-T-4014 | travel | TRV-GLOBE v2025.1 | ₹185,500 | ₹179,000 | COVERED | not payable, deductible / excess | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-A-3071 | personal_accident | PA-SECURE v2025.1 | ₹178,000 | ₹152,000 | COVERED | benefit schedule | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-A-5001 | personal_accident | PA-SECURE v2025.1 | ₹117,000 | ₹105,000 | COVERED | benefit schedule | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-A-5002 | personal_accident | PA-SECURE v2025.1 | ₹95,000 | ₹70,000 | COVERED | benefit schedule | LOW | PARTIAL_APPROVAL | ADJUSTER_REVIEW |
+| CLM-A-5003 | personal_accident | PA-SECURE v2025.1 | ₹1,500,000 | ₹1,500,000 | COVERED | none | MEDIUM (HIGH_AMOUNT_RATIO) | APPROVE | ADJUSTER_REVIEW |
+| CLM-A-5004 | personal_accident | PA-SECURE v2025.1 | ₹9,000 | ₹0 | NOT_COVERED | NOT_ACCIDENTAL §1.3 | LOW | RECOMMEND_REJECT | ADJUSTER_REVIEW |
+| CLM-A-5005 | personal_accident | PA-SECURE v2025.1 | ₹94,000 | ₹0 | NOT_COVERED | EXCL_ALCOHOL §3.2 | LOW | RECOMMEND_REJECT | ADJUSTER_REVIEW |
+| CLM-A-5006 | personal_accident | PA-SECURE v2025.1 | ₹800,000 | ₹800,000 | COVERED | none | HIGH (HIGH_AMOUNT_RATIO, EARLY_CLAIM) | INVESTIGATE | SIU_INVESTIGATION |
+| CLM-A-5007 | personal_accident | PA-SECURE v2025.1 | ₹30,000 | ₹30,000 | COVERED | missing medical_certificate | LOW (MISSING_DOCUMENTS) | REQUEST_INFO | PENDING_INFORMATION |
+| CLM-L-3072 | life | LIFE-TERM v2025.1 | ₹1,000,000 | ₹1,000,000 | COVERED | none | LOW | APPROVE | ADJUSTER_REVIEW |
+| CLM-L-6001 | life | LIFE-TERM v2025.1 | ₹2,000,000 | ₹2,000,000 | COVERED | none | LOW | APPROVE | ADJUSTER_REVIEW |
+| CLM-L-6002 | life | LIFE-TERM v2025.1 | ₹2,500,000 | ₹2,500,000 | COVERED | none | HIGH (CONTESTABLE_PERIOD) | INVESTIGATE | SIU_INVESTIGATION |
+| CLM-L-6003 | life | LIFE-TERM v2025.1 | ₹1,000,000 | ₹0 | NOT_COVERED | EXCL_SUICIDE §3.1 | HIGH (CONTESTABLE_PERIOD) | RECOMMEND_REJECT | ADJUSTER_REVIEW |
+| CLM-L-6004 | life | LIFE-TERM v2025.1 | ₹1,500,000 | ₹1,500,000 | COVERED | none | LOW | APPROVE | ADJUSTER_REVIEW |
+| CLM-L-6005 | life | LIFE-TERM v2025.1 | ₹1,200,000 | ₹1,200,000 | COVERED | missing death_certificate | LOW (MISSING_DOCUMENTS) | REQUEST_INFO | PENDING_INFORMATION |
+| CLM-L-6006 | life | LIFE-TERM v2025.1 | ₹1,500,000 | ₹0 | NOT_COVERED | POLICY_NOT_IN_FORCE §1.3 | LOW | RECOMMEND_REJECT | ADJUSTER_REVIEW |
 
 ## Risk rules on the 1,000-claim synthetic portfolio
 
-1000 synthetic claims (motor 241, health 507, travel 128, property 124) with 69 injected anomaly patterns. The transparent risk rules flagged 67: precision 86.6%, recall 84.1% (TP 58, FP 9, FN 11, TN 922). Synthetic portfolio with injected patterns; measures rule recall of injected patterns only.
+10000 synthetic claims (motor 2162, health 4231, personal_accident 1045, property 1111, travel 974, life 477) with 764 injected anomaly patterns. The transparent risk rules flagged 664: precision 90.1%, recall 78.3% (TP 598, FP 66, FN 166, TN 9170). Synthetic portfolio with injected patterns; measures rule recall of injected patterns only.
 
 ## Golden evaluation
 
-803 of 803 checks passed across 57 hand-worked claim cases and 26 policy-assistant questions (retrieval hit@1 100%). See `reports/evaluation.md`.
+986 of 986 checks passed across 72 hand-worked claim cases and 30 policy-assistant questions (retrieval hit@1 100%). See `reports/evaluation.md`.

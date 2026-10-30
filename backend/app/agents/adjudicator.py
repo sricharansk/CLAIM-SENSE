@@ -40,6 +40,10 @@ def run(ctx: ClaimContext, log: ToolLog) -> str:
         var = rules.money(var) if var else None
         result = rules.adjudicate_property(items, claimed, terms, Decimal(ctx.insured.sum_insured), var)
         args = {"mode": "property", "sum_insured": str(ctx.insured.sum_insured), "value_at_risk": str(var) if var else None}
+    elif terms.get("adjudication_model") == "benefit_schedule":
+        avail = _available_sum_insured(ctx)
+        result = rules.adjudicate_benefits(items, claimed, terms, Decimal(ctx.insured.sum_insured), avail)
+        args = {"mode": "benefit_schedule", "sum_insured": str(ctx.insured.sum_insured), "sum_insured_available": str(avail)}
     elif terms["line_of_business"] == "travel":
         result = rules.adjudicate_travel(items, claimed, terms, Decimal(ctx.insured.sum_insured))
         args = {"mode": "travel", "sum_insured": str(ctx.insured.sum_insured)}

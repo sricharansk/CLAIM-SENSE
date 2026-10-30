@@ -25,7 +25,8 @@ SYNONYMS = {
     "baby": "maternity childbirth", "plastic surgery": "cosmetic", "first year": "waiting period months",
     "car": "vehicle", "bike": "vehicle", "crash": "collision accident", "stolen": "theft",
     "hospital room": "room rent", "documents": "documents required", "paperwork": "documents required",
-    "icu": "intensive care unit", "underinsured": "underinsurance average value at risk",
+    "icu": "intensive care unit", "bear": "borne", "died": "death", "killed": "death", "thumb": "thumb partial disablement",
+    "finger": "finger partial disablement", "underinsured": "underinsurance average value at risk",
     "nepal": "outside india geographical area", "bhutan": "outside india geographical area",
 }
 

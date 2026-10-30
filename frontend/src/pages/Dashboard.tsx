@@ -84,7 +84,8 @@ function Kpi({ label, value, tone, to }: { label: string; value: string | number
     : <div className={`kpi ${tone ?? ""}`}>{body}</div>;
 }
 
-const LINE_NAMES: Record<string, string> = { health: "Health", motor: "Motor", property: "Property (home)", travel: "Travel" };
+const LINE_NAMES: Record<string, string> = { health: "Health", motor: "Motor", property: "Property (home)", travel: "Travel",
+  personal_accident: "Personal accident", life: "Life" };
 
 function LineTable({ lines }: { lines: Analytics["lines"] }) {
   const rows = Object.entries(lines);

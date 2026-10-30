@@ -4,7 +4,7 @@
   "sources": [
     {
       "id": "synthetic-policy-corpus",
-      "name": "Synthetic policy wordings and structured terms (HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, HOME-GUARD 2025.1, TRV-GLOBE 2025.1)",
+      "name": "Synthetic policy wordings and structured terms (HLT-SHIELD 2024.1 and 2025.1, MTR-SECURE 2025.1, HOME-GUARD 2025.1, TRV-GLOBE 2025.1, PA-SECURE 2025.1, LIFE-TERM 2025.1)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_policies",
@@ -30,10 +30,14 @@
         "data/policies/HOME-GUARD_2025.1.terms.json",
         "data/policies/TRV-GLOBE_2025.1.md",
         "data/policies/TRV-GLOBE_2025.1.terms.json",
+        "data/policies/PA-SECURE_2025.1.md",
+        "data/policies/PA-SECURE_2025.1.terms.json",
+        "data/policies/LIFE-TERM_2025.1.md",
+        "data/policies/LIFE-TERM_2025.1.terms.json",
         "data/policies/insured_policies.json"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "69dad3f3b3456bc84b73717ebe36a134a7788650b08d9f8d11d704b5226d8f96"
+      "checksum_sha256": "62a50bca72531c4be427ca3c239c5438a9946c32c840816a15c4966600f404a7"
     },
     {
       "id": "synthetic-policy-pdf-demo",
@@ -60,7 +64,7 @@
     },
     {
       "id": "synthetic-golden-claims",
-      "name": "Synthetic golden claim packets (50 scenarios across health, motor, property and travel, and the demo upload)",
+      "name": "Synthetic golden claim packets (63 scenarios across health, motor, property, travel, personal accident and life, and the demo upload)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_claims",
@@ -79,11 +83,11 @@
         "data/claims"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "ff80da0252b1a8fdba6bfa0b3bb809f7c70b375803427b4a2595f475ac60fa3a"
+      "checksum_sha256": "be0b74b9fdc2fd958d93d4f9f26e2a859a1d6946e92037275ae8396a0894df17"
     },
     {
       "id": "synthetic-claims-portfolio",
-      "name": "Synthetic claims portfolio (1,000 claims across health, motor, property and travel, with injected anomaly labels)",
+      "name": "Synthetic claims portfolio (10,000 claims across health, motor, property, travel, personal accident and life, with injected anomaly labels)",
       "publisher": "Claim Sense (generated)",
       "source_type": "synthetic",
       "data_type": "synthetic_claims",
@@ -102,11 +106,11 @@
         "data/synthetic/claims_portfolio.csv"
       ],
       "transformation_script": "data/synthetic/generate.py",
-      "checksum_sha256": "0f161c38f8707b10cd4fc09430990317447cb2a4603578e304b627f39f672acf"
+      "checksum_sha256": "429394933359749370802139a76ae4d56cdccec07727799b7d44c87a88ab03b6"
     },
     {
       "id": "golden-evaluation-set",
-      "name": "Golden evaluation set (57 claim cases, 26 policy questions, 7 fresh packets)",
+      "name": "Golden evaluation set (72 claim cases, 30 policy questions, 9 fresh packets)",
       "publisher": "Claim Sense (hand-worked expectations; generated packets)",
       "source_type": "synthetic",
       "data_type": "evaluation",
@@ -124,7 +128,31 @@
         "data/evaluation"
       ],
       "transformation_script": "data/synthetic/generate.py (packets); golden_cases.json and rag_questions.json written by hand",
-      "checksum_sha256": "57a9606ad4d1c765ee70cd7d8b8c387d853db6addc29cc684f34044644367867"
+      "checksum_sha256": "e8a4e25caf2b88dfed5595d018f957d6561e7932af0a5a70e728c1898807a7f8"
+    },
+    {
+      "id": "cas-schedule-p-1998-2007",
+      "name": "CAS Loss Reserving Database: NAIC Schedule P triangles, accident years 1998-2007 (six lines)",
+      "publisher": "Casualty Actuarial Society; compiled for the CAS by S&P Global Market Intelligence",
+      "source_type": "benchmark",
+      "data_type": "aggregate",
+      "claim_level": "aggregate",
+      "url": "https://www.casact.org/publications-research/research/research-resources/loss-reserving-data-pulled-naic-schedule-p",
+      "publication_date": "2025-12",
+      "retrieval_date": "2026-10-30",
+      "data_period": "Accident years 1998-2007, 10 development years",
+      "version": "clrd2025.csv as redistributed in chainladder 0.10.1 (PyPI sdist, SHA-256 pinned in the script)",
+      "license": "No licence is stated on the CAS page; the data is published for research and the CAS asks users to acknowledge that they accessed the files from the CAS web page as compiled for the CAS by S&P Global Market Intelligence. Retrieved through the chainladder package (MPL-2.0). Only industry aggregates are committed, not company rows.",
+      "intended_use": [
+        "analytics",
+        "benchmark"
+      ],
+      "status": "IN_USE",
+      "paths": [
+        "data/public/cas_schedule_p/benchmark.json"
+      ],
+      "transformation_script": "scripts/fetch_public_data.py",
+      "checksum_sha256": "ab454998f00957bea6b93543a32a5c8d6f1bd39262f62bfab47b000f228cbdd7"
     },
     {
       "id": "irdai-mc-health-2024",

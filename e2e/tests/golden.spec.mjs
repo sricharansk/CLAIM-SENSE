@@ -143,13 +143,17 @@ test("phone layout: navigation behind a menu, no sideways scrolling", async ({ p
   }
 });
 
-test("property and travel claims are filed and assessed through the UI", async ({ page }) => {
+test("property, travel, personal accident and life claims are filed and assessed through the UI", async ({ page }) => {
   const packets = fileURLToPath(new URL("../../data/claims/", import.meta.url));
   await signIn(page, "Adjuster");
   for (const [policy, line, folder, files, payable, rule] of [
     ["CS-HOM-25-003101", "property", "CLM-P-3001", ["claim_form.txt", "loss_assessment.txt"], "₹3,47,500", "Average clause: property underinsured"],
     ["CS-TRV-25-004468", "travel", "CLM-T-4002", ["claim_form.txt", "expense_statement.txt", "property_irregularity_report.txt", "travel_proof.txt"],
       "₹95,000", "Laptop Computer above per-item limit"],
+    ["CS-PAC-25-005101", "personal_accident", "CLM-A-5001", ["claim_form.txt", "claim_statement.txt", "medical_certificate.txt"],
+      "₹1,05,000", "Temporary Total Disablement - 6 weeks: scheduled benefit 60000.00"],
+    ["CS-LIF-19-006101", "life", "CLM-L-6001", ["claim_form.txt", "claim_statement.txt", "death_certificate.txt", "medical_certificate.txt"],
+      "₹20,00,000", "Within available sum insured"],
   ]) {
     await page.goto("/claims/new");
     await page.locator("select").first().selectOption(policy);

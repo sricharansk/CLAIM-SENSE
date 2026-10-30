@@ -108,7 +108,9 @@ audit = call("GET", f"/audit?claim_number={n}")
 check("audit trail", {"CLAIM_CREATED", "AI_RECOMMENDATION", "HUMAN_DECISION"} <= {e["event_type"] for e in audit}, f"{len(audit)} events")
 # One claim on each of the other lines, from the seeded packets; the payable amount must match the hand calculation.
 for folder, policy, line, claimant, payable in (("CLM-P-3001", "CS-HOM-25-003101", "property", "Anita Desai", "347500.00"),
-                                                ("CLM-T-4002", "CS-TRV-25-004468", "travel", "Neha Kapoor", "95000.00")):
+                                                ("CLM-T-4002", "CS-TRV-25-004468", "travel", "Neha Kapoor", "95000.00"),
+                                                ("CLM-A-5001", "CS-PAC-25-005101", "personal_accident", "Arjun Nair", "105000.00"),
+                                                ("CLM-L-6001", "CS-LIF-19-006101", "life", "Lalitha Venkatesh", "2000000.00")):
     m = call("POST", "/claims", {"policy_number": policy, "claim_type": line, "claimant_name": claimant,
                                  "description": "smoke test"})["claim_number"]
     call("POST", f"/claims/{m}/documents", files=sorted((DEMO.parent / folder).glob("*.txt")))

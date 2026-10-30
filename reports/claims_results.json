@@ -1,46 +1,48 @@
 {
   "report": "Claim Sense results on every claim packet",
-  "generated_at": "2026-10-12T23:36:25+00:00",
+  "generated_at": "2026-10-30T18:31:47+00:00",
   "data": "synthetic only",
   "llm": "off (deterministic rules and extractive retrieval)",
-  "rules_version": "adjudication-rules/1.0.0",
-  "risk_version": "risk-rules/1.0.0",
+  "rules_version": "adjudication-rules/1.1.0",
+  "risk_version": "risk-rules/1.1.0",
   "summary": {
-    "claims": 58,
-    "billed": "8773600.00",
-    "payable": "5405550.00",
-    "payout_ratio": 0.616,
+    "claims": 73,
+    "billed": "22296600.00",
+    "payable": "16262550.00",
+    "payout_ratio": 0.729,
     "recommendations": {
-      "PARTIAL_APPROVAL": 31,
-      "RECOMMEND_REJECT": 21,
-      "INVESTIGATE": 2,
-      "REQUEST_INFO": 4
+      "PARTIAL_APPROVAL": 34,
+      "RECOMMEND_REJECT": 25,
+      "INVESTIGATE": 4,
+      "REQUEST_INFO": 6,
+      "APPROVE": 4
     },
     "coverage": {
-      "COVERED": 37,
-      "NOT_COVERED": 21
+      "COVERED": 48,
+      "NOT_COVERED": 25
     },
     "risk": {
-      "LOW": 53,
-      "HIGH": 2,
-      "MEDIUM": 3
+      "LOW": 64,
+      "HIGH": 5,
+      "MEDIUM": 4
     },
     "queues": {
-      "ADJUSTER_REVIEW": 52,
-      "SIU_INVESTIGATION": 2,
-      "PENDING_INFORMATION": 4
+      "ADJUSTER_REVIEW": 63,
+      "SIU_INVESTIGATION": 4,
+      "PENDING_INFORMATION": 6
     },
     "deductions": {
       "R10_NON_PAYABLE": "-159600.00",
       "R15_DEPRECIATION": "-194350.00",
       "R20_BENEFIT_LIMIT": "-36000.00",
+      "R20_BENEFIT_SCHEDULE": "-63000.00",
       "R20_ITEM_LIMIT": "-75000.00",
       "R20_PER_DAY_LIMIT": "-96500.00",
       "R25_UNDERINSURANCE": "-98700.00",
       "R30_DEDUCTIBLE": "-212000.00",
       "R40_COPAY": "-156400.00",
       "R50_MAX_LIABILITY": "-197500.00",
-      "R99_NOT_ADMISSIBLE": "-2142000.00"
+      "R99_NOT_ADMISSIBLE": "-4745000.00"
     },
     "human_review_required": true
   },
@@ -87,6 +89,31 @@
         "PARTIAL_APPROVAL": 7,
         "RECOMMEND_REJECT": 5,
         "REQUEST_INFO": 2
+      }
+    },
+    "personal_accident": {
+      "claims": 8,
+      "billed": "2823000.00",
+      "payable": "2657000.00",
+      "payout_ratio": 0.941,
+      "recommendations": {
+        "PARTIAL_APPROVAL": 3,
+        "APPROVE": 1,
+        "RECOMMEND_REJECT": 2,
+        "INVESTIGATE": 1,
+        "REQUEST_INFO": 1
+      }
+    },
+    "life": {
+      "claims": 7,
+      "billed": "10700000.00",
+      "payable": "8200000.00",
+      "payout_ratio": 0.766,
+      "recommendations": {
+        "APPROVE": 3,
+        "INVESTIGATE": 1,
+        "RECOMMEND_REJECT": 2,
+        "REQUEST_INFO": 1
       }
     }
   },
@@ -727,7 +754,7 @@
       ]
     },
     {
-      "claim_number": "CLM-H-3051",
+      "claim_number": "CLM-H-3064",
       "source": "evaluation packet EVAL-H-01",
       "status": "PENDING_REVIEW",
       "line": "health",
@@ -762,7 +789,7 @@
       ]
     },
     {
-      "claim_number": "CLM-H-3052",
+      "claim_number": "CLM-H-3065",
       "source": "evaluation packet EVAL-H-02",
       "status": "PENDING_REVIEW",
       "line": "health",
@@ -800,7 +827,7 @@
       ]
     },
     {
-      "claim_number": "CLM-H-3053",
+      "claim_number": "CLM-H-3066",
       "source": "evaluation packet EVAL-H-03",
       "status": "PENDING_REVIEW",
       "line": "health",
@@ -835,7 +862,7 @@
       ]
     },
     {
-      "claim_number": "CLM-H-3054",
+      "claim_number": "CLM-H-3067",
       "source": "evaluation packet EVAL-H-04",
       "status": "PENDING_REVIEW",
       "line": "health",
@@ -872,7 +899,7 @@
       ]
     },
     {
-      "claim_number": "CLM-H-3058",
+      "claim_number": "CLM-H-3073",
       "source": "demo upload packet",
       "status": "PENDING_REVIEW",
       "line": "health",
@@ -1395,7 +1422,7 @@
       "risk_signals": [],
       "recommendation": "RECOMMEND_REJECT",
       "queue": "ADJUSTER_REVIEW",
-      "evidence_items": 7,
+      "evidence_items": 8,
       "policy_clauses_cited": [
         "2.1",
         "3.1",
@@ -1652,7 +1679,7 @@
       ]
     },
     {
-      "claim_number": "CLM-P-3055",
+      "claim_number": "CLM-P-3068",
       "source": "evaluation packet EVAL-P-01",
       "status": "PENDING_REVIEW",
       "line": "property",
@@ -1685,7 +1712,7 @@
       ]
     },
     {
-      "claim_number": "CLM-T-3056",
+      "claim_number": "CLM-T-3069",
       "source": "evaluation packet EVAL-T-01",
       "status": "PENDING_REVIEW",
       "line": "travel",
@@ -1709,7 +1736,7 @@
       "risk_signals": [],
       "recommendation": "PARTIAL_APPROVAL",
       "queue": "ADJUSTER_REVIEW",
-      "evidence_items": 12,
+      "evidence_items": 13,
       "policy_clauses_cited": [
         "1.2",
         "1.3",
@@ -1720,7 +1747,7 @@
       ]
     },
     {
-      "claim_number": "CLM-T-3057",
+      "claim_number": "CLM-T-3070",
       "source": "evaluation packet EVAL-T-02",
       "status": "PENDING_REVIEW",
       "line": "travel",
@@ -1747,7 +1774,7 @@
       "risk_signals": [],
       "recommendation": "RECOMMEND_REJECT",
       "queue": "ADJUSTER_REVIEW",
-      "evidence_items": 8,
+      "evidence_items": 10,
       "policy_clauses_cited": [
         "1.3",
         "2.1",
@@ -2178,47 +2205,534 @@
         "4.1",
         "5.2"
       ]
+    },
+    {
+      "claim_number": "CLM-A-3071",
+      "source": "evaluation packet EVAL-A-01",
+      "status": "PENDING_REVIEW",
+      "line": "personal_accident",
+      "claimant": "Lata Krishnan",
+      "policy_number": "CS-PAC-25-005170",
+      "product": "PA-SECURE v2025.1",
+      "incident_date": "2025-10-20",
+      "documents": 3,
+      "claimed": "178000.00",
+      "billed": "178000.00",
+      "payable": "152000.00",
+      "deductions": {
+        "R20_BENEFIT_SCHEDULE": "-26000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 12,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "2.4",
+        "2.5",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-A-5001",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "personal_accident",
+      "claimant": "Arjun Nair",
+      "policy_number": "CS-PAC-25-005101",
+      "product": "PA-SECURE v2025.1",
+      "incident_date": "2025-08-10",
+      "documents": 3,
+      "claimed": "117000.00",
+      "billed": "117000.00",
+      "payable": "105000.00",
+      "deductions": {
+        "R20_BENEFIT_SCHEDULE": "-12000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 8,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "2.4",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-A-5002",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "personal_accident",
+      "claimant": "Manoj Tiwari",
+      "policy_number": "CS-PAC-25-005118",
+      "product": "PA-SECURE v2025.1",
+      "incident_date": "2025-09-02",
+      "documents": 3,
+      "claimed": "95000.00",
+      "billed": "95000.00",
+      "payable": "70000.00",
+      "deductions": {
+        "R20_BENEFIT_SCHEDULE": "-25000.00"
+      },
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "PARTIAL_APPROVAL",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 11,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "2.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-A-5003",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "personal_accident",
+      "claimant": "Rehana Sheikh",
+      "policy_number": "CS-PAC-25-005125",
+      "product": "PA-SECURE v2025.1",
+      "incident_date": "2025-10-05",
+      "documents": 4,
+      "claimed": "1500000.00",
+      "billed": "1500000.00",
+      "payable": "1500000.00",
+      "deductions": {},
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "MEDIUM",
+      "risk_score": 30,
+      "risk_signals": [
+        "HIGH_AMOUNT_RATIO"
+      ],
+      "recommendation": "APPROVE",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 12,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-A-5004",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "personal_accident",
+      "claimant": "Pooja Iyer",
+      "policy_number": "CS-PAC-25-005132",
+      "product": "PA-SECURE v2025.1",
+      "incident_date": "2025-09-15",
+      "documents": 3,
+      "claimed": "9000.00",
+      "billed": "9000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-9000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "NOT_ACCIDENTAL",
+        "clause_ref": "1.3",
+        "message": "The documents do not describe an accident; the policy covers accidental injury only."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 7,
+      "policy_clauses_cited": [
+        "1.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-A-5005",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "personal_accident",
+      "claimant": "Rohan Kapoor",
+      "policy_number": "CS-PAC-25-005149",
+      "product": "PA-SECURE v2025.1",
+      "incident_date": "2025-08-23",
+      "documents": 4,
+      "claimed": "94000.00",
+      "billed": "94000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-94000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_ALCOHOL",
+        "clause_ref": "3.2",
+        "message": "Claim documents mention 'under the influence', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 11,
+      "policy_clauses_cited": [
+        "1.3",
+        "3.2",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-A-5006",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "personal_accident",
+      "claimant": "Suresh Babu",
+      "policy_number": "CS-PAC-25-005156",
+      "product": "PA-SECURE v2025.1",
+      "incident_date": "2025-08-15",
+      "documents": 3,
+      "claimed": "800000.00",
+      "billed": "800000.00",
+      "payable": "800000.00",
+      "deductions": {},
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "HIGH",
+      "risk_score": 50,
+      "risk_signals": [
+        "HIGH_AMOUNT_RATIO",
+        "EARLY_CLAIM"
+      ],
+      "recommendation": "INVESTIGATE",
+      "queue": "SIU_INVESTIGATION",
+      "evidence_items": 12,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-A-5007",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "personal_accident",
+      "claimant": "Divya Menon",
+      "policy_number": "CS-PAC-25-005163",
+      "product": "PA-SECURE v2025.1",
+      "incident_date": "2025-11-02",
+      "documents": 2,
+      "claimed": "30000.00",
+      "billed": "30000.00",
+      "payable": "30000.00",
+      "deductions": {},
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [
+        "medical_certificate"
+      ],
+      "risk_level": "LOW",
+      "risk_score": 10,
+      "risk_signals": [
+        "MISSING_DOCUMENTS"
+      ],
+      "recommendation": "REQUEST_INFO",
+      "queue": "PENDING_INFORMATION",
+      "evidence_items": 7,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-L-3072",
+      "source": "evaluation packet EVAL-L-01",
+      "status": "PENDING_REVIEW",
+      "line": "life",
+      "claimant": "Kavya Vardhan",
+      "policy_number": "CS-LIF-22-006170",
+      "product": "LIFE-TERM v2025.1",
+      "incident_date": "2025-10-05",
+      "documents": 4,
+      "claimed": "1000000.00",
+      "billed": "1000000.00",
+      "payable": "1000000.00",
+      "deductions": {},
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "APPROVE",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 8,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-L-6001",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "life",
+      "claimant": "Lalitha Venkatesh",
+      "policy_number": "CS-LIF-19-006101",
+      "product": "LIFE-TERM v2025.1",
+      "incident_date": "2025-07-21",
+      "documents": 4,
+      "claimed": "2000000.00",
+      "billed": "2000000.00",
+      "payable": "2000000.00",
+      "deductions": {},
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "APPROVE",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 9,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-L-6002",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "life",
+      "claimant": "Sourav Banerjee",
+      "policy_number": "CS-LIF-24-006118",
+      "product": "LIFE-TERM v2025.1",
+      "incident_date": "2025-08-28",
+      "documents": 4,
+      "claimed": "2500000.00",
+      "billed": "2500000.00",
+      "payable": "2500000.00",
+      "deductions": {},
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "HIGH",
+      "risk_score": 50,
+      "risk_signals": [
+        "CONTESTABLE_PERIOD"
+      ],
+      "recommendation": "INVESTIGATE",
+      "queue": "SIU_INVESTIGATION",
+      "evidence_items": 8,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-L-6003",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "life",
+      "claimant": "Neha Malhotra",
+      "policy_number": "CS-LIF-24-006125",
+      "product": "LIFE-TERM v2025.1",
+      "incident_date": "2025-07-02",
+      "documents": 4,
+      "claimed": "1000000.00",
+      "billed": "1000000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-1000000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "EXCL_SUICIDE",
+        "clause_ref": "3.1",
+        "message": "Claim documents mention 'suicide', which falls under an exclusion."
+      },
+      "missing_documents": [],
+      "risk_level": "HIGH",
+      "risk_score": 50,
+      "risk_signals": [
+        "CONTESTABLE_PERIOD"
+      ],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 9,
+      "policy_clauses_cited": [
+        "1.3",
+        "3.1",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-L-6004",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "life",
+      "claimant": "Sarita Agarwal",
+      "policy_number": "CS-LIF-21-006132",
+      "product": "LIFE-TERM v2025.1",
+      "incident_date": "2025-09-10",
+      "documents": 4,
+      "claimed": "1500000.00",
+      "billed": "1500000.00",
+      "payable": "1500000.00",
+      "deductions": {},
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "APPROVE",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 9,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "3.1",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-L-6005",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "life",
+      "claimant": "Joseph Verghese",
+      "policy_number": "CS-LIF-20-006149",
+      "product": "LIFE-TERM v2025.1",
+      "incident_date": "2025-09-18",
+      "documents": 3,
+      "claimed": "1200000.00",
+      "billed": "1200000.00",
+      "payable": "1200000.00",
+      "deductions": {},
+      "coverage": "COVERED",
+      "failing_check": null,
+      "missing_documents": [
+        "death_certificate"
+      ],
+      "risk_level": "LOW",
+      "risk_score": 10,
+      "risk_signals": [
+        "MISSING_DOCUMENTS"
+      ],
+      "recommendation": "REQUEST_INFO",
+      "queue": "PENDING_INFORMATION",
+      "evidence_items": 9,
+      "policy_clauses_cited": [
+        "1.2",
+        "1.3",
+        "4.2"
+      ]
+    },
+    {
+      "claim_number": "CLM-L-6006",
+      "source": "seeded scenario",
+      "status": "PENDING_REVIEW",
+      "line": "life",
+      "claimant": "Kamala Rao",
+      "policy_number": "CS-LIF-15-006156",
+      "product": "LIFE-TERM v2025.1",
+      "incident_date": "2025-07-20",
+      "documents": 4,
+      "claimed": "1500000.00",
+      "billed": "1500000.00",
+      "payable": "0.00",
+      "deductions": {
+        "R99_NOT_ADMISSIBLE": "-1500000.00"
+      },
+      "coverage": "NOT_COVERED",
+      "failing_check": {
+        "code": "POLICY_NOT_IN_FORCE",
+        "clause_ref": "1.3",
+        "message": "Incident 2025-07-20 is outside the policy period 2015-06-01 to 2025-05-31."
+      },
+      "missing_documents": [],
+      "risk_level": "LOW",
+      "risk_score": 0,
+      "risk_signals": [],
+      "recommendation": "RECOMMEND_REJECT",
+      "queue": "ADJUSTER_REVIEW",
+      "evidence_items": 9,
+      "policy_clauses_cited": [
+        "1.3",
+        "4.2"
+      ]
     }
   ],
   "portfolio_risk_rules": {
-    "claims": 1000,
+    "claims": 10000,
     "by_risk": {
-      "LOW": 933,
-      "MEDIUM": 30,
-      "HIGH": 37
+      "LOW": 9336,
+      "MEDIUM": 321,
+      "HIGH": 343
     },
     "by_line": {
-      "motor": 241,
-      "health": 507,
-      "travel": 128,
-      "property": 124
+      "motor": 2162,
+      "health": 4231,
+      "personal_accident": 1045,
+      "property": 1111,
+      "travel": 974,
+      "life": 477
     },
-    "injected_anomalies": 69,
-    "flagged": 67,
-    "precision": 0.866,
-    "recall": 0.841,
+    "injected_anomalies": 764,
+    "flagged": 664,
+    "precision": 0.901,
+    "recall": 0.783,
     "confusion": {
-      "tp": 58,
-      "fp": 9,
-      "fn": 11,
-      "tn": 922
+      "tp": 598,
+      "fp": 66,
+      "fn": 166,
+      "tn": 9170
     },
-    "median_claim": 39000.0,
+    "median_claim": 41500.0,
     "note": "Synthetic portfolio with injected patterns; measures rule recall of injected patterns only."
   },
   "golden_evaluation": {
-    "claim_cases": 57,
-    "claim_cases_passed": 57,
-    "questions": 26,
-    "questions_passed": 26,
-    "checks": 803,
-    "checks_passed": 803,
+    "claim_cases": 72,
+    "claim_cases_passed": 72,
+    "questions": 30,
+    "questions_passed": 30,
+    "checks": 986,
+    "checks_passed": 986,
     "retrieval_hit_at_1": 1.0,
     "retrieval_hit_at_3": 1.0,
     "mean_reciprocal_rank": 1.0,
     "refusal_accuracy": 1.0,
     "required_categories_covered": true,
-    "avg_claim_case_ms": 172,
+    "avg_claim_case_ms": 259,
     "all_passed": true
   }
 }
