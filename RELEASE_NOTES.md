@@ -1,5 +1,11 @@
 # Release notes
 
+## Claim Sense 1.4.3 — 2026-10-30
+
+- **Windows and VS Code setup guide** (`docs/LOCAL_SETUP.md`) and VS Code tasks (`.vscode/`) to start the API and UI and run the tests.
+- **Full validation re-run**: 127 backend tests, 803/803 golden checks, Docker + PostgreSQL smoke test, 12/12 browser tests; live site re-verified on 30 Oct 2026 with unchanged figures (57 claims, ₹86.96 L billed, ₹53.41 L payable).
+- **Results dashboard** republished in the current claude.ai account with the 30 Oct snapshot.
+
 ## Claim Sense 1.4.2 — 2026-10-15
 
 - **Project handover in `CLAUDE.md`**: a step-by-step guide to continuing on your own laptop (install, clone, pull, push, deploy), status, every pull request, how to run, deploy, verify and refresh the dashboard, and the open items, so work can continue on any machine.

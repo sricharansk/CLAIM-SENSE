@@ -1,6 +1,6 @@
 # Implementation Status
 
-Last updated: 2026-10-15. **Status: complete** — every item in the definition of done is met and verified on the live deployment; the items under *Blocked* need decisions or credentials from the owner and are outside this build. Source of truth: `docs/Claim_Sense_Project_1_..._FINAL_V2_..._Deployment_Ready.md` and `PROJECT_1_FINAL_CONTENTS.md`.
+Last updated: 2026-10-30. **Status: complete** — every item in the definition of done is met and verified on the live deployment; the items under *Blocked* need decisions or credentials from the owner and are outside this build. Source of truth: `docs/Claim_Sense_Project_1_..._FINAL_V2_..._Deployment_Ready.md` and `PROJECT_1_FINAL_CONTENTS.md`.
 
 ## Starting point
 
@@ -39,6 +39,16 @@ The repository held one file, `PROJECT 1.MD` (the original project prompt). Ther
 | – | Sign-in throttle and injection guard (blueprint Prompt 16) | `auth.LoginThrottle` (429 + `Retry-After`), `safety.py` scan in the Intake Agent, `EMBEDDED_INSTRUCTIONS` risk signal; assistant refusal gate | `test_security_guards.py`: 5 failures then 429; injected discharge summary is flagged HIGH, routed to investigation, payable unchanged at ₹64,080 |
 | – | Override and escalation rates (blueprint Prompt 14) | `analytics.dashboard`: override rate, amount overrides, escalation rate, reviewer actions; dashboard KPIs | `test_dashboard_reports_override_and_escalation_rates` |
 | – | Security | Upload allow-list, size limit and filename sanitising; security headers and CSP; non-root container; dependency audits; see `docs/SECURITY.md` | Header and path tests; pip-audit and npm audit clean |
+
+## Validation results (2026-10-30, resumed in a second account)
+
+Work resumed from `main` at the merge of PR #17; nothing was left unfinished. Every check was re-run from scratch:
+
+- `ruff`: clean. `pytest`: 127 passed. `provenance.py --check`: 14 sources, 0 problems; 85 chunks from 5 wordings, 0 rejected.
+- `evaluate.py`: 803 / 803 checks over 57 claim cases and 26 questions, retrieval hit@1 1.0, MRR 1.0. `claims_report.py`: 58 claims, ₹87,73,600 billed, ₹54,05,550 payable (61.6%). Both reports are unchanged apart from their generated time.
+- `npm run build`: passed. Docker Compose with PostgreSQL: smoke test passed (57 seeded claims, ₹64,080 health, ₹3,47,500 property, ₹95,000 travel). Playwright on a fresh stack: 12 / 12.
+- Live site ([run 41102353747](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/41102353747), 2026-10-30 17:55 UTC): every smoke check passed; snapshot 57 claims, ₹86,95,600 billed, ₹53,41,470 payable, the same as on 2026-10-15.
+- The results dashboard was republished in this account (the earlier one is private to the other account) from `docs/dashboard/`. Windows and VS Code setup guide added (`docs/LOCAL_SETUP.md`, `.vscode/`).
 
 ## Validation results (2026-10-13, final)
 

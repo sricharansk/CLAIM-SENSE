@@ -1,0 +1,75 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Backend: start API (port 8000)",
+      "type": "shell",
+      "command": "'${workspaceFolder}/backend/.venv/bin/python' -m uvicorn app.main:app --reload --port 8000",
+      "windows": {
+        "command": "& '${workspaceFolder}\\backend\\.venv\\Scripts\\python.exe' -m uvicorn app.main:app --reload --port 8000"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
+      "label": "Frontend: start UI (port 5173)",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Start app (API + UI)",
+      "dependsOn": [
+        "Backend: start API (port 8000)",
+        "Frontend: start UI (port 5173)"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Run backend tests",
+      "type": "shell",
+      "command": "'${workspaceFolder}/backend/.venv/bin/python' -m pytest -q",
+      "windows": {
+        "command": "& '${workspaceFolder}\\backend\\.venv\\Scripts\\python.exe' -m pytest -q"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Run golden evaluation",
+      "type": "shell",
+      "command": "'${workspaceFolder}/backend/.venv/bin/python' scripts/evaluate.py",
+      "windows": {
+        "command": "& '${workspaceFolder}\\backend\\.venv\\Scripts\\python.exe' scripts/evaluate.py"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Run claims report",
+      "type": "shell",
+      "command": "'${workspaceFolder}/backend/.venv/bin/python' scripts/claims_report.py",
+      "windows": {
+        "command": "& '${workspaceFolder}\\backend\\.venv\\Scripts\\python.exe' scripts/claims_report.py"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "test"
+    }
+  ]
+}

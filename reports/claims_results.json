@@ -1,6 +1,6 @@
 {
   "report": "Claim Sense results on every claim packet",
-  "generated_at": "2026-10-12T23:36:25+00:00",
+  "generated_at": "2026-10-30T17:47:45+00:00",
   "data": "synthetic only",
   "llm": "off (deterministic rules and extractive retrieval)",
   "rules_version": "adjudication-rules/1.0.0",
@@ -2218,7 +2218,7 @@
     "mean_reciprocal_rank": 1.0,
     "refusal_accuracy": 1.0,
     "required_categories_covered": true,
-    "avg_claim_case_ms": 172,
+    "avg_claim_case_ms": 214,
     "all_passed": true
   }
 }

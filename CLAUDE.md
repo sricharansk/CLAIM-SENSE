@@ -27,7 +27,7 @@ Update `docs/IMPLEMENTATION_STATUS.md` after meaningful changes. A task is compl
 
 # Project context and progress (handover)
 
-This section records everything built for the project, so work can continue on any machine. Last updated **2026-10-15**.
+This section records everything built for the project, so work can continue on any machine. Last updated **2026-10-30**.
 
 ## Continue on your own laptop (step by step)
 
@@ -64,7 +64,7 @@ For example:
 - "Refresh the results dashboard"
 - "Update the presentation with …"
 
-To run the app yourself without Claude Code, follow *Run it on your laptop* below.
+To run the app yourself without Claude Code, follow *Run it on your laptop* below, or the Windows and VS Code guide in `docs/LOCAL_SETUP.md`.
 
 ### Step 4: get the latest version from GitHub (every time you start work)
 
@@ -114,9 +114,9 @@ Every item in the blueprint's definition of done (PART 20) is built, tested, dep
 
 | What | Where |
 |---|---|
-| Repository | https://github.com/sricharansk/CLAIM-SENSE (branch `main`, all 15 PRs merged) |
+| Repository | https://github.com/sricharansk/CLAIM-SENSE (branch `main`; PRs #1, #2 and #4–#17 merged; #3 open but superseded, #18 closed) |
 | Live app | https://claim-sense.onrender.com (Render free tier, Docker, SQLite) |
-| Results dashboard | https://claude.ai/artifact/XzzbSf7X1PYcxwThkMvb1V (claude.ai artifact owned by the project account, last refreshed 2026-10-15 05:11 UTC) |
+| Results dashboard | https://claude.ai/artifact/FPQnN7TjiwjiwbqW7BSpau (claude.ai artifact in the current account, refreshed 2026-10-30 17:55 UTC). The earlier copy, https://claude.ai/artifact/XzzbSf7X1PYcxwThkMvb1V, belongs to the other claude.ai account |
 | Review III presentation | `docs/presentation/Claim_Sense_Review_III_SK_Sricharan.pptx` (16 slides) |
 | Owner | S.K. Sricharan, T-SERIES ID T9984, M.Tech Advanced Industry Integrated Program (University + LTIMindtree, L&T EduTech) |
 
@@ -183,6 +183,8 @@ Every item in the blueprint's definition of done (PART 20) is built, tested, dep
 | #13 | 2026-10-13 | Review III presentation added |
 | #14 | 2026-10-15 | Final status recorded; live verification run 38358451765 |
 | #15 | 2026-10-15 | Presentation updated with the final status and the 15 Oct live check (run 38685398836) |
+| #16, #17 | 2026-10-15 | Project handover and laptop guide in `CLAUDE.md` |
+| #19 | 2026-10-30 | Work resumed from a second claude.ai account: full validation re-run, live check (run 41102353747), dashboard republished in this account, Windows and VS Code setup guide (`docs/LOCAL_SETUP.md`, `.vscode/`) |
 
 The dashboard source and its data are also kept in `docs/dashboard/`. Design decisions D1–D26 are in `docs/DECISIONS.md`; release history is in `RELEASE_NOTES.md` (latest 1.4.2).
 
@@ -221,7 +223,7 @@ Other checks: `python3 scripts/evaluate.py`, `python3 scripts/claims_report.py`,
 
 ## Results dashboard (claude.ai artifact)
 
-URL: https://claude.ai/artifact/XzzbSf7X1PYcxwThkMvb1V. It is private to the owner's claude.ai account; share it from its **Share** button. It shows the live claims, filters by line, search and reductions by rule, plus the golden evaluation and portfolio scores.
+URL: https://claude.ai/artifact/FPQnN7TjiwjiwbqW7BSpau. It is private to the owner's claude.ai account; share it from its **Share** button. It shows the live claims, filters by line, search and reductions by rule, plus the golden evaluation and portfolio scores.
 
 To refresh it:
 1. Run the Verify deployment workflow.

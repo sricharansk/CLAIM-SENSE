@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "charliermarsh.ruff",
+    "dbaeumer.vscode-eslint",
+    "ms-playwright.playwright",
+    "ms-azuretools.vscode-docker"
+  ]
+}

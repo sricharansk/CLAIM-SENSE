@@ -1,6 +1,6 @@
 {
   "suite": "Claim Sense golden evaluation",
-  "generated_at": "2026-10-12T22:58:41+00:00",
+  "generated_at": "2026-10-30T17:47:39+00:00",
   "rules_version": "adjudication-rules/1.0.0",
   "risk_version": "risk-rules/1.0.0",
   "llm": "off (extractive answers)",
@@ -17,7 +17,7 @@
     "mean_reciprocal_rank": 1.0,
     "refusal_accuracy": 1.0,
     "required_categories_covered": true,
-    "avg_claim_case_ms": 172,
+    "avg_claim_case_ms": 214,
     "all_passed": true
   },
   "dimensions": {
@@ -288,7 +288,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 209
+      "duration_ms": 293
     },
     {
       "id": "C02",
@@ -396,7 +396,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 177
+      "duration_ms": 166
     },
     {
       "id": "C03",
@@ -503,7 +503,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 140
+      "duration_ms": 217
     },
     {
       "id": "C04",
@@ -620,7 +620,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 132
+      "duration_ms": 216
     },
     {
       "id": "C05",
@@ -722,7 +722,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 133
+      "duration_ms": 216
     },
     {
       "id": "C06",
@@ -814,7 +814,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 131
+      "duration_ms": 140
     },
     {
       "id": "C07",
@@ -924,7 +924,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 155
+      "duration_ms": 154
     },
     {
       "id": "C08",
@@ -1034,7 +1034,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 142
+      "duration_ms": 221
     },
     {
       "id": "C09",
@@ -1161,7 +1161,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 215
+      "duration_ms": 308
     },
     {
       "id": "C10",
@@ -1253,7 +1253,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 146
+      "duration_ms": 228
     },
     {
       "id": "C11",
@@ -1355,7 +1355,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 219
+      "duration_ms": 290
     },
     {
       "id": "C12",
@@ -1457,7 +1457,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 209
+      "duration_ms": 282
     },
     {
       "id": "C13",
@@ -1580,7 +1580,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 154
+      "duration_ms": 155
     },
     {
       "id": "C14",
@@ -1696,7 +1696,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 149
+      "duration_ms": 174
     },
     {
       "id": "C15",
@@ -1804,7 +1804,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 168
+      "duration_ms": 156
     },
     {
       "id": "C16",
@@ -1914,7 +1914,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 166
+      "duration_ms": 156
     },
     {
       "id": "C17",
@@ -2024,7 +2024,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 170
+      "duration_ms": 192
     },
     {
       "id": "C18",
@@ -2132,7 +2132,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 216
+      "duration_ms": 227
     },
     {
       "id": "C19",
@@ -2224,7 +2224,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 153
+      "duration_ms": 223
     },
     {
       "id": "C20",
@@ -2341,7 +2341,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 260
+      "duration_ms": 290
     },
     {
       "id": "C21",
@@ -2443,7 +2443,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 263
+      "duration_ms": 289
     },
     {
       "id": "C22",
@@ -2538,7 +2538,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 229
+      "duration_ms": 260
     },
     {
       "id": "C23",
@@ -2645,7 +2645,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 190
+      "duration_ms": 194
     },
     {
       "id": "C24",
@@ -2753,7 +2753,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 166
+      "duration_ms": 176
     },
     {
       "id": "C25",
@@ -2861,7 +2861,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 167
+      "duration_ms": 188
     },
     {
       "id": "C26",
@@ -2969,7 +2969,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 175
+      "duration_ms": 210
     },
     {
       "id": "C27",
@@ -3075,7 +3075,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 174
+      "duration_ms": 210
     },
     {
       "id": "C28",
@@ -3183,7 +3183,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 159
+      "duration_ms": 205
     },
     {
       "id": "C29",
@@ -3289,7 +3289,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 150
+      "duration_ms": 204
     },
     {
       "id": "C30",
@@ -3384,7 +3384,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 146
+      "duration_ms": 207
     },
     {
       "id": "C31",
@@ -3479,7 +3479,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 154
+      "duration_ms": 201
     },
     {
       "id": "C32",
@@ -3587,7 +3587,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 158
+      "duration_ms": 202
     },
     {
       "id": "C33",
@@ -3695,7 +3695,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 163
+      "duration_ms": 169
     },
     {
       "id": "C34",
@@ -3803,7 +3803,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 184
+      "duration_ms": 216
     },
     {
       "id": "C35",
@@ -3910,7 +3910,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 163
+      "duration_ms": 232
     },
     {
       "id": "C36",
@@ -4018,7 +4018,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 154
+      "duration_ms": 224
     },
     {
       "id": "C37",
@@ -4126,7 +4126,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 169
+      "duration_ms": 230
     },
     {
       "id": "C38",
@@ -4236,7 +4236,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 168
+      "duration_ms": 220
     },
     {
       "id": "C39",
@@ -4328,7 +4328,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 166
+      "duration_ms": 218
     },
     {
       "id": "C40",
@@ -4444,7 +4444,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 164
+      "duration_ms": 216
     },
     {
       "id": "C41",
@@ -4543,7 +4543,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 156
+      "duration_ms": 204
     },
     {
       "id": "C42",
@@ -4667,7 +4667,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 171
+      "duration_ms": 158
     },
     {
       "id": "C43",
@@ -4784,7 +4784,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 174
+      "duration_ms": 162
     },
     {
       "id": "C44",
@@ -4905,7 +4905,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 179
+      "duration_ms": 181
     },
     {
       "id": "C45",
@@ -5022,7 +5022,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 180
+      "duration_ms": 215
     },
     {
       "id": "C46",
@@ -5117,7 +5117,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 163
+      "duration_ms": 201
     },
     {
       "id": "C47",
@@ -5227,7 +5227,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 152
+      "duration_ms": 193
     },
     {
       "id": "C48",
@@ -5330,7 +5330,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 190
+      "duration_ms": 206
     },
     {
       "id": "C49",
@@ -5433,7 +5433,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 194
+      "duration_ms": 219
     },
     {
       "id": "C50",
@@ -5536,7 +5536,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 177
+      "duration_ms": 204
     },
     {
       "id": "C51",
@@ -5653,7 +5653,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 173
+      "duration_ms": 194
     },
     {
       "id": "C52",
@@ -5763,7 +5763,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 148
+      "duration_ms": 250
     },
     {
       "id": "C53",
@@ -5873,7 +5873,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 162
+      "duration_ms": 248
     },
     {
       "id": "C54",
@@ -5976,7 +5976,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 147
+      "duration_ms": 243
     },
     {
       "id": "C55",
@@ -6086,7 +6086,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 194
+      "duration_ms": 243
     },
     {
       "id": "C56",
@@ -6196,7 +6196,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 158
+      "duration_ms": 248
     },
     {
       "id": "C57",
@@ -6299,7 +6299,7 @@
           "passed": true
         }
       ],
-      "duration_ms": 159
+      "duration_ms": 247
     }
   ],
   "questions": [
@@ -7796,5 +7796,5 @@
       ]
     }
   ],
-  "duration_s": 10.15
+  "duration_s": 12.78
 }
