@@ -5,6 +5,7 @@
 - **Windows and VS Code setup guide** (`docs/LOCAL_SETUP.md`) and VS Code tasks (`.vscode/`) to start the API and UI and run the tests.
 - **Full validation re-run**: 127 backend tests, 803/803 golden checks, Docker + PostgreSQL smoke test, 12/12 browser tests; live site re-verified on 30 Oct 2026 with unchanged figures (57 claims, ₹86.96 L billed, ₹53.41 L payable).
 - **Results dashboard** republished in the current claude.ai account with the 30 Oct snapshot.
+- **Security:** pypdf 6.19.0 → 6.21.2, which fixes 11 advisories that `pip-audit` reported against 6.19.0.
 
 ## Claim Sense 1.4.2 — 2026-10-15
 
