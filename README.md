@@ -129,7 +129,7 @@ CLM-H-1001 waterfall, as the app shows it:
 | ![Policy PDF ingestion](docs/screenshots/15-policy-pdf-ingestion.png) | ![Claim evidence tab](docs/screenshots/16-claim-evidence.png) |
 | ![Data provenance](docs/screenshots/17-data-provenance.png) | ![Fact correction](docs/screenshots/18-fact-correction.png) |
 | ![Home claim with average clause](docs/screenshots/20-property-claim-adjudication.png) | ![Travel baggage limits](docs/screenshots/21-travel-claim-adjudication.png) |
-| ![Claims on all four lines](docs/screenshots/22-claims-all-lines.png) | ![Claims filtered from the dashboard](docs/screenshots/24-claims-filtered-travel.png) |
+| ![Claims on all six lines](docs/screenshots/22-claims-all-lines.png) | ![Claims filtered from the dashboard](docs/screenshots/24-claims-filtered-travel.png) |
 
 On a phone the navigation collapses into a menu: [screenshot](docs/screenshots/19-mobile-dashboard.png).
 

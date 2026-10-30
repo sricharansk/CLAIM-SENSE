@@ -37,7 +37,7 @@ Status is judged from the code and `docs/IMPLEMENTATION_STATUS.md`:
 | Data provenance registry and RAG manifest | Done | `data/source_registry.json`, `provenance.py`, `test_provenance.py` |
 | Docker image and Compose stack with PostgreSQL | Done | `Dockerfile`, `docker-compose.yml`, CI `docker-smoke` |
 | CI: lint, tests, evaluation, provenance, dependency audits, build, browser suite, smoke test | Done | `.github/workflows/ci.yml` |
-| Cloud deployment with a passing signed-in smoke test | Done | Render (`render.yaml`, https://claim-sense.onrender.com); the **Verify deployment** workflow's signed-in smoke test passed (runs 38358451765, 38685398836 and 41102353747, `IMPLEMENTATION_STATUS.md`) |
+| Cloud deployment with a passing signed-in smoke test | Done | Render (`render.yaml`, https://claim-sense.onrender.com); the **Verify deployment** workflow's signed-in smoke test passed (runs 38358451765, 38685398836, 41102353747 and, for the six-line release, 41115415499; `IMPLEMENTATION_STATUS.md`) |
 
 ## V2 Intelligence
 

@@ -114,9 +114,9 @@ Every item in the blueprint's definition of done (PART 20) is built, tested, dep
 
 | What | Where |
 |---|---|
-| Repository | https://github.com/sricharansk/CLAIM-SENSE (branch `main`; PRs #1, #2 and #4–#17 merged; #19 open; #3 superseded, its six-line work rebuilt in #19; #18 closed) |
+| Repository | https://github.com/sricharansk/CLAIM-SENSE (branch `main`; PRs #1, #2, #4–#17 and #19 merged; #3 superseded, its six-line work rebuilt in #19; #18 closed) |
 | Live app | https://claim-sense.onrender.com (Render free tier, Docker, SQLite) |
-| Results dashboard | https://claude.ai/artifact/FPQnN7TjiwjiwbqW7BSpau (claude.ai artifact in the current account, refreshed 2026-10-30 17:55 UTC). The earlier copy, https://claude.ai/artifact/XzzbSf7X1PYcxwThkMvb1V, belongs to the other claude.ai account |
+| Results dashboard | https://claude.ai/artifact/FPQnN7TjiwjiwbqW7BSpau (claude.ai artifact in the current account, refreshed from the 2026-10-30 19:28 UTC live snapshot, run 41115415499). The earlier copy, https://claude.ai/artifact/XzzbSf7X1PYcxwThkMvb1V, belongs to the other claude.ai account |
 | Review III presentation | `docs/presentation/Claim_Sense_Review_III_SK_Sricharan.pptx` (16 slides) |
 | Owner | S.K. Sricharan, T-SERIES ID T9984, M.Tech Advanced Industry Integrated Program (University + LTIMindtree, L&T EduTech) |
 
@@ -156,9 +156,9 @@ Every item in the blueprint's definition of done (PART 20) is built, tested, dep
   - The smoke test files 5 more claims each run (the health demo upload, then one property, travel, personal accident and life claim; numbers from 3073 on a fresh start).
 - **Repository report** (`reports/claims_results.md`): 73 claims (the 72 above plus the demo upload). ₹2,22,96,600 billed and ₹1,62,62,550 payable (72.9%).
   - Recommendations: partial approval 34, reject 25, request info 6, investigate 4, approve 4.
-- **Live site** (fresh start, once PR #19 is deployed): 72 claims, ₹2,22,18,600 billed and ₹1,61,98,470 payable (72.9%).
+- **Live site** (fresh start, verified 2026-10-30 19:28 UTC, [run 41115415499](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/41115415499)): 72 claims, ₹2,22,18,600 billed and ₹1,61,98,470 payable (72.9%).
   - By line: Health 21, Motor 11, Home 11, Travel 14, Personal accident 8, Life 7.
-  - Before that deploy the site runs the four-line build: 57 claims, ₹86,95,600 billed, ₹53,41,470 payable.
+  - Recommendations: partial approval 33, reject 25, request info 6, investigate 4, approve 4. The live site has an Anthropic key set, so the LLM writes the explanation narrative; amounts and routing are unchanged by it.
 - **Golden evaluation** (`scripts/evaluate.py` → `reports/evaluation.md`): 72 hand-worked claim cases and 30 assistant questions. **986/986 checks pass.** Retrieval hit@1 is 100%.
 - **Risk rules on the 10,000-claim portfolio** (six lines): precision 90.1%, recall 78.3% (injected patterns only).
 - **Industry benchmark:** CAS Schedule P aggregates (six US lines) from `scripts/fetch_public_data.py`, on the Data sources screen; not used in any decision.
@@ -188,9 +188,10 @@ Every item in the blueprint's definition of done (PART 20) is built, tested, dep
 | #14 | 2026-10-15 | Final status recorded; live verification run 38358451765 |
 | #15 | 2026-10-15 | Presentation updated with the final status and the 15 Oct live check (run 38685398836) |
 | #16, #17 | 2026-10-15 | Project handover and laptop guide in `CLAUDE.md` |
-| #19 | 2026-10-30 | Work resumed from a second claude.ai account: full validation re-run, live check (run 41102353747), dashboard republished in this account, Windows and VS Code setup guide (`docs/LOCAL_SETUP.md`, `.vscode/`). Then, at the owner's request, PR #3's extras rebuilt on `main`: personal accident and life lines (72 seeded claims, 986 checks), 10,000-claim portfolio, CAS benchmark, blueprint docs (API, environment, errors, observability, UX flows, roadmap, changelog); browser-test CI jobs pinned to ubuntu-24.04. Open until the owner merges |
+| #19 | 2026-10-30 | Work resumed from a second claude.ai account: full validation re-run, live check (run 41102353747), dashboard republished in this account, Windows and VS Code setup guide (`docs/LOCAL_SETUP.md`, `.vscode/`). Then, at the owner's request, PR #3's extras rebuilt on `main`: personal accident and life lines (72 seeded claims, 986 checks), 10,000-claim portfolio, CAS benchmark, blueprint docs (API, environment, errors, observability, UX flows, roadmap, changelog); browser-test CI jobs pinned to ubuntu-24.04. Deployed on Render and verified live (run 41115415499) |
+| #20 | 2026-10-30 | Dashboard, `docs/dashboard/`, presentation (figures, module text, references, screenshots) and README screenshots refreshed from the six-line live snapshot; `claims_report.py` heading and live LLM note fixed |
 
-The dashboard source and its data are also kept in `docs/dashboard/`. Design decisions D1–D31 are in `docs/DECISIONS.md`; release history is in `RELEASE_NOTES.md` (latest 1.5.0) and `docs/CHANGELOG.md`.
+The dashboard source and its data are also kept in `docs/dashboard/`. Design decisions D1–D31 are in `docs/DECISIONS.md`; release history is in `RELEASE_NOTES.md` (latest 1.5.1) and `docs/CHANGELOG.md`.
 
 ## Run it on your laptop
 
@@ -222,7 +223,7 @@ Other checks: `python3 scripts/evaluate.py`, `python3 scripts/claims_report.py`,
   1. Waits for `/api/v1/ready`.
   2. Snapshots the live claims (`live-claims` artifact, also printed in the log).
   3. Runs the smoke test. It signs in with the repository secret `DEMO_PASSWORD`.
-- **Free tier behaviour:** the instance sleeps when idle and restarts with a fresh SQLite database of the seeded claims (72 once PR #19 is deployed). Claims filed on the site, and reviewer decisions, are lost on restart. A paid instance with PostgreSQL fixes this.
+- **Free tier behaviour:** the instance sleeps when idle and restarts with a fresh SQLite database of the seeded claims (72). Claims filed on the site, and reviewer decisions, are lost on restart. A paid instance with PostgreSQL fixes this.
 - **Azure:** `deploy-azure.yml` is ready but needs `AZURE_CREDENTIALS` and the variables listed in `docs/DEPLOYMENT.md`. It has never been run.
 
 ## Results dashboard (claude.ai artifact)

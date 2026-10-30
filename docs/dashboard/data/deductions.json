@@ -15,6 +15,11 @@
   "amount": 36000
  },
  {
+  "rule": "R20_BENEFIT_SCHEDULE",
+  "label": "Benefit schedule",
+  "amount": 63000
+ },
+ {
   "rule": "R20_ITEM_LIMIT",
   "label": "Per-item limit",
   "amount": 75000
@@ -47,6 +52,6 @@
  {
   "rule": "R99_NOT_ADMISSIBLE",
   "label": "Not admissible (claim not covered)",
-  "amount": 2142000
+  "amount": 4745000
  }
 ]

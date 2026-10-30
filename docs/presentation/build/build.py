@@ -203,9 +203,9 @@ text(s, 0.35, 1.5, 7.3, 5.2, [
     B("Every recommendation goes to a human reviewer, with the evidence and an audit trail."),
 ], name="Intro text")
 for i, (big, small, fill, col) in enumerate([
-    ("4", "lines of business: health, motor, home and travel", TINT_BLUE, BLUE),
+    ("6", "lines: health, motor, home, travel, personal accident, life", TINT_BLUE, BLUE),
     ("8", "specialised agents in one supervised pipeline", TINT_GREEN, GREEN),
-    ("58", "synthetic claims analysed end to end", TINT_BLUE, BLUE),
+    ("72", "synthetic claims analysed end to end", TINT_BLUE, BLUE),
     ("Live", "deployed at claim-sense.onrender.com", TINT_GREEN, GREEN),
 ]):
     y = 1.55 + i * 1.28
@@ -245,7 +245,7 @@ for sh in s.shapes:
 modules = [
     ("Module 1 - Document Intelligence & Intake", "From an uploaded claim packet to one consolidated claim view", [
         "Upload claim forms, bills, estimates and reports as text or PDF (page-preserving extraction with pypdf).",
-        "Each document is classified (11 types: discharge summary, repair estimate, surveyor loss assessment, airline report ...).",
+        "Each document is classified (14 types: discharge summary, repair estimate, loss assessment, death certificate ...).",
         "Facts are extracted with their source file, line and confidence; itemised charges are categorised per line of business.",
         "Text addressed to an AI inside a document is flagged for the reviewer and never followed.",
         "A reviewer can correct a fact with a reason; the next analysis uses it and the change is audited.",
@@ -260,12 +260,12 @@ modules = [
     ("Module 3 - Deterministic Adjudication Engine", "A cited, step-by-step payment waterfall in exact decimal arithmetic", [
         "Health: room and ICU per-day limits, non-payable consumables, deductible, co-payment, sum insured cap.",
         "Motor: depreciation by part type and vehicle age, deductible by engine size, cap at the insured declared value.",
-        "Home: contents depreciation, the average clause for underinsurance (15% tolerance), excess.",
-        "Travel: per-item and per-benefit limits, personal comfort items excluded, deductible.",
+        "Home: depreciation and the average clause for underinsurance; travel: per-item and per-benefit limits.",
+        "Personal accident and life: a benefit schedule (% of the capital sum insured) and the sum assured.",
         "Every step (R10-R99) names the policy clause it applies; terms citing a missing clause are rejected at ingestion.",
     ], "20-property-claim-adjudication.png", "Home claim waterfall with the average clause"),
     ("Module 4 - Risk, Review & Audit", "Explainable risk signals and a human decision on every claim", [
-        "Rule-based risk score: duplicate, early claim, high amount ratio, amount mismatch, name mismatch, missing documents.",
+        "Rule-based risk score: duplicate, early claim, high amount ratio, amount or name mismatch, missing documents, life contestable period.",
         "Recommendation: reject (cite clause), request information, investigate, partial approval or approve.",
         "Routed to adjuster, supervisor, SIU investigation or pending-information queues with settlement-clock tracking.",
         "Role-based access: approval limits, supervisor escalation, read-only auditors; adverse decisions need notes.",
@@ -333,7 +333,7 @@ for i, (h, d) in enumerate(svc):
                                                        {"t": d, "size": 11, "color": TEXT}], name=f"Service {h}")
 # data
 data = [("PostgreSQL / SQLite", "claims, facts, runs, decisions, tasks, audit"),
-        ("Policy corpus", "5 wordings + structured terms, PDF ingestion"),
+        ("Policy corpus", "7 wordings + structured terms, PDF ingestion"),
         ("Document storage", "uploaded claim files"),
         ("Source registry", "SHA-256 provenance, RAG manifest")]
 for i, (h, d) in enumerate(data):
@@ -417,10 +417,10 @@ cols = [
         "pytest, Playwright, ruff",
     ]),
     ("Data & Evaluation", GREEN, TINT_GREEN, [
-        "Synthetic only: 5 policy wordings (health x2, motor, home, travel)",
-        "58 claim packets; 1,000-claim synthetic portfolio",
-        "Golden set: 57 claim cases + 26 questions, worked by hand",
-        "Source registry with SHA-256 checksums",
+        "Synthetic only: 7 policy wordings across 6 lines",
+        "72 claim packets; 10,000-claim synthetic portfolio",
+        "Golden set: 72 claim cases + 30 questions, worked by hand",
+        "SHA-256 source registry; CAS Schedule P industry benchmark (not used in decisions)",
         "CI fails on any failed check",
     ]),
 ]
@@ -434,8 +434,8 @@ for i, (h, c, tint, items) in enumerate(cols):
 # ---------------------------------------------------------------- 12. findings - claims
 s = slides[11]
 header_and_title(s, "Findings and Results - Claims")
-stats = [("58", "claims across 4 lines"), ("₹87.74 L", "billed"), ("₹54.06 L", "recommended payable (61.6%)"),
-         ("803/803", "golden checks passed")]
+stats = [("72", "claims across 6 lines"), ("₹2.22 Cr", "billed"), ("₹1.62 Cr", "recommended payable (72.9%)"),
+         ("986/986", "golden checks passed")]
 for i, (big, small) in enumerate(stats):
     x = 0.35 + i * 3.17
     box(s, x, 1.5, 2.95, 1.3, TINT_BLUE if i % 2 == 0 else TINT_GREEN, name=f"Stat {i + 1}")
@@ -443,9 +443,10 @@ for i, (big, small) in enumerate(stats):
                                         "align": PP_ALIGN.CENTER, "after": 0}], anchor=MSO_ANCHOR.MIDDLE)
     text(s, x + 0.1, 2.2, 2.75, 0.5, [{"t": small, "size": 13, "color": TEXT, "align": PP_ALIGN.CENTER, "after": 0}])
 cd = CategoryChartData()
-cd.categories = ["Health (22)", "Motor (11)", "Home (11)", "Travel (14)"]
-cd.add_series("Billed (₹ lakh)", (22.40, 6.81, 29.43, 29.10))
-cd.add_series("Payable (₹ lakh)", (12.55, 3.04, 19.01, 19.45))
+# live site, Verify deployment run 41115415499 (30 Oct 2026)
+cd.categories = ["Health (21)", "Motor (11)", "Home (11)", "Travel (14)", "PA (8)", "Life (7)"]
+cd.add_series("Billed (₹ lakh)", (21.62, 6.81, 29.43, 29.10, 28.23, 107.00))
+cd.add_series("Payable (₹ lakh)", (11.91, 3.04, 19.01, 19.45, 26.57, 82.00))
 gf = s.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, Inches(2.4), Inches(3.0), Inches(6.2), Inches(3.75), cd)
 gf.name = "Billed vs payable chart"
 ch = gf.chart
@@ -474,24 +475,24 @@ ch.value_axis.has_major_gridlines = True
 ch.value_axis.major_gridlines.format.line.color.rgb = rgb("D9D9D9")
 box(s, 8.85, 3.0, 4.15, 3.75, TINT_GREY, [
     {"t": "Recommendations", "size": 15, "bold": True, "color": NAVY, "align": PP_ALIGN.LEFT, "after": 4},
-    {"t": "Partial approval: 31", "size": 13, "align": PP_ALIGN.LEFT, "after": 1},
-    {"t": "Reject with cited clause: 21", "size": 13, "align": PP_ALIGN.LEFT, "after": 1},
-    {"t": "Request information: 4", "size": 13, "align": PP_ALIGN.LEFT, "after": 1},
-    {"t": "Investigate: 2", "size": 13, "align": PP_ALIGN.LEFT, "after": 6},
+    {"t": "Partial approval: 33", "size": 13, "align": PP_ALIGN.LEFT, "after": 1},
+    {"t": "Reject with cited clause: 25", "size": 13, "align": PP_ALIGN.LEFT, "after": 1},
+    {"t": "Request information: 6", "size": 13, "align": PP_ALIGN.LEFT, "after": 1},
+    {"t": "Investigate: 4  ·  Approve: 4", "size": 13, "align": PP_ALIGN.LEFT, "after": 6},
     {"t": "Every claim went to a human review queue; the system decided none. Every exclusion, waiting period and "
-          "limit in the four wordings is exercised by at least one claim.", "size": 12, "color": TEXT, "align": PP_ALIGN.LEFT,
+          "limit in the wordings is exercised by at least one claim.", "size": 12, "color": TEXT, "align": PP_ALIGN.LEFT,
      "after": 8},
-    {"t": "Live site, 15 Oct 2026", "size": 15, "bold": True, "color": NAVY, "align": PP_ALIGN.LEFT, "after": 4},
-    {"t": "57 seeded claims: ₹86.96 L billed, ₹53.41 L payable (61.4%), all awaiting a reviewer. The 58th claim "
-          "above is the demo upload that the smoke test files.", "size": 12, "color": TEXT, "align": PP_ALIGN.LEFT}],
+    {"t": "Live site, 30 Oct 2026", "size": 15, "bold": True, "color": NAVY, "align": PP_ALIGN.LEFT, "after": 4},
+    {"t": "The figures above are the live snapshot. They match the repository's prediction to the rupee, and the "
+          "smoke test then filed and assessed one new claim on each line.", "size": 12, "color": TEXT, "align": PP_ALIGN.LEFT}],
     anchor=MSO_ANCHOR.TOP, name="Recommendations panel", margin=0.2)
 
 # ---------------------------------------------------------------- 13. findings - quality
 s = slides[12]
 header_and_title(s, "Findings and Results - Quality and Deployment")
-dims = [("Retrieval correctness", "107/107"), ("Citation correctness", "68/68"), ("Groundedness", "129/129"),
-        ("Coverage state", "111/111"), ("Adjudication amount", "156/156"), ("Risk classification", "61/61"),
-        ("Workflow outcome", "171/171")]
+dims = [("Retrieval correctness", "130/130"), ("Citation correctness", "80/80"), ("Groundedness", "156/156"),
+        ("Coverage state", "143/143"), ("Adjudication amount", "182/182"), ("Risk classification", "79/79"),
+        ("Workflow outcome", "216/216")]
 rows, cols_n = len(dims) + 1, 2
 tbl = s.shapes.add_table(rows, cols_n, Inches(0.35), Inches(1.55), Inches(5.3), Inches(0.42 * rows)).table
 tbl.columns[0].width, tbl.columns[1].width = Inches(3.6), Inches(1.7)
@@ -510,14 +511,14 @@ for r, (a, b) in enumerate([("Golden evaluation dimension", "Checks passed")] + 
 text(s, 2.45, 5.05, 3.2, 1.5, [
     {"t": "Retrieval hit@1 100%  ·  MRR 1.00", "size": 13, "bold": True, "color": NAVY, "after": 3},
     {"t": "Refusals correct 100%", "size": 13, "bold": True, "color": NAVY, "after": 3},
-    {"t": "Risk rules on 1,000 synthetic claims: precision 86.6%, recall 84.1% (injected patterns only)",
+    {"t": "Risk rules on 10,000 synthetic claims: precision 90.1%, recall 78.3% (injected patterns only)",
      "size": 12, "color": TEXT}], name="Retrieval metrics")
 picture(s, IMG + "23-dashboard-interactive.png", 6.0, 1.55, 7.0, "Screenshot - live dashboard")
 text(s, 6.0, 1.55 + 7.0 * 760 / 1208 + 0.08, 7.0, 0.4,
      [{"t": "Claims dashboard: every tile, line and bar opens the matching claims", "size": 12, "italic": True,
        "color": MUTED, "after": 0}], name="Caption")
 text(s, 6.0, 6.45, 7.0, 0.4, [
-    {"t": [("127 backend tests  ·  12 browser tests  ·  live site checks passed (15 Oct 2026)", {"bold": True})],
+    {"t": [("158 backend tests  ·  12 browser tests  ·  live site checks passed (30 Oct 2026)", {"bold": True})],
      "size": 13, "color": GREEN, "after": 0}], name="Test summary")
 
 # ---------------------------------------------------------------- 14. conclusion
@@ -526,13 +527,13 @@ header_and_title(s, "Conclusion")
 text(s, 0.35, 1.5, 7.4, 5.0, [
     H("What was achieved"),
     B("Project complete: every item in the definition of done is met and verified on the live site."),
-    B("A working, deployed claims decision-support system for health, motor, home and travel insurance."),
+    B("A working, deployed claims decision-support system for health, motor, home, travel, personal accident and life insurance."),
     B("Retrieval-augmented, cited reasoning over versioned policy wordings, with refusal when evidence is weak."),
-    B("Exact, explainable payable amounts: 803/803 hand-worked checks pass, and every step cites its clause."),
+    B("Exact, explainable payable amounts: 986/986 hand-worked checks pass, and every step cites its clause."),
     B("People stay in charge: review queues, approval limits, reviewer notes, letters and a complete audit trail."),
     H("Limitations", after=4),
     B("Synthetic data only; the LLM narrative is not yet scored; no OCR for scanned images."),
-    B("The free hosting tier restarts with the 57 seeded claims, so claims filed on the live site are not kept."),
+    B("The free hosting tier restarts with the 72 seeded claims, so claims filed on the live site are not kept."),
 ], name="Conclusion text")
 box(s, 8.0, 1.55, 4.95, 4.1, TINT_GREEN, [
     {"t": "Future work", "size": 18, "bold": True, "color": GREEN, "align": PP_ALIGN.LEFT, "after": 8},
@@ -564,10 +565,11 @@ refs = [
     "S. Robertson and H. Zaragoza, \"The Probabilistic Relevance Framework: BM25 and Beyond,\" Foundations and Trends in Information Retrieval, vol. 3, no. 4, 2009.",
     "G. V. Cormack, C. L. A. Clarke and S. Buettcher, \"Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods,\" Proc. ACM SIGIR, 2009.",
     "Insurance Regulatory and Development Authority of India (IRDAI), Master Circulars on Health Insurance Business and on Protection of Policyholders' Interests, 2024. https://irdai.gov.in",
+    "Casualty Actuarial Society, Loss Reserving Data Pulled From NAIC Schedule P (accident years 1998-2007), compiled for the CAS by S&P Global Market Intelligence. https://www.casact.org",
     "FastAPI documentation, https://fastapi.tiangolo.com  ·  React documentation, https://react.dev  ·  SQLAlchemy documentation, https://www.sqlalchemy.org",
     "Project source code: https://github.com/sricharansk/CLAIM-SENSE  ·  Live application: https://claim-sense.onrender.com",
 ]
-text(s, 0.35, 1.5, 12.6, 4.2, [{"t": f"[{i + 1}]  {r}", "size": 15, "color": TEXT, "after": 10} for i, r in enumerate(refs)],
+text(s, 0.35, 1.5, 12.6, 4.2, [{"t": f"[{i + 1}]  {r}", "size": 14, "color": TEXT, "after": 8} for i, r in enumerate(refs)],
      name="Reference list")
 
 prs.save(OUT)

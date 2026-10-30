@@ -1,5 +1,11 @@
 # Release notes
 
+## Claim Sense 1.5.1 — 2026-10-30
+
+- **Six-line release verified live.** After the Render deploy, the Verify deployment workflow ([run 41115415499](https://github.com/sricharansk/CLAIM-SENSE/actions/runs/41115415499)) passed every smoke check. The live site holds 72 claims, ₹2,22,18,600 billed and ₹1,61,98,470 payable (72.9%), as the repository predicted, and the smoke test filed and assessed a claim on each of the six lines.
+- **Results dashboard, presentation and screenshots refreshed** from that snapshot: six lines, approvals, 986/986 golden checks, the 10,000-claim portfolio and the CAS reference.
+- `claims_report.py` names the portfolio size in its heading, and the live report says when the deployment's LLM writes the explanation narrative.
+
 ## Claim Sense 1.5.0 — 2026-10-30
 
 - **Personal accident and life lines.** PA-SECURE and LIFE-TERM 2025.1 synthetic wordings with structured terms that cite their clauses. Benefits are paid from a schedule (share of the sum insured, the disablement table, a weekly benefit capped at ₹10,000, medical expenses up to 10%), in `Decimal`, with a clause on every step. Accident-only cover, the 12-month suicide exclusion and the life contestable period (section 45) are checked and cited.
