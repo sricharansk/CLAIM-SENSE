@@ -172,3 +172,6 @@ table.lines .bar-track { position: relative; display: inline-block; width: 70%; 
 table.lines .bar-fill { position: absolute; left: 0; top: 0; bottom: 0; }
 .bar-fill.muted-fill { opacity: .25; }
 .chip { margin-left: .4rem; padding: .1rem .55rem; border-radius: 999px; border: 1px solid currentColor; background: transparent; cursor: pointer; font: inherit; }
+.spark { display: inline-flex; align-items: flex-end; gap: 2px; height: 30px; }
+.spark i { display: block; width: 6px; background: var(--brand); border-radius: 2px 2px 0 0; }
+.kpi small { display: block; }

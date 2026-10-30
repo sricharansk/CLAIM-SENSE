@@ -554,6 +554,18 @@ def datasets():
     return provenance.load_registry()
 
 
+@router.get("/benchmarks/industry")
+def industry_benchmark():
+    """Industry loss ratios and paid development by line from the CAS Schedule P database (aggregates written by
+    scripts/fetch_public_data.py), with the registry entry that records where they came from."""
+    path = settings.data_dir / "public" / "cas_schedule_p" / "benchmark.json"
+    if not path.is_file():
+        raise HTTPException(404, "Industry benchmark not generated; run scripts/fetch_public_data.py")
+    registry = provenance.load_registry()
+    entry = next((s for s in registry["sources"] if s["id"] == "cas-schedule-p-1998-2007"), None)
+    return {**json.loads(path.read_text(encoding="utf-8")), "registry": entry}
+
+
 @router.get("/knowledge-base/manifest")
 def knowledge_base_manifest(db: Session = Depends(get_db)):
     """Every indexed policy chunk with its source file, version, page, section/clause and extraction run."""

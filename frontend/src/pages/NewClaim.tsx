@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ApiError, api } from "../api";
 import { Card, ErrorBox, useLoad } from "../components/ui";
 
-const LINE_BY_PRODUCT: Record<string, string> = { HLT: "health", MTR: "motor", HOME: "property", TRV: "travel" };
+const LINE_BY_PRODUCT: Record<string, string> = { HLT: "health", MTR: "motor", HOME: "property", TRV: "travel", PA: "personal_accident", LIFE: "life" };
 
 export default function NewClaim() {
   const nav = useNavigate();
@@ -53,6 +53,7 @@ export default function NewClaim() {
             <select value={form.claim_type} onChange={(e) => setForm({ ...form, claim_type: e.target.value })}>
               <option value="health">Health</option><option value="motor">Motor</option>
               <option value="property">Property (home)</option><option value="travel">Travel</option>
+              <option value="personal_accident">Personal accident</option><option value="life">Life</option>
             </select>
           </label>
           <label>Claimant name<input required value={form.claimant_name} onChange={(e) => setForm({ ...form, claimant_name: e.target.value })} /></label>

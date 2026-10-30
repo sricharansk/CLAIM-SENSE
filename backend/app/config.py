@@ -30,8 +30,8 @@ class Settings:
     # Sign-in throttle: this many failed attempts for one username from one address locks it for the window.
     login_max_failures = int(os.getenv("LOGIN_MAX_FAILURES", "5"))
     login_window_seconds = int(os.getenv("LOGIN_WINDOW_SECONDS", "300"))
-    rules_version = "adjudication-rules/1.0.0"
-    risk_version = "risk-rules/1.0.0"
+    rules_version = "adjudication-rules/1.1.0"
+    risk_version = "risk-rules/1.1.0"
 
 
 settings = Settings()
