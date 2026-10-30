@@ -1,6 +1,6 @@
 {
   "report": "Claim Sense results on every claim packet",
-  "generated_at": "2026-10-30T18:31:47+00:00",
+  "generated_at": "2026-10-30T19:43:24+00:00",
   "data": "synthetic only",
   "llm": "off (deterministic rules and extractive retrieval)",
   "rules_version": "adjudication-rules/1.1.0",

@@ -7,7 +7,7 @@ Creates a temporary SQLite database seeded with the synthetic corpus (the 50 see
 start-up), then files the 7 evaluation packets and the demo upload as new claims through the real API, exactly
 as the UI does. Every figure in claims_results.json and claims_results.md is read back from the API: amounts from
 the deterministic rules engine, clauses from the matched wording, routing from the review queue. Also includes the
-risk-rule results on the 1,000-claim synthetic portfolio. Synthetic data only; the LLM is off.
+risk-rule results on the synthetic portfolio. Synthetic data only; the LLM is off.
 
 With --live URL it files nothing: it signs in to a deployed instance (password from $DEMO_PASSWORD) and reports
 the claims that are there now, read-only, to live_claims.json and live_claims.md. Uses only the standard library,
@@ -190,6 +190,9 @@ def build_live(client) -> dict:
     rules = first["adjudication"].get("rules_version") if first else None
     risk = first["risk"].get("rules_version") if first else None
     report = _summarise(client, rows, "Claim Sense claims on the live site", rules, risk)
+    llm = _ok(client.get("/api/v1/ready"), "ready").get("llm", "")
+    if llm == "anthropic":  # the deployment has an LLM key; it writes only the explanation narrative
+        report["llm"] = f"{llm} for the explanation narrative only (amounts, coverage and routing from the deterministic rules)"
     report["not_analysed"] = sorted(not_analysed)
     return report
 
@@ -245,7 +248,7 @@ def to_markdown(r: dict) -> str:
                    + (f" {c['status']} | {c['source']} |" if live else ""))
     p = r.get("portfolio_risk_rules")
     if p:
-        out += ["", "## Risk rules on the 1,000-claim synthetic portfolio", "",
+        out += ["", f"## Risk rules on the {p['claims']:,}-claim synthetic portfolio", "",
                 f"{p['claims']} synthetic claims ({', '.join(f'{k} {v}' for k, v in p['by_line'].items())}) with "
                 f"{p['injected_anomalies']} injected anomaly patterns. The transparent risk rules flagged {p['flagged']}: "
                 f"precision {p['precision']:.1%}, recall {p['recall']:.1%} "

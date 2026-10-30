@@ -2,6 +2,12 @@
 
 Implementation history of Claim Sense by release, in the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) style. Each release has its full notes in [`RELEASE_NOTES.md`](../RELEASE_NOTES.md) and its pull requests in the timeline in [`CLAUDE.md`](../CLAUDE.md). The repository has no git tags; releases are named in the release notes. The API reports `version` `1.0.0` from `backend/app/config.py`; the rules and risk versions are reported with every analysis.
 
+## [1.5.1] - 2026-10-30
+### Changed
+- Results dashboard, `docs/dashboard/`, presentation and README screenshots refreshed from the verified six-line live snapshot (run 41115415499).
+### Fixed
+- `claims_report.py`: the portfolio heading shows the real portfolio size; a live report notes when the deployment's LLM writes the narrative.
+
 ## [1.5.0] - 2026-10-30
 
 ### Added

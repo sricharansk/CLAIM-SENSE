@@ -1,37 +1,37 @@
 [
  {
   "dimension": "Retrieval correctness",
-  "passed": 107,
-  "total": 107
+  "passed": 130,
+  "total": 130
  },
  {
   "dimension": "Citation correctness",
-  "passed": 68,
-  "total": 68
+  "passed": 80,
+  "total": 80
  },
  {
   "dimension": "Groundedness",
-  "passed": 129,
-  "total": 129
- },
- {
-  "dimension": "Coverage state",
-  "passed": 111,
-  "total": 111
- },
- {
-  "dimension": "Adjudication amount",
   "passed": 156,
   "total": 156
  },
  {
+  "dimension": "Coverage state",
+  "passed": 143,
+  "total": 143
+ },
+ {
+  "dimension": "Adjudication amount",
+  "passed": 182,
+  "total": 182
+ },
+ {
   "dimension": "Risk classification",
-  "passed": 61,
-  "total": 61
+  "passed": 79,
+  "total": 79
  },
  {
   "dimension": "Workflow outcome",
-  "passed": 171,
-  "total": 171
+  "passed": 216,
+  "total": 216
  }
 ]

@@ -1,6 +1,6 @@
 # Claim Sense results on every claim packet
 
-Generated 2026-10-30T18:31:47+00:00 by `python scripts/claims_report.py` on a fresh database. Synthetic data only; LLM off (deterministic rules and extractive retrieval). Rules adjudication-rules/1.1.0, risk risk-rules/1.1.0. Every figure is read back from the API.
+Generated 2026-10-30T19:43:24+00:00 by `python scripts/claims_report.py` on a fresh database. Synthetic data only; LLM off (deterministic rules and extractive retrieval). Rules adjudication-rules/1.1.0, risk risk-rules/1.1.0. Every figure is read back from the API.
 
 **73 claims** across health, motor, property, travel, personal accident and life: ₹22,296,600 billed, ₹16,262,550 recommended payable (72.9%). Every claim was routed to a human review queue; no claim was decided by the system.
 
@@ -133,7 +133,7 @@ Total reductions from billed to payable, by rule:
 | CLM-L-6005 | life | LIFE-TERM v2025.1 | ₹1,200,000 | ₹1,200,000 | COVERED | missing death_certificate | LOW (MISSING_DOCUMENTS) | REQUEST_INFO | PENDING_INFORMATION |
 | CLM-L-6006 | life | LIFE-TERM v2025.1 | ₹1,500,000 | ₹0 | NOT_COVERED | POLICY_NOT_IN_FORCE §1.3 | LOW | RECOMMEND_REJECT | ADJUSTER_REVIEW |
 
-## Risk rules on the 1,000-claim synthetic portfolio
+## Risk rules on the 10,000-claim synthetic portfolio
 
 10000 synthetic claims (motor 2162, health 4231, personal_accident 1045, property 1111, travel 974, life 477) with 764 injected anomaly patterns. The transparent risk rules flagged 664: precision 90.1%, recall 78.3% (TP 598, FP 66, FN 166, TN 9170). Synthetic portfolio with injected patterns; measures rule recall of injected patterns only.
 

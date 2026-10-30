@@ -77,7 +77,7 @@
 
   <section class="cs-kpis" id="headline" aria-label="Headline figures">
     <div class="cs-kpi"><span class="lbl">Claims on the live site</span><span class="val dash-skeleton" data-source="totals" data-field="claims" data-row="0">—</span><span class="sub"><span data-source="totals" data-field="seeded" data-row="0">—</span> seeded at start-up, <span data-source="totals" data-field="filed" data-row="0">—</span> filed on the site</span></div>
-    <div class="cs-kpi"><span class="lbl">Billed</span><span class="val dash-skeleton" data-source="totals" data-field="billed" data-row="0">—</span><span class="sub">Itemised bills, estimates and assessments</span></div>
+    <div class="cs-kpi"><span class="lbl">Billed</span><span class="val dash-skeleton" data-source="totals" data-field="billed" data-row="0">—</span><span class="sub">Bills, estimates and scheduled benefits claimed</span></div>
     <div class="cs-kpi"><span class="lbl">Recommended payable</span><span class="val dash-skeleton" data-source="totals" data-field="payable" data-row="0">—</span><span class="sub">After policy deductions</span></div>
     <div class="cs-kpi"><span class="lbl">Payout ratio</span><span class="val dash-skeleton" data-source="totals" data-field="payout" data-row="0">—</span><span class="sub">Payable as a share of billed</span></div>
     <div class="cs-kpi"><span class="lbl">Not covered</span><span class="val dash-skeleton" data-source="totals" data-field="not_covered" data-row="0">—</span><span class="sub">Each rejection cites its clause</span></div>
@@ -118,7 +118,7 @@
 
   <section class="cs-card claims" id="every-claim">
     <h2>Every claim</h2>
-    <p class="cs-note">Every claim on https://claim-sense.onrender.com in a read-only snapshot taken 2026-10-30 17:55 UTC by the Verify deployment workflow (scripts/claims_report.py --live). Amounts in rupees.</p>
+    <p class="cs-note">Every claim on https://claim-sense.onrender.com in a read-only snapshot taken 2026-10-30 19:28 UTC by the Verify deployment workflow (run 41115415499) (scripts/claims_report.py --live). Amounts in rupees.</p>
     <div class="cs-tools">
       <input id="claim-search" type="search" placeholder="Search claims, reasons, wordings" aria-label="Search claims">
       <div class="cs-tools" id="line-filter" role="group" aria-label="Line of business"></div>
@@ -147,7 +147,7 @@
     </div>
   </section>
 
-  <p class="cs-foot">All policies, people and claims are synthetic. Figures come from <code>scripts/claims_report.py</code> and <code>scripts/evaluate.py</code> in the Claim Sense repository: deterministic Decimal rules, extractive retrieval, no LLM. Recommendations are decision support; a person makes every decision. Try the live app at <a href="https://claim-sense.onrender.com" target="_blank" rel="noopener">claim-sense.onrender.com</a> (sign-in required; the free instance may take a minute to wake).</p>
+  <p class="cs-foot">All policies, people and claims are synthetic. Figures come from <code>scripts/claims_report.py</code> and <code>scripts/evaluate.py</code> in the Claim Sense repository: deterministic Decimal rules and extractive retrieval; no LLM sets any figure or decision. Recommendations are decision support; a person makes every decision. Try the live app at <a href="https://claim-sense.onrender.com" target="_blank" rel="noopener">claim-sense.onrender.com</a> (sign-in required; the free instance may take a minute to wake).</p>
 </div>
 
 <script>
@@ -172,7 +172,7 @@ dash.calc("by_line", {
   title: "Totals by line of business",
   description: "Claims, billed and payable per line.",
   inputs: ["claims"],
-  fn: (claims) => ["Health", "Motor", "Property", "Travel"].map((line) => {
+  fn: (claims) => ["Health", "Motor", "Property", "Travel", "Personal accident", "Life"].map((line) => {
     const rs = claims.filter((c) => c.line === line);
     const billed = rs.reduce((a, c) => a + Number(c.billed), 0);
     const payable = rs.reduce((a, c) => a + Number(c.payable), 0);
@@ -183,7 +183,7 @@ dash.calc("recs", {
   title: "Recommendations",
   description: "Claims per AI recommendation.",
   inputs: ["claims"],
-  fn: (claims) => ["Partial approval", "Reject", "Request info", "Investigate"].map((recommendation) =>
+  fn: (claims) => ["Approve", "Partial approval", "Reject", "Request info", "Investigate"].map((recommendation) =>
     ({ recommendation, claims: claims.filter((c) => c.recommendation === recommendation).length })),
 });
 dash.calc("eval_total", {
@@ -277,7 +277,7 @@ dash.calc("eval_total", {
   });
   document.getElementById("claim-search").addEventListener("input", (e) => { query = e.target.value.toLowerCase(); drawTable(); });
   const filter = document.getElementById("line-filter");
-  ["All", "Health", "Motor", "Property", "Travel"].forEach((l) => {
+  ["All", "Health", "Motor", "Property", "Travel", "Personal accident", "Life"].forEach((l) => {
     const b = document.createElement("button"); b.type = "button"; b.className = "cs-chip"; b.textContent = l;
     b.setAttribute("aria-pressed", String(l === lineSel));
     b.addEventListener("click", () => { lineSel = l; filter.querySelectorAll(".cs-chip").forEach((c) => c.setAttribute("aria-pressed", String(c.textContent === l))); drawTable(); });
@@ -337,7 +337,7 @@ dash.calc("eval_total", {
     if (rs.status === "error") fail(recEl);
     else if (rs.status === "ok") {
       const total = d3.sum(rs.data, (d) => d.claims) || 1;
-      const colorOf = { "Partial approval": accent, Reject: "var(--cds-chart-status-critical)", "Request info": "var(--cds-chart-muted)", Investigate: dash.colors[2] };
+      const colorOf = { Approve: "var(--color-ok)", "Partial approval": accent, Reject: "var(--cds-chart-status-critical)", "Request info": "var(--cds-chart-muted)", Investigate: dash.colors[2] };
       rs.data.forEach((d) => barRow(recEl, d.recommendation, `${count(d.claims)} · ${pct(d.claims / total)}`, d.claims / total,
         colorOf[d.recommendation] || accent, null, d.recommendation, [`Claims: ${count(d.claims)}`, `Share: ${pct(d.claims / total)}`]));
     }
